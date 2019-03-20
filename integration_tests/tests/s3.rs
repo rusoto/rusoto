@@ -18,13 +18,12 @@ use time::get_time;
 use futures::{Future, Stream};
 use futures_fs::FsPool;
 use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider};
-use rusoto_core::ProvideAwsCredentials;
-use rusoto_core::Region;
+use rusoto_core::{Region, ProvideAwsCredentials, RusotoError};
 use rusoto_s3::util::{PreSignedRequest, PreSignedRequestOption};
 use rusoto_s3::{
     CORSConfiguration, CORSRule, CompleteMultipartUploadRequest, CompletedMultipartUpload,
     CompletedPart, CopyObjectRequest, CreateBucketRequest, CreateMultipartUploadRequest,
-    DeleteBucketError, DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest,
+    DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest,
     HeadObjectRequest, ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest,
     PutObjectRequest, S3Client, StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
 };
@@ -364,7 +363,7 @@ fn test_delete_bucket(client: &TestClient, bucket: &str) {
     println!("{:#?}", result);
     match result {
         Err(e) => match e {
-            DeleteBucketError::Unknown(ref e) => panic!(
+            RusotoError::Unknown(ref e) => panic!(
                 "Couldn't delete bucket because: {}",
                 str::from_utf8(&e.body).unwrap()
             ),
@@ -478,7 +477,7 @@ fn test_get_object_no_such_object(client: &TestClient, bucket: &str, filename: &
     };
 
     match client.get_object(get_req).sync() {
-        Err(GetObjectError::NoSuchKey(_)) => (),
+        Err(RusotoError::Service(GetObjectError::NoSuchKey(_))) => (),
         r => panic!("unexpected response {:?}", r),
     };
 }

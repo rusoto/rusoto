@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -109,20 +106,10 @@ pub struct StartSupportDataExportResult {
 pub enum GenerateDataSetError {
     /// <p>This exception is thrown when an internal service error occurs.</p>
     MarketplaceCommerceAnalytics(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateDataSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateDataSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateDataSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -135,38 +122,15 @@ impl GenerateDataSetError {
 
             match *error_type {
                 "MarketplaceCommerceAnalyticsException" => {
-                    return GenerateDataSetError::MarketplaceCommerceAnalytics(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateDataSetError::MarketplaceCommerceAnalytics(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GenerateDataSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GenerateDataSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GenerateDataSetError {
-    fn from(err: serde_json::error::Error) -> GenerateDataSetError {
-        GenerateDataSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GenerateDataSetError {
-    fn from(err: CredentialsError) -> GenerateDataSetError {
-        GenerateDataSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateDataSetError {
-    fn from(err: HttpDispatchError) -> GenerateDataSetError {
-        GenerateDataSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateDataSetError {
-    fn from(err: io::Error) -> GenerateDataSetError {
-        GenerateDataSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GenerateDataSetError {
@@ -178,11 +142,6 @@ impl Error for GenerateDataSetError {
     fn description(&self) -> &str {
         match *self {
             GenerateDataSetError::MarketplaceCommerceAnalytics(ref cause) => cause,
-            GenerateDataSetError::Validation(ref cause) => cause,
-            GenerateDataSetError::Credentials(ref err) => err.description(),
-            GenerateDataSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GenerateDataSetError::ParseError(ref cause) => cause,
-            GenerateDataSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -191,20 +150,10 @@ impl Error for GenerateDataSetError {
 pub enum StartSupportDataExportError {
     /// <p>This exception is thrown when an internal service error occurs.</p>
     MarketplaceCommerceAnalytics(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartSupportDataExportError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartSupportDataExportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartSupportDataExportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -217,38 +166,17 @@ impl StartSupportDataExportError {
 
             match *error_type {
                 "MarketplaceCommerceAnalyticsException" => {
-                    return StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartSupportDataExportError::MarketplaceCommerceAnalytics(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return StartSupportDataExportError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartSupportDataExportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartSupportDataExportError {
-    fn from(err: serde_json::error::Error) -> StartSupportDataExportError {
-        StartSupportDataExportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartSupportDataExportError {
-    fn from(err: CredentialsError) -> StartSupportDataExportError {
-        StartSupportDataExportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartSupportDataExportError {
-    fn from(err: HttpDispatchError) -> StartSupportDataExportError {
-        StartSupportDataExportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartSupportDataExportError {
-    fn from(err: io::Error) -> StartSupportDataExportError {
-        StartSupportDataExportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartSupportDataExportError {
@@ -260,13 +188,6 @@ impl Error for StartSupportDataExportError {
     fn description(&self) -> &str {
         match *self {
             StartSupportDataExportError::MarketplaceCommerceAnalytics(ref cause) => cause,
-            StartSupportDataExportError::Validation(ref cause) => cause,
-            StartSupportDataExportError::Credentials(ref err) => err.description(),
-            StartSupportDataExportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartSupportDataExportError::ParseError(ref cause) => cause,
-            StartSupportDataExportError::Unknown(_) => "unknown error",
         }
     }
 }

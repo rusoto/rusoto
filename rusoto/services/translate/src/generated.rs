@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -270,20 +267,10 @@ pub enum DeleteTerminologyError {
     ResourceNotFound(String),
     /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTerminologyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTerminologyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTerminologyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -296,42 +283,25 @@ impl DeleteTerminologyError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteTerminologyError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DeleteTerminologyError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTerminologyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTerminologyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteTerminologyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteTerminologyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteTerminologyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTerminologyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTerminologyError {
-    fn from(err: serde_json::error::Error) -> DeleteTerminologyError {
-        DeleteTerminologyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTerminologyError {
-    fn from(err: CredentialsError) -> DeleteTerminologyError {
-        DeleteTerminologyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTerminologyError {
-    fn from(err: HttpDispatchError) -> DeleteTerminologyError {
-        DeleteTerminologyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTerminologyError {
-    fn from(err: io::Error) -> DeleteTerminologyError {
-        DeleteTerminologyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTerminologyError {
@@ -345,13 +315,6 @@ impl Error for DeleteTerminologyError {
             DeleteTerminologyError::InternalServer(ref cause) => cause,
             DeleteTerminologyError::ResourceNotFound(ref cause) => cause,
             DeleteTerminologyError::TooManyRequests(ref cause) => cause,
-            DeleteTerminologyError::Validation(ref cause) => cause,
-            DeleteTerminologyError::Credentials(ref err) => err.description(),
-            DeleteTerminologyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTerminologyError::ParseError(ref cause) => cause,
-            DeleteTerminologyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -366,20 +329,10 @@ pub enum GetTerminologyError {
     ResourceNotFound(String),
     /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTerminologyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTerminologyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTerminologyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -392,45 +345,30 @@ impl GetTerminologyError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetTerminologyError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(GetTerminologyError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterValueException" => {
-                    return GetTerminologyError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetTerminologyError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetTerminologyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetTerminologyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return GetTerminologyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetTerminologyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTerminologyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTerminologyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTerminologyError {
-    fn from(err: serde_json::error::Error) -> GetTerminologyError {
-        GetTerminologyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTerminologyError {
-    fn from(err: CredentialsError) -> GetTerminologyError {
-        GetTerminologyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTerminologyError {
-    fn from(err: HttpDispatchError) -> GetTerminologyError {
-        GetTerminologyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTerminologyError {
-    fn from(err: io::Error) -> GetTerminologyError {
-        GetTerminologyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTerminologyError {
@@ -445,11 +383,6 @@ impl Error for GetTerminologyError {
             GetTerminologyError::InvalidParameterValue(ref cause) => cause,
             GetTerminologyError::ResourceNotFound(ref cause) => cause,
             GetTerminologyError::TooManyRequests(ref cause) => cause,
-            GetTerminologyError::Validation(ref cause) => cause,
-            GetTerminologyError::Credentials(ref err) => err.description(),
-            GetTerminologyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTerminologyError::ParseError(ref cause) => cause,
-            GetTerminologyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -464,20 +397,10 @@ pub enum ImportTerminologyError {
     LimitExceeded(String),
     /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportTerminologyError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportTerminologyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportTerminologyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -490,47 +413,30 @@ impl ImportTerminologyError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ImportTerminologyError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(ImportTerminologyError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return ImportTerminologyError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ImportTerminologyError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return ImportTerminologyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ImportTerminologyError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ImportTerminologyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ImportTerminologyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ImportTerminologyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportTerminologyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportTerminologyError {
-    fn from(err: serde_json::error::Error) -> ImportTerminologyError {
-        ImportTerminologyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportTerminologyError {
-    fn from(err: CredentialsError) -> ImportTerminologyError {
-        ImportTerminologyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportTerminologyError {
-    fn from(err: HttpDispatchError) -> ImportTerminologyError {
-        ImportTerminologyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportTerminologyError {
-    fn from(err: io::Error) -> ImportTerminologyError {
-        ImportTerminologyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportTerminologyError {
@@ -545,13 +451,6 @@ impl Error for ImportTerminologyError {
             ImportTerminologyError::InvalidParameterValue(ref cause) => cause,
             ImportTerminologyError::LimitExceeded(ref cause) => cause,
             ImportTerminologyError::TooManyRequests(ref cause) => cause,
-            ImportTerminologyError::Validation(ref cause) => cause,
-            ImportTerminologyError::Credentials(ref err) => err.description(),
-            ImportTerminologyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ImportTerminologyError::ParseError(ref cause) => cause,
-            ImportTerminologyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -564,20 +463,10 @@ pub enum ListTerminologiesError {
     InvalidParameterValue(String),
     /// <p> You have made too many requests within a short period of time. Wait for a short time and then try your request again.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTerminologiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTerminologiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTerminologiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -590,44 +479,25 @@ impl ListTerminologiesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListTerminologiesError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(ListTerminologiesError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return ListTerminologiesError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTerminologiesError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ListTerminologiesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListTerminologiesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTerminologiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTerminologiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTerminologiesError {
-    fn from(err: serde_json::error::Error) -> ListTerminologiesError {
-        ListTerminologiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTerminologiesError {
-    fn from(err: CredentialsError) -> ListTerminologiesError {
-        ListTerminologiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTerminologiesError {
-    fn from(err: HttpDispatchError) -> ListTerminologiesError {
-        ListTerminologiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTerminologiesError {
-    fn from(err: io::Error) -> ListTerminologiesError {
-        ListTerminologiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTerminologiesError {
@@ -641,13 +511,6 @@ impl Error for ListTerminologiesError {
             ListTerminologiesError::InternalServer(ref cause) => cause,
             ListTerminologiesError::InvalidParameterValue(ref cause) => cause,
             ListTerminologiesError::TooManyRequests(ref cause) => cause,
-            ListTerminologiesError::Validation(ref cause) => cause,
-            ListTerminologiesError::Credentials(ref err) => err.description(),
-            ListTerminologiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTerminologiesError::ParseError(ref cause) => cause,
-            ListTerminologiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -670,20 +533,10 @@ pub enum TranslateTextError {
     TooManyRequests(String),
     /// <p>Amazon Translate does not support translation from the language of the source text into the requested target language. For more information, see <a>how-to-error-msg</a>. </p>
     UnsupportedLanguagePair(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TranslateTextError {
-    pub fn from_response(res: BufferedHttpResponse) -> TranslateTextError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TranslateTextError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -696,59 +549,50 @@ impl TranslateTextError {
 
             match *error_type {
                 "DetectedLanguageLowConfidenceException" => {
-                    return TranslateTextError::DetectedLanguageLowConfidence(String::from(
-                        error_message,
+                    return RusotoError::Service(TranslateTextError::DetectedLanguageLowConfidence(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerException" => {
-                    return TranslateTextError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(TranslateTextError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return TranslateTextError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(TranslateTextError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return TranslateTextError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TranslateTextError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return TranslateTextError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(TranslateTextError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TextSizeLimitExceededException" => {
-                    return TranslateTextError::TextSizeLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TranslateTextError::TextSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return TranslateTextError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(TranslateTextError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedLanguagePairException" => {
-                    return TranslateTextError::UnsupportedLanguagePair(String::from(error_message));
+                    return RusotoError::Service(TranslateTextError::UnsupportedLanguagePair(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return TranslateTextError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TranslateTextError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TranslateTextError {
-    fn from(err: serde_json::error::Error) -> TranslateTextError {
-        TranslateTextError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TranslateTextError {
-    fn from(err: CredentialsError) -> TranslateTextError {
-        TranslateTextError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TranslateTextError {
-    fn from(err: HttpDispatchError) -> TranslateTextError {
-        TranslateTextError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TranslateTextError {
-    fn from(err: io::Error) -> TranslateTextError {
-        TranslateTextError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TranslateTextError {
@@ -767,11 +611,6 @@ impl Error for TranslateTextError {
             TranslateTextError::TextSizeLimitExceeded(ref cause) => cause,
             TranslateTextError::TooManyRequests(ref cause) => cause,
             TranslateTextError::UnsupportedLanguagePair(ref cause) => cause,
-            TranslateTextError::Validation(ref cause) => cause,
-            TranslateTextError::Credentials(ref err) => err.description(),
-            TranslateTextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TranslateTextError::ParseError(ref cause) => cause,
-            TranslateTextError::Unknown(_) => "unknown error",
         }
     }
 }

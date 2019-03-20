@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -381,22 +378,14 @@ pub enum AssociateDeviceWithPlacementError {
     ResourceConflict(String),
     /// <p><p/></p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateDeviceWithPlacementError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateDeviceWithPlacementError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateDeviceWithPlacementError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -421,53 +410,34 @@ impl AssociateDeviceWithPlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return AssociateDeviceWithPlacementError::InternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateDeviceWithPlacementError::InternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return AssociateDeviceWithPlacementError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateDeviceWithPlacementError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceConflictException" => {
-                    return AssociateDeviceWithPlacementError::ResourceConflict(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateDeviceWithPlacementError::ResourceConflict(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateDeviceWithPlacementError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateDeviceWithPlacementError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AssociateDeviceWithPlacementError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateDeviceWithPlacementError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateDeviceWithPlacementError {
-    fn from(err: serde_json::error::Error) -> AssociateDeviceWithPlacementError {
-        AssociateDeviceWithPlacementError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateDeviceWithPlacementError {
-    fn from(err: CredentialsError) -> AssociateDeviceWithPlacementError {
-        AssociateDeviceWithPlacementError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateDeviceWithPlacementError {
-    fn from(err: HttpDispatchError) -> AssociateDeviceWithPlacementError {
-        AssociateDeviceWithPlacementError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateDeviceWithPlacementError {
-    fn from(err: io::Error) -> AssociateDeviceWithPlacementError {
-        AssociateDeviceWithPlacementError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateDeviceWithPlacementError {
@@ -482,13 +452,6 @@ impl Error for AssociateDeviceWithPlacementError {
             AssociateDeviceWithPlacementError::InvalidRequest(ref cause) => cause,
             AssociateDeviceWithPlacementError::ResourceConflict(ref cause) => cause,
             AssociateDeviceWithPlacementError::ResourceNotFound(ref cause) => cause,
-            AssociateDeviceWithPlacementError::Validation(ref cause) => cause,
-            AssociateDeviceWithPlacementError::Credentials(ref err) => err.description(),
-            AssociateDeviceWithPlacementError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateDeviceWithPlacementError::ParseError(ref cause) => cause,
-            AssociateDeviceWithPlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -503,22 +466,12 @@ pub enum CreatePlacementError {
     ResourceConflict(String),
     /// <p><p/></p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePlacementError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePlacementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlacementError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -543,45 +496,30 @@ impl CreatePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreatePlacementError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreatePlacementError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return CreatePlacementError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreatePlacementError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceConflictException" => {
-                    return CreatePlacementError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(CreatePlacementError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreatePlacementError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreatePlacementError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreatePlacementError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePlacementError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePlacementError {
-    fn from(err: serde_json::error::Error) -> CreatePlacementError {
-        CreatePlacementError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePlacementError {
-    fn from(err: CredentialsError) -> CreatePlacementError {
-        CreatePlacementError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePlacementError {
-    fn from(err: HttpDispatchError) -> CreatePlacementError {
-        CreatePlacementError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePlacementError {
-    fn from(err: io::Error) -> CreatePlacementError {
-        CreatePlacementError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePlacementError {
@@ -596,11 +534,6 @@ impl Error for CreatePlacementError {
             CreatePlacementError::InvalidRequest(ref cause) => cause,
             CreatePlacementError::ResourceConflict(ref cause) => cause,
             CreatePlacementError::ResourceNotFound(ref cause) => cause,
-            CreatePlacementError::Validation(ref cause) => cause,
-            CreatePlacementError::Credentials(ref err) => err.description(),
-            CreatePlacementError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePlacementError::ParseError(ref cause) => cause,
-            CreatePlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -613,22 +546,12 @@ pub enum CreateProjectError {
     InvalidRequest(String),
     /// <p><p/></p>
     ResourceConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -653,42 +576,25 @@ impl CreateProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return CreateProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return CreateProjectError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceConflictException" => {
-                    return CreateProjectError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ResourceConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateProjectError {
-    fn from(err: serde_json::error::Error) -> CreateProjectError {
-        CreateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateProjectError {
-    fn from(err: CredentialsError) -> CreateProjectError {
-        CreateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateProjectError {
-    fn from(err: HttpDispatchError) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateProjectError {
-    fn from(err: io::Error) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -702,11 +608,6 @@ impl Error for CreateProjectError {
             CreateProjectError::InternalFailure(ref cause) => cause,
             CreateProjectError::InvalidRequest(ref cause) => cause,
             CreateProjectError::ResourceConflict(ref cause) => cause,
-            CreateProjectError::Validation(ref cause) => cause,
-            CreateProjectError::Credentials(ref err) => err.description(),
-            CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProjectError::ParseError(ref cause) => cause,
-            CreateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -721,22 +622,12 @@ pub enum DeletePlacementError {
     ResourceNotFound(String),
     /// <p><p/></p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePlacementError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePlacementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePlacementError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -761,45 +652,30 @@ impl DeletePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeletePlacementError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeletePlacementError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DeletePlacementError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeletePlacementError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePlacementError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeletePlacementError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeletePlacementError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeletePlacementError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeletePlacementError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePlacementError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePlacementError {
-    fn from(err: serde_json::error::Error) -> DeletePlacementError {
-        DeletePlacementError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePlacementError {
-    fn from(err: CredentialsError) -> DeletePlacementError {
-        DeletePlacementError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePlacementError {
-    fn from(err: HttpDispatchError) -> DeletePlacementError {
-        DeletePlacementError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePlacementError {
-    fn from(err: io::Error) -> DeletePlacementError {
-        DeletePlacementError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePlacementError {
@@ -814,11 +690,6 @@ impl Error for DeletePlacementError {
             DeletePlacementError::InvalidRequest(ref cause) => cause,
             DeletePlacementError::ResourceNotFound(ref cause) => cause,
             DeletePlacementError::TooManyRequests(ref cause) => cause,
-            DeletePlacementError::Validation(ref cause) => cause,
-            DeletePlacementError::Credentials(ref err) => err.description(),
-            DeletePlacementError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePlacementError::ParseError(ref cause) => cause,
-            DeletePlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -833,22 +704,12 @@ pub enum DeleteProjectError {
     ResourceNotFound(String),
     /// <p><p/></p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -873,45 +734,30 @@ impl DeleteProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DeleteProjectError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteProjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteProjectError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteProjectError {
-    fn from(err: serde_json::error::Error) -> DeleteProjectError {
-        DeleteProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteProjectError {
-    fn from(err: CredentialsError) -> DeleteProjectError {
-        DeleteProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteProjectError {
-    fn from(err: HttpDispatchError) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteProjectError {
-    fn from(err: io::Error) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -926,11 +772,6 @@ impl Error for DeleteProjectError {
             DeleteProjectError::InvalidRequest(ref cause) => cause,
             DeleteProjectError::ResourceNotFound(ref cause) => cause,
             DeleteProjectError::TooManyRequests(ref cause) => cause,
-            DeleteProjectError::Validation(ref cause) => cause,
-            DeleteProjectError::Credentials(ref err) => err.description(),
-            DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProjectError::ParseError(ref cause) => cause,
-            DeleteProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -943,22 +784,12 @@ pub enum DescribePlacementError {
     InvalidRequest(String),
     /// <p><p/></p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePlacementError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribePlacementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePlacementError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -983,42 +814,25 @@ impl DescribePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribePlacementError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DescribePlacementError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribePlacementError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribePlacementError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribePlacementError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribePlacementError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribePlacementError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribePlacementError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribePlacementError {
-    fn from(err: serde_json::error::Error) -> DescribePlacementError {
-        DescribePlacementError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribePlacementError {
-    fn from(err: CredentialsError) -> DescribePlacementError {
-        DescribePlacementError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribePlacementError {
-    fn from(err: HttpDispatchError) -> DescribePlacementError {
-        DescribePlacementError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribePlacementError {
-    fn from(err: io::Error) -> DescribePlacementError {
-        DescribePlacementError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribePlacementError {
@@ -1032,13 +846,6 @@ impl Error for DescribePlacementError {
             DescribePlacementError::InternalFailure(ref cause) => cause,
             DescribePlacementError::InvalidRequest(ref cause) => cause,
             DescribePlacementError::ResourceNotFound(ref cause) => cause,
-            DescribePlacementError::Validation(ref cause) => cause,
-            DescribePlacementError::Credentials(ref err) => err.description(),
-            DescribePlacementError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribePlacementError::ParseError(ref cause) => cause,
-            DescribePlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1051,22 +858,12 @@ pub enum DescribeProjectError {
     InvalidRequest(String),
     /// <p><p/></p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1091,42 +888,25 @@ impl DescribeProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeProjectError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeProjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeProjectError {
-    fn from(err: serde_json::error::Error) -> DescribeProjectError {
-        DescribeProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeProjectError {
-    fn from(err: CredentialsError) -> DescribeProjectError {
-        DescribeProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeProjectError {
-    fn from(err: HttpDispatchError) -> DescribeProjectError {
-        DescribeProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeProjectError {
-    fn from(err: io::Error) -> DescribeProjectError {
-        DescribeProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeProjectError {
@@ -1140,11 +920,6 @@ impl Error for DescribeProjectError {
             DescribeProjectError::InternalFailure(ref cause) => cause,
             DescribeProjectError::InvalidRequest(ref cause) => cause,
             DescribeProjectError::ResourceNotFound(ref cause) => cause,
-            DescribeProjectError::Validation(ref cause) => cause,
-            DescribeProjectError::Credentials(ref err) => err.description(),
-            DescribeProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeProjectError::ParseError(ref cause) => cause,
-            DescribeProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1159,22 +934,14 @@ pub enum DisassociateDeviceFromPlacementError {
     ResourceNotFound(String),
     /// <p><p/></p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateDeviceFromPlacementError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateDeviceFromPlacementError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateDeviceFromPlacementError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1199,55 +966,38 @@ impl DisassociateDeviceFromPlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DisassociateDeviceFromPlacementError::InternalFailure(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return DisassociateDeviceFromPlacementError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceNotFoundException" => {
-                    return DisassociateDeviceFromPlacementError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return DisassociateDeviceFromPlacementError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DisassociateDeviceFromPlacementError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DisassociateDeviceFromPlacementError::InternalFailure(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateDeviceFromPlacementError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateDeviceFromPlacementError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DisassociateDeviceFromPlacementError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateDeviceFromPlacementError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateDeviceFromPlacementError {
-    fn from(err: serde_json::error::Error) -> DisassociateDeviceFromPlacementError {
-        DisassociateDeviceFromPlacementError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateDeviceFromPlacementError {
-    fn from(err: CredentialsError) -> DisassociateDeviceFromPlacementError {
-        DisassociateDeviceFromPlacementError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateDeviceFromPlacementError {
-    fn from(err: HttpDispatchError) -> DisassociateDeviceFromPlacementError {
-        DisassociateDeviceFromPlacementError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateDeviceFromPlacementError {
-    fn from(err: io::Error) -> DisassociateDeviceFromPlacementError {
-        DisassociateDeviceFromPlacementError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateDeviceFromPlacementError {
@@ -1262,13 +1012,6 @@ impl Error for DisassociateDeviceFromPlacementError {
             DisassociateDeviceFromPlacementError::InvalidRequest(ref cause) => cause,
             DisassociateDeviceFromPlacementError::ResourceNotFound(ref cause) => cause,
             DisassociateDeviceFromPlacementError::TooManyRequests(ref cause) => cause,
-            DisassociateDeviceFromPlacementError::Validation(ref cause) => cause,
-            DisassociateDeviceFromPlacementError::Credentials(ref err) => err.description(),
-            DisassociateDeviceFromPlacementError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateDeviceFromPlacementError::ParseError(ref cause) => cause,
-            DisassociateDeviceFromPlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1281,22 +1024,12 @@ pub enum GetDevicesInPlacementError {
     InvalidRequest(String),
     /// <p><p/></p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDevicesInPlacementError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDevicesInPlacementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevicesInPlacementError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1321,42 +1054,25 @@ impl GetDevicesInPlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return GetDevicesInPlacementError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetDevicesInPlacementError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return GetDevicesInPlacementError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetDevicesInPlacementError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDevicesInPlacementError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDevicesInPlacementError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDevicesInPlacementError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDevicesInPlacementError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDevicesInPlacementError {
-    fn from(err: serde_json::error::Error) -> GetDevicesInPlacementError {
-        GetDevicesInPlacementError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDevicesInPlacementError {
-    fn from(err: CredentialsError) -> GetDevicesInPlacementError {
-        GetDevicesInPlacementError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDevicesInPlacementError {
-    fn from(err: HttpDispatchError) -> GetDevicesInPlacementError {
-        GetDevicesInPlacementError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDevicesInPlacementError {
-    fn from(err: io::Error) -> GetDevicesInPlacementError {
-        GetDevicesInPlacementError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDevicesInPlacementError {
@@ -1370,13 +1086,6 @@ impl Error for GetDevicesInPlacementError {
             GetDevicesInPlacementError::InternalFailure(ref cause) => cause,
             GetDevicesInPlacementError::InvalidRequest(ref cause) => cause,
             GetDevicesInPlacementError::ResourceNotFound(ref cause) => cause,
-            GetDevicesInPlacementError::Validation(ref cause) => cause,
-            GetDevicesInPlacementError::Credentials(ref err) => err.description(),
-            GetDevicesInPlacementError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDevicesInPlacementError::ParseError(ref cause) => cause,
-            GetDevicesInPlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1389,22 +1098,12 @@ pub enum ListPlacementsError {
     InvalidRequest(String),
     /// <p><p/></p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPlacementsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPlacementsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPlacementsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1429,42 +1128,25 @@ impl ListPlacementsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListPlacementsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListPlacementsError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ListPlacementsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListPlacementsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPlacementsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListPlacementsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListPlacementsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPlacementsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPlacementsError {
-    fn from(err: serde_json::error::Error) -> ListPlacementsError {
-        ListPlacementsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPlacementsError {
-    fn from(err: CredentialsError) -> ListPlacementsError {
-        ListPlacementsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPlacementsError {
-    fn from(err: HttpDispatchError) -> ListPlacementsError {
-        ListPlacementsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPlacementsError {
-    fn from(err: io::Error) -> ListPlacementsError {
-        ListPlacementsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPlacementsError {
@@ -1478,11 +1160,6 @@ impl Error for ListPlacementsError {
             ListPlacementsError::InternalFailure(ref cause) => cause,
             ListPlacementsError::InvalidRequest(ref cause) => cause,
             ListPlacementsError::ResourceNotFound(ref cause) => cause,
-            ListPlacementsError::Validation(ref cause) => cause,
-            ListPlacementsError::Credentials(ref err) => err.description(),
-            ListPlacementsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPlacementsError::ParseError(ref cause) => cause,
-            ListPlacementsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1493,22 +1170,12 @@ pub enum ListProjectsError {
     InternalFailure(String),
     /// <p><p/></p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListProjectsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1533,39 +1200,20 @@ impl ListProjectsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListProjectsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ListProjectsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListProjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListProjectsError {
-    fn from(err: serde_json::error::Error) -> ListProjectsError {
-        ListProjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListProjectsError {
-    fn from(err: CredentialsError) -> ListProjectsError {
-        ListProjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListProjectsError {
-    fn from(err: HttpDispatchError) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListProjectsError {
-    fn from(err: io::Error) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -1578,11 +1226,6 @@ impl Error for ListProjectsError {
         match *self {
             ListProjectsError::InternalFailure(ref cause) => cause,
             ListProjectsError::InvalidRequest(ref cause) => cause,
-            ListProjectsError::Validation(ref cause) => cause,
-            ListProjectsError::Credentials(ref err) => err.description(),
-            ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListProjectsError::ParseError(ref cause) => cause,
-            ListProjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1597,22 +1240,12 @@ pub enum UpdatePlacementError {
     ResourceNotFound(String),
     /// <p><p/></p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePlacementError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePlacementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePlacementError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1637,45 +1270,30 @@ impl UpdatePlacementError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdatePlacementError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(UpdatePlacementError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdatePlacementError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdatePlacementError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePlacementError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdatePlacementError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdatePlacementError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdatePlacementError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdatePlacementError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePlacementError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePlacementError {
-    fn from(err: serde_json::error::Error) -> UpdatePlacementError {
-        UpdatePlacementError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePlacementError {
-    fn from(err: CredentialsError) -> UpdatePlacementError {
-        UpdatePlacementError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePlacementError {
-    fn from(err: HttpDispatchError) -> UpdatePlacementError {
-        UpdatePlacementError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePlacementError {
-    fn from(err: io::Error) -> UpdatePlacementError {
-        UpdatePlacementError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePlacementError {
@@ -1690,11 +1308,6 @@ impl Error for UpdatePlacementError {
             UpdatePlacementError::InvalidRequest(ref cause) => cause,
             UpdatePlacementError::ResourceNotFound(ref cause) => cause,
             UpdatePlacementError::TooManyRequests(ref cause) => cause,
-            UpdatePlacementError::Validation(ref cause) => cause,
-            UpdatePlacementError::Credentials(ref err) => err.description(),
-            UpdatePlacementError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePlacementError::ParseError(ref cause) => cause,
-            UpdatePlacementError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1709,22 +1322,12 @@ pub enum UpdateProjectError {
     ResourceNotFound(String),
     /// <p><p/></p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1749,45 +1352,30 @@ impl UpdateProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdateProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return UpdateProjectError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateProjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateProjectError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateProjectError {
-    fn from(err: serde_json::error::Error) -> UpdateProjectError {
-        UpdateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateProjectError {
-    fn from(err: CredentialsError) -> UpdateProjectError {
-        UpdateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateProjectError {
-    fn from(err: HttpDispatchError) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateProjectError {
-    fn from(err: io::Error) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -1802,11 +1390,6 @@ impl Error for UpdateProjectError {
             UpdateProjectError::InvalidRequest(ref cause) => cause,
             UpdateProjectError::ResourceNotFound(ref cause) => cause,
             UpdateProjectError::TooManyRequests(ref cause) => cause,
-            UpdateProjectError::Validation(ref cause) => cause,
-            UpdateProjectError::Credentials(ref err) => err.description(),
-            UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProjectError::ParseError(ref cause) => cause,
-            UpdateProjectError::Unknown(_) => "unknown error",
         }
     }
 }

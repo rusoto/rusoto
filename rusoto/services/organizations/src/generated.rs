@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1172,20 +1169,10 @@ pub enum AcceptHandshakeError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptHandshakeError {
-    pub fn from_response(res: BufferedHttpResponse) -> AcceptHandshakeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptHandshakeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1198,76 +1185,65 @@ impl AcceptHandshakeError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return AcceptHandshakeError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(AcceptHandshakeError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return AcceptHandshakeError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AcceptHandshakeError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccessDeniedForDependencyException" => {
-                    return AcceptHandshakeError::AccessDeniedForDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(AcceptHandshakeError::AccessDeniedForDependency(
+                        String::from(error_message),
                     ));
                 }
                 "ConcurrentModificationException" => {
-                    return AcceptHandshakeError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(AcceptHandshakeError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "HandshakeAlreadyInStateException" => {
-                    return AcceptHandshakeError::HandshakeAlreadyInState(String::from(
-                        error_message,
+                    return RusotoError::Service(AcceptHandshakeError::HandshakeAlreadyInState(
+                        String::from(error_message),
                     ));
                 }
                 "HandshakeConstraintViolationException" => {
-                    return AcceptHandshakeError::HandshakeConstraintViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(AcceptHandshakeError::HandshakeConstraintViolation(
+                        String::from(error_message),
                     ));
                 }
                 "HandshakeNotFoundException" => {
-                    return AcceptHandshakeError::HandshakeNotFound(String::from(error_message));
+                    return RusotoError::Service(AcceptHandshakeError::HandshakeNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidHandshakeTransitionException" => {
-                    return AcceptHandshakeError::InvalidHandshakeTransition(String::from(
-                        error_message,
+                    return RusotoError::Service(AcceptHandshakeError::InvalidHandshakeTransition(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return AcceptHandshakeError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AcceptHandshakeError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return AcceptHandshakeError::Service(String::from(error_message));
+                    return RusotoError::Service(AcceptHandshakeError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return AcceptHandshakeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AcceptHandshakeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AcceptHandshakeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AcceptHandshakeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AcceptHandshakeError {
-    fn from(err: serde_json::error::Error) -> AcceptHandshakeError {
-        AcceptHandshakeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AcceptHandshakeError {
-    fn from(err: CredentialsError) -> AcceptHandshakeError {
-        AcceptHandshakeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AcceptHandshakeError {
-    fn from(err: HttpDispatchError) -> AcceptHandshakeError {
-        AcceptHandshakeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AcceptHandshakeError {
-    fn from(err: io::Error) -> AcceptHandshakeError {
-        AcceptHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AcceptHandshakeError {
@@ -1289,11 +1265,6 @@ impl Error for AcceptHandshakeError {
             AcceptHandshakeError::InvalidInput(ref cause) => cause,
             AcceptHandshakeError::Service(ref cause) => cause,
             AcceptHandshakeError::TooManyRequests(ref cause) => cause,
-            AcceptHandshakeError::Validation(ref cause) => cause,
-            AcceptHandshakeError::Credentials(ref err) => err.description(),
-            AcceptHandshakeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AcceptHandshakeError::ParseError(ref cause) => cause,
-            AcceptHandshakeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1322,20 +1293,10 @@ pub enum AttachPolicyError {
     TargetNotFound(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1348,66 +1309,65 @@ impl AttachPolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return AttachPolicyError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return AttachPolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return AttachPolicyError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return AttachPolicyError::ConstraintViolation(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicatePolicyAttachmentException" => {
-                    return AttachPolicyError::DuplicatePolicyAttachment(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::DuplicatePolicyAttachment(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AttachPolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyNotFoundException" => {
-                    return AttachPolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::PolicyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyTypeNotEnabledException" => {
-                    return AttachPolicyError::PolicyTypeNotEnabled(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::PolicyTypeNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return AttachPolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TargetNotFoundException" => {
-                    return AttachPolicyError::TargetNotFound(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::TargetNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return AttachPolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AttachPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachPolicyError {
-    fn from(err: serde_json::error::Error) -> AttachPolicyError {
-        AttachPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachPolicyError {
-    fn from(err: CredentialsError) -> AttachPolicyError {
-        AttachPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachPolicyError {
-    fn from(err: HttpDispatchError) -> AttachPolicyError {
-        AttachPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachPolicyError {
-    fn from(err: io::Error) -> AttachPolicyError {
-        AttachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachPolicyError {
@@ -1429,11 +1389,6 @@ impl Error for AttachPolicyError {
             AttachPolicyError::Service(ref cause) => cause,
             AttachPolicyError::TargetNotFound(ref cause) => cause,
             AttachPolicyError::TooManyRequests(ref cause) => cause,
-            AttachPolicyError::Validation(ref cause) => cause,
-            AttachPolicyError::Credentials(ref err) => err.description(),
-            AttachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachPolicyError::ParseError(ref cause) => cause,
-            AttachPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1456,20 +1411,10 @@ pub enum CancelHandshakeError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelHandshakeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelHandshakeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelHandshakeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1482,61 +1427,50 @@ impl CancelHandshakeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CancelHandshakeError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CancelHandshakeError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return CancelHandshakeError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(CancelHandshakeError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "HandshakeAlreadyInStateException" => {
-                    return CancelHandshakeError::HandshakeAlreadyInState(String::from(
-                        error_message,
+                    return RusotoError::Service(CancelHandshakeError::HandshakeAlreadyInState(
+                        String::from(error_message),
                     ));
                 }
                 "HandshakeNotFoundException" => {
-                    return CancelHandshakeError::HandshakeNotFound(String::from(error_message));
+                    return RusotoError::Service(CancelHandshakeError::HandshakeNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidHandshakeTransitionException" => {
-                    return CancelHandshakeError::InvalidHandshakeTransition(String::from(
-                        error_message,
+                    return RusotoError::Service(CancelHandshakeError::InvalidHandshakeTransition(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return CancelHandshakeError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CancelHandshakeError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return CancelHandshakeError::Service(String::from(error_message));
+                    return RusotoError::Service(CancelHandshakeError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CancelHandshakeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CancelHandshakeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CancelHandshakeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelHandshakeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelHandshakeError {
-    fn from(err: serde_json::error::Error) -> CancelHandshakeError {
-        CancelHandshakeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelHandshakeError {
-    fn from(err: CredentialsError) -> CancelHandshakeError {
-        CancelHandshakeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelHandshakeError {
-    fn from(err: HttpDispatchError) -> CancelHandshakeError {
-        CancelHandshakeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelHandshakeError {
-    fn from(err: io::Error) -> CancelHandshakeError {
-        CancelHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelHandshakeError {
@@ -1555,11 +1489,6 @@ impl Error for CancelHandshakeError {
             CancelHandshakeError::InvalidInput(ref cause) => cause,
             CancelHandshakeError::Service(ref cause) => cause,
             CancelHandshakeError::TooManyRequests(ref cause) => cause,
-            CancelHandshakeError::Validation(ref cause) => cause,
-            CancelHandshakeError::Credentials(ref err) => err.description(),
-            CancelHandshakeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelHandshakeError::ParseError(ref cause) => cause,
-            CancelHandshakeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1582,20 +1511,10 @@ pub enum CreateAccountError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1608,57 +1527,50 @@ impl CreateAccountError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return CreateAccountError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return CreateAccountError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateAccountError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return CreateAccountError::ConstraintViolation(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "FinalizingOrganizationException" => {
-                    return CreateAccountError::FinalizingOrganization(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::FinalizingOrganization(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateAccountError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return CreateAccountError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreateAccountError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateAccountError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateAccountError {
-    fn from(err: serde_json::error::Error) -> CreateAccountError {
-        CreateAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateAccountError {
-    fn from(err: CredentialsError) -> CreateAccountError {
-        CreateAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAccountError {
-    fn from(err: HttpDispatchError) -> CreateAccountError {
-        CreateAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAccountError {
-    fn from(err: io::Error) -> CreateAccountError {
-        CreateAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateAccountError {
@@ -1677,11 +1589,6 @@ impl Error for CreateAccountError {
             CreateAccountError::InvalidInput(ref cause) => cause,
             CreateAccountError::Service(ref cause) => cause,
             CreateAccountError::TooManyRequests(ref cause) => cause,
-            CreateAccountError::Validation(ref cause) => cause,
-            CreateAccountError::Credentials(ref err) => err.description(),
-            CreateAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAccountError::ParseError(ref cause) => cause,
-            CreateAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1704,20 +1611,10 @@ pub enum CreateOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateOrganizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1730,63 +1627,50 @@ impl CreateOrganizationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateOrganizationError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateOrganizationError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedForDependencyException" => {
-                    return CreateOrganizationError::AccessDeniedForDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOrganizationError::AccessDeniedForDependency(
+                        String::from(error_message),
                     ));
                 }
                 "AlreadyInOrganizationException" => {
-                    return CreateOrganizationError::AlreadyInOrganization(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOrganizationError::AlreadyInOrganization(
+                        String::from(error_message),
                     ));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateOrganizationError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOrganizationError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ConstraintViolationException" => {
-                    return CreateOrganizationError::ConstraintViolation(String::from(error_message));
+                    return RusotoError::Service(CreateOrganizationError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateOrganizationError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateOrganizationError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateOrganizationError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateOrganizationError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreateOrganizationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateOrganizationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateOrganizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateOrganizationError {
-    fn from(err: serde_json::error::Error) -> CreateOrganizationError {
-        CreateOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateOrganizationError {
-    fn from(err: CredentialsError) -> CreateOrganizationError {
-        CreateOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateOrganizationError {
-    fn from(err: HttpDispatchError) -> CreateOrganizationError {
-        CreateOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateOrganizationError {
-    fn from(err: io::Error) -> CreateOrganizationError {
-        CreateOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateOrganizationError {
@@ -1805,13 +1689,6 @@ impl Error for CreateOrganizationError {
             CreateOrganizationError::InvalidInput(ref cause) => cause,
             CreateOrganizationError::Service(ref cause) => cause,
             CreateOrganizationError::TooManyRequests(ref cause) => cause,
-            CreateOrganizationError::Validation(ref cause) => cause,
-            CreateOrganizationError::Credentials(ref err) => err.description(),
-            CreateOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateOrganizationError::ParseError(ref cause) => cause,
-            CreateOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1836,20 +1713,10 @@ pub enum CreateOrganizationalUnitError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateOrganizationalUnitError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateOrganizationalUnitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOrganizationalUnitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1862,72 +1729,61 @@ impl CreateOrganizationalUnitError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return CreateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return CreateOrganizationalUnitError::AccessDenied(String::from(error_message));
-                }
-                "ConcurrentModificationException" => {
-                    return CreateOrganizationalUnitError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOrganizationalUnitError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        CreateOrganizationalUnitError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ConstraintViolationException" => {
-                    return CreateOrganizationalUnitError::ConstraintViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOrganizationalUnitError::ConstraintViolation(
+                        String::from(error_message),
                     ));
                 }
                 "DuplicateOrganizationalUnitException" => {
-                    return CreateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return CreateOrganizationalUnitError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateOrganizationalUnitError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "ParentNotFoundException" => {
-                    return CreateOrganizationalUnitError::ParentNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOrganizationalUnitError::ParentNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CreateOrganizationalUnitError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return CreateOrganizationalUnitError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOrganizationalUnitError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateOrganizationalUnitError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateOrganizationalUnitError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateOrganizationalUnitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateOrganizationalUnitError {
-    fn from(err: serde_json::error::Error) -> CreateOrganizationalUnitError {
-        CreateOrganizationalUnitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateOrganizationalUnitError {
-    fn from(err: CredentialsError) -> CreateOrganizationalUnitError {
-        CreateOrganizationalUnitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateOrganizationalUnitError {
-    fn from(err: HttpDispatchError) -> CreateOrganizationalUnitError {
-        CreateOrganizationalUnitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateOrganizationalUnitError {
-    fn from(err: io::Error) -> CreateOrganizationalUnitError {
-        CreateOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateOrganizationalUnitError {
@@ -1947,13 +1803,6 @@ impl Error for CreateOrganizationalUnitError {
             CreateOrganizationalUnitError::ParentNotFound(ref cause) => cause,
             CreateOrganizationalUnitError::Service(ref cause) => cause,
             CreateOrganizationalUnitError::TooManyRequests(ref cause) => cause,
-            CreateOrganizationalUnitError::Validation(ref cause) => cause,
-            CreateOrganizationalUnitError::Credentials(ref err) => err.description(),
-            CreateOrganizationalUnitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateOrganizationalUnitError::ParseError(ref cause) => cause,
-            CreateOrganizationalUnitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1980,20 +1829,10 @@ pub enum CreatePolicyError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2006,65 +1845,62 @@ impl CreatePolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return CreatePolicyError::AWSOrganizationsNotInUse(String::from(error_message));
-                }
-                "AccessDeniedException" => {
-                    return CreatePolicyError::AccessDenied(String::from(error_message));
-                }
-                "ConcurrentModificationException" => {
-                    return CreatePolicyError::ConcurrentModification(String::from(error_message));
-                }
-                "ConstraintViolationException" => {
-                    return CreatePolicyError::ConstraintViolation(String::from(error_message));
-                }
-                "DuplicatePolicyException" => {
-                    return CreatePolicyError::DuplicatePolicy(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return CreatePolicyError::InvalidInput(String::from(error_message));
-                }
-                "MalformedPolicyDocumentException" => {
-                    return CreatePolicyError::MalformedPolicyDocument(String::from(error_message));
-                }
-                "PolicyTypeNotAvailableForOrganizationException" => {
-                    return CreatePolicyError::PolicyTypeNotAvailableForOrganization(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePolicyError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreatePolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(CreatePolicyError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
+                }
+                "ConstraintViolationException" => {
+                    return RusotoError::Service(CreatePolicyError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
+                }
+                "DuplicatePolicyException" => {
+                    return RusotoError::Service(CreatePolicyError::DuplicatePolicy(String::from(
+                        error_message,
+                    )));
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreatePolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
+                }
+                "MalformedPolicyDocumentException" => {
+                    return RusotoError::Service(CreatePolicyError::MalformedPolicyDocument(
+                        String::from(error_message),
+                    ));
+                }
+                "PolicyTypeNotAvailableForOrganizationException" => {
+                    return RusotoError::Service(
+                        CreatePolicyError::PolicyTypeNotAvailableForOrganization(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ServiceException" => {
-                    return CreatePolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(CreatePolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreatePolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreatePolicyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreatePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePolicyError {
-    fn from(err: serde_json::error::Error) -> CreatePolicyError {
-        CreatePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePolicyError {
-    fn from(err: CredentialsError) -> CreatePolicyError {
-        CreatePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePolicyError {
-    fn from(err: HttpDispatchError) -> CreatePolicyError {
-        CreatePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePolicyError {
-    fn from(err: io::Error) -> CreatePolicyError {
-        CreatePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePolicyError {
@@ -2085,11 +1921,6 @@ impl Error for CreatePolicyError {
             CreatePolicyError::PolicyTypeNotAvailableForOrganization(ref cause) => cause,
             CreatePolicyError::Service(ref cause) => cause,
             CreatePolicyError::TooManyRequests(ref cause) => cause,
-            CreatePolicyError::Validation(ref cause) => cause,
-            CreatePolicyError::Credentials(ref err) => err.description(),
-            CreatePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePolicyError::ParseError(ref cause) => cause,
-            CreatePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2112,20 +1943,10 @@ pub enum DeclineHandshakeError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeclineHandshakeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeclineHandshakeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeclineHandshakeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2138,63 +1959,50 @@ impl DeclineHandshakeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeclineHandshakeError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeclineHandshakeError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return DeclineHandshakeError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DeclineHandshakeError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "HandshakeAlreadyInStateException" => {
-                    return DeclineHandshakeError::HandshakeAlreadyInState(String::from(
-                        error_message,
+                    return RusotoError::Service(DeclineHandshakeError::HandshakeAlreadyInState(
+                        String::from(error_message),
                     ));
                 }
                 "HandshakeNotFoundException" => {
-                    return DeclineHandshakeError::HandshakeNotFound(String::from(error_message));
+                    return RusotoError::Service(DeclineHandshakeError::HandshakeNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidHandshakeTransitionException" => {
-                    return DeclineHandshakeError::InvalidHandshakeTransition(String::from(
-                        error_message,
+                    return RusotoError::Service(DeclineHandshakeError::InvalidHandshakeTransition(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DeclineHandshakeError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeclineHandshakeError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DeclineHandshakeError::Service(String::from(error_message));
+                    return RusotoError::Service(DeclineHandshakeError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeclineHandshakeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeclineHandshakeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeclineHandshakeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeclineHandshakeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeclineHandshakeError {
-    fn from(err: serde_json::error::Error) -> DeclineHandshakeError {
-        DeclineHandshakeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeclineHandshakeError {
-    fn from(err: CredentialsError) -> DeclineHandshakeError {
-        DeclineHandshakeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeclineHandshakeError {
-    fn from(err: HttpDispatchError) -> DeclineHandshakeError {
-        DeclineHandshakeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeclineHandshakeError {
-    fn from(err: io::Error) -> DeclineHandshakeError {
-        DeclineHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeclineHandshakeError {
@@ -2213,11 +2021,6 @@ impl Error for DeclineHandshakeError {
             DeclineHandshakeError::InvalidInput(ref cause) => cause,
             DeclineHandshakeError::Service(ref cause) => cause,
             DeclineHandshakeError::TooManyRequests(ref cause) => cause,
-            DeclineHandshakeError::Validation(ref cause) => cause,
-            DeclineHandshakeError::Credentials(ref err) => err.description(),
-            DeclineHandshakeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeclineHandshakeError::ParseError(ref cause) => cause,
-            DeclineHandshakeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2238,20 +2041,10 @@ pub enum DeleteOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteOrganizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2264,60 +2057,45 @@ impl DeleteOrganizationError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DeleteOrganizationError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteOrganizationError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return DeleteOrganizationError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteOrganizationError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return DeleteOrganizationError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteOrganizationError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DeleteOrganizationError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteOrganizationError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotEmptyException" => {
-                    return DeleteOrganizationError::OrganizationNotEmpty(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteOrganizationError::OrganizationNotEmpty(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DeleteOrganizationError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteOrganizationError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteOrganizationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteOrganizationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteOrganizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteOrganizationError {
-    fn from(err: serde_json::error::Error) -> DeleteOrganizationError {
-        DeleteOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteOrganizationError {
-    fn from(err: CredentialsError) -> DeleteOrganizationError {
-        DeleteOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteOrganizationError {
-    fn from(err: HttpDispatchError) -> DeleteOrganizationError {
-        DeleteOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteOrganizationError {
-    fn from(err: io::Error) -> DeleteOrganizationError {
-        DeleteOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteOrganizationError {
@@ -2335,13 +2113,6 @@ impl Error for DeleteOrganizationError {
             DeleteOrganizationError::OrganizationNotEmpty(ref cause) => cause,
             DeleteOrganizationError::Service(ref cause) => cause,
             DeleteOrganizationError::TooManyRequests(ref cause) => cause,
-            DeleteOrganizationError::Validation(ref cause) => cause,
-            DeleteOrganizationError::Credentials(ref err) => err.description(),
-            DeleteOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteOrganizationError::ParseError(ref cause) => cause,
-            DeleteOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2364,20 +2135,10 @@ pub enum DeleteOrganizationalUnitError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteOrganizationalUnitError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteOrganizationalUnitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOrganizationalUnitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2390,67 +2151,58 @@ impl DeleteOrganizationalUnitError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return DeleteOrganizationalUnitError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteOrganizationalUnitError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return DeleteOrganizationalUnitError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteOrganizationalUnitError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return DeleteOrganizationalUnitError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteOrganizationalUnitError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationalUnitNotEmptyException" => {
-                    return DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OrganizationalUnitNotFoundException" => {
-                    return DeleteOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return DeleteOrganizationalUnitError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DeleteOrganizationalUnitError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteOrganizationalUnitError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteOrganizationalUnitError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteOrganizationalUnitError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteOrganizationalUnitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteOrganizationalUnitError {
-    fn from(err: serde_json::error::Error) -> DeleteOrganizationalUnitError {
-        DeleteOrganizationalUnitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteOrganizationalUnitError {
-    fn from(err: CredentialsError) -> DeleteOrganizationalUnitError {
-        DeleteOrganizationalUnitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteOrganizationalUnitError {
-    fn from(err: HttpDispatchError) -> DeleteOrganizationalUnitError {
-        DeleteOrganizationalUnitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteOrganizationalUnitError {
-    fn from(err: io::Error) -> DeleteOrganizationalUnitError {
-        DeleteOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteOrganizationalUnitError {
@@ -2469,13 +2221,6 @@ impl Error for DeleteOrganizationalUnitError {
             DeleteOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => cause,
             DeleteOrganizationalUnitError::Service(ref cause) => cause,
             DeleteOrganizationalUnitError::TooManyRequests(ref cause) => cause,
-            DeleteOrganizationalUnitError::Validation(ref cause) => cause,
-            DeleteOrganizationalUnitError::Credentials(ref err) => err.description(),
-            DeleteOrganizationalUnitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteOrganizationalUnitError::ParseError(ref cause) => cause,
-            DeleteOrganizationalUnitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2498,20 +2243,10 @@ pub enum DeletePolicyError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2524,57 +2259,50 @@ impl DeletePolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DeletePolicyError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DeletePolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return DeletePolicyError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeletePolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyInUseException" => {
-                    return DeletePolicyError::PolicyInUse(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::PolicyInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyNotFoundException" => {
-                    return DeletePolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::PolicyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DeletePolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeletePolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeletePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePolicyError {
-    fn from(err: serde_json::error::Error) -> DeletePolicyError {
-        DeletePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePolicyError {
-    fn from(err: CredentialsError) -> DeletePolicyError {
-        DeletePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePolicyError {
-    fn from(err: HttpDispatchError) -> DeletePolicyError {
-        DeletePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePolicyError {
-    fn from(err: io::Error) -> DeletePolicyError {
-        DeletePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePolicyError {
@@ -2593,11 +2321,6 @@ impl Error for DeletePolicyError {
             DeletePolicyError::PolicyNotFound(ref cause) => cause,
             DeletePolicyError::Service(ref cause) => cause,
             DeletePolicyError::TooManyRequests(ref cause) => cause,
-            DeletePolicyError::Validation(ref cause) => cause,
-            DeletePolicyError::Credentials(ref err) => err.description(),
-            DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePolicyError::ParseError(ref cause) => cause,
-            DeletePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2616,20 +2339,10 @@ pub enum DescribeAccountError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2642,53 +2355,40 @@ impl DescribeAccountError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DescribeAccountError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeAccountError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return DescribeAccountError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DescribeAccountError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountNotFoundException" => {
-                    return DescribeAccountError::AccountNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeAccountError::AccountNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DescribeAccountError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DescribeAccountError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DescribeAccountError::Service(String::from(error_message));
+                    return RusotoError::Service(DescribeAccountError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeAccountError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeAccountError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAccountError {
-    fn from(err: serde_json::error::Error) -> DescribeAccountError {
-        DescribeAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAccountError {
-    fn from(err: CredentialsError) -> DescribeAccountError {
-        DescribeAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAccountError {
-    fn from(err: HttpDispatchError) -> DescribeAccountError {
-        DescribeAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAccountError {
-    fn from(err: io::Error) -> DescribeAccountError {
-        DescribeAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAccountError {
@@ -2705,11 +2405,6 @@ impl Error for DescribeAccountError {
             DescribeAccountError::InvalidInput(ref cause) => cause,
             DescribeAccountError::Service(ref cause) => cause,
             DescribeAccountError::TooManyRequests(ref cause) => cause,
-            DescribeAccountError::Validation(ref cause) => cause,
-            DescribeAccountError::Credentials(ref err) => err.description(),
-            DescribeAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeAccountError::ParseError(ref cause) => cause,
-            DescribeAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2728,20 +2423,12 @@ pub enum DescribeCreateAccountStatusError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCreateAccountStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCreateAccountStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCreateAccountStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2754,61 +2441,44 @@ impl DescribeCreateAccountStatusError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return DescribeCreateAccountStatusError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeCreateAccountStatusError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "CreateAccountStatusNotFoundException" => {
-                    return DescribeCreateAccountStatusError::CreateAccountStatusNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeCreateAccountStatusError::CreateAccountStatusNotFound(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return DescribeCreateAccountStatusError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeCreateAccountStatusError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DescribeCreateAccountStatusError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DescribeCreateAccountStatusError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeCreateAccountStatusError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeCreateAccountStatusError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeCreateAccountStatusError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCreateAccountStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCreateAccountStatusError {
-    fn from(err: serde_json::error::Error) -> DescribeCreateAccountStatusError {
-        DescribeCreateAccountStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCreateAccountStatusError {
-    fn from(err: CredentialsError) -> DescribeCreateAccountStatusError {
-        DescribeCreateAccountStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCreateAccountStatusError {
-    fn from(err: HttpDispatchError) -> DescribeCreateAccountStatusError {
-        DescribeCreateAccountStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCreateAccountStatusError {
-    fn from(err: io::Error) -> DescribeCreateAccountStatusError {
-        DescribeCreateAccountStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCreateAccountStatusError {
@@ -2825,13 +2495,6 @@ impl Error for DescribeCreateAccountStatusError {
             DescribeCreateAccountStatusError::InvalidInput(ref cause) => cause,
             DescribeCreateAccountStatusError::Service(ref cause) => cause,
             DescribeCreateAccountStatusError::TooManyRequests(ref cause) => cause,
-            DescribeCreateAccountStatusError::Validation(ref cause) => cause,
-            DescribeCreateAccountStatusError::Credentials(ref err) => err.description(),
-            DescribeCreateAccountStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCreateAccountStatusError::ParseError(ref cause) => cause,
-            DescribeCreateAccountStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2850,20 +2513,10 @@ pub enum DescribeHandshakeError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHandshakeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeHandshakeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHandshakeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2876,53 +2529,40 @@ impl DescribeHandshakeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeHandshakeError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DescribeHandshakeError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return DescribeHandshakeError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeHandshakeError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "HandshakeNotFoundException" => {
-                    return DescribeHandshakeError::HandshakeNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeHandshakeError::HandshakeNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DescribeHandshakeError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DescribeHandshakeError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DescribeHandshakeError::Service(String::from(error_message));
+                    return RusotoError::Service(DescribeHandshakeError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeHandshakeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeHandshakeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeHandshakeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeHandshakeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeHandshakeError {
-    fn from(err: serde_json::error::Error) -> DescribeHandshakeError {
-        DescribeHandshakeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeHandshakeError {
-    fn from(err: CredentialsError) -> DescribeHandshakeError {
-        DescribeHandshakeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeHandshakeError {
-    fn from(err: HttpDispatchError) -> DescribeHandshakeError {
-        DescribeHandshakeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeHandshakeError {
-    fn from(err: io::Error) -> DescribeHandshakeError {
-        DescribeHandshakeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeHandshakeError {
@@ -2939,13 +2579,6 @@ impl Error for DescribeHandshakeError {
             DescribeHandshakeError::InvalidInput(ref cause) => cause,
             DescribeHandshakeError::Service(ref cause) => cause,
             DescribeHandshakeError::TooManyRequests(ref cause) => cause,
-            DescribeHandshakeError::Validation(ref cause) => cause,
-            DescribeHandshakeError::Credentials(ref err) => err.description(),
-            DescribeHandshakeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeHandshakeError::ParseError(ref cause) => cause,
-            DescribeHandshakeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2962,20 +2595,10 @@ pub enum DescribeOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOrganizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2988,52 +2611,37 @@ impl DescribeOrganizationError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DescribeOrganizationError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return DescribeOrganizationError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DescribeOrganizationError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return DescribeOrganizationError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOrganizationError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DescribeOrganizationError::Service(String::from(error_message));
+                    return RusotoError::Service(DescribeOrganizationError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeOrganizationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeOrganizationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeOrganizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeOrganizationError {
-    fn from(err: serde_json::error::Error) -> DescribeOrganizationError {
-        DescribeOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOrganizationError {
-    fn from(err: CredentialsError) -> DescribeOrganizationError {
-        DescribeOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOrganizationError {
-    fn from(err: HttpDispatchError) -> DescribeOrganizationError {
-        DescribeOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOrganizationError {
-    fn from(err: io::Error) -> DescribeOrganizationError {
-        DescribeOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeOrganizationError {
@@ -3049,13 +2657,6 @@ impl Error for DescribeOrganizationError {
             DescribeOrganizationError::ConcurrentModification(ref cause) => cause,
             DescribeOrganizationError::Service(ref cause) => cause,
             DescribeOrganizationError::TooManyRequests(ref cause) => cause,
-            DescribeOrganizationError::Validation(ref cause) => cause,
-            DescribeOrganizationError::Credentials(ref err) => err.description(),
-            DescribeOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOrganizationError::ParseError(ref cause) => cause,
-            DescribeOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3074,20 +2675,12 @@ pub enum DescribeOrganizationalUnitError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeOrganizationalUnitError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOrganizationalUnitError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrganizationalUnitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3100,61 +2693,44 @@ impl DescribeOrganizationalUnitError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return DescribeOrganizationalUnitError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOrganizationalUnitError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DescribeOrganizationalUnitError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOrganizationalUnitError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationalUnitNotFoundException" => {
-                    return DescribeOrganizationalUnitError::OrganizationalUnitNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ServiceException" => {
-                    return DescribeOrganizationalUnitError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DescribeOrganizationalUnitError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOrganizationalUnitError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeOrganizationalUnitError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeOrganizationalUnitError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeOrganizationalUnitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeOrganizationalUnitError {
-    fn from(err: serde_json::error::Error) -> DescribeOrganizationalUnitError {
-        DescribeOrganizationalUnitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOrganizationalUnitError {
-    fn from(err: CredentialsError) -> DescribeOrganizationalUnitError {
-        DescribeOrganizationalUnitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOrganizationalUnitError {
-    fn from(err: HttpDispatchError) -> DescribeOrganizationalUnitError {
-        DescribeOrganizationalUnitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOrganizationalUnitError {
-    fn from(err: io::Error) -> DescribeOrganizationalUnitError {
-        DescribeOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeOrganizationalUnitError {
@@ -3171,13 +2747,6 @@ impl Error for DescribeOrganizationalUnitError {
             DescribeOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => cause,
             DescribeOrganizationalUnitError::Service(ref cause) => cause,
             DescribeOrganizationalUnitError::TooManyRequests(ref cause) => cause,
-            DescribeOrganizationalUnitError::Validation(ref cause) => cause,
-            DescribeOrganizationalUnitError::Credentials(ref err) => err.description(),
-            DescribeOrganizationalUnitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOrganizationalUnitError::ParseError(ref cause) => cause,
-            DescribeOrganizationalUnitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3196,20 +2765,10 @@ pub enum DescribePolicyError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3222,53 +2781,40 @@ impl DescribePolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DescribePolicyError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribePolicyError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return DescribePolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DescribePolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return DescribePolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DescribePolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyNotFoundException" => {
-                    return DescribePolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribePolicyError::PolicyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DescribePolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(DescribePolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DescribePolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribePolicyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribePolicyError {
-    fn from(err: serde_json::error::Error) -> DescribePolicyError {
-        DescribePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribePolicyError {
-    fn from(err: CredentialsError) -> DescribePolicyError {
-        DescribePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribePolicyError {
-    fn from(err: HttpDispatchError) -> DescribePolicyError {
-        DescribePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribePolicyError {
-    fn from(err: io::Error) -> DescribePolicyError {
-        DescribePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribePolicyError {
@@ -3285,11 +2831,6 @@ impl Error for DescribePolicyError {
             DescribePolicyError::PolicyNotFound(ref cause) => cause,
             DescribePolicyError::Service(ref cause) => cause,
             DescribePolicyError::TooManyRequests(ref cause) => cause,
-            DescribePolicyError::Validation(ref cause) => cause,
-            DescribePolicyError::Credentials(ref err) => err.description(),
-            DescribePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribePolicyError::ParseError(ref cause) => cause,
-            DescribePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3316,20 +2857,10 @@ pub enum DetachPolicyError {
     TargetNotFound(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3342,63 +2873,60 @@ impl DetachPolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DetachPolicyError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return DetachPolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return DetachPolicyError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return DetachPolicyError::ConstraintViolation(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DetachPolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyNotAttachedException" => {
-                    return DetachPolicyError::PolicyNotAttached(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::PolicyNotAttached(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyNotFoundException" => {
-                    return DetachPolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::PolicyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DetachPolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TargetNotFoundException" => {
-                    return DetachPolicyError::TargetNotFound(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::TargetNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DetachPolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetachPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachPolicyError {
-    fn from(err: serde_json::error::Error) -> DetachPolicyError {
-        DetachPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachPolicyError {
-    fn from(err: CredentialsError) -> DetachPolicyError {
-        DetachPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachPolicyError {
-    fn from(err: HttpDispatchError) -> DetachPolicyError {
-        DetachPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachPolicyError {
-    fn from(err: io::Error) -> DetachPolicyError {
-        DetachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachPolicyError {
@@ -3419,11 +2947,6 @@ impl Error for DetachPolicyError {
             DetachPolicyError::Service(ref cause) => cause,
             DetachPolicyError::TargetNotFound(ref cause) => cause,
             DetachPolicyError::TooManyRequests(ref cause) => cause,
-            DetachPolicyError::Validation(ref cause) => cause,
-            DetachPolicyError::Credentials(ref err) => err.description(),
-            DetachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachPolicyError::ParseError(ref cause) => cause,
-            DetachPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3444,20 +2967,10 @@ pub enum DisableAWSServiceAccessError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableAWSServiceAccessError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableAWSServiceAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableAWSServiceAccessError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3470,62 +2983,49 @@ impl DisableAWSServiceAccessError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DisableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return DisableAWSServiceAccessError::AccessDenied(String::from(error_message));
-                }
-                "ConcurrentModificationException" => {
-                    return DisableAWSServiceAccessError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableAWSServiceAccessError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        DisableAWSServiceAccessError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ConstraintViolationException" => {
-                    return DisableAWSServiceAccessError::ConstraintViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableAWSServiceAccessError::ConstraintViolation(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DisableAWSServiceAccessError::InvalidInput(String::from(error_message));
-                }
-                "ServiceException" => {
-                    return DisableAWSServiceAccessError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DisableAWSServiceAccessError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableAWSServiceAccessError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DisableAWSServiceAccessError::Validation(error_message.to_string());
+                "ServiceException" => {
+                    return RusotoError::Service(DisableAWSServiceAccessError::Service(
+                        String::from(error_message),
+                    ));
                 }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DisableAWSServiceAccessError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableAWSServiceAccessError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableAWSServiceAccessError {
-    fn from(err: serde_json::error::Error) -> DisableAWSServiceAccessError {
-        DisableAWSServiceAccessError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableAWSServiceAccessError {
-    fn from(err: CredentialsError) -> DisableAWSServiceAccessError {
-        DisableAWSServiceAccessError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableAWSServiceAccessError {
-    fn from(err: HttpDispatchError) -> DisableAWSServiceAccessError {
-        DisableAWSServiceAccessError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableAWSServiceAccessError {
-    fn from(err: io::Error) -> DisableAWSServiceAccessError {
-        DisableAWSServiceAccessError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableAWSServiceAccessError {
@@ -3543,13 +3043,6 @@ impl Error for DisableAWSServiceAccessError {
             DisableAWSServiceAccessError::InvalidInput(ref cause) => cause,
             DisableAWSServiceAccessError::Service(ref cause) => cause,
             DisableAWSServiceAccessError::TooManyRequests(ref cause) => cause,
-            DisableAWSServiceAccessError::Validation(ref cause) => cause,
-            DisableAWSServiceAccessError::Credentials(ref err) => err.description(),
-            DisableAWSServiceAccessError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisableAWSServiceAccessError::ParseError(ref cause) => cause,
-            DisableAWSServiceAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3574,20 +3067,10 @@ pub enum DisablePolicyTypeError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisablePolicyTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisablePolicyTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisablePolicyTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3600,64 +3083,55 @@ impl DisablePolicyTypeError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return DisablePolicyTypeError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(DisablePolicyTypeError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return DisablePolicyTypeError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DisablePolicyTypeError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return DisablePolicyTypeError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DisablePolicyTypeError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ConstraintViolationException" => {
-                    return DisablePolicyTypeError::ConstraintViolation(String::from(error_message));
+                    return RusotoError::Service(DisablePolicyTypeError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DisablePolicyTypeError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DisablePolicyTypeError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyTypeNotEnabledException" => {
-                    return DisablePolicyTypeError::PolicyTypeNotEnabled(String::from(error_message));
+                    return RusotoError::Service(DisablePolicyTypeError::PolicyTypeNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "RootNotFoundException" => {
-                    return DisablePolicyTypeError::RootNotFound(String::from(error_message));
+                    return RusotoError::Service(DisablePolicyTypeError::RootNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DisablePolicyTypeError::Service(String::from(error_message));
+                    return RusotoError::Service(DisablePolicyTypeError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DisablePolicyTypeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DisablePolicyTypeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisablePolicyTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisablePolicyTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisablePolicyTypeError {
-    fn from(err: serde_json::error::Error) -> DisablePolicyTypeError {
-        DisablePolicyTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisablePolicyTypeError {
-    fn from(err: CredentialsError) -> DisablePolicyTypeError {
-        DisablePolicyTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisablePolicyTypeError {
-    fn from(err: HttpDispatchError) -> DisablePolicyTypeError {
-        DisablePolicyTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisablePolicyTypeError {
-    fn from(err: io::Error) -> DisablePolicyTypeError {
-        DisablePolicyTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisablePolicyTypeError {
@@ -3677,13 +3151,6 @@ impl Error for DisablePolicyTypeError {
             DisablePolicyTypeError::RootNotFound(ref cause) => cause,
             DisablePolicyTypeError::Service(ref cause) => cause,
             DisablePolicyTypeError::TooManyRequests(ref cause) => cause,
-            DisablePolicyTypeError::Validation(ref cause) => cause,
-            DisablePolicyTypeError::Credentials(ref err) => err.description(),
-            DisablePolicyTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisablePolicyTypeError::ParseError(ref cause) => cause,
-            DisablePolicyTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3704,20 +3171,10 @@ pub enum EnableAWSServiceAccessError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableAWSServiceAccessError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableAWSServiceAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAWSServiceAccessError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3730,60 +3187,49 @@ impl EnableAWSServiceAccessError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return EnableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        EnableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return EnableAWSServiceAccessError::AccessDenied(String::from(error_message));
-                }
-                "ConcurrentModificationException" => {
-                    return EnableAWSServiceAccessError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableAWSServiceAccessError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        EnableAWSServiceAccessError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ConstraintViolationException" => {
-                    return EnableAWSServiceAccessError::ConstraintViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableAWSServiceAccessError::ConstraintViolation(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return EnableAWSServiceAccessError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(EnableAWSServiceAccessError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return EnableAWSServiceAccessError::Service(String::from(error_message));
+                    return RusotoError::Service(EnableAWSServiceAccessError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return EnableAWSServiceAccessError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(EnableAWSServiceAccessError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EnableAWSServiceAccessError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableAWSServiceAccessError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableAWSServiceAccessError {
-    fn from(err: serde_json::error::Error) -> EnableAWSServiceAccessError {
-        EnableAWSServiceAccessError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableAWSServiceAccessError {
-    fn from(err: CredentialsError) -> EnableAWSServiceAccessError {
-        EnableAWSServiceAccessError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableAWSServiceAccessError {
-    fn from(err: HttpDispatchError) -> EnableAWSServiceAccessError {
-        EnableAWSServiceAccessError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableAWSServiceAccessError {
-    fn from(err: io::Error) -> EnableAWSServiceAccessError {
-        EnableAWSServiceAccessError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableAWSServiceAccessError {
@@ -3801,13 +3247,6 @@ impl Error for EnableAWSServiceAccessError {
             EnableAWSServiceAccessError::InvalidInput(ref cause) => cause,
             EnableAWSServiceAccessError::Service(ref cause) => cause,
             EnableAWSServiceAccessError::TooManyRequests(ref cause) => cause,
-            EnableAWSServiceAccessError::Validation(ref cause) => cause,
-            EnableAWSServiceAccessError::Credentials(ref err) => err.description(),
-            EnableAWSServiceAccessError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableAWSServiceAccessError::ParseError(ref cause) => cause,
-            EnableAWSServiceAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3828,20 +3267,10 @@ pub enum EnableAllFeaturesError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableAllFeaturesError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableAllFeaturesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableAllFeaturesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3854,60 +3283,47 @@ impl EnableAllFeaturesError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return EnableAllFeaturesError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableAllFeaturesError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return EnableAllFeaturesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(EnableAllFeaturesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return EnableAllFeaturesError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableAllFeaturesError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "HandshakeConstraintViolationException" => {
-                    return EnableAllFeaturesError::HandshakeConstraintViolation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        EnableAllFeaturesError::HandshakeConstraintViolation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return EnableAllFeaturesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(EnableAllFeaturesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return EnableAllFeaturesError::Service(String::from(error_message));
+                    return RusotoError::Service(EnableAllFeaturesError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return EnableAllFeaturesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(EnableAllFeaturesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EnableAllFeaturesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableAllFeaturesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableAllFeaturesError {
-    fn from(err: serde_json::error::Error) -> EnableAllFeaturesError {
-        EnableAllFeaturesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableAllFeaturesError {
-    fn from(err: CredentialsError) -> EnableAllFeaturesError {
-        EnableAllFeaturesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableAllFeaturesError {
-    fn from(err: HttpDispatchError) -> EnableAllFeaturesError {
-        EnableAllFeaturesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableAllFeaturesError {
-    fn from(err: io::Error) -> EnableAllFeaturesError {
-        EnableAllFeaturesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableAllFeaturesError {
@@ -3925,13 +3341,6 @@ impl Error for EnableAllFeaturesError {
             EnableAllFeaturesError::InvalidInput(ref cause) => cause,
             EnableAllFeaturesError::Service(ref cause) => cause,
             EnableAllFeaturesError::TooManyRequests(ref cause) => cause,
-            EnableAllFeaturesError::Validation(ref cause) => cause,
-            EnableAllFeaturesError::Credentials(ref err) => err.description(),
-            EnableAllFeaturesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableAllFeaturesError::ParseError(ref cause) => cause,
-            EnableAllFeaturesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3958,20 +3367,10 @@ pub enum EnablePolicyTypeError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnablePolicyTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnablePolicyTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnablePolicyTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3984,71 +3383,62 @@ impl EnablePolicyTypeError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return EnablePolicyTypeError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(EnablePolicyTypeError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return EnablePolicyTypeError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(EnablePolicyTypeError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return EnablePolicyTypeError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(EnablePolicyTypeError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ConstraintViolationException" => {
-                    return EnablePolicyTypeError::ConstraintViolation(String::from(error_message));
+                    return RusotoError::Service(EnablePolicyTypeError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return EnablePolicyTypeError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(EnablePolicyTypeError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "PolicyTypeAlreadyEnabledException" => {
-                    return EnablePolicyTypeError::PolicyTypeAlreadyEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(EnablePolicyTypeError::PolicyTypeAlreadyEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "PolicyTypeNotAvailableForOrganizationException" => {
-                    return EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "RootNotFoundException" => {
-                    return EnablePolicyTypeError::RootNotFound(String::from(error_message));
+                    return RusotoError::Service(EnablePolicyTypeError::RootNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return EnablePolicyTypeError::Service(String::from(error_message));
+                    return RusotoError::Service(EnablePolicyTypeError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return EnablePolicyTypeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(EnablePolicyTypeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EnablePolicyTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnablePolicyTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnablePolicyTypeError {
-    fn from(err: serde_json::error::Error) -> EnablePolicyTypeError {
-        EnablePolicyTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnablePolicyTypeError {
-    fn from(err: CredentialsError) -> EnablePolicyTypeError {
-        EnablePolicyTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnablePolicyTypeError {
-    fn from(err: HttpDispatchError) -> EnablePolicyTypeError {
-        EnablePolicyTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnablePolicyTypeError {
-    fn from(err: io::Error) -> EnablePolicyTypeError {
-        EnablePolicyTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnablePolicyTypeError {
@@ -4069,11 +3459,6 @@ impl Error for EnablePolicyTypeError {
             EnablePolicyTypeError::RootNotFound(ref cause) => cause,
             EnablePolicyTypeError::Service(ref cause) => cause,
             EnablePolicyTypeError::TooManyRequests(ref cause) => cause,
-            EnablePolicyTypeError::Validation(ref cause) => cause,
-            EnablePolicyTypeError::Credentials(ref err) => err.description(),
-            EnablePolicyTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnablePolicyTypeError::ParseError(ref cause) => cause,
-            EnablePolicyTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4100,20 +3485,12 @@ pub enum InviteAccountToOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InviteAccountToOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> InviteAccountToOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<InviteAccountToOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4126,81 +3503,72 @@ impl InviteAccountToOrganizationError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return InviteAccountToOrganizationError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InviteAccountToOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return InviteAccountToOrganizationError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(InviteAccountToOrganizationError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountOwnerNotVerifiedException" => {
-                    return InviteAccountToOrganizationError::AccountOwnerNotVerified(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InviteAccountToOrganizationError::AccountOwnerNotVerified(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ConcurrentModificationException" => {
-                    return InviteAccountToOrganizationError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InviteAccountToOrganizationError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DuplicateHandshakeException" => {
-                    return InviteAccountToOrganizationError::DuplicateHandshake(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InviteAccountToOrganizationError::DuplicateHandshake(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "FinalizingOrganizationException" => {
-                    return InviteAccountToOrganizationError::FinalizingOrganization(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InviteAccountToOrganizationError::FinalizingOrganization(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "HandshakeConstraintViolationException" => {
-                    return InviteAccountToOrganizationError::HandshakeConstraintViolation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        InviteAccountToOrganizationError::HandshakeConstraintViolation(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return InviteAccountToOrganizationError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(InviteAccountToOrganizationError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return InviteAccountToOrganizationError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return InviteAccountToOrganizationError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(InviteAccountToOrganizationError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return InviteAccountToOrganizationError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(InviteAccountToOrganizationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InviteAccountToOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InviteAccountToOrganizationError {
-    fn from(err: serde_json::error::Error) -> InviteAccountToOrganizationError {
-        InviteAccountToOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InviteAccountToOrganizationError {
-    fn from(err: CredentialsError) -> InviteAccountToOrganizationError {
-        InviteAccountToOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InviteAccountToOrganizationError {
-    fn from(err: HttpDispatchError) -> InviteAccountToOrganizationError {
-        InviteAccountToOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InviteAccountToOrganizationError {
-    fn from(err: io::Error) -> InviteAccountToOrganizationError {
-        InviteAccountToOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InviteAccountToOrganizationError {
@@ -4221,13 +3589,6 @@ impl Error for InviteAccountToOrganizationError {
             InviteAccountToOrganizationError::InvalidInput(ref cause) => cause,
             InviteAccountToOrganizationError::Service(ref cause) => cause,
             InviteAccountToOrganizationError::TooManyRequests(ref cause) => cause,
-            InviteAccountToOrganizationError::Validation(ref cause) => cause,
-            InviteAccountToOrganizationError::Credentials(ref err) => err.description(),
-            InviteAccountToOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InviteAccountToOrganizationError::ParseError(ref cause) => cause,
-            InviteAccountToOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4252,20 +3613,10 @@ pub enum LeaveOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl LeaveOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> LeaveOrganizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LeaveOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4278,66 +3629,57 @@ impl LeaveOrganizationError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return LeaveOrganizationError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(LeaveOrganizationError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
                     ));
                 }
                 "AccessDeniedException" => {
-                    return LeaveOrganizationError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(LeaveOrganizationError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountNotFoundException" => {
-                    return LeaveOrganizationError::AccountNotFound(String::from(error_message));
+                    return RusotoError::Service(LeaveOrganizationError::AccountNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return LeaveOrganizationError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(LeaveOrganizationError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ConstraintViolationException" => {
-                    return LeaveOrganizationError::ConstraintViolation(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return LeaveOrganizationError::InvalidInput(String::from(error_message));
-                }
-                "MasterCannotLeaveOrganizationException" => {
-                    return LeaveOrganizationError::MasterCannotLeaveOrganization(String::from(
-                        error_message,
+                    return RusotoError::Service(LeaveOrganizationError::ConstraintViolation(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidInputException" => {
+                    return RusotoError::Service(LeaveOrganizationError::InvalidInput(String::from(
+                        error_message,
+                    )));
+                }
+                "MasterCannotLeaveOrganizationException" => {
+                    return RusotoError::Service(
+                        LeaveOrganizationError::MasterCannotLeaveOrganization(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ServiceException" => {
-                    return LeaveOrganizationError::Service(String::from(error_message));
+                    return RusotoError::Service(LeaveOrganizationError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return LeaveOrganizationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(LeaveOrganizationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return LeaveOrganizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return LeaveOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for LeaveOrganizationError {
-    fn from(err: serde_json::error::Error) -> LeaveOrganizationError {
-        LeaveOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for LeaveOrganizationError {
-    fn from(err: CredentialsError) -> LeaveOrganizationError {
-        LeaveOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for LeaveOrganizationError {
-    fn from(err: HttpDispatchError) -> LeaveOrganizationError {
-        LeaveOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for LeaveOrganizationError {
-    fn from(err: io::Error) -> LeaveOrganizationError {
-        LeaveOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for LeaveOrganizationError {
@@ -4357,13 +3699,6 @@ impl Error for LeaveOrganizationError {
             LeaveOrganizationError::MasterCannotLeaveOrganization(ref cause) => cause,
             LeaveOrganizationError::Service(ref cause) => cause,
             LeaveOrganizationError::TooManyRequests(ref cause) => cause,
-            LeaveOrganizationError::Validation(ref cause) => cause,
-            LeaveOrganizationError::Credentials(ref err) => err.description(),
-            LeaveOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            LeaveOrganizationError::ParseError(ref cause) => cause,
-            LeaveOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4382,20 +3717,12 @@ pub enum ListAWSServiceAccessForOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAWSServiceAccessForOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAWSServiceAccessForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListAWSServiceAccessForOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4408,65 +3735,50 @@ impl ListAWSServiceAccessForOrganizationError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "AccessDeniedException" => {
-                    return ListAWSServiceAccessForOrganizationError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListAWSServiceAccessForOrganizationError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ConstraintViolationException" => {
-                    return ListAWSServiceAccessForOrganizationError::ConstraintViolation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListAWSServiceAccessForOrganizationError::ConstraintViolation(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return ListAWSServiceAccessForOrganizationError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListAWSServiceAccessForOrganizationError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return ListAWSServiceAccessForOrganizationError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(ListAWSServiceAccessForOrganizationError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ListAWSServiceAccessForOrganizationError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return ListAWSServiceAccessForOrganizationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        ListAWSServiceAccessForOrganizationError::TooManyRequests(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAWSServiceAccessForOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAWSServiceAccessForOrganizationError {
-    fn from(err: serde_json::error::Error) -> ListAWSServiceAccessForOrganizationError {
-        ListAWSServiceAccessForOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAWSServiceAccessForOrganizationError {
-    fn from(err: CredentialsError) -> ListAWSServiceAccessForOrganizationError {
-        ListAWSServiceAccessForOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAWSServiceAccessForOrganizationError {
-    fn from(err: HttpDispatchError) -> ListAWSServiceAccessForOrganizationError {
-        ListAWSServiceAccessForOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAWSServiceAccessForOrganizationError {
-    fn from(err: io::Error) -> ListAWSServiceAccessForOrganizationError {
-        ListAWSServiceAccessForOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAWSServiceAccessForOrganizationError {
@@ -4483,13 +3795,6 @@ impl Error for ListAWSServiceAccessForOrganizationError {
             ListAWSServiceAccessForOrganizationError::InvalidInput(ref cause) => cause,
             ListAWSServiceAccessForOrganizationError::Service(ref cause) => cause,
             ListAWSServiceAccessForOrganizationError::TooManyRequests(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::Validation(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::Credentials(ref err) => err.description(),
-            ListAWSServiceAccessForOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAWSServiceAccessForOrganizationError::ParseError(ref cause) => cause,
-            ListAWSServiceAccessForOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4506,20 +3811,10 @@ pub enum ListAccountsError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAccountsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAccountsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4532,48 +3827,35 @@ impl ListAccountsError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListAccountsError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(ListAccountsError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListAccountsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListAccountsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return ListAccountsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListAccountsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return ListAccountsError::Service(String::from(error_message));
+                    return RusotoError::Service(ListAccountsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListAccountsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListAccountsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListAccountsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAccountsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAccountsError {
-    fn from(err: serde_json::error::Error) -> ListAccountsError {
-        ListAccountsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAccountsError {
-    fn from(err: CredentialsError) -> ListAccountsError {
-        ListAccountsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAccountsError {
-    fn from(err: HttpDispatchError) -> ListAccountsError {
-        ListAccountsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAccountsError {
-    fn from(err: io::Error) -> ListAccountsError {
-        ListAccountsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAccountsError {
@@ -4589,11 +3871,6 @@ impl Error for ListAccountsError {
             ListAccountsError::InvalidInput(ref cause) => cause,
             ListAccountsError::Service(ref cause) => cause,
             ListAccountsError::TooManyRequests(ref cause) => cause,
-            ListAccountsError::Validation(ref cause) => cause,
-            ListAccountsError::Credentials(ref err) => err.description(),
-            ListAccountsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAccountsError::ParseError(ref cause) => cause,
-            ListAccountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4612,20 +3889,10 @@ pub enum ListAccountsForParentError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAccountsForParentError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAccountsForParentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountsForParentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4638,53 +3905,42 @@ impl ListAccountsForParentError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListAccountsForParentError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListAccountsForParentError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return ListAccountsForParentError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListAccountsForParentError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ListAccountsForParentError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListAccountsForParentError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "ParentNotFoundException" => {
-                    return ListAccountsForParentError::ParentNotFound(String::from(error_message));
+                    return RusotoError::Service(ListAccountsForParentError::ParentNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return ListAccountsForParentError::Service(String::from(error_message));
+                    return RusotoError::Service(ListAccountsForParentError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListAccountsForParentError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListAccountsForParentError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListAccountsForParentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAccountsForParentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAccountsForParentError {
-    fn from(err: serde_json::error::Error) -> ListAccountsForParentError {
-        ListAccountsForParentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAccountsForParentError {
-    fn from(err: CredentialsError) -> ListAccountsForParentError {
-        ListAccountsForParentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAccountsForParentError {
-    fn from(err: HttpDispatchError) -> ListAccountsForParentError {
-        ListAccountsForParentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAccountsForParentError {
-    fn from(err: io::Error) -> ListAccountsForParentError {
-        ListAccountsForParentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAccountsForParentError {
@@ -4701,13 +3957,6 @@ impl Error for ListAccountsForParentError {
             ListAccountsForParentError::ParentNotFound(ref cause) => cause,
             ListAccountsForParentError::Service(ref cause) => cause,
             ListAccountsForParentError::TooManyRequests(ref cause) => cause,
-            ListAccountsForParentError::Validation(ref cause) => cause,
-            ListAccountsForParentError::Credentials(ref err) => err.description(),
-            ListAccountsForParentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAccountsForParentError::ParseError(ref cause) => cause,
-            ListAccountsForParentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4726,20 +3975,10 @@ pub enum ListChildrenError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListChildrenError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListChildrenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChildrenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4752,51 +3991,40 @@ impl ListChildrenError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListChildrenError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(ListChildrenError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListChildrenError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListChildrenError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return ListChildrenError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListChildrenError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ParentNotFoundException" => {
-                    return ListChildrenError::ParentNotFound(String::from(error_message));
+                    return RusotoError::Service(ListChildrenError::ParentNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return ListChildrenError::Service(String::from(error_message));
+                    return RusotoError::Service(ListChildrenError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListChildrenError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListChildrenError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListChildrenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListChildrenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListChildrenError {
-    fn from(err: serde_json::error::Error) -> ListChildrenError {
-        ListChildrenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListChildrenError {
-    fn from(err: CredentialsError) -> ListChildrenError {
-        ListChildrenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListChildrenError {
-    fn from(err: HttpDispatchError) -> ListChildrenError {
-        ListChildrenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListChildrenError {
-    fn from(err: io::Error) -> ListChildrenError {
-        ListChildrenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListChildrenError {
@@ -4813,11 +4041,6 @@ impl Error for ListChildrenError {
             ListChildrenError::ParentNotFound(ref cause) => cause,
             ListChildrenError::Service(ref cause) => cause,
             ListChildrenError::TooManyRequests(ref cause) => cause,
-            ListChildrenError::Validation(ref cause) => cause,
-            ListChildrenError::Credentials(ref err) => err.description(),
-            ListChildrenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListChildrenError::ParseError(ref cause) => cause,
-            ListChildrenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4834,20 +4057,10 @@ pub enum ListCreateAccountStatusError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListCreateAccountStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListCreateAccountStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCreateAccountStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4860,52 +4073,37 @@ impl ListCreateAccountStatusError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return ListCreateAccountStatusError::AccessDenied(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return ListCreateAccountStatusError::InvalidInput(String::from(error_message));
-                }
-                "ServiceException" => {
-                    return ListCreateAccountStatusError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListCreateAccountStatusError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListCreateAccountStatusError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListCreateAccountStatusError::Validation(error_message.to_string());
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListCreateAccountStatusError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
+                "ServiceException" => {
+                    return RusotoError::Service(ListCreateAccountStatusError::Service(
+                        String::from(error_message),
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListCreateAccountStatusError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListCreateAccountStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListCreateAccountStatusError {
-    fn from(err: serde_json::error::Error) -> ListCreateAccountStatusError {
-        ListCreateAccountStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListCreateAccountStatusError {
-    fn from(err: CredentialsError) -> ListCreateAccountStatusError {
-        ListCreateAccountStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListCreateAccountStatusError {
-    fn from(err: HttpDispatchError) -> ListCreateAccountStatusError {
-        ListCreateAccountStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListCreateAccountStatusError {
-    fn from(err: io::Error) -> ListCreateAccountStatusError {
-        ListCreateAccountStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListCreateAccountStatusError {
@@ -4921,13 +4119,6 @@ impl Error for ListCreateAccountStatusError {
             ListCreateAccountStatusError::InvalidInput(ref cause) => cause,
             ListCreateAccountStatusError::Service(ref cause) => cause,
             ListCreateAccountStatusError::TooManyRequests(ref cause) => cause,
-            ListCreateAccountStatusError::Validation(ref cause) => cause,
-            ListCreateAccountStatusError::Credentials(ref err) => err.description(),
-            ListCreateAccountStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListCreateAccountStatusError::ParseError(ref cause) => cause,
-            ListCreateAccountStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4944,20 +4135,10 @@ pub enum ListHandshakesForAccountError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHandshakesForAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHandshakesForAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHandshakesForAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4970,52 +4151,37 @@ impl ListHandshakesForAccountError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListHandshakesForAccountError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListHandshakesForAccountError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return ListHandshakesForAccountError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListHandshakesForAccountError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return ListHandshakesForAccountError::InvalidInput(String::from(error_message));
-                }
-                "ServiceException" => {
-                    return ListHandshakesForAccountError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListHandshakesForAccountError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListHandshakesForAccountError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListHandshakesForAccountError::Validation(error_message.to_string());
+                "ServiceException" => {
+                    return RusotoError::Service(ListHandshakesForAccountError::Service(
+                        String::from(error_message),
+                    ));
                 }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListHandshakesForAccountError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListHandshakesForAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListHandshakesForAccountError {
-    fn from(err: serde_json::error::Error) -> ListHandshakesForAccountError {
-        ListHandshakesForAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListHandshakesForAccountError {
-    fn from(err: CredentialsError) -> ListHandshakesForAccountError {
-        ListHandshakesForAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHandshakesForAccountError {
-    fn from(err: HttpDispatchError) -> ListHandshakesForAccountError {
-        ListHandshakesForAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHandshakesForAccountError {
-    fn from(err: io::Error) -> ListHandshakesForAccountError {
-        ListHandshakesForAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListHandshakesForAccountError {
@@ -5031,13 +4197,6 @@ impl Error for ListHandshakesForAccountError {
             ListHandshakesForAccountError::InvalidInput(ref cause) => cause,
             ListHandshakesForAccountError::Service(ref cause) => cause,
             ListHandshakesForAccountError::TooManyRequests(ref cause) => cause,
-            ListHandshakesForAccountError::Validation(ref cause) => cause,
-            ListHandshakesForAccountError::Credentials(ref err) => err.description(),
-            ListHandshakesForAccountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListHandshakesForAccountError::ParseError(ref cause) => cause,
-            ListHandshakesForAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5056,20 +4215,12 @@ pub enum ListHandshakesForOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHandshakesForOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHandshakesForOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListHandshakesForOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5082,61 +4233,46 @@ impl ListHandshakesForOrganizationError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "AccessDeniedException" => {
-                    return ListHandshakesForOrganizationError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(ListHandshakesForOrganizationError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "ConcurrentModificationException" => {
-                    return ListHandshakesForOrganizationError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListHandshakesForOrganizationError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return ListHandshakesForOrganizationError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(ListHandshakesForOrganizationError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return ListHandshakesForOrganizationError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListHandshakesForOrganizationError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListHandshakesForOrganizationError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListHandshakesForOrganizationError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        ListHandshakesForOrganizationError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListHandshakesForOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListHandshakesForOrganizationError {
-    fn from(err: serde_json::error::Error) -> ListHandshakesForOrganizationError {
-        ListHandshakesForOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListHandshakesForOrganizationError {
-    fn from(err: CredentialsError) -> ListHandshakesForOrganizationError {
-        ListHandshakesForOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHandshakesForOrganizationError {
-    fn from(err: HttpDispatchError) -> ListHandshakesForOrganizationError {
-        ListHandshakesForOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHandshakesForOrganizationError {
-    fn from(err: io::Error) -> ListHandshakesForOrganizationError {
-        ListHandshakesForOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListHandshakesForOrganizationError {
@@ -5153,13 +4289,6 @@ impl Error for ListHandshakesForOrganizationError {
             ListHandshakesForOrganizationError::InvalidInput(ref cause) => cause,
             ListHandshakesForOrganizationError::Service(ref cause) => cause,
             ListHandshakesForOrganizationError::TooManyRequests(ref cause) => cause,
-            ListHandshakesForOrganizationError::Validation(ref cause) => cause,
-            ListHandshakesForOrganizationError::Credentials(ref err) => err.description(),
-            ListHandshakesForOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListHandshakesForOrganizationError::ParseError(ref cause) => cause,
-            ListHandshakesForOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5178,20 +4307,12 @@ pub enum ListOrganizationalUnitsForParentError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOrganizationalUnitsForParentError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOrganizationalUnitsForParentError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListOrganizationalUnitsForParentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5204,65 +4325,50 @@ impl ListOrganizationalUnitsForParentError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "AccessDeniedException" => {
-                    return ListOrganizationalUnitsForParentError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListOrganizationalUnitsForParentError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return ListOrganizationalUnitsForParentError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListOrganizationalUnitsForParentError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ParentNotFoundException" => {
-                    return ListOrganizationalUnitsForParentError::ParentNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListOrganizationalUnitsForParentError::ParentNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return ListOrganizationalUnitsForParentError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOrganizationalUnitsForParentError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ListOrganizationalUnitsForParentError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return ListOrganizationalUnitsForParentError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        ListOrganizationalUnitsForParentError::TooManyRequests(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOrganizationalUnitsForParentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOrganizationalUnitsForParentError {
-    fn from(err: serde_json::error::Error) -> ListOrganizationalUnitsForParentError {
-        ListOrganizationalUnitsForParentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOrganizationalUnitsForParentError {
-    fn from(err: CredentialsError) -> ListOrganizationalUnitsForParentError {
-        ListOrganizationalUnitsForParentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOrganizationalUnitsForParentError {
-    fn from(err: HttpDispatchError) -> ListOrganizationalUnitsForParentError {
-        ListOrganizationalUnitsForParentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOrganizationalUnitsForParentError {
-    fn from(err: io::Error) -> ListOrganizationalUnitsForParentError {
-        ListOrganizationalUnitsForParentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOrganizationalUnitsForParentError {
@@ -5279,13 +4385,6 @@ impl Error for ListOrganizationalUnitsForParentError {
             ListOrganizationalUnitsForParentError::ParentNotFound(ref cause) => cause,
             ListOrganizationalUnitsForParentError::Service(ref cause) => cause,
             ListOrganizationalUnitsForParentError::TooManyRequests(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::Validation(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::Credentials(ref err) => err.description(),
-            ListOrganizationalUnitsForParentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOrganizationalUnitsForParentError::ParseError(ref cause) => cause,
-            ListOrganizationalUnitsForParentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5304,20 +4403,10 @@ pub enum ListParentsError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListParentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListParentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListParentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5330,49 +4419,40 @@ impl ListParentsError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListParentsError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(ListParentsError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListParentsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListParentsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ChildNotFoundException" => {
-                    return ListParentsError::ChildNotFound(String::from(error_message));
+                    return RusotoError::Service(ListParentsError::ChildNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return ListParentsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListParentsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return ListParentsError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(ListParentsError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return ListParentsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListParentsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListParentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListParentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListParentsError {
-    fn from(err: serde_json::error::Error) -> ListParentsError {
-        ListParentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListParentsError {
-    fn from(err: CredentialsError) -> ListParentsError {
-        ListParentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListParentsError {
-    fn from(err: HttpDispatchError) -> ListParentsError {
-        ListParentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListParentsError {
-    fn from(err: io::Error) -> ListParentsError {
-        ListParentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListParentsError {
@@ -5389,11 +4469,6 @@ impl Error for ListParentsError {
             ListParentsError::InvalidInput(ref cause) => cause,
             ListParentsError::Service(ref cause) => cause,
             ListParentsError::TooManyRequests(ref cause) => cause,
-            ListParentsError::Validation(ref cause) => cause,
-            ListParentsError::Credentials(ref err) => err.description(),
-            ListParentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListParentsError::ParseError(ref cause) => cause,
-            ListParentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5410,20 +4485,10 @@ pub enum ListPoliciesError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5436,48 +4501,35 @@ impl ListPoliciesError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListPoliciesError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListPoliciesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return ListPoliciesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return ListPoliciesError::Service(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListPoliciesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPoliciesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPoliciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPoliciesError {
-    fn from(err: serde_json::error::Error) -> ListPoliciesError {
-        ListPoliciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPoliciesError {
-    fn from(err: CredentialsError) -> ListPoliciesError {
-        ListPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPoliciesError {
-    fn from(err: HttpDispatchError) -> ListPoliciesError {
-        ListPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPoliciesError {
-    fn from(err: io::Error) -> ListPoliciesError {
-        ListPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -5493,11 +4545,6 @@ impl Error for ListPoliciesError {
             ListPoliciesError::InvalidInput(ref cause) => cause,
             ListPoliciesError::Service(ref cause) => cause,
             ListPoliciesError::TooManyRequests(ref cause) => cause,
-            ListPoliciesError::Validation(ref cause) => cause,
-            ListPoliciesError::Credentials(ref err) => err.description(),
-            ListPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPoliciesError::ParseError(ref cause) => cause,
-            ListPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5516,20 +4563,10 @@ pub enum ListPoliciesForTargetError {
     TargetNotFound(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPoliciesForTargetError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesForTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesForTargetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5542,53 +4579,42 @@ impl ListPoliciesForTargetError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListPoliciesForTargetError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListPoliciesForTargetError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return ListPoliciesForTargetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesForTargetError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ListPoliciesForTargetError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesForTargetError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return ListPoliciesForTargetError::Service(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesForTargetError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TargetNotFoundException" => {
-                    return ListPoliciesForTargetError::TargetNotFound(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesForTargetError::TargetNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListPoliciesForTargetError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesForTargetError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListPoliciesForTargetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPoliciesForTargetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPoliciesForTargetError {
-    fn from(err: serde_json::error::Error) -> ListPoliciesForTargetError {
-        ListPoliciesForTargetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPoliciesForTargetError {
-    fn from(err: CredentialsError) -> ListPoliciesForTargetError {
-        ListPoliciesForTargetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPoliciesForTargetError {
-    fn from(err: HttpDispatchError) -> ListPoliciesForTargetError {
-        ListPoliciesForTargetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPoliciesForTargetError {
-    fn from(err: io::Error) -> ListPoliciesForTargetError {
-        ListPoliciesForTargetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPoliciesForTargetError {
@@ -5605,13 +4631,6 @@ impl Error for ListPoliciesForTargetError {
             ListPoliciesForTargetError::Service(ref cause) => cause,
             ListPoliciesForTargetError::TargetNotFound(ref cause) => cause,
             ListPoliciesForTargetError::TooManyRequests(ref cause) => cause,
-            ListPoliciesForTargetError::Validation(ref cause) => cause,
-            ListPoliciesForTargetError::Credentials(ref err) => err.description(),
-            ListPoliciesForTargetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPoliciesForTargetError::ParseError(ref cause) => cause,
-            ListPoliciesForTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5628,20 +4647,10 @@ pub enum ListRootsError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRootsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRootsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRootsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5654,46 +4663,35 @@ impl ListRootsError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListRootsError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(ListRootsError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return ListRootsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListRootsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return ListRootsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListRootsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return ListRootsError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(ListRootsError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return ListRootsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListRootsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListRootsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRootsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRootsError {
-    fn from(err: serde_json::error::Error) -> ListRootsError {
-        ListRootsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRootsError {
-    fn from(err: CredentialsError) -> ListRootsError {
-        ListRootsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRootsError {
-    fn from(err: HttpDispatchError) -> ListRootsError {
-        ListRootsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRootsError {
-    fn from(err: io::Error) -> ListRootsError {
-        ListRootsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRootsError {
@@ -5709,11 +4707,6 @@ impl Error for ListRootsError {
             ListRootsError::InvalidInput(ref cause) => cause,
             ListRootsError::Service(ref cause) => cause,
             ListRootsError::TooManyRequests(ref cause) => cause,
-            ListRootsError::Validation(ref cause) => cause,
-            ListRootsError::Credentials(ref err) => err.description(),
-            ListRootsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRootsError::ParseError(ref cause) => cause,
-            ListRootsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5732,20 +4725,10 @@ pub enum ListTargetsForPolicyError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTargetsForPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTargetsForPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTargetsForPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5758,53 +4741,42 @@ impl ListTargetsForPolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return ListTargetsForPolicyError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListTargetsForPolicyError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return ListTargetsForPolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListTargetsForPolicyError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ListTargetsForPolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListTargetsForPolicyError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "PolicyNotFoundException" => {
-                    return ListTargetsForPolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTargetsForPolicyError::PolicyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return ListTargetsForPolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(ListTargetsForPolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListTargetsForPolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListTargetsForPolicyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTargetsForPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTargetsForPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTargetsForPolicyError {
-    fn from(err: serde_json::error::Error) -> ListTargetsForPolicyError {
-        ListTargetsForPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTargetsForPolicyError {
-    fn from(err: CredentialsError) -> ListTargetsForPolicyError {
-        ListTargetsForPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTargetsForPolicyError {
-    fn from(err: HttpDispatchError) -> ListTargetsForPolicyError {
-        ListTargetsForPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTargetsForPolicyError {
-    fn from(err: io::Error) -> ListTargetsForPolicyError {
-        ListTargetsForPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTargetsForPolicyError {
@@ -5821,13 +4793,6 @@ impl Error for ListTargetsForPolicyError {
             ListTargetsForPolicyError::PolicyNotFound(ref cause) => cause,
             ListTargetsForPolicyError::Service(ref cause) => cause,
             ListTargetsForPolicyError::TooManyRequests(ref cause) => cause,
-            ListTargetsForPolicyError::Validation(ref cause) => cause,
-            ListTargetsForPolicyError::Credentials(ref err) => err.description(),
-            ListTargetsForPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTargetsForPolicyError::ParseError(ref cause) => cause,
-            ListTargetsForPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5854,20 +4819,10 @@ pub enum MoveAccountError {
     SourceParentNotFound(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl MoveAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> MoveAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MoveAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5880,61 +4835,60 @@ impl MoveAccountError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return MoveAccountError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return MoveAccountError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountNotFoundException" => {
-                    return MoveAccountError::AccountNotFound(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::AccountNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return MoveAccountError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "DestinationParentNotFoundException" => {
-                    return MoveAccountError::DestinationParentNotFound(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::DestinationParentNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicateAccountException" => {
-                    return MoveAccountError::DuplicateAccount(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::DuplicateAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return MoveAccountError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return MoveAccountError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(MoveAccountError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "SourceParentNotFoundException" => {
-                    return MoveAccountError::SourceParentNotFound(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::SourceParentNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return MoveAccountError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(MoveAccountError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return MoveAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return MoveAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for MoveAccountError {
-    fn from(err: serde_json::error::Error) -> MoveAccountError {
-        MoveAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for MoveAccountError {
-    fn from(err: CredentialsError) -> MoveAccountError {
-        MoveAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for MoveAccountError {
-    fn from(err: HttpDispatchError) -> MoveAccountError {
-        MoveAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for MoveAccountError {
-    fn from(err: io::Error) -> MoveAccountError {
-        MoveAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for MoveAccountError {
@@ -5955,11 +4909,6 @@ impl Error for MoveAccountError {
             MoveAccountError::Service(ref cause) => cause,
             MoveAccountError::SourceParentNotFound(ref cause) => cause,
             MoveAccountError::TooManyRequests(ref cause) => cause,
-            MoveAccountError::Validation(ref cause) => cause,
-            MoveAccountError::Credentials(ref err) => err.description(),
-            MoveAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            MoveAccountError::ParseError(ref cause) => cause,
-            MoveAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5984,20 +4933,12 @@ pub enum RemoveAccountFromOrganizationError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveAccountFromOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveAccountFromOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveAccountFromOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6010,76 +4951,67 @@ impl RemoveAccountFromOrganizationError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "AccessDeniedException" => {
-                    return RemoveAccountFromOrganizationError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveAccountFromOrganizationError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountNotFoundException" => {
-                    return RemoveAccountFromOrganizationError::AccountNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveAccountFromOrganizationError::AccountNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ConcurrentModificationException" => {
-                    return RemoveAccountFromOrganizationError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveAccountFromOrganizationError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ConstraintViolationException" => {
-                    return RemoveAccountFromOrganizationError::ConstraintViolation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveAccountFromOrganizationError::ConstraintViolation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return RemoveAccountFromOrganizationError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveAccountFromOrganizationError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "MasterCannotLeaveOrganizationException" => {
-                    return RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServiceException" => {
-                    return RemoveAccountFromOrganizationError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return RemoveAccountFromOrganizationError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveAccountFromOrganizationError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RemoveAccountFromOrganizationError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        RemoveAccountFromOrganizationError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveAccountFromOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveAccountFromOrganizationError {
-    fn from(err: serde_json::error::Error) -> RemoveAccountFromOrganizationError {
-        RemoveAccountFromOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveAccountFromOrganizationError {
-    fn from(err: CredentialsError) -> RemoveAccountFromOrganizationError {
-        RemoveAccountFromOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveAccountFromOrganizationError {
-    fn from(err: HttpDispatchError) -> RemoveAccountFromOrganizationError {
-        RemoveAccountFromOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveAccountFromOrganizationError {
-    fn from(err: io::Error) -> RemoveAccountFromOrganizationError {
-        RemoveAccountFromOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveAccountFromOrganizationError {
@@ -6099,13 +5031,6 @@ impl Error for RemoveAccountFromOrganizationError {
             RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(ref cause) => cause,
             RemoveAccountFromOrganizationError::Service(ref cause) => cause,
             RemoveAccountFromOrganizationError::TooManyRequests(ref cause) => cause,
-            RemoveAccountFromOrganizationError::Validation(ref cause) => cause,
-            RemoveAccountFromOrganizationError::Credentials(ref err) => err.description(),
-            RemoveAccountFromOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveAccountFromOrganizationError::ParseError(ref cause) => cause,
-            RemoveAccountFromOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6128,20 +5053,10 @@ pub enum UpdateOrganizationalUnitError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateOrganizationalUnitError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateOrganizationalUnitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOrganizationalUnitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6154,67 +5069,58 @@ impl UpdateOrganizationalUnitError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccessDeniedException" => {
-                    return UpdateOrganizationalUnitError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateOrganizationalUnitError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return UpdateOrganizationalUnitError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateOrganizationalUnitError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DuplicateOrganizationalUnitException" => {
-                    return UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return UpdateOrganizationalUnitError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateOrganizationalUnitError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationalUnitNotFoundException" => {
-                    return UpdateOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return UpdateOrganizationalUnitError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return UpdateOrganizationalUnitError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateOrganizationalUnitError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateOrganizationalUnitError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateOrganizationalUnitError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateOrganizationalUnitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateOrganizationalUnitError {
-    fn from(err: serde_json::error::Error) -> UpdateOrganizationalUnitError {
-        UpdateOrganizationalUnitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateOrganizationalUnitError {
-    fn from(err: CredentialsError) -> UpdateOrganizationalUnitError {
-        UpdateOrganizationalUnitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateOrganizationalUnitError {
-    fn from(err: HttpDispatchError) -> UpdateOrganizationalUnitError {
-        UpdateOrganizationalUnitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateOrganizationalUnitError {
-    fn from(err: io::Error) -> UpdateOrganizationalUnitError {
-        UpdateOrganizationalUnitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateOrganizationalUnitError {
@@ -6233,13 +5139,6 @@ impl Error for UpdateOrganizationalUnitError {
             UpdateOrganizationalUnitError::OrganizationalUnitNotFound(ref cause) => cause,
             UpdateOrganizationalUnitError::Service(ref cause) => cause,
             UpdateOrganizationalUnitError::TooManyRequests(ref cause) => cause,
-            UpdateOrganizationalUnitError::Validation(ref cause) => cause,
-            UpdateOrganizationalUnitError::Credentials(ref err) => err.description(),
-            UpdateOrganizationalUnitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateOrganizationalUnitError::ParseError(ref cause) => cause,
-            UpdateOrganizationalUnitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6266,20 +5165,10 @@ pub enum UpdatePolicyError {
     Service(String),
     /// <p>You've sent too many requests in too short a period of time. The limit helps protect against denial-of-service attacks. Try again later.</p> <p>For information on limits that affect Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html">Limits of AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6292,63 +5181,60 @@ impl UpdatePolicyError {
 
             match *error_type {
                 "AWSOrganizationsNotInUseException" => {
-                    return UpdatePolicyError::AWSOrganizationsNotInUse(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::AWSOrganizationsNotInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "AccessDeniedException" => {
-                    return UpdatePolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return UpdatePolicyError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "ConstraintViolationException" => {
-                    return UpdatePolicyError::ConstraintViolation(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::ConstraintViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicatePolicyException" => {
-                    return UpdatePolicyError::DuplicatePolicy(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::DuplicatePolicy(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return UpdatePolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return UpdatePolicyError::MalformedPolicyDocument(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::MalformedPolicyDocument(
+                        String::from(error_message),
+                    ));
                 }
                 "PolicyNotFoundException" => {
-                    return UpdatePolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::PolicyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return UpdatePolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdatePolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdatePolicyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdatePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePolicyError {
-    fn from(err: serde_json::error::Error) -> UpdatePolicyError {
-        UpdatePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePolicyError {
-    fn from(err: CredentialsError) -> UpdatePolicyError {
-        UpdatePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePolicyError {
-    fn from(err: HttpDispatchError) -> UpdatePolicyError {
-        UpdatePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePolicyError {
-    fn from(err: io::Error) -> UpdatePolicyError {
-        UpdatePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePolicyError {
@@ -6369,11 +5255,6 @@ impl Error for UpdatePolicyError {
             UpdatePolicyError::PolicyNotFound(ref cause) => cause,
             UpdatePolicyError::Service(ref cause) => cause,
             UpdatePolicyError::TooManyRequests(ref cause) => cause,
-            UpdatePolicyError::Validation(ref cause) => cause,
-            UpdatePolicyError::Credentials(ref err) => err.description(),
-            UpdatePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePolicyError::ParseError(ref cause) => cause,
-            UpdatePolicyError::Unknown(_) => "unknown error",
         }
     }
 }

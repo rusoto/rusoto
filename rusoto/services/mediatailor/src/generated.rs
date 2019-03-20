@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -377,23 +374,14 @@ pub struct UntagResourceRequest {
 
 /// Errors returned by DeletePlaybackConfiguration
 #[derive(Debug, PartialEq)]
-pub enum DeletePlaybackConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeletePlaybackConfigurationError {}
 
 impl DeletePlaybackConfigurationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePlaybackConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeletePlaybackConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -417,34 +405,11 @@ impl DeletePlaybackConfigurationError {
                 .unwrap_or("");
 
             match error_type {
-                "ValidationException" => {
-                    return DeletePlaybackConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePlaybackConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePlaybackConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeletePlaybackConfigurationError {
-        DeletePlaybackConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePlaybackConfigurationError {
-    fn from(err: CredentialsError) -> DeletePlaybackConfigurationError {
-        DeletePlaybackConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePlaybackConfigurationError {
-    fn from(err: HttpDispatchError) -> DeletePlaybackConfigurationError {
-        DeletePlaybackConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePlaybackConfigurationError {
-    fn from(err: io::Error) -> DeletePlaybackConfigurationError {
-        DeletePlaybackConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePlaybackConfigurationError {
@@ -454,36 +419,17 @@ impl fmt::Display for DeletePlaybackConfigurationError {
 }
 impl Error for DeletePlaybackConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            DeletePlaybackConfigurationError::Validation(ref cause) => cause,
-            DeletePlaybackConfigurationError::Credentials(ref err) => err.description(),
-            DeletePlaybackConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeletePlaybackConfigurationError::ParseError(ref cause) => cause,
-            DeletePlaybackConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetPlaybackConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetPlaybackConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetPlaybackConfigurationError {}
 
 impl GetPlaybackConfigurationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetPlaybackConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPlaybackConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -507,34 +453,11 @@ impl GetPlaybackConfigurationError {
                 .unwrap_or("");
 
             match error_type {
-                "ValidationException" => {
-                    return GetPlaybackConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPlaybackConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPlaybackConfigurationError {
-    fn from(err: serde_json::error::Error) -> GetPlaybackConfigurationError {
-        GetPlaybackConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPlaybackConfigurationError {
-    fn from(err: CredentialsError) -> GetPlaybackConfigurationError {
-        GetPlaybackConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPlaybackConfigurationError {
-    fn from(err: HttpDispatchError) -> GetPlaybackConfigurationError {
-        GetPlaybackConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPlaybackConfigurationError {
-    fn from(err: io::Error) -> GetPlaybackConfigurationError {
-        GetPlaybackConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPlaybackConfigurationError {
@@ -544,36 +467,19 @@ impl fmt::Display for GetPlaybackConfigurationError {
 }
 impl Error for GetPlaybackConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetPlaybackConfigurationError::Validation(ref cause) => cause,
-            GetPlaybackConfigurationError::Credentials(ref err) => err.description(),
-            GetPlaybackConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetPlaybackConfigurationError::ParseError(ref cause) => cause,
-            GetPlaybackConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListPlaybackConfigurations
 #[derive(Debug, PartialEq)]
-pub enum ListPlaybackConfigurationsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListPlaybackConfigurationsError {}
 
 impl ListPlaybackConfigurationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPlaybackConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListPlaybackConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -597,34 +503,11 @@ impl ListPlaybackConfigurationsError {
                 .unwrap_or("");
 
             match error_type {
-                "ValidationException" => {
-                    return ListPlaybackConfigurationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPlaybackConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPlaybackConfigurationsError {
-    fn from(err: serde_json::error::Error) -> ListPlaybackConfigurationsError {
-        ListPlaybackConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPlaybackConfigurationsError {
-    fn from(err: CredentialsError) -> ListPlaybackConfigurationsError {
-        ListPlaybackConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPlaybackConfigurationsError {
-    fn from(err: HttpDispatchError) -> ListPlaybackConfigurationsError {
-        ListPlaybackConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPlaybackConfigurationsError {
-    fn from(err: io::Error) -> ListPlaybackConfigurationsError {
-        ListPlaybackConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPlaybackConfigurationsError {
@@ -634,15 +517,7 @@ impl fmt::Display for ListPlaybackConfigurationsError {
 }
 impl Error for ListPlaybackConfigurationsError {
     fn description(&self) -> &str {
-        match *self {
-            ListPlaybackConfigurationsError::Validation(ref cause) => cause,
-            ListPlaybackConfigurationsError::Credentials(ref err) => err.description(),
-            ListPlaybackConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPlaybackConfigurationsError::ParseError(ref cause) => cause,
-            ListPlaybackConfigurationsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListTagsForResource
@@ -650,22 +525,12 @@ impl Error for ListPlaybackConfigurationsError {
 pub enum ListTagsForResourceError {
     /// <p>Invalid request parameters.</p>
     BadRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -690,36 +555,15 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListTagsForResourceError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForResourceError {
-    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -731,35 +575,17 @@ impl Error for ListTagsForResourceError {
     fn description(&self) -> &str {
         match *self {
             ListTagsForResourceError::BadRequest(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by PutPlaybackConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutPlaybackConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutPlaybackConfigurationError {}
 
 impl PutPlaybackConfigurationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutPlaybackConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPlaybackConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -783,34 +609,11 @@ impl PutPlaybackConfigurationError {
                 .unwrap_or("");
 
             match error_type {
-                "ValidationException" => {
-                    return PutPlaybackConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutPlaybackConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutPlaybackConfigurationError {
-    fn from(err: serde_json::error::Error) -> PutPlaybackConfigurationError {
-        PutPlaybackConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutPlaybackConfigurationError {
-    fn from(err: CredentialsError) -> PutPlaybackConfigurationError {
-        PutPlaybackConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutPlaybackConfigurationError {
-    fn from(err: HttpDispatchError) -> PutPlaybackConfigurationError {
-        PutPlaybackConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutPlaybackConfigurationError {
-    fn from(err: io::Error) -> PutPlaybackConfigurationError {
-        PutPlaybackConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutPlaybackConfigurationError {
@@ -820,15 +623,7 @@ impl fmt::Display for PutPlaybackConfigurationError {
 }
 impl Error for PutPlaybackConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutPlaybackConfigurationError::Validation(ref cause) => cause,
-            PutPlaybackConfigurationError::Credentials(ref err) => err.description(),
-            PutPlaybackConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutPlaybackConfigurationError::ParseError(ref cause) => cause,
-            PutPlaybackConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by TagResource
@@ -836,22 +631,12 @@ impl Error for PutPlaybackConfigurationError {
 pub enum TagResourceError {
     /// <p>Invalid request parameters.</p>
     BadRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -876,36 +661,15 @@ impl TagResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return TagResourceError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -917,11 +681,6 @@ impl Error for TagResourceError {
     fn description(&self) -> &str {
         match *self {
             TagResourceError::BadRequest(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -930,22 +689,12 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>Invalid request parameters.</p>
     BadRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -970,36 +719,15 @@ impl UntagResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UntagResourceError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -1011,11 +739,6 @@ impl Error for UntagResourceError {
     fn description(&self) -> &str {
         match *self {
             UntagResourceError::BadRequest(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -440,20 +437,10 @@ pub enum AssociateAdminAccountError {
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateAdminAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateAdminAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateAdminAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -466,45 +453,30 @@ impl AssociateAdminAccountError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AssociateAdminAccountError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AssociateAdminAccountError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AssociateAdminAccountError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AssociateAdminAccountError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOperationException" => {
-                    return AssociateAdminAccountError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(AssociateAdminAccountError::InvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateAdminAccountError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AssociateAdminAccountError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AssociateAdminAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateAdminAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateAdminAccountError {
-    fn from(err: serde_json::error::Error) -> AssociateAdminAccountError {
-        AssociateAdminAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateAdminAccountError {
-    fn from(err: CredentialsError) -> AssociateAdminAccountError {
-        AssociateAdminAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateAdminAccountError {
-    fn from(err: HttpDispatchError) -> AssociateAdminAccountError {
-        AssociateAdminAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateAdminAccountError {
-    fn from(err: io::Error) -> AssociateAdminAccountError {
-        AssociateAdminAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateAdminAccountError {
@@ -519,13 +491,6 @@ impl Error for AssociateAdminAccountError {
             AssociateAdminAccountError::InvalidInput(ref cause) => cause,
             AssociateAdminAccountError::InvalidOperation(ref cause) => cause,
             AssociateAdminAccountError::ResourceNotFound(ref cause) => cause,
-            AssociateAdminAccountError::Validation(ref cause) => cause,
-            AssociateAdminAccountError::Credentials(ref err) => err.description(),
-            AssociateAdminAccountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateAdminAccountError::ParseError(ref cause) => cause,
-            AssociateAdminAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -538,20 +503,10 @@ pub enum DeleteNotificationChannelError {
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNotificationChannelError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteNotificationChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotificationChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -564,48 +519,25 @@ impl DeleteNotificationChannelError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteNotificationChannelError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteNotificationChannelError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidOperationException" => {
-                    return DeleteNotificationChannelError::InvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteNotificationChannelError::InvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteNotificationChannelError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteNotificationChannelError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteNotificationChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteNotificationChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteNotificationChannelError {
-    fn from(err: serde_json::error::Error) -> DeleteNotificationChannelError {
-        DeleteNotificationChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteNotificationChannelError {
-    fn from(err: CredentialsError) -> DeleteNotificationChannelError {
-        DeleteNotificationChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteNotificationChannelError {
-    fn from(err: HttpDispatchError) -> DeleteNotificationChannelError {
-        DeleteNotificationChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteNotificationChannelError {
-    fn from(err: io::Error) -> DeleteNotificationChannelError {
-        DeleteNotificationChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteNotificationChannelError {
@@ -619,13 +551,6 @@ impl Error for DeleteNotificationChannelError {
             DeleteNotificationChannelError::InternalError(ref cause) => cause,
             DeleteNotificationChannelError::InvalidOperation(ref cause) => cause,
             DeleteNotificationChannelError::ResourceNotFound(ref cause) => cause,
-            DeleteNotificationChannelError::Validation(ref cause) => cause,
-            DeleteNotificationChannelError::Credentials(ref err) => err.description(),
-            DeleteNotificationChannelError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteNotificationChannelError::ParseError(ref cause) => cause,
-            DeleteNotificationChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -638,20 +563,10 @@ pub enum DeletePolicyError {
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -664,42 +579,25 @@ impl DeletePolicyError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeletePolicyError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidOperationException" => {
-                    return DeletePolicyError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::InvalidOperation(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeletePolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeletePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePolicyError {
-    fn from(err: serde_json::error::Error) -> DeletePolicyError {
-        DeletePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePolicyError {
-    fn from(err: CredentialsError) -> DeletePolicyError {
-        DeletePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePolicyError {
-    fn from(err: HttpDispatchError) -> DeletePolicyError {
-        DeletePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePolicyError {
-    fn from(err: io::Error) -> DeletePolicyError {
-        DeletePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePolicyError {
@@ -713,11 +611,6 @@ impl Error for DeletePolicyError {
             DeletePolicyError::InternalError(ref cause) => cause,
             DeletePolicyError::InvalidOperation(ref cause) => cause,
             DeletePolicyError::ResourceNotFound(ref cause) => cause,
-            DeletePolicyError::Validation(ref cause) => cause,
-            DeletePolicyError::Credentials(ref err) => err.description(),
-            DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePolicyError::ParseError(ref cause) => cause,
-            DeletePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -730,20 +623,10 @@ pub enum DisassociateAdminAccountError {
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateAdminAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateAdminAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateAdminAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -756,46 +639,25 @@ impl DisassociateAdminAccountError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DisassociateAdminAccountError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DisassociateAdminAccountError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOperationException" => {
-                    return DisassociateAdminAccountError::InvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateAdminAccountError::InvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateAdminAccountError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateAdminAccountError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DisassociateAdminAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateAdminAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateAdminAccountError {
-    fn from(err: serde_json::error::Error) -> DisassociateAdminAccountError {
-        DisassociateAdminAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateAdminAccountError {
-    fn from(err: CredentialsError) -> DisassociateAdminAccountError {
-        DisassociateAdminAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateAdminAccountError {
-    fn from(err: HttpDispatchError) -> DisassociateAdminAccountError {
-        DisassociateAdminAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateAdminAccountError {
-    fn from(err: io::Error) -> DisassociateAdminAccountError {
-        DisassociateAdminAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateAdminAccountError {
@@ -809,13 +671,6 @@ impl Error for DisassociateAdminAccountError {
             DisassociateAdminAccountError::InternalError(ref cause) => cause,
             DisassociateAdminAccountError::InvalidOperation(ref cause) => cause,
             DisassociateAdminAccountError::ResourceNotFound(ref cause) => cause,
-            DisassociateAdminAccountError::Validation(ref cause) => cause,
-            DisassociateAdminAccountError::Credentials(ref err) => err.description(),
-            DisassociateAdminAccountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateAdminAccountError::ParseError(ref cause) => cause,
-            DisassociateAdminAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -828,20 +683,10 @@ pub enum GetAdminAccountError {
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAdminAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAdminAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAdminAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -854,42 +699,25 @@ impl GetAdminAccountError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetAdminAccountError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetAdminAccountError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidOperationException" => {
-                    return GetAdminAccountError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(GetAdminAccountError::InvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetAdminAccountError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetAdminAccountError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetAdminAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAdminAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAdminAccountError {
-    fn from(err: serde_json::error::Error) -> GetAdminAccountError {
-        GetAdminAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAdminAccountError {
-    fn from(err: CredentialsError) -> GetAdminAccountError {
-        GetAdminAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAdminAccountError {
-    fn from(err: HttpDispatchError) -> GetAdminAccountError {
-        GetAdminAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAdminAccountError {
-    fn from(err: io::Error) -> GetAdminAccountError {
-        GetAdminAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAdminAccountError {
@@ -903,11 +731,6 @@ impl Error for GetAdminAccountError {
             GetAdminAccountError::InternalError(ref cause) => cause,
             GetAdminAccountError::InvalidOperation(ref cause) => cause,
             GetAdminAccountError::ResourceNotFound(ref cause) => cause,
-            GetAdminAccountError::Validation(ref cause) => cause,
-            GetAdminAccountError::Credentials(ref err) => err.description(),
-            GetAdminAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAdminAccountError::ParseError(ref cause) => cause,
-            GetAdminAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -918,20 +741,10 @@ pub enum GetComplianceDetailError {
     InternalError(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceDetailError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceDetailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetComplianceDetailError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -944,39 +757,20 @@ impl GetComplianceDetailError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetComplianceDetailError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetComplianceDetailError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetComplianceDetailError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetComplianceDetailError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetComplianceDetailError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetComplianceDetailError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetComplianceDetailError {
-    fn from(err: serde_json::error::Error) -> GetComplianceDetailError {
-        GetComplianceDetailError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetComplianceDetailError {
-    fn from(err: CredentialsError) -> GetComplianceDetailError {
-        GetComplianceDetailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetComplianceDetailError {
-    fn from(err: HttpDispatchError) -> GetComplianceDetailError {
-        GetComplianceDetailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetComplianceDetailError {
-    fn from(err: io::Error) -> GetComplianceDetailError {
-        GetComplianceDetailError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetComplianceDetailError {
@@ -989,13 +783,6 @@ impl Error for GetComplianceDetailError {
         match *self {
             GetComplianceDetailError::InternalError(ref cause) => cause,
             GetComplianceDetailError::ResourceNotFound(ref cause) => cause,
-            GetComplianceDetailError::Validation(ref cause) => cause,
-            GetComplianceDetailError::Credentials(ref err) => err.description(),
-            GetComplianceDetailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetComplianceDetailError::ParseError(ref cause) => cause,
-            GetComplianceDetailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1008,20 +795,10 @@ pub enum GetNotificationChannelError {
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetNotificationChannelError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetNotificationChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNotificationChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1034,46 +811,25 @@ impl GetNotificationChannelError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetNotificationChannelError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetNotificationChannelError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOperationException" => {
-                    return GetNotificationChannelError::InvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(GetNotificationChannelError::InvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetNotificationChannelError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetNotificationChannelError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetNotificationChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetNotificationChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetNotificationChannelError {
-    fn from(err: serde_json::error::Error) -> GetNotificationChannelError {
-        GetNotificationChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetNotificationChannelError {
-    fn from(err: CredentialsError) -> GetNotificationChannelError {
-        GetNotificationChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetNotificationChannelError {
-    fn from(err: HttpDispatchError) -> GetNotificationChannelError {
-        GetNotificationChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetNotificationChannelError {
-    fn from(err: io::Error) -> GetNotificationChannelError {
-        GetNotificationChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetNotificationChannelError {
@@ -1087,13 +843,6 @@ impl Error for GetNotificationChannelError {
             GetNotificationChannelError::InternalError(ref cause) => cause,
             GetNotificationChannelError::InvalidOperation(ref cause) => cause,
             GetNotificationChannelError::ResourceNotFound(ref cause) => cause,
-            GetNotificationChannelError::Validation(ref cause) => cause,
-            GetNotificationChannelError::Credentials(ref err) => err.description(),
-            GetNotificationChannelError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetNotificationChannelError::ParseError(ref cause) => cause,
-            GetNotificationChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1108,20 +857,10 @@ pub enum GetPolicyError {
     InvalidType(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1134,45 +873,30 @@ impl GetPolicyError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetPolicyError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetPolicyError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidOperationException" => {
-                    return GetPolicyError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(GetPolicyError::InvalidOperation(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTypeException" => {
-                    return GetPolicyError::InvalidType(String::from(error_message));
+                    return RusotoError::Service(GetPolicyError::InvalidType(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPolicyError {
-    fn from(err: serde_json::error::Error) -> GetPolicyError {
-        GetPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPolicyError {
-    fn from(err: CredentialsError) -> GetPolicyError {
-        GetPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPolicyError {
-    fn from(err: HttpDispatchError) -> GetPolicyError {
-        GetPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPolicyError {
-    fn from(err: io::Error) -> GetPolicyError {
-        GetPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -1187,11 +911,6 @@ impl Error for GetPolicyError {
             GetPolicyError::InvalidOperation(ref cause) => cause,
             GetPolicyError::InvalidType(ref cause) => cause,
             GetPolicyError::ResourceNotFound(ref cause) => cause,
-            GetPolicyError::Validation(ref cause) => cause,
-            GetPolicyError::Credentials(ref err) => err.description(),
-            GetPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPolicyError::ParseError(ref cause) => cause,
-            GetPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1202,20 +921,10 @@ pub enum ListComplianceStatusError {
     InternalError(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListComplianceStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListComplianceStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListComplianceStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1228,39 +937,20 @@ impl ListComplianceStatusError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListComplianceStatusError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListComplianceStatusError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListComplianceStatusError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListComplianceStatusError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListComplianceStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListComplianceStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListComplianceStatusError {
-    fn from(err: serde_json::error::Error) -> ListComplianceStatusError {
-        ListComplianceStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListComplianceStatusError {
-    fn from(err: CredentialsError) -> ListComplianceStatusError {
-        ListComplianceStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListComplianceStatusError {
-    fn from(err: HttpDispatchError) -> ListComplianceStatusError {
-        ListComplianceStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListComplianceStatusError {
-    fn from(err: io::Error) -> ListComplianceStatusError {
-        ListComplianceStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListComplianceStatusError {
@@ -1273,13 +963,6 @@ impl Error for ListComplianceStatusError {
         match *self {
             ListComplianceStatusError::InternalError(ref cause) => cause,
             ListComplianceStatusError::ResourceNotFound(ref cause) => cause,
-            ListComplianceStatusError::Validation(ref cause) => cause,
-            ListComplianceStatusError::Credentials(ref err) => err.description(),
-            ListComplianceStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListComplianceStatusError::ParseError(ref cause) => cause,
-            ListComplianceStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1290,20 +973,10 @@ pub enum ListMemberAccountsError {
     InternalError(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListMemberAccountsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListMemberAccountsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMemberAccountsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1316,39 +989,20 @@ impl ListMemberAccountsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListMemberAccountsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListMemberAccountsError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListMemberAccountsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListMemberAccountsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListMemberAccountsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListMemberAccountsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListMemberAccountsError {
-    fn from(err: serde_json::error::Error) -> ListMemberAccountsError {
-        ListMemberAccountsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListMemberAccountsError {
-    fn from(err: CredentialsError) -> ListMemberAccountsError {
-        ListMemberAccountsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListMemberAccountsError {
-    fn from(err: HttpDispatchError) -> ListMemberAccountsError {
-        ListMemberAccountsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListMemberAccountsError {
-    fn from(err: io::Error) -> ListMemberAccountsError {
-        ListMemberAccountsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListMemberAccountsError {
@@ -1361,13 +1015,6 @@ impl Error for ListMemberAccountsError {
         match *self {
             ListMemberAccountsError::InternalError(ref cause) => cause,
             ListMemberAccountsError::ResourceNotFound(ref cause) => cause,
-            ListMemberAccountsError::Validation(ref cause) => cause,
-            ListMemberAccountsError::Credentials(ref err) => err.description(),
-            ListMemberAccountsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListMemberAccountsError::ParseError(ref cause) => cause,
-            ListMemberAccountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1382,20 +1029,10 @@ pub enum ListPoliciesError {
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1408,45 +1045,30 @@ impl ListPoliciesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListPoliciesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidOperationException" => {
-                    return ListPoliciesError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::InvalidOperation(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListPoliciesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPoliciesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListPoliciesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPoliciesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPoliciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPoliciesError {
-    fn from(err: serde_json::error::Error) -> ListPoliciesError {
-        ListPoliciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPoliciesError {
-    fn from(err: CredentialsError) -> ListPoliciesError {
-        ListPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPoliciesError {
-    fn from(err: HttpDispatchError) -> ListPoliciesError {
-        ListPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPoliciesError {
-    fn from(err: io::Error) -> ListPoliciesError {
-        ListPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -1461,11 +1083,6 @@ impl Error for ListPoliciesError {
             ListPoliciesError::InvalidOperation(ref cause) => cause,
             ListPoliciesError::LimitExceeded(ref cause) => cause,
             ListPoliciesError::ResourceNotFound(ref cause) => cause,
-            ListPoliciesError::Validation(ref cause) => cause,
-            ListPoliciesError::Credentials(ref err) => err.description(),
-            ListPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPoliciesError::ParseError(ref cause) => cause,
-            ListPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1478,20 +1095,10 @@ pub enum PutNotificationChannelError {
     InvalidOperation(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutNotificationChannelError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutNotificationChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutNotificationChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1504,46 +1111,25 @@ impl PutNotificationChannelError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return PutNotificationChannelError::InternalError(String::from(error_message));
+                    return RusotoError::Service(PutNotificationChannelError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOperationException" => {
-                    return PutNotificationChannelError::InvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(PutNotificationChannelError::InvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutNotificationChannelError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PutNotificationChannelError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PutNotificationChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutNotificationChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutNotificationChannelError {
-    fn from(err: serde_json::error::Error) -> PutNotificationChannelError {
-        PutNotificationChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutNotificationChannelError {
-    fn from(err: CredentialsError) -> PutNotificationChannelError {
-        PutNotificationChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutNotificationChannelError {
-    fn from(err: HttpDispatchError) -> PutNotificationChannelError {
-        PutNotificationChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutNotificationChannelError {
-    fn from(err: io::Error) -> PutNotificationChannelError {
-        PutNotificationChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutNotificationChannelError {
@@ -1557,13 +1143,6 @@ impl Error for PutNotificationChannelError {
             PutNotificationChannelError::InternalError(ref cause) => cause,
             PutNotificationChannelError::InvalidOperation(ref cause) => cause,
             PutNotificationChannelError::ResourceNotFound(ref cause) => cause,
-            PutNotificationChannelError::Validation(ref cause) => cause,
-            PutNotificationChannelError::Credentials(ref err) => err.description(),
-            PutNotificationChannelError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutNotificationChannelError::ParseError(ref cause) => cause,
-            PutNotificationChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1582,20 +1161,10 @@ pub enum PutPolicyError {
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1608,51 +1177,40 @@ impl PutPolicyError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return PutPolicyError::InternalError(String::from(error_message));
+                    return RusotoError::Service(PutPolicyError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return PutPolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(PutPolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidOperationException" => {
-                    return PutPolicyError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(PutPolicyError::InvalidOperation(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTypeException" => {
-                    return PutPolicyError::InvalidType(String::from(error_message));
+                    return RusotoError::Service(PutPolicyError::InvalidType(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PutPolicyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutPolicyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return PutPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PutPolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutPolicyError {
-    fn from(err: serde_json::error::Error) -> PutPolicyError {
-        PutPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutPolicyError {
-    fn from(err: CredentialsError) -> PutPolicyError {
-        PutPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutPolicyError {
-    fn from(err: HttpDispatchError) -> PutPolicyError {
-        PutPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutPolicyError {
-    fn from(err: io::Error) -> PutPolicyError {
-        PutPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutPolicyError {
@@ -1669,11 +1227,6 @@ impl Error for PutPolicyError {
             PutPolicyError::InvalidType(ref cause) => cause,
             PutPolicyError::LimitExceeded(ref cause) => cause,
             PutPolicyError::ResourceNotFound(ref cause) => cause,
-            PutPolicyError::Validation(ref cause) => cause,
-            PutPolicyError::Credentials(ref err) => err.description(),
-            PutPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutPolicyError::ParseError(ref cause) => cause,
-            PutPolicyError::Unknown(_) => "unknown error",
         }
     }
 }

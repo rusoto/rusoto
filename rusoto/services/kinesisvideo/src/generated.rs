@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -344,22 +341,12 @@ pub enum CreateStreamError {
     ResourceInUse(String),
     /// <p>You have exceeded the limit of tags that you can associate with the resource. Kinesis video streams support up to 50 tags. </p>
     TagsPerResourceExceededLimit(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStreamError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -384,58 +371,45 @@ impl CreateStreamError {
 
             match error_type {
                 "AccountStreamLimitExceededException" => {
-                    return CreateStreamError::AccountStreamLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStreamError::AccountStreamLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ClientLimitExceededException" => {
-                    return CreateStreamError::ClientLimitExceeded(String::from(error_message));
-                }
-                "DeviceStreamLimitExceededException" => {
-                    return CreateStreamError::DeviceStreamLimitExceeded(String::from(error_message));
-                }
-                "InvalidArgumentException" => {
-                    return CreateStreamError::InvalidArgument(String::from(error_message));
-                }
-                "InvalidDeviceException" => {
-                    return CreateStreamError::InvalidDevice(String::from(error_message));
-                }
-                "ResourceInUseException" => {
-                    return CreateStreamError::ResourceInUse(String::from(error_message));
-                }
-                "TagsPerResourceExceededLimitException" => {
-                    return CreateStreamError::TagsPerResourceExceededLimit(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStreamError::ClientLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateStreamError::Validation(error_message.to_string());
+                "DeviceStreamLimitExceededException" => {
+                    return RusotoError::Service(CreateStreamError::DeviceStreamLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(CreateStreamError::InvalidArgument(String::from(
+                        error_message,
+                    )));
+                }
+                "InvalidDeviceException" => {
+                    return RusotoError::Service(CreateStreamError::InvalidDevice(String::from(
+                        error_message,
+                    )));
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateStreamError::ResourceInUse(String::from(
+                        error_message,
+                    )));
+                }
+                "TagsPerResourceExceededLimitException" => {
+                    return RusotoError::Service(CreateStreamError::TagsPerResourceExceededLimit(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateStreamError {
-    fn from(err: serde_json::error::Error) -> CreateStreamError {
-        CreateStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateStreamError {
-    fn from(err: CredentialsError) -> CreateStreamError {
-        CreateStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateStreamError {
-    fn from(err: HttpDispatchError) -> CreateStreamError {
-        CreateStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateStreamError {
-    fn from(err: io::Error) -> CreateStreamError {
-        CreateStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateStreamError {
@@ -453,11 +427,6 @@ impl Error for CreateStreamError {
             CreateStreamError::InvalidDevice(ref cause) => cause,
             CreateStreamError::ResourceInUse(ref cause) => cause,
             CreateStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
-            CreateStreamError::Validation(ref cause) => cause,
-            CreateStreamError::Credentials(ref err) => err.description(),
-            CreateStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateStreamError::ParseError(ref cause) => cause,
-            CreateStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -474,22 +443,12 @@ pub enum DeleteStreamError {
     ResourceNotFound(String),
     /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
     VersionMismatch(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStreamError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -514,48 +473,35 @@ impl DeleteStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return DeleteStreamError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return DeleteStreamError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteStreamError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "VersionMismatchException" => {
-                    return DeleteStreamError::VersionMismatch(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamError::VersionMismatch(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteStreamError {
-    fn from(err: serde_json::error::Error) -> DeleteStreamError {
-        DeleteStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteStreamError {
-    fn from(err: CredentialsError) -> DeleteStreamError {
-        DeleteStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteStreamError {
-    fn from(err: HttpDispatchError) -> DeleteStreamError {
-        DeleteStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteStreamError {
-    fn from(err: io::Error) -> DeleteStreamError {
-        DeleteStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteStreamError {
@@ -571,11 +517,6 @@ impl Error for DeleteStreamError {
             DeleteStreamError::NotAuthorized(ref cause) => cause,
             DeleteStreamError::ResourceNotFound(ref cause) => cause,
             DeleteStreamError::VersionMismatch(ref cause) => cause,
-            DeleteStreamError::Validation(ref cause) => cause,
-            DeleteStreamError::Credentials(ref err) => err.description(),
-            DeleteStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteStreamError::ParseError(ref cause) => cause,
-            DeleteStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -590,22 +531,12 @@ pub enum DescribeStreamError {
     NotAuthorized(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStreamError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -630,45 +561,30 @@ impl DescribeStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return DescribeStreamError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeStreamError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeStreamError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeStreamError {
-    fn from(err: serde_json::error::Error) -> DescribeStreamError {
-        DescribeStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeStreamError {
-    fn from(err: CredentialsError) -> DescribeStreamError {
-        DescribeStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeStreamError {
-    fn from(err: HttpDispatchError) -> DescribeStreamError {
-        DescribeStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeStreamError {
-    fn from(err: io::Error) -> DescribeStreamError {
-        DescribeStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeStreamError {
@@ -683,11 +599,6 @@ impl Error for DescribeStreamError {
             DescribeStreamError::InvalidArgument(ref cause) => cause,
             DescribeStreamError::NotAuthorized(ref cause) => cause,
             DescribeStreamError::ResourceNotFound(ref cause) => cause,
-            DescribeStreamError::Validation(ref cause) => cause,
-            DescribeStreamError::Credentials(ref err) => err.description(),
-            DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeStreamError::ParseError(ref cause) => cause,
-            DescribeStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -702,22 +613,12 @@ pub enum GetDataEndpointError {
     NotAuthorized(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDataEndpointError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDataEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -742,45 +643,30 @@ impl GetDataEndpointError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return GetDataEndpointError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetDataEndpointError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return GetDataEndpointError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(GetDataEndpointError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetDataEndpointError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetDataEndpointError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDataEndpointError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDataEndpointError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDataEndpointError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDataEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDataEndpointError {
-    fn from(err: serde_json::error::Error) -> GetDataEndpointError {
-        GetDataEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDataEndpointError {
-    fn from(err: CredentialsError) -> GetDataEndpointError {
-        GetDataEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDataEndpointError {
-    fn from(err: HttpDispatchError) -> GetDataEndpointError {
-        GetDataEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDataEndpointError {
-    fn from(err: io::Error) -> GetDataEndpointError {
-        GetDataEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDataEndpointError {
@@ -795,11 +681,6 @@ impl Error for GetDataEndpointError {
             GetDataEndpointError::InvalidArgument(ref cause) => cause,
             GetDataEndpointError::NotAuthorized(ref cause) => cause,
             GetDataEndpointError::ResourceNotFound(ref cause) => cause,
-            GetDataEndpointError::Validation(ref cause) => cause,
-            GetDataEndpointError::Credentials(ref err) => err.description(),
-            GetDataEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDataEndpointError::ParseError(ref cause) => cause,
-            GetDataEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -810,22 +691,12 @@ pub enum ListStreamsError {
     ClientLimitExceeded(String),
     /// <p>The value for this input parameter is invalid.</p>
     InvalidArgument(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListStreamsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -850,39 +721,20 @@ impl ListStreamsError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return ListStreamsError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListStreamsError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return ListStreamsError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(ListStreamsError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListStreamsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListStreamsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListStreamsError {
-    fn from(err: serde_json::error::Error) -> ListStreamsError {
-        ListStreamsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListStreamsError {
-    fn from(err: CredentialsError) -> ListStreamsError {
-        ListStreamsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListStreamsError {
-    fn from(err: HttpDispatchError) -> ListStreamsError {
-        ListStreamsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListStreamsError {
-    fn from(err: io::Error) -> ListStreamsError {
-        ListStreamsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListStreamsError {
@@ -895,11 +747,6 @@ impl Error for ListStreamsError {
         match *self {
             ListStreamsError::ClientLimitExceeded(ref cause) => cause,
             ListStreamsError::InvalidArgument(ref cause) => cause,
-            ListStreamsError::Validation(ref cause) => cause,
-            ListStreamsError::Credentials(ref err) => err.description(),
-            ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListStreamsError::ParseError(ref cause) => cause,
-            ListStreamsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -916,22 +763,12 @@ pub enum ListTagsForStreamError {
     NotAuthorized(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForStreamError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -956,50 +793,35 @@ impl ListTagsForStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return ListTagsForStreamError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListTagsForStreamError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return ListTagsForStreamError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(ListTagsForStreamError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidResourceFormatException" => {
-                    return ListTagsForStreamError::InvalidResourceFormat(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTagsForStreamError::InvalidResourceFormat(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return ListTagsForStreamError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListTagsForStreamError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsForStreamError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsForStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForStreamError {
-    fn from(err: serde_json::error::Error) -> ListTagsForStreamError {
-        ListTagsForStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForStreamError {
-    fn from(err: CredentialsError) -> ListTagsForStreamError {
-        ListTagsForStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForStreamError {
-    fn from(err: HttpDispatchError) -> ListTagsForStreamError {
-        ListTagsForStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForStreamError {
-    fn from(err: io::Error) -> ListTagsForStreamError {
-        ListTagsForStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForStreamError {
@@ -1015,13 +837,6 @@ impl Error for ListTagsForStreamError {
             ListTagsForStreamError::InvalidResourceFormat(ref cause) => cause,
             ListTagsForStreamError::NotAuthorized(ref cause) => cause,
             ListTagsForStreamError::ResourceNotFound(ref cause) => cause,
-            ListTagsForStreamError::Validation(ref cause) => cause,
-            ListTagsForStreamError::Credentials(ref err) => err.description(),
-            ListTagsForStreamError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForStreamError::ParseError(ref cause) => cause,
-            ListTagsForStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1040,22 +855,12 @@ pub enum TagStreamError {
     ResourceNotFound(String),
     /// <p>You have exceeded the limit of tags that you can associate with the resource. Kinesis video streams support up to 50 tags. </p>
     TagsPerResourceExceededLimit(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagStreamError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TagStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1080,51 +885,40 @@ impl TagStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return TagStreamError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TagStreamError::ClientLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArgumentException" => {
-                    return TagStreamError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(TagStreamError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceFormatException" => {
-                    return TagStreamError::InvalidResourceFormat(String::from(error_message));
+                    return RusotoError::Service(TagStreamError::InvalidResourceFormat(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return TagStreamError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(TagStreamError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return TagStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TagStreamError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TagsPerResourceExceededLimitException" => {
-                    return TagStreamError::TagsPerResourceExceededLimit(String::from(error_message));
+                    return RusotoError::Service(TagStreamError::TagsPerResourceExceededLimit(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return TagStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagStreamError {
-    fn from(err: serde_json::error::Error) -> TagStreamError {
-        TagStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagStreamError {
-    fn from(err: CredentialsError) -> TagStreamError {
-        TagStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagStreamError {
-    fn from(err: HttpDispatchError) -> TagStreamError {
-        TagStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagStreamError {
-    fn from(err: io::Error) -> TagStreamError {
-        TagStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagStreamError {
@@ -1141,11 +935,6 @@ impl Error for TagStreamError {
             TagStreamError::NotAuthorized(ref cause) => cause,
             TagStreamError::ResourceNotFound(ref cause) => cause,
             TagStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
-            TagStreamError::Validation(ref cause) => cause,
-            TagStreamError::Credentials(ref err) => err.description(),
-            TagStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagStreamError::ParseError(ref cause) => cause,
-            TagStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1162,22 +951,12 @@ pub enum UntagStreamError {
     NotAuthorized(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagStreamError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UntagStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1202,48 +981,35 @@ impl UntagStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return UntagStreamError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UntagStreamError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return UntagStreamError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(UntagStreamError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceFormatException" => {
-                    return UntagStreamError::InvalidResourceFormat(String::from(error_message));
+                    return RusotoError::Service(UntagStreamError::InvalidResourceFormat(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UntagStreamError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UntagStreamError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagStreamError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagStreamError {
-    fn from(err: serde_json::error::Error) -> UntagStreamError {
-        UntagStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagStreamError {
-    fn from(err: CredentialsError) -> UntagStreamError {
-        UntagStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagStreamError {
-    fn from(err: HttpDispatchError) -> UntagStreamError {
-        UntagStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagStreamError {
-    fn from(err: io::Error) -> UntagStreamError {
-        UntagStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagStreamError {
@@ -1259,11 +1025,6 @@ impl Error for UntagStreamError {
             UntagStreamError::InvalidResourceFormat(ref cause) => cause,
             UntagStreamError::NotAuthorized(ref cause) => cause,
             UntagStreamError::ResourceNotFound(ref cause) => cause,
-            UntagStreamError::Validation(ref cause) => cause,
-            UntagStreamError::Credentials(ref err) => err.description(),
-            UntagStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagStreamError::ParseError(ref cause) => cause,
-            UntagStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1282,22 +1043,12 @@ pub enum UpdateDataRetentionError {
     ResourceNotFound(String),
     /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
     VersionMismatch(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDataRetentionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDataRetentionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDataRetentionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1322,53 +1073,40 @@ impl UpdateDataRetentionError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return UpdateDataRetentionError::ClientLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDataRetentionError::ClientLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateDataRetentionError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(UpdateDataRetentionError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateDataRetentionError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateDataRetentionError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateDataRetentionError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateDataRetentionError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDataRetentionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDataRetentionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "VersionMismatchException" => {
-                    return UpdateDataRetentionError::VersionMismatch(String::from(error_message));
+                    return RusotoError::Service(UpdateDataRetentionError::VersionMismatch(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDataRetentionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDataRetentionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDataRetentionError {
-    fn from(err: serde_json::error::Error) -> UpdateDataRetentionError {
-        UpdateDataRetentionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDataRetentionError {
-    fn from(err: CredentialsError) -> UpdateDataRetentionError {
-        UpdateDataRetentionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDataRetentionError {
-    fn from(err: HttpDispatchError) -> UpdateDataRetentionError {
-        UpdateDataRetentionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDataRetentionError {
-    fn from(err: io::Error) -> UpdateDataRetentionError {
-        UpdateDataRetentionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDataRetentionError {
@@ -1385,13 +1123,6 @@ impl Error for UpdateDataRetentionError {
             UpdateDataRetentionError::ResourceInUse(ref cause) => cause,
             UpdateDataRetentionError::ResourceNotFound(ref cause) => cause,
             UpdateDataRetentionError::VersionMismatch(ref cause) => cause,
-            UpdateDataRetentionError::Validation(ref cause) => cause,
-            UpdateDataRetentionError::Credentials(ref err) => err.description(),
-            UpdateDataRetentionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDataRetentionError::ParseError(ref cause) => cause,
-            UpdateDataRetentionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1410,22 +1141,12 @@ pub enum UpdateStreamError {
     ResourceNotFound(String),
     /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
     VersionMismatch(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateStreamError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1450,51 +1171,40 @@ impl UpdateStreamError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return UpdateStreamError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateStreamError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateStreamError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(UpdateStreamError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateStreamError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateStreamError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return UpdateStreamError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateStreamError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateStreamError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "VersionMismatchException" => {
-                    return UpdateStreamError::VersionMismatch(String::from(error_message));
+                    return RusotoError::Service(UpdateStreamError::VersionMismatch(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateStreamError {
-    fn from(err: serde_json::error::Error) -> UpdateStreamError {
-        UpdateStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateStreamError {
-    fn from(err: CredentialsError) -> UpdateStreamError {
-        UpdateStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateStreamError {
-    fn from(err: HttpDispatchError) -> UpdateStreamError {
-        UpdateStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateStreamError {
-    fn from(err: io::Error) -> UpdateStreamError {
-        UpdateStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateStreamError {
@@ -1511,11 +1221,6 @@ impl Error for UpdateStreamError {
             UpdateStreamError::ResourceInUse(ref cause) => cause,
             UpdateStreamError::ResourceNotFound(ref cause) => cause,
             UpdateStreamError::VersionMismatch(ref cause) => cause,
-            UpdateStreamError::Validation(ref cause) => cause,
-            UpdateStreamError::Credentials(ref err) => err.description(),
-            UpdateStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateStreamError::ParseError(ref cause) => cause,
-            UpdateStreamError::Unknown(_) => "unknown error",
         }
     }
 }

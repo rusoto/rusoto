@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -5705,20 +5702,10 @@ pub enum AddTagsError {
     DuplicateTagKeys(String),
     /// <p>The quota for the number of tags that can be assigned to a load balancer has been reached.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5726,19 +5713,25 @@ impl AddTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return AddTagsError::AccessPointNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(AddTagsError::AccessPointNotFound(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "DuplicateTagKeys" => {
-                        return AddTagsError::DuplicateTagKeys(String::from(parsed_error.message));
+                        return RusotoError::Service(AddTagsError::DuplicateTagKeys(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TooManyTags" => {
-                        return AddTagsError::TooManyTags(String::from(parsed_error.message));
+                        return RusotoError::Service(AddTagsError::TooManyTags(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        AddTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5747,28 +5740,6 @@ impl AddTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddTagsError {
-    fn from(err: XmlParseError) -> AddTagsError {
-        let XmlParseError(message) = err;
-        AddTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsError {
-    fn from(err: CredentialsError) -> AddTagsError {
-        AddTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsError {
-    fn from(err: HttpDispatchError) -> AddTagsError {
-        AddTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsError {
-    fn from(err: io::Error) -> AddTagsError {
-        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddTagsError {
@@ -5782,11 +5753,6 @@ impl Error for AddTagsError {
             AddTagsError::AccessPointNotFound(ref cause) => cause,
             AddTagsError::DuplicateTagKeys(ref cause) => cause,
             AddTagsError::TooManyTags(ref cause) => cause,
-            AddTagsError::Validation(ref cause) => cause,
-            AddTagsError::Credentials(ref err) => err.description(),
-            AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddTagsError::ParseError(ref cause) => cause,
-            AddTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5799,20 +5765,12 @@ pub enum ApplySecurityGroupsToLoadBalancerError {
     InvalidConfigurationRequest(String),
     /// <p>One or more of the specified security groups do not exist.</p>
     InvalidSecurityGroup(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ApplySecurityGroupsToLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> ApplySecurityGroupsToLoadBalancerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ApplySecurityGroupsToLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5820,25 +5778,31 @@ impl ApplySecurityGroupsToLoadBalancerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidConfigurationRequest" => {
-                        return ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidSecurityGroup" => {
-                        return ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ApplySecurityGroupsToLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5847,28 +5811,6 @@ impl ApplySecurityGroupsToLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ApplySecurityGroupsToLoadBalancerError {
-    fn from(err: XmlParseError) -> ApplySecurityGroupsToLoadBalancerError {
-        let XmlParseError(message) = err;
-        ApplySecurityGroupsToLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ApplySecurityGroupsToLoadBalancerError {
-    fn from(err: CredentialsError) -> ApplySecurityGroupsToLoadBalancerError {
-        ApplySecurityGroupsToLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ApplySecurityGroupsToLoadBalancerError {
-    fn from(err: HttpDispatchError) -> ApplySecurityGroupsToLoadBalancerError {
-        ApplySecurityGroupsToLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ApplySecurityGroupsToLoadBalancerError {
-    fn from(err: io::Error) -> ApplySecurityGroupsToLoadBalancerError {
-        ApplySecurityGroupsToLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ApplySecurityGroupsToLoadBalancerError {
@@ -5882,13 +5824,6 @@ impl Error for ApplySecurityGroupsToLoadBalancerError {
             ApplySecurityGroupsToLoadBalancerError::AccessPointNotFound(ref cause) => cause,
             ApplySecurityGroupsToLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
             ApplySecurityGroupsToLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
-            ApplySecurityGroupsToLoadBalancerError::Validation(ref cause) => cause,
-            ApplySecurityGroupsToLoadBalancerError::Credentials(ref err) => err.description(),
-            ApplySecurityGroupsToLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ApplySecurityGroupsToLoadBalancerError::ParseError(ref cause) => cause,
-            ApplySecurityGroupsToLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5903,20 +5838,12 @@ pub enum AttachLoadBalancerToSubnetsError {
     InvalidSubnet(String),
     /// <p>One or more of the specified subnets do not exist.</p>
     SubnetNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachLoadBalancerToSubnetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachLoadBalancerToSubnetsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AttachLoadBalancerToSubnetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5924,30 +5851,38 @@ impl AttachLoadBalancerToSubnetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AttachLoadBalancerToSubnetsError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidConfigurationRequest" => {
-                        return AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidSubnet" => {
-                        return AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AttachLoadBalancerToSubnetsError::InvalidSubnet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SubnetNotFound" => {
-                        return AttachLoadBalancerToSubnetsError::SubnetNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AttachLoadBalancerToSubnetsError::SubnetNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AttachLoadBalancerToSubnetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5956,28 +5891,6 @@ impl AttachLoadBalancerToSubnetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AttachLoadBalancerToSubnetsError {
-    fn from(err: XmlParseError) -> AttachLoadBalancerToSubnetsError {
-        let XmlParseError(message) = err;
-        AttachLoadBalancerToSubnetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AttachLoadBalancerToSubnetsError {
-    fn from(err: CredentialsError) -> AttachLoadBalancerToSubnetsError {
-        AttachLoadBalancerToSubnetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachLoadBalancerToSubnetsError {
-    fn from(err: HttpDispatchError) -> AttachLoadBalancerToSubnetsError {
-        AttachLoadBalancerToSubnetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachLoadBalancerToSubnetsError {
-    fn from(err: io::Error) -> AttachLoadBalancerToSubnetsError {
-        AttachLoadBalancerToSubnetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachLoadBalancerToSubnetsError {
@@ -5992,13 +5905,6 @@ impl Error for AttachLoadBalancerToSubnetsError {
             AttachLoadBalancerToSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
             AttachLoadBalancerToSubnetsError::InvalidSubnet(ref cause) => cause,
             AttachLoadBalancerToSubnetsError::SubnetNotFound(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::Validation(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::Credentials(ref err) => err.description(),
-            AttachLoadBalancerToSubnetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AttachLoadBalancerToSubnetsError::ParseError(ref cause) => cause,
-            AttachLoadBalancerToSubnetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6007,20 +5913,10 @@ impl Error for AttachLoadBalancerToSubnetsError {
 pub enum ConfigureHealthCheckError {
     /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConfigureHealthCheckError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConfigureHealthCheckError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfigureHealthCheckError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6028,15 +5924,15 @@ impl ConfigureHealthCheckError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return ConfigureHealthCheckError::AccessPointNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ConfigureHealthCheckError::AccessPointNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ConfigureHealthCheckError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6045,28 +5941,6 @@ impl ConfigureHealthCheckError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ConfigureHealthCheckError {
-    fn from(err: XmlParseError) -> ConfigureHealthCheckError {
-        let XmlParseError(message) = err;
-        ConfigureHealthCheckError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ConfigureHealthCheckError {
-    fn from(err: CredentialsError) -> ConfigureHealthCheckError {
-        ConfigureHealthCheckError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConfigureHealthCheckError {
-    fn from(err: HttpDispatchError) -> ConfigureHealthCheckError {
-        ConfigureHealthCheckError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConfigureHealthCheckError {
-    fn from(err: io::Error) -> ConfigureHealthCheckError {
-        ConfigureHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ConfigureHealthCheckError {
@@ -6078,13 +5952,6 @@ impl Error for ConfigureHealthCheckError {
     fn description(&self) -> &str {
         match *self {
             ConfigureHealthCheckError::AccessPointNotFound(ref cause) => cause,
-            ConfigureHealthCheckError::Validation(ref cause) => cause,
-            ConfigureHealthCheckError::Credentials(ref err) => err.description(),
-            ConfigureHealthCheckError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ConfigureHealthCheckError::ParseError(ref cause) => cause,
-            ConfigureHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6099,20 +5966,12 @@ pub enum CreateAppCookieStickinessPolicyError {
     InvalidConfigurationRequest(String),
     /// <p>The quota for the number of policies for this load balancer has been reached.</p>
     TooManyPolicies(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAppCookieStickinessPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAppCookieStickinessPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateAppCookieStickinessPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6120,30 +5979,38 @@ impl CreateAppCookieStickinessPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return CreateAppCookieStickinessPolicyError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateAppCookieStickinessPolicyError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DuplicatePolicyName" => {
-                        return CreateAppCookieStickinessPolicyError::DuplicatePolicyName(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateAppCookieStickinessPolicyError::DuplicatePolicyName(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TooManyPolicies" => {
-                        return CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateAppCookieStickinessPolicyError::TooManyPolicies(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateAppCookieStickinessPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6152,28 +6019,6 @@ impl CreateAppCookieStickinessPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateAppCookieStickinessPolicyError {
-    fn from(err: XmlParseError) -> CreateAppCookieStickinessPolicyError {
-        let XmlParseError(message) = err;
-        CreateAppCookieStickinessPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateAppCookieStickinessPolicyError {
-    fn from(err: CredentialsError) -> CreateAppCookieStickinessPolicyError {
-        CreateAppCookieStickinessPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAppCookieStickinessPolicyError {
-    fn from(err: HttpDispatchError) -> CreateAppCookieStickinessPolicyError {
-        CreateAppCookieStickinessPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAppCookieStickinessPolicyError {
-    fn from(err: io::Error) -> CreateAppCookieStickinessPolicyError {
-        CreateAppCookieStickinessPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAppCookieStickinessPolicyError {
@@ -6188,13 +6033,6 @@ impl Error for CreateAppCookieStickinessPolicyError {
             CreateAppCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
             CreateAppCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
             CreateAppCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::Validation(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::Credentials(ref err) => err.description(),
-            CreateAppCookieStickinessPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateAppCookieStickinessPolicyError::ParseError(ref cause) => cause,
-            CreateAppCookieStickinessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6209,20 +6047,12 @@ pub enum CreateLBCookieStickinessPolicyError {
     InvalidConfigurationRequest(String),
     /// <p>The quota for the number of policies for this load balancer has been reached.</p>
     TooManyPolicies(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLBCookieStickinessPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLBCookieStickinessPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateLBCookieStickinessPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6230,30 +6060,38 @@ impl CreateLBCookieStickinessPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return CreateLBCookieStickinessPolicyError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateLBCookieStickinessPolicyError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DuplicatePolicyName" => {
-                        return CreateLBCookieStickinessPolicyError::DuplicatePolicyName(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateLBCookieStickinessPolicyError::DuplicatePolicyName(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TooManyPolicies" => {
-                        return CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLBCookieStickinessPolicyError::TooManyPolicies(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateLBCookieStickinessPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6262,28 +6100,6 @@ impl CreateLBCookieStickinessPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateLBCookieStickinessPolicyError {
-    fn from(err: XmlParseError) -> CreateLBCookieStickinessPolicyError {
-        let XmlParseError(message) = err;
-        CreateLBCookieStickinessPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateLBCookieStickinessPolicyError {
-    fn from(err: CredentialsError) -> CreateLBCookieStickinessPolicyError {
-        CreateLBCookieStickinessPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLBCookieStickinessPolicyError {
-    fn from(err: HttpDispatchError) -> CreateLBCookieStickinessPolicyError {
-        CreateLBCookieStickinessPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLBCookieStickinessPolicyError {
-    fn from(err: io::Error) -> CreateLBCookieStickinessPolicyError {
-        CreateLBCookieStickinessPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateLBCookieStickinessPolicyError {
@@ -6298,13 +6114,6 @@ impl Error for CreateLBCookieStickinessPolicyError {
             CreateLBCookieStickinessPolicyError::DuplicatePolicyName(ref cause) => cause,
             CreateLBCookieStickinessPolicyError::InvalidConfigurationRequest(ref cause) => cause,
             CreateLBCookieStickinessPolicyError::TooManyPolicies(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::Validation(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::Credentials(ref err) => err.description(),
-            CreateLBCookieStickinessPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLBCookieStickinessPolicyError::ParseError(ref cause) => cause,
-            CreateLBCookieStickinessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6335,20 +6144,10 @@ pub enum CreateLoadBalancerError {
     TooManyTags(String),
     /// <p>The specified protocol or signature version is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLoadBalancerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6356,70 +6155,74 @@ impl CreateLoadBalancerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CertificateNotFound" => {
-                        return CreateLoadBalancerError::CertificateNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::CertificateNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DuplicateLoadBalancerName" => {
-                        return CreateLoadBalancerError::DuplicateAccessPointName(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerError::DuplicateAccessPointName(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DuplicateTagKeys" => {
-                        return CreateLoadBalancerError::DuplicateTagKeys(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::DuplicateTagKeys(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidScheme" => {
-                        return CreateLoadBalancerError::InvalidScheme(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::InvalidScheme(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidSecurityGroup" => {
-                        return CreateLoadBalancerError::InvalidSecurityGroup(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::InvalidSecurityGroup(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidSubnet" => {
-                        return CreateLoadBalancerError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "OperationNotPermitted" => {
-                        return CreateLoadBalancerError::OperationNotPermitted(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::OperationNotPermitted(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SubnetNotFound" => {
-                        return CreateLoadBalancerError::SubnetNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::SubnetNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyLoadBalancers" => {
-                        return CreateLoadBalancerError::TooManyAccessPoints(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::TooManyAccessPoints(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyTags" => {
-                        return CreateLoadBalancerError::TooManyTags(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::TooManyTags(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedProtocol" => {
-                        return CreateLoadBalancerError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::UnsupportedProtocol(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6428,28 +6231,6 @@ impl CreateLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateLoadBalancerError {
-    fn from(err: XmlParseError) -> CreateLoadBalancerError {
-        let XmlParseError(message) = err;
-        CreateLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateLoadBalancerError {
-    fn from(err: CredentialsError) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLoadBalancerError {
-    fn from(err: HttpDispatchError) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLoadBalancerError {
-    fn from(err: io::Error) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateLoadBalancerError {
@@ -6472,13 +6253,6 @@ impl Error for CreateLoadBalancerError {
             CreateLoadBalancerError::TooManyAccessPoints(ref cause) => cause,
             CreateLoadBalancerError::TooManyTags(ref cause) => cause,
             CreateLoadBalancerError::UnsupportedProtocol(ref cause) => cause,
-            CreateLoadBalancerError::Validation(ref cause) => cause,
-            CreateLoadBalancerError::Credentials(ref err) => err.description(),
-            CreateLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLoadBalancerError::ParseError(ref cause) => cause,
-            CreateLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6495,20 +6269,12 @@ pub enum CreateLoadBalancerListenersError {
     InvalidConfigurationRequest(String),
     /// <p>The specified protocol or signature version is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoadBalancerListenersError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLoadBalancerListenersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateLoadBalancerListenersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6516,35 +6282,45 @@ impl CreateLoadBalancerListenersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return CreateLoadBalancerListenersError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerListenersError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "CertificateNotFound" => {
-                        return CreateLoadBalancerListenersError::CertificateNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerListenersError::CertificateNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DuplicateListener" => {
-                        return CreateLoadBalancerListenersError::DuplicateListener(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerListenersError::DuplicateListener(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateLoadBalancerListenersError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateLoadBalancerListenersError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "UnsupportedProtocol" => {
-                        return CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerListenersError::UnsupportedProtocol(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateLoadBalancerListenersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6553,28 +6329,6 @@ impl CreateLoadBalancerListenersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateLoadBalancerListenersError {
-    fn from(err: XmlParseError) -> CreateLoadBalancerListenersError {
-        let XmlParseError(message) = err;
-        CreateLoadBalancerListenersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateLoadBalancerListenersError {
-    fn from(err: CredentialsError) -> CreateLoadBalancerListenersError {
-        CreateLoadBalancerListenersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLoadBalancerListenersError {
-    fn from(err: HttpDispatchError) -> CreateLoadBalancerListenersError {
-        CreateLoadBalancerListenersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLoadBalancerListenersError {
-    fn from(err: io::Error) -> CreateLoadBalancerListenersError {
-        CreateLoadBalancerListenersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateLoadBalancerListenersError {
@@ -6590,13 +6344,6 @@ impl Error for CreateLoadBalancerListenersError {
             CreateLoadBalancerListenersError::DuplicateListener(ref cause) => cause,
             CreateLoadBalancerListenersError::InvalidConfigurationRequest(ref cause) => cause,
             CreateLoadBalancerListenersError::UnsupportedProtocol(ref cause) => cause,
-            CreateLoadBalancerListenersError::Validation(ref cause) => cause,
-            CreateLoadBalancerListenersError::Credentials(ref err) => err.description(),
-            CreateLoadBalancerListenersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLoadBalancerListenersError::ParseError(ref cause) => cause,
-            CreateLoadBalancerListenersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6613,20 +6360,10 @@ pub enum CreateLoadBalancerPolicyError {
     PolicyTypeNotFound(String),
     /// <p>The quota for the number of policies for this load balancer has been reached.</p>
     TooManyPolicies(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoadBalancerPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLoadBalancerPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoadBalancerPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6634,35 +6371,43 @@ impl CreateLoadBalancerPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerPolicyError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DuplicatePolicyName" => {
-                        return CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerPolicyError::DuplicatePolicyName(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateLoadBalancerPolicyError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateLoadBalancerPolicyError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "PolicyTypeNotFound" => {
-                        return CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerPolicyError::PolicyTypeNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyPolicies" => {
-                        return CreateLoadBalancerPolicyError::TooManyPolicies(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerPolicyError::TooManyPolicies(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateLoadBalancerPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6671,28 +6416,6 @@ impl CreateLoadBalancerPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateLoadBalancerPolicyError {
-    fn from(err: XmlParseError) -> CreateLoadBalancerPolicyError {
-        let XmlParseError(message) = err;
-        CreateLoadBalancerPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateLoadBalancerPolicyError {
-    fn from(err: CredentialsError) -> CreateLoadBalancerPolicyError {
-        CreateLoadBalancerPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLoadBalancerPolicyError {
-    fn from(err: HttpDispatchError) -> CreateLoadBalancerPolicyError {
-        CreateLoadBalancerPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLoadBalancerPolicyError {
-    fn from(err: io::Error) -> CreateLoadBalancerPolicyError {
-        CreateLoadBalancerPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateLoadBalancerPolicyError {
@@ -6708,33 +6431,15 @@ impl Error for CreateLoadBalancerPolicyError {
             CreateLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
             CreateLoadBalancerPolicyError::PolicyTypeNotFound(ref cause) => cause,
             CreateLoadBalancerPolicyError::TooManyPolicies(ref cause) => cause,
-            CreateLoadBalancerPolicyError::Validation(ref cause) => cause,
-            CreateLoadBalancerPolicyError::Credentials(ref err) => err.description(),
-            CreateLoadBalancerPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLoadBalancerPolicyError::ParseError(ref cause) => cause,
-            CreateLoadBalancerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DeleteLoadBalancer
 #[derive(Debug, PartialEq)]
-pub enum DeleteLoadBalancerError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteLoadBalancerError {}
 
 impl DeleteLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoadBalancerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6745,7 +6450,7 @@ impl DeleteLoadBalancerError {
                 }
             }
         }
-        DeleteLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6754,28 +6459,6 @@ impl DeleteLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteLoadBalancerError {
-    fn from(err: XmlParseError) -> DeleteLoadBalancerError {
-        let XmlParseError(message) = err;
-        DeleteLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoadBalancerError {
-    fn from(err: CredentialsError) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoadBalancerError {
-    fn from(err: HttpDispatchError) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoadBalancerError {
-    fn from(err: io::Error) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoadBalancerError {
@@ -6785,15 +6468,7 @@ impl fmt::Display for DeleteLoadBalancerError {
 }
 impl Error for DeleteLoadBalancerError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteLoadBalancerError::Validation(ref cause) => cause,
-            DeleteLoadBalancerError::Credentials(ref err) => err.description(),
-            DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoadBalancerError::ParseError(ref cause) => cause,
-            DeleteLoadBalancerError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteLoadBalancerListeners
@@ -6801,20 +6476,12 @@ impl Error for DeleteLoadBalancerError {
 pub enum DeleteLoadBalancerListenersError {
     /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoadBalancerListenersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoadBalancerListenersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteLoadBalancerListenersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6822,15 +6489,17 @@ impl DeleteLoadBalancerListenersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteLoadBalancerListenersError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteLoadBalancerListenersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6839,28 +6508,6 @@ impl DeleteLoadBalancerListenersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteLoadBalancerListenersError {
-    fn from(err: XmlParseError) -> DeleteLoadBalancerListenersError {
-        let XmlParseError(message) = err;
-        DeleteLoadBalancerListenersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoadBalancerListenersError {
-    fn from(err: CredentialsError) -> DeleteLoadBalancerListenersError {
-        DeleteLoadBalancerListenersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoadBalancerListenersError {
-    fn from(err: HttpDispatchError) -> DeleteLoadBalancerListenersError {
-        DeleteLoadBalancerListenersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoadBalancerListenersError {
-    fn from(err: io::Error) -> DeleteLoadBalancerListenersError {
-        DeleteLoadBalancerListenersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoadBalancerListenersError {
@@ -6872,13 +6519,6 @@ impl Error for DeleteLoadBalancerListenersError {
     fn description(&self) -> &str {
         match *self {
             DeleteLoadBalancerListenersError::AccessPointNotFound(ref cause) => cause,
-            DeleteLoadBalancerListenersError::Validation(ref cause) => cause,
-            DeleteLoadBalancerListenersError::Credentials(ref err) => err.description(),
-            DeleteLoadBalancerListenersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoadBalancerListenersError::ParseError(ref cause) => cause,
-            DeleteLoadBalancerListenersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6889,20 +6529,10 @@ pub enum DeleteLoadBalancerPolicyError {
     AccessPointNotFound(String),
     /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoadBalancerPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoadBalancerPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoadBalancerPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6910,20 +6540,24 @@ impl DeleteLoadBalancerPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteLoadBalancerPolicyError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidConfigurationRequest" => {
-                        return DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteLoadBalancerPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6932,28 +6566,6 @@ impl DeleteLoadBalancerPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteLoadBalancerPolicyError {
-    fn from(err: XmlParseError) -> DeleteLoadBalancerPolicyError {
-        let XmlParseError(message) = err;
-        DeleteLoadBalancerPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoadBalancerPolicyError {
-    fn from(err: CredentialsError) -> DeleteLoadBalancerPolicyError {
-        DeleteLoadBalancerPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoadBalancerPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteLoadBalancerPolicyError {
-        DeleteLoadBalancerPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoadBalancerPolicyError {
-    fn from(err: io::Error) -> DeleteLoadBalancerPolicyError {
-        DeleteLoadBalancerPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoadBalancerPolicyError {
@@ -6966,13 +6578,6 @@ impl Error for DeleteLoadBalancerPolicyError {
         match *self {
             DeleteLoadBalancerPolicyError::AccessPointNotFound(ref cause) => cause,
             DeleteLoadBalancerPolicyError::InvalidConfigurationRequest(ref cause) => cause,
-            DeleteLoadBalancerPolicyError::Validation(ref cause) => cause,
-            DeleteLoadBalancerPolicyError::Credentials(ref err) => err.description(),
-            DeleteLoadBalancerPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoadBalancerPolicyError::ParseError(ref cause) => cause,
-            DeleteLoadBalancerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6983,20 +6588,12 @@ pub enum DeregisterInstancesFromLoadBalancerError {
     AccessPointNotFound(String),
     /// <p>The specified endpoint is not valid.</p>
     InvalidEndPoint(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterInstancesFromLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterInstancesFromLoadBalancerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeregisterInstancesFromLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7004,20 +6601,24 @@ impl DeregisterInstancesFromLoadBalancerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidInstance" => {
-                        return DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeregisterInstancesFromLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7026,28 +6627,6 @@ impl DeregisterInstancesFromLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeregisterInstancesFromLoadBalancerError {
-    fn from(err: XmlParseError) -> DeregisterInstancesFromLoadBalancerError {
-        let XmlParseError(message) = err;
-        DeregisterInstancesFromLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterInstancesFromLoadBalancerError {
-    fn from(err: CredentialsError) -> DeregisterInstancesFromLoadBalancerError {
-        DeregisterInstancesFromLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterInstancesFromLoadBalancerError {
-    fn from(err: HttpDispatchError) -> DeregisterInstancesFromLoadBalancerError {
-        DeregisterInstancesFromLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterInstancesFromLoadBalancerError {
-    fn from(err: io::Error) -> DeregisterInstancesFromLoadBalancerError {
-        DeregisterInstancesFromLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterInstancesFromLoadBalancerError {
@@ -7060,33 +6639,15 @@ impl Error for DeregisterInstancesFromLoadBalancerError {
         match *self {
             DeregisterInstancesFromLoadBalancerError::AccessPointNotFound(ref cause) => cause,
             DeregisterInstancesFromLoadBalancerError::InvalidEndPoint(ref cause) => cause,
-            DeregisterInstancesFromLoadBalancerError::Validation(ref cause) => cause,
-            DeregisterInstancesFromLoadBalancerError::Credentials(ref err) => err.description(),
-            DeregisterInstancesFromLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterInstancesFromLoadBalancerError::ParseError(ref cause) => cause,
-            DeregisterInstancesFromLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
-pub enum DescribeAccountLimitsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeAccountLimitsError {}
 
 impl DescribeAccountLimitsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountLimitsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountLimitsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7097,7 +6658,7 @@ impl DescribeAccountLimitsError {
                 }
             }
         }
-        DescribeAccountLimitsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7106,28 +6667,6 @@ impl DescribeAccountLimitsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeAccountLimitsError {
-    fn from(err: XmlParseError) -> DescribeAccountLimitsError {
-        let XmlParseError(message) = err;
-        DescribeAccountLimitsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAccountLimitsError {
-    fn from(err: CredentialsError) -> DescribeAccountLimitsError {
-        DescribeAccountLimitsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAccountLimitsError {
-    fn from(err: HttpDispatchError) -> DescribeAccountLimitsError {
-        DescribeAccountLimitsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAccountLimitsError {
-    fn from(err: io::Error) -> DescribeAccountLimitsError {
-        DescribeAccountLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountLimitsError {
@@ -7137,15 +6676,7 @@ impl fmt::Display for DescribeAccountLimitsError {
 }
 impl Error for DescribeAccountLimitsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeAccountLimitsError::Validation(ref cause) => cause,
-            DescribeAccountLimitsError::Credentials(ref err) => err.description(),
-            DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAccountLimitsError::ParseError(ref cause) => cause,
-            DescribeAccountLimitsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeInstanceHealth
@@ -7155,20 +6686,10 @@ pub enum DescribeInstanceHealthError {
     AccessPointNotFound(String),
     /// <p>The specified endpoint is not valid.</p>
     InvalidEndPoint(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInstanceHealthError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeInstanceHealthError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstanceHealthError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7176,20 +6697,22 @@ impl DescribeInstanceHealthError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeInstanceHealthError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeInstanceHealthError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInstance" => {
-                        return DescribeInstanceHealthError::InvalidEndPoint(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeInstanceHealthError::InvalidEndPoint(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeInstanceHealthError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7198,28 +6721,6 @@ impl DescribeInstanceHealthError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeInstanceHealthError {
-    fn from(err: XmlParseError) -> DescribeInstanceHealthError {
-        let XmlParseError(message) = err;
-        DescribeInstanceHealthError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeInstanceHealthError {
-    fn from(err: CredentialsError) -> DescribeInstanceHealthError {
-        DescribeInstanceHealthError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeInstanceHealthError {
-    fn from(err: HttpDispatchError) -> DescribeInstanceHealthError {
-        DescribeInstanceHealthError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeInstanceHealthError {
-    fn from(err: io::Error) -> DescribeInstanceHealthError {
-        DescribeInstanceHealthError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstanceHealthError {
@@ -7232,13 +6733,6 @@ impl Error for DescribeInstanceHealthError {
         match *self {
             DescribeInstanceHealthError::AccessPointNotFound(ref cause) => cause,
             DescribeInstanceHealthError::InvalidEndPoint(ref cause) => cause,
-            DescribeInstanceHealthError::Validation(ref cause) => cause,
-            DescribeInstanceHealthError::Credentials(ref err) => err.description(),
-            DescribeInstanceHealthError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeInstanceHealthError::ParseError(ref cause) => cause,
-            DescribeInstanceHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7249,20 +6743,12 @@ pub enum DescribeLoadBalancerAttributesError {
     AccessPointNotFound(String),
     /// <p>The specified load balancer attribute does not exist.</p>
     LoadBalancerAttributeNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancerAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancerAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeLoadBalancerAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7270,20 +6756,24 @@ impl DescribeLoadBalancerAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeLoadBalancerAttributesError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeLoadBalancerAttributesError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "LoadBalancerAttributeNotFound" => {
-                        return DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeLoadBalancerAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7292,28 +6782,6 @@ impl DescribeLoadBalancerAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeLoadBalancerAttributesError {
-    fn from(err: XmlParseError) -> DescribeLoadBalancerAttributesError {
-        let XmlParseError(message) = err;
-        DescribeLoadBalancerAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoadBalancerAttributesError {
-    fn from(err: CredentialsError) -> DescribeLoadBalancerAttributesError {
-        DescribeLoadBalancerAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoadBalancerAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeLoadBalancerAttributesError {
-        DescribeLoadBalancerAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoadBalancerAttributesError {
-    fn from(err: io::Error) -> DescribeLoadBalancerAttributesError {
-        DescribeLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancerAttributesError {
@@ -7326,13 +6794,6 @@ impl Error for DescribeLoadBalancerAttributesError {
         match *self {
             DescribeLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
             DescribeLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::Validation(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::Credentials(ref err) => err.description(),
-            DescribeLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLoadBalancerAttributesError::ParseError(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7343,20 +6804,12 @@ pub enum DescribeLoadBalancerPoliciesError {
     AccessPointNotFound(String),
     /// <p>One or more of the specified policies do not exist.</p>
     PolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancerPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancerPoliciesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeLoadBalancerPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7364,20 +6817,24 @@ impl DescribeLoadBalancerPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeLoadBalancerPoliciesError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "PolicyNotFound" => {
-                        return DescribeLoadBalancerPoliciesError::PolicyNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeLoadBalancerPoliciesError::PolicyNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeLoadBalancerPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7386,28 +6843,6 @@ impl DescribeLoadBalancerPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeLoadBalancerPoliciesError {
-    fn from(err: XmlParseError) -> DescribeLoadBalancerPoliciesError {
-        let XmlParseError(message) = err;
-        DescribeLoadBalancerPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoadBalancerPoliciesError {
-    fn from(err: CredentialsError) -> DescribeLoadBalancerPoliciesError {
-        DescribeLoadBalancerPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoadBalancerPoliciesError {
-    fn from(err: HttpDispatchError) -> DescribeLoadBalancerPoliciesError {
-        DescribeLoadBalancerPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoadBalancerPoliciesError {
-    fn from(err: io::Error) -> DescribeLoadBalancerPoliciesError {
-        DescribeLoadBalancerPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancerPoliciesError {
@@ -7420,13 +6855,6 @@ impl Error for DescribeLoadBalancerPoliciesError {
         match *self {
             DescribeLoadBalancerPoliciesError::AccessPointNotFound(ref cause) => cause,
             DescribeLoadBalancerPoliciesError::PolicyNotFound(ref cause) => cause,
-            DescribeLoadBalancerPoliciesError::Validation(ref cause) => cause,
-            DescribeLoadBalancerPoliciesError::Credentials(ref err) => err.description(),
-            DescribeLoadBalancerPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLoadBalancerPoliciesError::ParseError(ref cause) => cause,
-            DescribeLoadBalancerPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7435,20 +6863,12 @@ impl Error for DescribeLoadBalancerPoliciesError {
 pub enum DescribeLoadBalancerPolicyTypesError {
     /// <p>One or more of the specified policy types do not exist.</p>
     PolicyTypeNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancerPolicyTypesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancerPolicyTypesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeLoadBalancerPolicyTypesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7456,15 +6876,17 @@ impl DescribeLoadBalancerPolicyTypesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "PolicyTypeNotFound" => {
-                        return DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeLoadBalancerPolicyTypesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7473,28 +6895,6 @@ impl DescribeLoadBalancerPolicyTypesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeLoadBalancerPolicyTypesError {
-    fn from(err: XmlParseError) -> DescribeLoadBalancerPolicyTypesError {
-        let XmlParseError(message) = err;
-        DescribeLoadBalancerPolicyTypesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoadBalancerPolicyTypesError {
-    fn from(err: CredentialsError) -> DescribeLoadBalancerPolicyTypesError {
-        DescribeLoadBalancerPolicyTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoadBalancerPolicyTypesError {
-    fn from(err: HttpDispatchError) -> DescribeLoadBalancerPolicyTypesError {
-        DescribeLoadBalancerPolicyTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoadBalancerPolicyTypesError {
-    fn from(err: io::Error) -> DescribeLoadBalancerPolicyTypesError {
-        DescribeLoadBalancerPolicyTypesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancerPolicyTypesError {
@@ -7506,13 +6906,6 @@ impl Error for DescribeLoadBalancerPolicyTypesError {
     fn description(&self) -> &str {
         match *self {
             DescribeLoadBalancerPolicyTypesError::PolicyTypeNotFound(ref cause) => cause,
-            DescribeLoadBalancerPolicyTypesError::Validation(ref cause) => cause,
-            DescribeLoadBalancerPolicyTypesError::Credentials(ref err) => err.description(),
-            DescribeLoadBalancerPolicyTypesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLoadBalancerPolicyTypesError::ParseError(ref cause) => cause,
-            DescribeLoadBalancerPolicyTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7523,20 +6916,10 @@ pub enum DescribeLoadBalancersError {
     AccessPointNotFound(String),
     /// <p>A request made by Elastic Load Balancing to another service exceeds the maximum request rate permitted for your account.</p>
     DependencyThrottle(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoadBalancersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7544,20 +6927,22 @@ impl DescribeLoadBalancersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeLoadBalancersError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeLoadBalancersError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DependencyThrottle" => {
-                        return DescribeLoadBalancersError::DependencyThrottle(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeLoadBalancersError::DependencyThrottle(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeLoadBalancersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7566,28 +6951,6 @@ impl DescribeLoadBalancersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeLoadBalancersError {
-    fn from(err: XmlParseError) -> DescribeLoadBalancersError {
-        let XmlParseError(message) = err;
-        DescribeLoadBalancersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoadBalancersError {
-    fn from(err: CredentialsError) -> DescribeLoadBalancersError {
-        DescribeLoadBalancersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoadBalancersError {
-    fn from(err: HttpDispatchError) -> DescribeLoadBalancersError {
-        DescribeLoadBalancersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoadBalancersError {
-    fn from(err: io::Error) -> DescribeLoadBalancersError {
-        DescribeLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancersError {
@@ -7600,13 +6963,6 @@ impl Error for DescribeLoadBalancersError {
         match *self {
             DescribeLoadBalancersError::AccessPointNotFound(ref cause) => cause,
             DescribeLoadBalancersError::DependencyThrottle(ref cause) => cause,
-            DescribeLoadBalancersError::Validation(ref cause) => cause,
-            DescribeLoadBalancersError::Credentials(ref err) => err.description(),
-            DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLoadBalancersError::ParseError(ref cause) => cause,
-            DescribeLoadBalancersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7615,20 +6971,10 @@ impl Error for DescribeLoadBalancersError {
 pub enum DescribeTagsError {
     /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7636,15 +6982,15 @@ impl DescribeTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeTagsError::AccessPointNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTagsError::AccessPointNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7653,28 +6999,6 @@ impl DescribeTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeTagsError {
-    fn from(err: XmlParseError) -> DescribeTagsError {
-        let XmlParseError(message) = err;
-        DescribeTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTagsError {
-    fn from(err: CredentialsError) -> DescribeTagsError {
-        DescribeTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTagsError {
-    fn from(err: HttpDispatchError) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTagsError {
-    fn from(err: io::Error) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -7686,11 +7010,6 @@ impl Error for DescribeTagsError {
     fn description(&self) -> &str {
         match *self {
             DescribeTagsError::AccessPointNotFound(ref cause) => cause,
-            DescribeTagsError::Validation(ref cause) => cause,
-            DescribeTagsError::Credentials(ref err) => err.description(),
-            DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::ParseError(ref cause) => cause,
-            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7701,20 +7020,12 @@ pub enum DetachLoadBalancerFromSubnetsError {
     AccessPointNotFound(String),
     /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachLoadBalancerFromSubnetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachLoadBalancerFromSubnetsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DetachLoadBalancerFromSubnetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7722,20 +7033,24 @@ impl DetachLoadBalancerFromSubnetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DetachLoadBalancerFromSubnetsError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DetachLoadBalancerFromSubnetsError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidConfigurationRequest" => {
-                        return DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DetachLoadBalancerFromSubnetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7744,28 +7059,6 @@ impl DetachLoadBalancerFromSubnetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DetachLoadBalancerFromSubnetsError {
-    fn from(err: XmlParseError) -> DetachLoadBalancerFromSubnetsError {
-        let XmlParseError(message) = err;
-        DetachLoadBalancerFromSubnetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DetachLoadBalancerFromSubnetsError {
-    fn from(err: CredentialsError) -> DetachLoadBalancerFromSubnetsError {
-        DetachLoadBalancerFromSubnetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachLoadBalancerFromSubnetsError {
-    fn from(err: HttpDispatchError) -> DetachLoadBalancerFromSubnetsError {
-        DetachLoadBalancerFromSubnetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachLoadBalancerFromSubnetsError {
-    fn from(err: io::Error) -> DetachLoadBalancerFromSubnetsError {
-        DetachLoadBalancerFromSubnetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachLoadBalancerFromSubnetsError {
@@ -7778,13 +7071,6 @@ impl Error for DetachLoadBalancerFromSubnetsError {
         match *self {
             DetachLoadBalancerFromSubnetsError::AccessPointNotFound(ref cause) => cause,
             DetachLoadBalancerFromSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
-            DetachLoadBalancerFromSubnetsError::Validation(ref cause) => cause,
-            DetachLoadBalancerFromSubnetsError::Credentials(ref err) => err.description(),
-            DetachLoadBalancerFromSubnetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DetachLoadBalancerFromSubnetsError::ParseError(ref cause) => cause,
-            DetachLoadBalancerFromSubnetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7795,33 +7081,35 @@ pub enum DisableAvailabilityZonesForLoadBalancerError {
     AccessPointNotFound(String),
     /// <p>The requested configuration change is not valid.</p>
     InvalidConfigurationRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableAvailabilityZonesForLoadBalancerError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DisableAvailabilityZonesForLoadBalancerError {
+    ) -> RusotoError<DisableAvailabilityZonesForLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "LoadBalancerNotFound" => return DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequest" => return DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(String::from(parsed_error.message)),_ => {}
-                                }
+                    "LoadBalancerNotFound" => {
+                        return RusotoError::Service(
+                            DisableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidConfigurationRequest" => return RusotoError::Service(
+                        DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        DisableAvailabilityZonesForLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7830,28 +7118,6 @@ impl DisableAvailabilityZonesForLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DisableAvailabilityZonesForLoadBalancerError {
-    fn from(err: XmlParseError) -> DisableAvailabilityZonesForLoadBalancerError {
-        let XmlParseError(message) = err;
-        DisableAvailabilityZonesForLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DisableAvailabilityZonesForLoadBalancerError {
-    fn from(err: CredentialsError) -> DisableAvailabilityZonesForLoadBalancerError {
-        DisableAvailabilityZonesForLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableAvailabilityZonesForLoadBalancerError {
-    fn from(err: HttpDispatchError) -> DisableAvailabilityZonesForLoadBalancerError {
-        DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableAvailabilityZonesForLoadBalancerError {
-    fn from(err: io::Error) -> DisableAvailabilityZonesForLoadBalancerError {
-        DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableAvailabilityZonesForLoadBalancerError {
@@ -7866,13 +7132,6 @@ impl Error for DisableAvailabilityZonesForLoadBalancerError {
             DisableAvailabilityZonesForLoadBalancerError::InvalidConfigurationRequest(
                 ref cause,
             ) => cause,
-            DisableAvailabilityZonesForLoadBalancerError::Validation(ref cause) => cause,
-            DisableAvailabilityZonesForLoadBalancerError::Credentials(ref err) => err.description(),
-            DisableAvailabilityZonesForLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisableAvailabilityZonesForLoadBalancerError::ParseError(ref cause) => cause,
-            DisableAvailabilityZonesForLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7881,20 +7140,12 @@ impl Error for DisableAvailabilityZonesForLoadBalancerError {
 pub enum EnableAvailabilityZonesForLoadBalancerError {
     /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableAvailabilityZonesForLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableAvailabilityZonesForLoadBalancerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableAvailabilityZonesForLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7902,15 +7153,17 @@ impl EnableAvailabilityZonesForLoadBalancerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        EnableAvailabilityZonesForLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7919,28 +7172,6 @@ impl EnableAvailabilityZonesForLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for EnableAvailabilityZonesForLoadBalancerError {
-    fn from(err: XmlParseError) -> EnableAvailabilityZonesForLoadBalancerError {
-        let XmlParseError(message) = err;
-        EnableAvailabilityZonesForLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for EnableAvailabilityZonesForLoadBalancerError {
-    fn from(err: CredentialsError) -> EnableAvailabilityZonesForLoadBalancerError {
-        EnableAvailabilityZonesForLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableAvailabilityZonesForLoadBalancerError {
-    fn from(err: HttpDispatchError) -> EnableAvailabilityZonesForLoadBalancerError {
-        EnableAvailabilityZonesForLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableAvailabilityZonesForLoadBalancerError {
-    fn from(err: io::Error) -> EnableAvailabilityZonesForLoadBalancerError {
-        EnableAvailabilityZonesForLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableAvailabilityZonesForLoadBalancerError {
@@ -7952,13 +7183,6 @@ impl Error for EnableAvailabilityZonesForLoadBalancerError {
     fn description(&self) -> &str {
         match *self {
             EnableAvailabilityZonesForLoadBalancerError::AccessPointNotFound(ref cause) => cause,
-            EnableAvailabilityZonesForLoadBalancerError::Validation(ref cause) => cause,
-            EnableAvailabilityZonesForLoadBalancerError::Credentials(ref err) => err.description(),
-            EnableAvailabilityZonesForLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableAvailabilityZonesForLoadBalancerError::ParseError(ref cause) => cause,
-            EnableAvailabilityZonesForLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7971,20 +7195,12 @@ pub enum ModifyLoadBalancerAttributesError {
     InvalidConfigurationRequest(String),
     /// <p>The specified load balancer attribute does not exist.</p>
     LoadBalancerAttributeNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyLoadBalancerAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyLoadBalancerAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyLoadBalancerAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7992,25 +7208,31 @@ impl ModifyLoadBalancerAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyLoadBalancerAttributesError::AccessPointNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidConfigurationRequest" => {
-                        return ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "LoadBalancerAttributeNotFound" => {
-                        return ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyLoadBalancerAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8019,28 +7241,6 @@ impl ModifyLoadBalancerAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyLoadBalancerAttributesError {
-    fn from(err: XmlParseError) -> ModifyLoadBalancerAttributesError {
-        let XmlParseError(message) = err;
-        ModifyLoadBalancerAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyLoadBalancerAttributesError {
-    fn from(err: CredentialsError) -> ModifyLoadBalancerAttributesError {
-        ModifyLoadBalancerAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyLoadBalancerAttributesError {
-    fn from(err: HttpDispatchError) -> ModifyLoadBalancerAttributesError {
-        ModifyLoadBalancerAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyLoadBalancerAttributesError {
-    fn from(err: io::Error) -> ModifyLoadBalancerAttributesError {
-        ModifyLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
@@ -8054,13 +7254,6 @@ impl Error for ModifyLoadBalancerAttributesError {
             ModifyLoadBalancerAttributesError::AccessPointNotFound(ref cause) => cause,
             ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,
             ModifyLoadBalancerAttributesError::LoadBalancerAttributeNotFound(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::Validation(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::Credentials(ref err) => err.description(),
-            ModifyLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyLoadBalancerAttributesError::ParseError(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8071,20 +7264,12 @@ pub enum RegisterInstancesWithLoadBalancerError {
     AccessPointNotFound(String),
     /// <p>The specified endpoint is not valid.</p>
     InvalidEndPoint(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterInstancesWithLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterInstancesWithLoadBalancerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RegisterInstancesWithLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8092,20 +7277,24 @@ impl RegisterInstancesWithLoadBalancerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return RegisterInstancesWithLoadBalancerError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RegisterInstancesWithLoadBalancerError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidInstance" => {
-                        return RegisterInstancesWithLoadBalancerError::InvalidEndPoint(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RegisterInstancesWithLoadBalancerError::InvalidEndPoint(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RegisterInstancesWithLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8114,28 +7303,6 @@ impl RegisterInstancesWithLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RegisterInstancesWithLoadBalancerError {
-    fn from(err: XmlParseError) -> RegisterInstancesWithLoadBalancerError {
-        let XmlParseError(message) = err;
-        RegisterInstancesWithLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RegisterInstancesWithLoadBalancerError {
-    fn from(err: CredentialsError) -> RegisterInstancesWithLoadBalancerError {
-        RegisterInstancesWithLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterInstancesWithLoadBalancerError {
-    fn from(err: HttpDispatchError) -> RegisterInstancesWithLoadBalancerError {
-        RegisterInstancesWithLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterInstancesWithLoadBalancerError {
-    fn from(err: io::Error) -> RegisterInstancesWithLoadBalancerError {
-        RegisterInstancesWithLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterInstancesWithLoadBalancerError {
@@ -8148,13 +7315,6 @@ impl Error for RegisterInstancesWithLoadBalancerError {
         match *self {
             RegisterInstancesWithLoadBalancerError::AccessPointNotFound(ref cause) => cause,
             RegisterInstancesWithLoadBalancerError::InvalidEndPoint(ref cause) => cause,
-            RegisterInstancesWithLoadBalancerError::Validation(ref cause) => cause,
-            RegisterInstancesWithLoadBalancerError::Credentials(ref err) => err.description(),
-            RegisterInstancesWithLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterInstancesWithLoadBalancerError::ParseError(ref cause) => cause,
-            RegisterInstancesWithLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8163,20 +7323,10 @@ impl Error for RegisterInstancesWithLoadBalancerError {
 pub enum RemoveTagsError {
     /// <p>The specified load balancer does not exist.</p>
     AccessPointNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8184,15 +7334,15 @@ impl RemoveTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return RemoveTagsError::AccessPointNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RemoveTagsError::AccessPointNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        RemoveTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8201,28 +7351,6 @@ impl RemoveTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveTagsError {
-    fn from(err: XmlParseError) -> RemoveTagsError {
-        let XmlParseError(message) = err;
-        RemoveTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsError {
-    fn from(err: CredentialsError) -> RemoveTagsError {
-        RemoveTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsError {
-    fn from(err: HttpDispatchError) -> RemoveTagsError {
-        RemoveTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsError {
-    fn from(err: io::Error) -> RemoveTagsError {
-        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsError {
@@ -8234,11 +7362,6 @@ impl Error for RemoveTagsError {
     fn description(&self) -> &str {
         match *self {
             RemoveTagsError::AccessPointNotFound(ref cause) => cause,
-            RemoveTagsError::Validation(ref cause) => cause,
-            RemoveTagsError::Credentials(ref err) => err.description(),
-            RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RemoveTagsError::ParseError(ref cause) => cause,
-            RemoveTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8255,31 +7378,58 @@ pub enum SetLoadBalancerListenerSSLCertificateError {
     ListenerNotFound(String),
     /// <p>The specified protocol or signature version is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetLoadBalancerListenerSSLCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetLoadBalancerListenerSSLCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SetLoadBalancerListenerSSLCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "LoadBalancerNotFound" => return SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(String::from(parsed_error.message)),"CertificateNotFound" => return SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequest" => return SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(String::from(parsed_error.message)),"ListenerNotFound" => return SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(String::from(parsed_error.message)),"UnsupportedProtocol" => return SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(String::from(parsed_error.message)),_ => {}
-                                }
+                    "LoadBalancerNotFound" => {
+                        return RusotoError::Service(
+                            SetLoadBalancerListenerSSLCertificateError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "CertificateNotFound" => {
+                        return RusotoError::Service(
+                            SetLoadBalancerListenerSSLCertificateError::CertificateNotFound(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidConfigurationRequest" => {
+                        return RusotoError::Service(
+                            SetLoadBalancerListenerSSLCertificateError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ListenerNotFound" => {
+                        return RusotoError::Service(
+                            SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "UnsupportedProtocol" => {
+                        return RusotoError::Service(
+                            SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        SetLoadBalancerListenerSSLCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8288,28 +7438,6 @@ impl SetLoadBalancerListenerSSLCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetLoadBalancerListenerSSLCertificateError {
-    fn from(err: XmlParseError) -> SetLoadBalancerListenerSSLCertificateError {
-        let XmlParseError(message) = err;
-        SetLoadBalancerListenerSSLCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetLoadBalancerListenerSSLCertificateError {
-    fn from(err: CredentialsError) -> SetLoadBalancerListenerSSLCertificateError {
-        SetLoadBalancerListenerSSLCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetLoadBalancerListenerSSLCertificateError {
-    fn from(err: HttpDispatchError) -> SetLoadBalancerListenerSSLCertificateError {
-        SetLoadBalancerListenerSSLCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetLoadBalancerListenerSSLCertificateError {
-    fn from(err: io::Error) -> SetLoadBalancerListenerSSLCertificateError {
-        SetLoadBalancerListenerSSLCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetLoadBalancerListenerSSLCertificateError {
@@ -8327,13 +7455,6 @@ impl Error for SetLoadBalancerListenerSSLCertificateError {
             }
             SetLoadBalancerListenerSSLCertificateError::ListenerNotFound(ref cause) => cause,
             SetLoadBalancerListenerSSLCertificateError::UnsupportedProtocol(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::Validation(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::Credentials(ref err) => err.description(),
-            SetLoadBalancerListenerSSLCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetLoadBalancerListenerSSLCertificateError::ParseError(ref cause) => cause,
-            SetLoadBalancerListenerSSLCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8346,33 +7467,42 @@ pub enum SetLoadBalancerPoliciesForBackendServerError {
     InvalidConfigurationRequest(String),
     /// <p>One or more of the specified policies do not exist.</p>
     PolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetLoadBalancerPoliciesForBackendServerError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> SetLoadBalancerPoliciesForBackendServerError {
+    ) -> RusotoError<SetLoadBalancerPoliciesForBackendServerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "LoadBalancerNotFound" => return SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(String::from(parsed_error.message)),"InvalidConfigurationRequest" => return SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(String::from(parsed_error.message)),"PolicyNotFound" => return SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(String::from(parsed_error.message)),_ => {}
-                                }
+                    "LoadBalancerNotFound" => {
+                        return RusotoError::Service(
+                            SetLoadBalancerPoliciesForBackendServerError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidConfigurationRequest" => return RusotoError::Service(
+                        SetLoadBalancerPoliciesForBackendServerError::InvalidConfigurationRequest(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "PolicyNotFound" => {
+                        return RusotoError::Service(
+                            SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        SetLoadBalancerPoliciesForBackendServerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8381,28 +7511,6 @@ impl SetLoadBalancerPoliciesForBackendServerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetLoadBalancerPoliciesForBackendServerError {
-    fn from(err: XmlParseError) -> SetLoadBalancerPoliciesForBackendServerError {
-        let XmlParseError(message) = err;
-        SetLoadBalancerPoliciesForBackendServerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetLoadBalancerPoliciesForBackendServerError {
-    fn from(err: CredentialsError) -> SetLoadBalancerPoliciesForBackendServerError {
-        SetLoadBalancerPoliciesForBackendServerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetLoadBalancerPoliciesForBackendServerError {
-    fn from(err: HttpDispatchError) -> SetLoadBalancerPoliciesForBackendServerError {
-        SetLoadBalancerPoliciesForBackendServerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetLoadBalancerPoliciesForBackendServerError {
-    fn from(err: io::Error) -> SetLoadBalancerPoliciesForBackendServerError {
-        SetLoadBalancerPoliciesForBackendServerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetLoadBalancerPoliciesForBackendServerError {
@@ -8418,13 +7526,6 @@ impl Error for SetLoadBalancerPoliciesForBackendServerError {
                 ref cause,
             ) => cause,
             SetLoadBalancerPoliciesForBackendServerError::PolicyNotFound(ref cause) => cause,
-            SetLoadBalancerPoliciesForBackendServerError::Validation(ref cause) => cause,
-            SetLoadBalancerPoliciesForBackendServerError::Credentials(ref err) => err.description(),
-            SetLoadBalancerPoliciesForBackendServerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetLoadBalancerPoliciesForBackendServerError::ParseError(ref cause) => cause,
-            SetLoadBalancerPoliciesForBackendServerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8439,20 +7540,12 @@ pub enum SetLoadBalancerPoliciesOfListenerError {
     ListenerNotFound(String),
     /// <p>One or more of the specified policies do not exist.</p>
     PolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetLoadBalancerPoliciesOfListenerError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetLoadBalancerPoliciesOfListenerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SetLoadBalancerPoliciesOfListenerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8460,30 +7553,38 @@ impl SetLoadBalancerPoliciesOfListenerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            SetLoadBalancerPoliciesOfListenerError::AccessPointNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidConfigurationRequest" => {
-                        return SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ListenerNotFound" => {
-                        return SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "PolicyNotFound" => {
-                        return SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        SetLoadBalancerPoliciesOfListenerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8492,28 +7593,6 @@ impl SetLoadBalancerPoliciesOfListenerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetLoadBalancerPoliciesOfListenerError {
-    fn from(err: XmlParseError) -> SetLoadBalancerPoliciesOfListenerError {
-        let XmlParseError(message) = err;
-        SetLoadBalancerPoliciesOfListenerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetLoadBalancerPoliciesOfListenerError {
-    fn from(err: CredentialsError) -> SetLoadBalancerPoliciesOfListenerError {
-        SetLoadBalancerPoliciesOfListenerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetLoadBalancerPoliciesOfListenerError {
-    fn from(err: HttpDispatchError) -> SetLoadBalancerPoliciesOfListenerError {
-        SetLoadBalancerPoliciesOfListenerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetLoadBalancerPoliciesOfListenerError {
-    fn from(err: io::Error) -> SetLoadBalancerPoliciesOfListenerError {
-        SetLoadBalancerPoliciesOfListenerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetLoadBalancerPoliciesOfListenerError {
@@ -8528,13 +7607,6 @@ impl Error for SetLoadBalancerPoliciesOfListenerError {
             SetLoadBalancerPoliciesOfListenerError::InvalidConfigurationRequest(ref cause) => cause,
             SetLoadBalancerPoliciesOfListenerError::ListenerNotFound(ref cause) => cause,
             SetLoadBalancerPoliciesOfListenerError::PolicyNotFound(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::Validation(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::Credentials(ref err) => err.description(),
-            SetLoadBalancerPoliciesOfListenerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetLoadBalancerPoliciesOfListenerError::ParseError(ref cause) => cause,
-            SetLoadBalancerPoliciesOfListenerError::Unknown(_) => "unknown error",
         }
     }
 }

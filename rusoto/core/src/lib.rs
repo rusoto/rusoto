@@ -44,6 +44,7 @@ extern crate url;
 extern crate xml;
 
 mod client;
+mod error;
 mod future;
 mod stream;
 
@@ -62,6 +63,7 @@ pub mod xmlerror;
 pub mod xmlutil;
 
 pub use credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+pub use error::{RusotoError, RusotoResult};
 pub use future::RusotoFuture;
 pub use region::Region;
 pub use request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};

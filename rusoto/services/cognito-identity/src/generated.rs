@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -599,20 +596,10 @@ pub enum CreateIdentityPoolError {
     ResourceConflict(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIdentityPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateIdentityPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIdentityPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -625,51 +612,40 @@ impl CreateIdentityPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateIdentityPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityPoolError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateIdentityPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateIdentityPoolError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityPoolError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return CreateIdentityPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityPoolError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return CreateIdentityPoolError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityPoolError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateIdentityPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateIdentityPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateIdentityPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateIdentityPoolError {
-    fn from(err: serde_json::error::Error) -> CreateIdentityPoolError {
-        CreateIdentityPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateIdentityPoolError {
-    fn from(err: CredentialsError) -> CreateIdentityPoolError {
-        CreateIdentityPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateIdentityPoolError {
-    fn from(err: HttpDispatchError) -> CreateIdentityPoolError {
-        CreateIdentityPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateIdentityPoolError {
-    fn from(err: io::Error) -> CreateIdentityPoolError {
-        CreateIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateIdentityPoolError {
@@ -686,13 +662,6 @@ impl Error for CreateIdentityPoolError {
             CreateIdentityPoolError::NotAuthorized(ref cause) => cause,
             CreateIdentityPoolError::ResourceConflict(ref cause) => cause,
             CreateIdentityPoolError::TooManyRequests(ref cause) => cause,
-            CreateIdentityPoolError::Validation(ref cause) => cause,
-            CreateIdentityPoolError::Credentials(ref err) => err.description(),
-            CreateIdentityPoolError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateIdentityPoolError::ParseError(ref cause) => cause,
-            CreateIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -705,20 +674,10 @@ pub enum DeleteIdentitiesError {
     InvalidParameter(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIdentitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -731,42 +690,25 @@ impl DeleteIdentitiesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteIdentitiesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentitiesError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteIdentitiesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentitiesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteIdentitiesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentitiesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteIdentitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteIdentitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteIdentitiesError {
-    fn from(err: serde_json::error::Error) -> DeleteIdentitiesError {
-        DeleteIdentitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIdentitiesError {
-    fn from(err: CredentialsError) -> DeleteIdentitiesError {
-        DeleteIdentitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIdentitiesError {
-    fn from(err: HttpDispatchError) -> DeleteIdentitiesError {
-        DeleteIdentitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIdentitiesError {
-    fn from(err: io::Error) -> DeleteIdentitiesError {
-        DeleteIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteIdentitiesError {
@@ -780,11 +722,6 @@ impl Error for DeleteIdentitiesError {
             DeleteIdentitiesError::InternalError(ref cause) => cause,
             DeleteIdentitiesError::InvalidParameter(ref cause) => cause,
             DeleteIdentitiesError::TooManyRequests(ref cause) => cause,
-            DeleteIdentitiesError::Validation(ref cause) => cause,
-            DeleteIdentitiesError::Credentials(ref err) => err.description(),
-            DeleteIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIdentitiesError::ParseError(ref cause) => cause,
-            DeleteIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -801,20 +738,10 @@ pub enum DeleteIdentityPoolError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIdentityPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentityPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -827,48 +754,35 @@ impl DeleteIdentityPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteIdentityPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentityPoolError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteIdentityPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentityPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteIdentityPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentityPoolError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteIdentityPoolError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentityPoolError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteIdentityPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentityPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteIdentityPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteIdentityPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteIdentityPoolError {
-    fn from(err: serde_json::error::Error) -> DeleteIdentityPoolError {
-        DeleteIdentityPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIdentityPoolError {
-    fn from(err: CredentialsError) -> DeleteIdentityPoolError {
-        DeleteIdentityPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIdentityPoolError {
-    fn from(err: HttpDispatchError) -> DeleteIdentityPoolError {
-        DeleteIdentityPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIdentityPoolError {
-    fn from(err: io::Error) -> DeleteIdentityPoolError {
-        DeleteIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteIdentityPoolError {
@@ -884,13 +798,6 @@ impl Error for DeleteIdentityPoolError {
             DeleteIdentityPoolError::NotAuthorized(ref cause) => cause,
             DeleteIdentityPoolError::ResourceNotFound(ref cause) => cause,
             DeleteIdentityPoolError::TooManyRequests(ref cause) => cause,
-            DeleteIdentityPoolError::Validation(ref cause) => cause,
-            DeleteIdentityPoolError::Credentials(ref err) => err.description(),
-            DeleteIdentityPoolError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteIdentityPoolError::ParseError(ref cause) => cause,
-            DeleteIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -907,20 +814,10 @@ pub enum DescribeIdentityError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -933,48 +830,35 @@ impl DescribeIdentityError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeIdentityError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DescribeIdentityError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeIdentityError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeIdentityError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeIdentityError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeIdentityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeIdentityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeIdentityError {
-    fn from(err: serde_json::error::Error) -> DescribeIdentityError {
-        DescribeIdentityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeIdentityError {
-    fn from(err: CredentialsError) -> DescribeIdentityError {
-        DescribeIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeIdentityError {
-    fn from(err: HttpDispatchError) -> DescribeIdentityError {
-        DescribeIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeIdentityError {
-    fn from(err: io::Error) -> DescribeIdentityError {
-        DescribeIdentityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeIdentityError {
@@ -990,11 +874,6 @@ impl Error for DescribeIdentityError {
             DescribeIdentityError::NotAuthorized(ref cause) => cause,
             DescribeIdentityError::ResourceNotFound(ref cause) => cause,
             DescribeIdentityError::TooManyRequests(ref cause) => cause,
-            DescribeIdentityError::Validation(ref cause) => cause,
-            DescribeIdentityError::Credentials(ref err) => err.description(),
-            DescribeIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeIdentityError::ParseError(ref cause) => cause,
-            DescribeIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1011,20 +890,10 @@ pub enum DescribeIdentityPoolError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIdentityPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeIdentityPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1037,48 +906,35 @@ impl DescribeIdentityPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeIdentityPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityPoolError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeIdentityPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeIdentityPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityPoolError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeIdentityPoolError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityPoolError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeIdentityPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeIdentityPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeIdentityPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeIdentityPoolError {
-    fn from(err: serde_json::error::Error) -> DescribeIdentityPoolError {
-        DescribeIdentityPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeIdentityPoolError {
-    fn from(err: CredentialsError) -> DescribeIdentityPoolError {
-        DescribeIdentityPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeIdentityPoolError {
-    fn from(err: HttpDispatchError) -> DescribeIdentityPoolError {
-        DescribeIdentityPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeIdentityPoolError {
-    fn from(err: io::Error) -> DescribeIdentityPoolError {
-        DescribeIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeIdentityPoolError {
@@ -1094,13 +950,6 @@ impl Error for DescribeIdentityPoolError {
             DescribeIdentityPoolError::NotAuthorized(ref cause) => cause,
             DescribeIdentityPoolError::ResourceNotFound(ref cause) => cause,
             DescribeIdentityPoolError::TooManyRequests(ref cause) => cause,
-            DescribeIdentityPoolError::Validation(ref cause) => cause,
-            DescribeIdentityPoolError::Credentials(ref err) => err.description(),
-            DescribeIdentityPoolError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeIdentityPoolError::ParseError(ref cause) => cause,
-            DescribeIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1123,20 +972,10 @@ pub enum GetCredentialsForIdentityError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCredentialsForIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCredentialsForIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCredentialsForIdentityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1149,73 +988,52 @@ impl GetCredentialsForIdentityError {
 
             match *error_type {
                 "ExternalServiceException" => {
-                    return GetCredentialsForIdentityError::ExternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCredentialsForIdentityError::ExternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return GetCredentialsForIdentityError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCredentialsForIdentityError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidIdentityPoolConfigurationException" => {
-                    return GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCredentialsForIdentityError::InvalidIdentityPoolConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidParameterException" => {
-                    return GetCredentialsForIdentityError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCredentialsForIdentityError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return GetCredentialsForIdentityError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCredentialsForIdentityError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceConflictException" => {
-                    return GetCredentialsForIdentityError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCredentialsForIdentityError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCredentialsForIdentityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCredentialsForIdentityError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return GetCredentialsForIdentityError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCredentialsForIdentityError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetCredentialsForIdentityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCredentialsForIdentityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCredentialsForIdentityError {
-    fn from(err: serde_json::error::Error) -> GetCredentialsForIdentityError {
-        GetCredentialsForIdentityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCredentialsForIdentityError {
-    fn from(err: CredentialsError) -> GetCredentialsForIdentityError {
-        GetCredentialsForIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCredentialsForIdentityError {
-    fn from(err: HttpDispatchError) -> GetCredentialsForIdentityError {
-        GetCredentialsForIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCredentialsForIdentityError {
-    fn from(err: io::Error) -> GetCredentialsForIdentityError {
-        GetCredentialsForIdentityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCredentialsForIdentityError {
@@ -1234,13 +1052,6 @@ impl Error for GetCredentialsForIdentityError {
             GetCredentialsForIdentityError::ResourceConflict(ref cause) => cause,
             GetCredentialsForIdentityError::ResourceNotFound(ref cause) => cause,
             GetCredentialsForIdentityError::TooManyRequests(ref cause) => cause,
-            GetCredentialsForIdentityError::Validation(ref cause) => cause,
-            GetCredentialsForIdentityError::Credentials(ref err) => err.description(),
-            GetCredentialsForIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCredentialsForIdentityError::ParseError(ref cause) => cause,
-            GetCredentialsForIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1263,20 +1074,10 @@ pub enum GetIdError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1289,55 +1090,50 @@ impl GetIdError {
 
             match *error_type {
                 "ExternalServiceException" => {
-                    return GetIdError::ExternalService(String::from(error_message));
+                    return RusotoError::Service(GetIdError::ExternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return GetIdError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetIdError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetIdError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetIdError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetIdError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetIdError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return GetIdError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetIdError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceConflictException" => {
-                    return GetIdError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(GetIdError::ResourceConflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetIdError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetIdError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetIdError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetIdError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetIdError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIdError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIdError {
-    fn from(err: serde_json::error::Error) -> GetIdError {
-        GetIdError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIdError {
-    fn from(err: CredentialsError) -> GetIdError {
-        GetIdError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdError {
-    fn from(err: HttpDispatchError) -> GetIdError {
-        GetIdError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdError {
-    fn from(err: io::Error) -> GetIdError {
-        GetIdError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIdError {
@@ -1356,11 +1152,6 @@ impl Error for GetIdError {
             GetIdError::ResourceConflict(ref cause) => cause,
             GetIdError::ResourceNotFound(ref cause) => cause,
             GetIdError::TooManyRequests(ref cause) => cause,
-            GetIdError::Validation(ref cause) => cause,
-            GetIdError::Credentials(ref err) => err.description(),
-            GetIdError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIdError::ParseError(ref cause) => cause,
-            GetIdError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1379,20 +1170,10 @@ pub enum GetIdentityPoolRolesError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityPoolRolesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityPoolRolesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdentityPoolRolesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1405,51 +1186,40 @@ impl GetIdentityPoolRolesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetIdentityPoolRolesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetIdentityPoolRolesError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetIdentityPoolRolesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetIdentityPoolRolesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetIdentityPoolRolesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetIdentityPoolRolesError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return GetIdentityPoolRolesError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(GetIdentityPoolRolesError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetIdentityPoolRolesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetIdentityPoolRolesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return GetIdentityPoolRolesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetIdentityPoolRolesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetIdentityPoolRolesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIdentityPoolRolesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIdentityPoolRolesError {
-    fn from(err: serde_json::error::Error) -> GetIdentityPoolRolesError {
-        GetIdentityPoolRolesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIdentityPoolRolesError {
-    fn from(err: CredentialsError) -> GetIdentityPoolRolesError {
-        GetIdentityPoolRolesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdentityPoolRolesError {
-    fn from(err: HttpDispatchError) -> GetIdentityPoolRolesError {
-        GetIdentityPoolRolesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdentityPoolRolesError {
-    fn from(err: io::Error) -> GetIdentityPoolRolesError {
-        GetIdentityPoolRolesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIdentityPoolRolesError {
@@ -1466,13 +1236,6 @@ impl Error for GetIdentityPoolRolesError {
             GetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,
             GetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,
             GetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,
-            GetIdentityPoolRolesError::Validation(ref cause) => cause,
-            GetIdentityPoolRolesError::Credentials(ref err) => err.description(),
-            GetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIdentityPoolRolesError::ParseError(ref cause) => cause,
-            GetIdentityPoolRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1493,20 +1256,10 @@ pub enum GetOpenIdTokenError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOpenIdTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOpenIdTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOpenIdTokenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1519,54 +1272,45 @@ impl GetOpenIdTokenError {
 
             match *error_type {
                 "ExternalServiceException" => {
-                    return GetOpenIdTokenError::ExternalService(String::from(error_message));
+                    return RusotoError::Service(GetOpenIdTokenError::ExternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return GetOpenIdTokenError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetOpenIdTokenError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetOpenIdTokenError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetOpenIdTokenError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetOpenIdTokenError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetOpenIdTokenError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceConflictException" => {
-                    return GetOpenIdTokenError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(GetOpenIdTokenError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetOpenIdTokenError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetOpenIdTokenError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return GetOpenIdTokenError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetOpenIdTokenError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetOpenIdTokenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOpenIdTokenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOpenIdTokenError {
-    fn from(err: serde_json::error::Error) -> GetOpenIdTokenError {
-        GetOpenIdTokenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOpenIdTokenError {
-    fn from(err: CredentialsError) -> GetOpenIdTokenError {
-        GetOpenIdTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOpenIdTokenError {
-    fn from(err: HttpDispatchError) -> GetOpenIdTokenError {
-        GetOpenIdTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOpenIdTokenError {
-    fn from(err: io::Error) -> GetOpenIdTokenError {
-        GetOpenIdTokenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOpenIdTokenError {
@@ -1584,11 +1328,6 @@ impl Error for GetOpenIdTokenError {
             GetOpenIdTokenError::ResourceConflict(ref cause) => cause,
             GetOpenIdTokenError::ResourceNotFound(ref cause) => cause,
             GetOpenIdTokenError::TooManyRequests(ref cause) => cause,
-            GetOpenIdTokenError::Validation(ref cause) => cause,
-            GetOpenIdTokenError::Credentials(ref err) => err.description(),
-            GetOpenIdTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetOpenIdTokenError::ParseError(ref cause) => cause,
-            GetOpenIdTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1609,20 +1348,12 @@ pub enum GetOpenIdTokenForDeveloperIdentityError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOpenIdTokenForDeveloperIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOpenIdTokenForDeveloperIdentityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetOpenIdTokenForDeveloperIdentityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1635,70 +1366,59 @@ impl GetOpenIdTokenForDeveloperIdentityError {
 
             match *error_type {
                 "DeveloperUserAlreadyRegisteredException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetOpenIdTokenForDeveloperIdentityError::DeveloperUserAlreadyRegistered(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InternalErrorException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::InternalError(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidParameterException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(String::from(
-                        error_message,
-                    ));
-                }
-                "NotAuthorizedException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceConflictException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceNotFoundException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetOpenIdTokenForDeveloperIdentityError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetOpenIdTokenForDeveloperIdentityError::InternalError(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        GetOpenIdTokenForDeveloperIdentityError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(
+                        GetOpenIdTokenForDeveloperIdentityError::NotAuthorized(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(
+                        GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOpenIdTokenForDeveloperIdentityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOpenIdTokenForDeveloperIdentityError {
-    fn from(err: serde_json::error::Error) -> GetOpenIdTokenForDeveloperIdentityError {
-        GetOpenIdTokenForDeveloperIdentityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOpenIdTokenForDeveloperIdentityError {
-    fn from(err: CredentialsError) -> GetOpenIdTokenForDeveloperIdentityError {
-        GetOpenIdTokenForDeveloperIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOpenIdTokenForDeveloperIdentityError {
-    fn from(err: HttpDispatchError) -> GetOpenIdTokenForDeveloperIdentityError {
-        GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOpenIdTokenForDeveloperIdentityError {
-    fn from(err: io::Error) -> GetOpenIdTokenForDeveloperIdentityError {
-        GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOpenIdTokenForDeveloperIdentityError {
@@ -1718,13 +1438,6 @@ impl Error for GetOpenIdTokenForDeveloperIdentityError {
             GetOpenIdTokenForDeveloperIdentityError::ResourceConflict(ref cause) => cause,
             GetOpenIdTokenForDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
             GetOpenIdTokenForDeveloperIdentityError::TooManyRequests(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::Validation(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::Credentials(ref err) => err.description(),
-            GetOpenIdTokenForDeveloperIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetOpenIdTokenForDeveloperIdentityError::ParseError(ref cause) => cause,
-            GetOpenIdTokenForDeveloperIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1741,20 +1454,10 @@ pub enum ListIdentitiesError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListIdentitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListIdentitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1767,48 +1470,35 @@ impl ListIdentitiesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListIdentitiesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListIdentitiesError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListIdentitiesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListIdentitiesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListIdentitiesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListIdentitiesError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListIdentitiesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListIdentitiesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListIdentitiesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListIdentitiesError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListIdentitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListIdentitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListIdentitiesError {
-    fn from(err: serde_json::error::Error) -> ListIdentitiesError {
-        ListIdentitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListIdentitiesError {
-    fn from(err: CredentialsError) -> ListIdentitiesError {
-        ListIdentitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIdentitiesError {
-    fn from(err: HttpDispatchError) -> ListIdentitiesError {
-        ListIdentitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIdentitiesError {
-    fn from(err: io::Error) -> ListIdentitiesError {
-        ListIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListIdentitiesError {
@@ -1824,11 +1514,6 @@ impl Error for ListIdentitiesError {
             ListIdentitiesError::NotAuthorized(ref cause) => cause,
             ListIdentitiesError::ResourceNotFound(ref cause) => cause,
             ListIdentitiesError::TooManyRequests(ref cause) => cause,
-            ListIdentitiesError::Validation(ref cause) => cause,
-            ListIdentitiesError::Credentials(ref err) => err.description(),
-            ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIdentitiesError::ParseError(ref cause) => cause,
-            ListIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1843,20 +1528,10 @@ pub enum ListIdentityPoolsError {
     NotAuthorized(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListIdentityPoolsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListIdentityPoolsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityPoolsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1869,45 +1544,30 @@ impl ListIdentityPoolsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListIdentityPoolsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListIdentityPoolsError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListIdentityPoolsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListIdentityPoolsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListIdentityPoolsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListIdentityPoolsError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListIdentityPoolsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListIdentityPoolsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListIdentityPoolsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListIdentityPoolsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListIdentityPoolsError {
-    fn from(err: serde_json::error::Error) -> ListIdentityPoolsError {
-        ListIdentityPoolsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListIdentityPoolsError {
-    fn from(err: CredentialsError) -> ListIdentityPoolsError {
-        ListIdentityPoolsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIdentityPoolsError {
-    fn from(err: HttpDispatchError) -> ListIdentityPoolsError {
-        ListIdentityPoolsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIdentityPoolsError {
-    fn from(err: io::Error) -> ListIdentityPoolsError {
-        ListIdentityPoolsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListIdentityPoolsError {
@@ -1922,13 +1582,6 @@ impl Error for ListIdentityPoolsError {
             ListIdentityPoolsError::InvalidParameter(ref cause) => cause,
             ListIdentityPoolsError::NotAuthorized(ref cause) => cause,
             ListIdentityPoolsError::TooManyRequests(ref cause) => cause,
-            ListIdentityPoolsError::Validation(ref cause) => cause,
-            ListIdentityPoolsError::Credentials(ref err) => err.description(),
-            ListIdentityPoolsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListIdentityPoolsError::ParseError(ref cause) => cause,
-            ListIdentityPoolsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1947,20 +1600,10 @@ pub enum LookupDeveloperIdentityError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl LookupDeveloperIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> LookupDeveloperIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LookupDeveloperIdentityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1973,59 +1616,40 @@ impl LookupDeveloperIdentityError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return LookupDeveloperIdentityError::InternalError(String::from(error_message));
+                    return RusotoError::Service(LookupDeveloperIdentityError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return LookupDeveloperIdentityError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(LookupDeveloperIdentityError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return LookupDeveloperIdentityError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(LookupDeveloperIdentityError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return LookupDeveloperIdentityError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(LookupDeveloperIdentityError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return LookupDeveloperIdentityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(LookupDeveloperIdentityError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return LookupDeveloperIdentityError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(LookupDeveloperIdentityError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return LookupDeveloperIdentityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return LookupDeveloperIdentityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for LookupDeveloperIdentityError {
-    fn from(err: serde_json::error::Error) -> LookupDeveloperIdentityError {
-        LookupDeveloperIdentityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for LookupDeveloperIdentityError {
-    fn from(err: CredentialsError) -> LookupDeveloperIdentityError {
-        LookupDeveloperIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for LookupDeveloperIdentityError {
-    fn from(err: HttpDispatchError) -> LookupDeveloperIdentityError {
-        LookupDeveloperIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for LookupDeveloperIdentityError {
-    fn from(err: io::Error) -> LookupDeveloperIdentityError {
-        LookupDeveloperIdentityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for LookupDeveloperIdentityError {
@@ -2042,13 +1666,6 @@ impl Error for LookupDeveloperIdentityError {
             LookupDeveloperIdentityError::ResourceConflict(ref cause) => cause,
             LookupDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
             LookupDeveloperIdentityError::TooManyRequests(ref cause) => cause,
-            LookupDeveloperIdentityError::Validation(ref cause) => cause,
-            LookupDeveloperIdentityError::Credentials(ref err) => err.description(),
-            LookupDeveloperIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            LookupDeveloperIdentityError::ParseError(ref cause) => cause,
-            LookupDeveloperIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2067,20 +1684,10 @@ pub enum MergeDeveloperIdentitiesError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl MergeDeveloperIdentitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> MergeDeveloperIdentitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MergeDeveloperIdentitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2093,59 +1700,40 @@ impl MergeDeveloperIdentitiesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return MergeDeveloperIdentitiesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(MergeDeveloperIdentitiesError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return MergeDeveloperIdentitiesError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(MergeDeveloperIdentitiesError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return MergeDeveloperIdentitiesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(MergeDeveloperIdentitiesError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return MergeDeveloperIdentitiesError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(MergeDeveloperIdentitiesError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return MergeDeveloperIdentitiesError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(MergeDeveloperIdentitiesError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return MergeDeveloperIdentitiesError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(MergeDeveloperIdentitiesError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return MergeDeveloperIdentitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return MergeDeveloperIdentitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for MergeDeveloperIdentitiesError {
-    fn from(err: serde_json::error::Error) -> MergeDeveloperIdentitiesError {
-        MergeDeveloperIdentitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for MergeDeveloperIdentitiesError {
-    fn from(err: CredentialsError) -> MergeDeveloperIdentitiesError {
-        MergeDeveloperIdentitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for MergeDeveloperIdentitiesError {
-    fn from(err: HttpDispatchError) -> MergeDeveloperIdentitiesError {
-        MergeDeveloperIdentitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for MergeDeveloperIdentitiesError {
-    fn from(err: io::Error) -> MergeDeveloperIdentitiesError {
-        MergeDeveloperIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for MergeDeveloperIdentitiesError {
@@ -2162,13 +1750,6 @@ impl Error for MergeDeveloperIdentitiesError {
             MergeDeveloperIdentitiesError::ResourceConflict(ref cause) => cause,
             MergeDeveloperIdentitiesError::ResourceNotFound(ref cause) => cause,
             MergeDeveloperIdentitiesError::TooManyRequests(ref cause) => cause,
-            MergeDeveloperIdentitiesError::Validation(ref cause) => cause,
-            MergeDeveloperIdentitiesError::Credentials(ref err) => err.description(),
-            MergeDeveloperIdentitiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            MergeDeveloperIdentitiesError::ParseError(ref cause) => cause,
-            MergeDeveloperIdentitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2189,20 +1770,10 @@ pub enum SetIdentityPoolRolesError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetIdentityPoolRolesError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityPoolRolesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIdentityPoolRolesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2215,56 +1786,45 @@ impl SetIdentityPoolRolesError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return SetIdentityPoolRolesError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(SetIdentityPoolRolesError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return SetIdentityPoolRolesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(SetIdentityPoolRolesError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return SetIdentityPoolRolesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SetIdentityPoolRolesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return SetIdentityPoolRolesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(SetIdentityPoolRolesError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return SetIdentityPoolRolesError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(SetIdentityPoolRolesError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetIdentityPoolRolesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SetIdentityPoolRolesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return SetIdentityPoolRolesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(SetIdentityPoolRolesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return SetIdentityPoolRolesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetIdentityPoolRolesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetIdentityPoolRolesError {
-    fn from(err: serde_json::error::Error) -> SetIdentityPoolRolesError {
-        SetIdentityPoolRolesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetIdentityPoolRolesError {
-    fn from(err: CredentialsError) -> SetIdentityPoolRolesError {
-        SetIdentityPoolRolesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetIdentityPoolRolesError {
-    fn from(err: HttpDispatchError) -> SetIdentityPoolRolesError {
-        SetIdentityPoolRolesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetIdentityPoolRolesError {
-    fn from(err: io::Error) -> SetIdentityPoolRolesError {
-        SetIdentityPoolRolesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetIdentityPoolRolesError {
@@ -2282,13 +1842,6 @@ impl Error for SetIdentityPoolRolesError {
             SetIdentityPoolRolesError::ResourceConflict(ref cause) => cause,
             SetIdentityPoolRolesError::ResourceNotFound(ref cause) => cause,
             SetIdentityPoolRolesError::TooManyRequests(ref cause) => cause,
-            SetIdentityPoolRolesError::Validation(ref cause) => cause,
-            SetIdentityPoolRolesError::Credentials(ref err) => err.description(),
-            SetIdentityPoolRolesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetIdentityPoolRolesError::ParseError(ref cause) => cause,
-            SetIdentityPoolRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2307,20 +1860,10 @@ pub enum UnlinkDeveloperIdentityError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UnlinkDeveloperIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> UnlinkDeveloperIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnlinkDeveloperIdentityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2333,59 +1876,40 @@ impl UnlinkDeveloperIdentityError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UnlinkDeveloperIdentityError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UnlinkDeveloperIdentityError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UnlinkDeveloperIdentityError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UnlinkDeveloperIdentityError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return UnlinkDeveloperIdentityError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UnlinkDeveloperIdentityError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return UnlinkDeveloperIdentityError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(UnlinkDeveloperIdentityError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UnlinkDeveloperIdentityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UnlinkDeveloperIdentityError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return UnlinkDeveloperIdentityError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(UnlinkDeveloperIdentityError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UnlinkDeveloperIdentityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UnlinkDeveloperIdentityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UnlinkDeveloperIdentityError {
-    fn from(err: serde_json::error::Error) -> UnlinkDeveloperIdentityError {
-        UnlinkDeveloperIdentityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UnlinkDeveloperIdentityError {
-    fn from(err: CredentialsError) -> UnlinkDeveloperIdentityError {
-        UnlinkDeveloperIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UnlinkDeveloperIdentityError {
-    fn from(err: HttpDispatchError) -> UnlinkDeveloperIdentityError {
-        UnlinkDeveloperIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UnlinkDeveloperIdentityError {
-    fn from(err: io::Error) -> UnlinkDeveloperIdentityError {
-        UnlinkDeveloperIdentityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UnlinkDeveloperIdentityError {
@@ -2402,13 +1926,6 @@ impl Error for UnlinkDeveloperIdentityError {
             UnlinkDeveloperIdentityError::ResourceConflict(ref cause) => cause,
             UnlinkDeveloperIdentityError::ResourceNotFound(ref cause) => cause,
             UnlinkDeveloperIdentityError::TooManyRequests(ref cause) => cause,
-            UnlinkDeveloperIdentityError::Validation(ref cause) => cause,
-            UnlinkDeveloperIdentityError::Credentials(ref err) => err.description(),
-            UnlinkDeveloperIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UnlinkDeveloperIdentityError::ParseError(ref cause) => cause,
-            UnlinkDeveloperIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2429,20 +1946,10 @@ pub enum UnlinkIdentityError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UnlinkIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> UnlinkIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnlinkIdentityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2455,54 +1962,45 @@ impl UnlinkIdentityError {
 
             match *error_type {
                 "ExternalServiceException" => {
-                    return UnlinkIdentityError::ExternalService(String::from(error_message));
+                    return RusotoError::Service(UnlinkIdentityError::ExternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return UnlinkIdentityError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UnlinkIdentityError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return UnlinkIdentityError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UnlinkIdentityError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UnlinkIdentityError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UnlinkIdentityError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceConflictException" => {
-                    return UnlinkIdentityError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(UnlinkIdentityError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UnlinkIdentityError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UnlinkIdentityError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UnlinkIdentityError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UnlinkIdentityError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UnlinkIdentityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UnlinkIdentityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UnlinkIdentityError {
-    fn from(err: serde_json::error::Error) -> UnlinkIdentityError {
-        UnlinkIdentityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UnlinkIdentityError {
-    fn from(err: CredentialsError) -> UnlinkIdentityError {
-        UnlinkIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UnlinkIdentityError {
-    fn from(err: HttpDispatchError) -> UnlinkIdentityError {
-        UnlinkIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UnlinkIdentityError {
-    fn from(err: io::Error) -> UnlinkIdentityError {
-        UnlinkIdentityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UnlinkIdentityError {
@@ -2520,11 +2018,6 @@ impl Error for UnlinkIdentityError {
             UnlinkIdentityError::ResourceConflict(ref cause) => cause,
             UnlinkIdentityError::ResourceNotFound(ref cause) => cause,
             UnlinkIdentityError::TooManyRequests(ref cause) => cause,
-            UnlinkIdentityError::Validation(ref cause) => cause,
-            UnlinkIdentityError::Credentials(ref err) => err.description(),
-            UnlinkIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UnlinkIdentityError::ParseError(ref cause) => cause,
-            UnlinkIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2547,20 +2040,10 @@ pub enum UpdateIdentityPoolError {
     ResourceNotFound(String),
     /// <p>Thrown when a request is throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateIdentityPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateIdentityPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIdentityPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2573,59 +2056,50 @@ impl UpdateIdentityPoolError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateIdentityPoolError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateIdentityPoolError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return UpdateIdentityPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityPoolError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateIdentityPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateIdentityPoolError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityPoolError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateIdentityPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityPoolError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return UpdateIdentityPoolError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityPoolError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateIdentityPoolError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityPoolError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateIdentityPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateIdentityPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateIdentityPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateIdentityPoolError {
-    fn from(err: serde_json::error::Error) -> UpdateIdentityPoolError {
-        UpdateIdentityPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateIdentityPoolError {
-    fn from(err: CredentialsError) -> UpdateIdentityPoolError {
-        UpdateIdentityPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateIdentityPoolError {
-    fn from(err: HttpDispatchError) -> UpdateIdentityPoolError {
-        UpdateIdentityPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateIdentityPoolError {
-    fn from(err: io::Error) -> UpdateIdentityPoolError {
-        UpdateIdentityPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateIdentityPoolError {
@@ -2644,13 +2118,6 @@ impl Error for UpdateIdentityPoolError {
             UpdateIdentityPoolError::ResourceConflict(ref cause) => cause,
             UpdateIdentityPoolError::ResourceNotFound(ref cause) => cause,
             UpdateIdentityPoolError::TooManyRequests(ref cause) => cause,
-            UpdateIdentityPoolError::Validation(ref cause) => cause,
-            UpdateIdentityPoolError::Credentials(ref err) => err.description(),
-            UpdateIdentityPoolError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateIdentityPoolError::ParseError(ref cause) => cause,
-            UpdateIdentityPoolError::Unknown(_) => "unknown error",
         }
     }
 }

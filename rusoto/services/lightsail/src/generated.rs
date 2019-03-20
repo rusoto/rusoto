@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -3944,20 +3941,10 @@ pub enum AllocateStaticIpError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AllocateStaticIpError {
-    pub fn from_response(res: BufferedHttpResponse) -> AllocateStaticIpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllocateStaticIpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3970,56 +3957,45 @@ impl AllocateStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AllocateStaticIpError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AllocateStaticIpError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return AllocateStaticIpError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(AllocateStaticIpError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return AllocateStaticIpError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AllocateStaticIpError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return AllocateStaticIpError::NotFound(String::from(error_message));
+                    return RusotoError::Service(AllocateStaticIpError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return AllocateStaticIpError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(AllocateStaticIpError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return AllocateStaticIpError::Service(String::from(error_message));
+                    return RusotoError::Service(AllocateStaticIpError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return AllocateStaticIpError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(AllocateStaticIpError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AllocateStaticIpError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AllocateStaticIpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AllocateStaticIpError {
-    fn from(err: serde_json::error::Error) -> AllocateStaticIpError {
-        AllocateStaticIpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AllocateStaticIpError {
-    fn from(err: CredentialsError) -> AllocateStaticIpError {
-        AllocateStaticIpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AllocateStaticIpError {
-    fn from(err: HttpDispatchError) -> AllocateStaticIpError {
-        AllocateStaticIpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AllocateStaticIpError {
-    fn from(err: io::Error) -> AllocateStaticIpError {
-        AllocateStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AllocateStaticIpError {
@@ -4037,11 +4013,6 @@ impl Error for AllocateStaticIpError {
             AllocateStaticIpError::OperationFailure(ref cause) => cause,
             AllocateStaticIpError::Service(ref cause) => cause,
             AllocateStaticIpError::Unauthenticated(ref cause) => cause,
-            AllocateStaticIpError::Validation(ref cause) => cause,
-            AllocateStaticIpError::Credentials(ref err) => err.description(),
-            AllocateStaticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AllocateStaticIpError::ParseError(ref cause) => cause,
-            AllocateStaticIpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4062,20 +4033,10 @@ pub enum AttachDiskError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachDiskError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachDiskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachDiskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4088,52 +4049,45 @@ impl AttachDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AttachDiskError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AttachDiskError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return AttachDiskError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(AttachDiskError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AttachDiskError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AttachDiskError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return AttachDiskError::NotFound(String::from(error_message));
+                    return RusotoError::Service(AttachDiskError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return AttachDiskError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(AttachDiskError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return AttachDiskError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(AttachDiskError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return AttachDiskError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(AttachDiskError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AttachDiskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachDiskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachDiskError {
-    fn from(err: serde_json::error::Error) -> AttachDiskError {
-        AttachDiskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachDiskError {
-    fn from(err: CredentialsError) -> AttachDiskError {
-        AttachDiskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachDiskError {
-    fn from(err: HttpDispatchError) -> AttachDiskError {
-        AttachDiskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachDiskError {
-    fn from(err: io::Error) -> AttachDiskError {
-        AttachDiskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachDiskError {
@@ -4151,11 +4105,6 @@ impl Error for AttachDiskError {
             AttachDiskError::OperationFailure(ref cause) => cause,
             AttachDiskError::Service(ref cause) => cause,
             AttachDiskError::Unauthenticated(ref cause) => cause,
-            AttachDiskError::Validation(ref cause) => cause,
-            AttachDiskError::Credentials(ref err) => err.description(),
-            AttachDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachDiskError::ParseError(ref cause) => cause,
-            AttachDiskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4176,20 +4125,12 @@ pub enum AttachInstancesToLoadBalancerError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachInstancesToLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachInstancesToLoadBalancerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AttachInstancesToLoadBalancerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4202,64 +4143,51 @@ impl AttachInstancesToLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AttachInstancesToLoadBalancerError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(AttachInstancesToLoadBalancerError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return AttachInstancesToLoadBalancerError::AccountSetupInProgress(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AttachInstancesToLoadBalancerError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return AttachInstancesToLoadBalancerError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(AttachInstancesToLoadBalancerError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return AttachInstancesToLoadBalancerError::NotFound(String::from(error_message));
+                    return RusotoError::Service(AttachInstancesToLoadBalancerError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return AttachInstancesToLoadBalancerError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AttachInstancesToLoadBalancerError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return AttachInstancesToLoadBalancerError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return AttachInstancesToLoadBalancerError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(AttachInstancesToLoadBalancerError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AttachInstancesToLoadBalancerError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        AttachInstancesToLoadBalancerError::Unauthenticated(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachInstancesToLoadBalancerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachInstancesToLoadBalancerError {
-    fn from(err: serde_json::error::Error) -> AttachInstancesToLoadBalancerError {
-        AttachInstancesToLoadBalancerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachInstancesToLoadBalancerError {
-    fn from(err: CredentialsError) -> AttachInstancesToLoadBalancerError {
-        AttachInstancesToLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachInstancesToLoadBalancerError {
-    fn from(err: HttpDispatchError) -> AttachInstancesToLoadBalancerError {
-        AttachInstancesToLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachInstancesToLoadBalancerError {
-    fn from(err: io::Error) -> AttachInstancesToLoadBalancerError {
-        AttachInstancesToLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachInstancesToLoadBalancerError {
@@ -4277,13 +4205,6 @@ impl Error for AttachInstancesToLoadBalancerError {
             AttachInstancesToLoadBalancerError::OperationFailure(ref cause) => cause,
             AttachInstancesToLoadBalancerError::Service(ref cause) => cause,
             AttachInstancesToLoadBalancerError::Unauthenticated(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::Validation(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::Credentials(ref err) => err.description(),
-            AttachInstancesToLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AttachInstancesToLoadBalancerError::ParseError(ref cause) => cause,
-            AttachInstancesToLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4304,20 +4225,12 @@ pub enum AttachLoadBalancerTlsCertificateError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachLoadBalancerTlsCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachLoadBalancerTlsCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AttachLoadBalancerTlsCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4330,70 +4243,55 @@ impl AttachLoadBalancerTlsCertificateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AttachLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AttachLoadBalancerTlsCertificateError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return AttachLoadBalancerTlsCertificateError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AttachLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return AttachLoadBalancerTlsCertificateError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AttachLoadBalancerTlsCertificateError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return AttachLoadBalancerTlsCertificateError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AttachLoadBalancerTlsCertificateError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return AttachLoadBalancerTlsCertificateError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(AttachLoadBalancerTlsCertificateError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return AttachLoadBalancerTlsCertificateError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return AttachLoadBalancerTlsCertificateError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        AttachLoadBalancerTlsCertificateError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachLoadBalancerTlsCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachLoadBalancerTlsCertificateError {
-    fn from(err: serde_json::error::Error) -> AttachLoadBalancerTlsCertificateError {
-        AttachLoadBalancerTlsCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachLoadBalancerTlsCertificateError {
-    fn from(err: CredentialsError) -> AttachLoadBalancerTlsCertificateError {
-        AttachLoadBalancerTlsCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachLoadBalancerTlsCertificateError {
-    fn from(err: HttpDispatchError) -> AttachLoadBalancerTlsCertificateError {
-        AttachLoadBalancerTlsCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachLoadBalancerTlsCertificateError {
-    fn from(err: io::Error) -> AttachLoadBalancerTlsCertificateError {
-        AttachLoadBalancerTlsCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachLoadBalancerTlsCertificateError {
@@ -4411,13 +4309,6 @@ impl Error for AttachLoadBalancerTlsCertificateError {
             AttachLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
             AttachLoadBalancerTlsCertificateError::Service(ref cause) => cause,
             AttachLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::Validation(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::Credentials(ref err) => err.description(),
-            AttachLoadBalancerTlsCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AttachLoadBalancerTlsCertificateError::ParseError(ref cause) => cause,
-            AttachLoadBalancerTlsCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4438,20 +4329,10 @@ pub enum AttachStaticIpError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachStaticIpError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachStaticIpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachStaticIpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4464,54 +4345,45 @@ impl AttachStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AttachStaticIpError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AttachStaticIpError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return AttachStaticIpError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(AttachStaticIpError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AttachStaticIpError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AttachStaticIpError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return AttachStaticIpError::NotFound(String::from(error_message));
+                    return RusotoError::Service(AttachStaticIpError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return AttachStaticIpError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(AttachStaticIpError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return AttachStaticIpError::Service(String::from(error_message));
+                    return RusotoError::Service(AttachStaticIpError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return AttachStaticIpError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(AttachStaticIpError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AttachStaticIpError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachStaticIpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachStaticIpError {
-    fn from(err: serde_json::error::Error) -> AttachStaticIpError {
-        AttachStaticIpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachStaticIpError {
-    fn from(err: CredentialsError) -> AttachStaticIpError {
-        AttachStaticIpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachStaticIpError {
-    fn from(err: HttpDispatchError) -> AttachStaticIpError {
-        AttachStaticIpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachStaticIpError {
-    fn from(err: io::Error) -> AttachStaticIpError {
-        AttachStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachStaticIpError {
@@ -4529,11 +4401,6 @@ impl Error for AttachStaticIpError {
             AttachStaticIpError::OperationFailure(ref cause) => cause,
             AttachStaticIpError::Service(ref cause) => cause,
             AttachStaticIpError::Unauthenticated(ref cause) => cause,
-            AttachStaticIpError::Validation(ref cause) => cause,
-            AttachStaticIpError::Credentials(ref err) => err.description(),
-            AttachStaticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachStaticIpError::ParseError(ref cause) => cause,
-            AttachStaticIpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4554,20 +4421,10 @@ pub enum CloseInstancePublicPortsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CloseInstancePublicPortsError {
-    pub fn from_response(res: BufferedHttpResponse) -> CloseInstancePublicPortsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CloseInstancePublicPortsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4580,60 +4437,47 @@ impl CloseInstancePublicPortsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CloseInstancePublicPortsError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return CloseInstancePublicPortsError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CloseInstancePublicPortsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        CloseInstancePublicPortsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return CloseInstancePublicPortsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CloseInstancePublicPortsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CloseInstancePublicPortsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CloseInstancePublicPortsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return CloseInstancePublicPortsError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(CloseInstancePublicPortsError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CloseInstancePublicPortsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return CloseInstancePublicPortsError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(CloseInstancePublicPortsError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CloseInstancePublicPortsError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(CloseInstancePublicPortsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CloseInstancePublicPortsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CloseInstancePublicPortsError {
-    fn from(err: serde_json::error::Error) -> CloseInstancePublicPortsError {
-        CloseInstancePublicPortsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CloseInstancePublicPortsError {
-    fn from(err: CredentialsError) -> CloseInstancePublicPortsError {
-        CloseInstancePublicPortsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CloseInstancePublicPortsError {
-    fn from(err: HttpDispatchError) -> CloseInstancePublicPortsError {
-        CloseInstancePublicPortsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CloseInstancePublicPortsError {
-    fn from(err: io::Error) -> CloseInstancePublicPortsError {
-        CloseInstancePublicPortsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CloseInstancePublicPortsError {
@@ -4651,13 +4495,6 @@ impl Error for CloseInstancePublicPortsError {
             CloseInstancePublicPortsError::OperationFailure(ref cause) => cause,
             CloseInstancePublicPortsError::Service(ref cause) => cause,
             CloseInstancePublicPortsError::Unauthenticated(ref cause) => cause,
-            CloseInstancePublicPortsError::Validation(ref cause) => cause,
-            CloseInstancePublicPortsError::Credentials(ref err) => err.description(),
-            CloseInstancePublicPortsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CloseInstancePublicPortsError::ParseError(ref cause) => cause,
-            CloseInstancePublicPortsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4678,20 +4515,10 @@ pub enum CopySnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopySnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopySnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopySnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4704,54 +4531,45 @@ impl CopySnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CopySnapshotError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CopySnapshotError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return CopySnapshotError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(CopySnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CopySnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CopySnapshotError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CopySnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CopySnapshotError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CopySnapshotError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CopySnapshotError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return CopySnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(CopySnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CopySnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CopySnapshotError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CopySnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CopySnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CopySnapshotError {
-    fn from(err: serde_json::error::Error) -> CopySnapshotError {
-        CopySnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CopySnapshotError {
-    fn from(err: CredentialsError) -> CopySnapshotError {
-        CopySnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopySnapshotError {
-    fn from(err: HttpDispatchError) -> CopySnapshotError {
-        CopySnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopySnapshotError {
-    fn from(err: io::Error) -> CopySnapshotError {
-        CopySnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CopySnapshotError {
@@ -4769,11 +4587,6 @@ impl Error for CopySnapshotError {
             CopySnapshotError::OperationFailure(ref cause) => cause,
             CopySnapshotError::Service(ref cause) => cause,
             CopySnapshotError::Unauthenticated(ref cause) => cause,
-            CopySnapshotError::Validation(ref cause) => cause,
-            CopySnapshotError::Credentials(ref err) => err.description(),
-            CopySnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopySnapshotError::ParseError(ref cause) => cause,
-            CopySnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4794,20 +4607,10 @@ pub enum CreateCloudFormationStackError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCloudFormationStackError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCloudFormationStackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCloudFormationStackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4820,60 +4623,47 @@ impl CreateCloudFormationStackError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateCloudFormationStackError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return CreateCloudFormationStackError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCloudFormationStackError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        CreateCloudFormationStackError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return CreateCloudFormationStackError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateCloudFormationStackError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateCloudFormationStackError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateCloudFormationStackError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return CreateCloudFormationStackError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCloudFormationStackError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CreateCloudFormationStackError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return CreateCloudFormationStackError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCloudFormationStackError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateCloudFormationStackError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(CreateCloudFormationStackError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCloudFormationStackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCloudFormationStackError {
-    fn from(err: serde_json::error::Error) -> CreateCloudFormationStackError {
-        CreateCloudFormationStackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCloudFormationStackError {
-    fn from(err: CredentialsError) -> CreateCloudFormationStackError {
-        CreateCloudFormationStackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCloudFormationStackError {
-    fn from(err: HttpDispatchError) -> CreateCloudFormationStackError {
-        CreateCloudFormationStackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCloudFormationStackError {
-    fn from(err: io::Error) -> CreateCloudFormationStackError {
-        CreateCloudFormationStackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCloudFormationStackError {
@@ -4891,13 +4681,6 @@ impl Error for CreateCloudFormationStackError {
             CreateCloudFormationStackError::OperationFailure(ref cause) => cause,
             CreateCloudFormationStackError::Service(ref cause) => cause,
             CreateCloudFormationStackError::Unauthenticated(ref cause) => cause,
-            CreateCloudFormationStackError::Validation(ref cause) => cause,
-            CreateCloudFormationStackError::Credentials(ref err) => err.description(),
-            CreateCloudFormationStackError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCloudFormationStackError::ParseError(ref cause) => cause,
-            CreateCloudFormationStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4918,20 +4701,10 @@ pub enum CreateDiskError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDiskError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDiskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDiskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4944,52 +4717,45 @@ impl CreateDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDiskError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateDiskError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateDiskError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(CreateDiskError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateDiskError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateDiskError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateDiskError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateDiskError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CreateDiskError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CreateDiskError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return CreateDiskError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(CreateDiskError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return CreateDiskError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateDiskError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateDiskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDiskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDiskError {
-    fn from(err: serde_json::error::Error) -> CreateDiskError {
-        CreateDiskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDiskError {
-    fn from(err: CredentialsError) -> CreateDiskError {
-        CreateDiskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDiskError {
-    fn from(err: HttpDispatchError) -> CreateDiskError {
-        CreateDiskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDiskError {
-    fn from(err: io::Error) -> CreateDiskError {
-        CreateDiskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDiskError {
@@ -5007,11 +4773,6 @@ impl Error for CreateDiskError {
             CreateDiskError::OperationFailure(ref cause) => cause,
             CreateDiskError::Service(ref cause) => cause,
             CreateDiskError::Unauthenticated(ref cause) => cause,
-            CreateDiskError::Validation(ref cause) => cause,
-            CreateDiskError::Credentials(ref err) => err.description(),
-            CreateDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDiskError::ParseError(ref cause) => cause,
-            CreateDiskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5032,20 +4793,10 @@ pub enum CreateDiskFromSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDiskFromSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDiskFromSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDiskFromSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5058,58 +4809,47 @@ impl CreateDiskFromSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDiskFromSnapshotError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return CreateDiskFromSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDiskFromSnapshotError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        CreateDiskFromSnapshotError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return CreateDiskFromSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateDiskFromSnapshotError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateDiskFromSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateDiskFromSnapshotError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return CreateDiskFromSnapshotError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDiskFromSnapshotError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CreateDiskFromSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateDiskFromSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDiskFromSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateDiskFromSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateDiskFromSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDiskFromSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDiskFromSnapshotError {
-    fn from(err: serde_json::error::Error) -> CreateDiskFromSnapshotError {
-        CreateDiskFromSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDiskFromSnapshotError {
-    fn from(err: CredentialsError) -> CreateDiskFromSnapshotError {
-        CreateDiskFromSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDiskFromSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateDiskFromSnapshotError {
-        CreateDiskFromSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDiskFromSnapshotError {
-    fn from(err: io::Error) -> CreateDiskFromSnapshotError {
-        CreateDiskFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDiskFromSnapshotError {
@@ -5127,13 +4867,6 @@ impl Error for CreateDiskFromSnapshotError {
             CreateDiskFromSnapshotError::OperationFailure(ref cause) => cause,
             CreateDiskFromSnapshotError::Service(ref cause) => cause,
             CreateDiskFromSnapshotError::Unauthenticated(ref cause) => cause,
-            CreateDiskFromSnapshotError::Validation(ref cause) => cause,
-            CreateDiskFromSnapshotError::Credentials(ref err) => err.description(),
-            CreateDiskFromSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDiskFromSnapshotError::ParseError(ref cause) => cause,
-            CreateDiskFromSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5154,20 +4887,10 @@ pub enum CreateDiskSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDiskSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDiskSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDiskSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5180,56 +4903,45 @@ impl CreateDiskSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDiskSnapshotError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateDiskSnapshotError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateDiskSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDiskSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return CreateDiskSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateDiskSnapshotError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateDiskSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateDiskSnapshotError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CreateDiskSnapshotError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CreateDiskSnapshotError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateDiskSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateDiskSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDiskSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateDiskSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateDiskSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDiskSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDiskSnapshotError {
-    fn from(err: serde_json::error::Error) -> CreateDiskSnapshotError {
-        CreateDiskSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDiskSnapshotError {
-    fn from(err: CredentialsError) -> CreateDiskSnapshotError {
-        CreateDiskSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDiskSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateDiskSnapshotError {
-        CreateDiskSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDiskSnapshotError {
-    fn from(err: io::Error) -> CreateDiskSnapshotError {
-        CreateDiskSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDiskSnapshotError {
@@ -5247,13 +4959,6 @@ impl Error for CreateDiskSnapshotError {
             CreateDiskSnapshotError::OperationFailure(ref cause) => cause,
             CreateDiskSnapshotError::Service(ref cause) => cause,
             CreateDiskSnapshotError::Unauthenticated(ref cause) => cause,
-            CreateDiskSnapshotError::Validation(ref cause) => cause,
-            CreateDiskSnapshotError::Credentials(ref err) => err.description(),
-            CreateDiskSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDiskSnapshotError::ParseError(ref cause) => cause,
-            CreateDiskSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5274,20 +4979,10 @@ pub enum CreateDomainError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5300,54 +4995,45 @@ impl CreateDomainError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDomainError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateDomainError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateDomainError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(CreateDomainError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateDomainError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateDomainError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateDomainError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CreateDomainError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CreateDomainError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return CreateDomainError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateDomainError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDomainError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateDomainError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDomainError {
-    fn from(err: serde_json::error::Error) -> CreateDomainError {
-        CreateDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDomainError {
-    fn from(err: CredentialsError) -> CreateDomainError {
-        CreateDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDomainError {
-    fn from(err: HttpDispatchError) -> CreateDomainError {
-        CreateDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDomainError {
-    fn from(err: io::Error) -> CreateDomainError {
-        CreateDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDomainError {
@@ -5365,11 +5051,6 @@ impl Error for CreateDomainError {
             CreateDomainError::OperationFailure(ref cause) => cause,
             CreateDomainError::Service(ref cause) => cause,
             CreateDomainError::Unauthenticated(ref cause) => cause,
-            CreateDomainError::Validation(ref cause) => cause,
-            CreateDomainError::Credentials(ref err) => err.description(),
-            CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDomainError::ParseError(ref cause) => cause,
-            CreateDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5390,20 +5071,10 @@ pub enum CreateDomainEntryError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDomainEntryError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDomainEntryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainEntryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5416,56 +5087,45 @@ impl CreateDomainEntryError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDomainEntryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateDomainEntryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateDomainEntryError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDomainEntryError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return CreateDomainEntryError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateDomainEntryError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateDomainEntryError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateDomainEntryError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CreateDomainEntryError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CreateDomainEntryError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateDomainEntryError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateDomainEntryError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateDomainEntryError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateDomainEntryError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateDomainEntryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDomainEntryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDomainEntryError {
-    fn from(err: serde_json::error::Error) -> CreateDomainEntryError {
-        CreateDomainEntryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDomainEntryError {
-    fn from(err: CredentialsError) -> CreateDomainEntryError {
-        CreateDomainEntryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDomainEntryError {
-    fn from(err: HttpDispatchError) -> CreateDomainEntryError {
-        CreateDomainEntryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDomainEntryError {
-    fn from(err: io::Error) -> CreateDomainEntryError {
-        CreateDomainEntryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDomainEntryError {
@@ -5483,13 +5143,6 @@ impl Error for CreateDomainEntryError {
             CreateDomainEntryError::OperationFailure(ref cause) => cause,
             CreateDomainEntryError::Service(ref cause) => cause,
             CreateDomainEntryError::Unauthenticated(ref cause) => cause,
-            CreateDomainEntryError::Validation(ref cause) => cause,
-            CreateDomainEntryError::Credentials(ref err) => err.description(),
-            CreateDomainEntryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDomainEntryError::ParseError(ref cause) => cause,
-            CreateDomainEntryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5510,20 +5163,10 @@ pub enum CreateInstanceSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInstanceSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateInstanceSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5536,58 +5179,47 @@ impl CreateInstanceSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateInstanceSnapshotError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return CreateInstanceSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateInstanceSnapshotError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        CreateInstanceSnapshotError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return CreateInstanceSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceSnapshotError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateInstanceSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceSnapshotError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return CreateInstanceSnapshotError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateInstanceSnapshotError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CreateInstanceSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateInstanceSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateInstanceSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateInstanceSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateInstanceSnapshotError {
-    fn from(err: serde_json::error::Error) -> CreateInstanceSnapshotError {
-        CreateInstanceSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateInstanceSnapshotError {
-    fn from(err: CredentialsError) -> CreateInstanceSnapshotError {
-        CreateInstanceSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateInstanceSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateInstanceSnapshotError {
-        CreateInstanceSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateInstanceSnapshotError {
-    fn from(err: io::Error) -> CreateInstanceSnapshotError {
-        CreateInstanceSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateInstanceSnapshotError {
@@ -5605,13 +5237,6 @@ impl Error for CreateInstanceSnapshotError {
             CreateInstanceSnapshotError::OperationFailure(ref cause) => cause,
             CreateInstanceSnapshotError::Service(ref cause) => cause,
             CreateInstanceSnapshotError::Unauthenticated(ref cause) => cause,
-            CreateInstanceSnapshotError::Validation(ref cause) => cause,
-            CreateInstanceSnapshotError::Credentials(ref err) => err.description(),
-            CreateInstanceSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateInstanceSnapshotError::ParseError(ref cause) => cause,
-            CreateInstanceSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5632,20 +5257,10 @@ pub enum CreateInstancesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5658,54 +5273,45 @@ impl CreateInstancesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateInstancesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateInstancesError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateInstancesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateInstancesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CreateInstancesError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateInstancesError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateInstancesError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateInstancesError {
-    fn from(err: serde_json::error::Error) -> CreateInstancesError {
-        CreateInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateInstancesError {
-    fn from(err: CredentialsError) -> CreateInstancesError {
-        CreateInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateInstancesError {
-    fn from(err: HttpDispatchError) -> CreateInstancesError {
-        CreateInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateInstancesError {
-    fn from(err: io::Error) -> CreateInstancesError {
-        CreateInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateInstancesError {
@@ -5723,11 +5329,6 @@ impl Error for CreateInstancesError {
             CreateInstancesError::OperationFailure(ref cause) => cause,
             CreateInstancesError::Service(ref cause) => cause,
             CreateInstancesError::Unauthenticated(ref cause) => cause,
-            CreateInstancesError::Validation(ref cause) => cause,
-            CreateInstancesError::Credentials(ref err) => err.description(),
-            CreateInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateInstancesError::ParseError(ref cause) => cause,
-            CreateInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5748,20 +5349,12 @@ pub enum CreateInstancesFromSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInstancesFromSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateInstancesFromSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateInstancesFromSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5774,64 +5367,47 @@ impl CreateInstancesFromSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateInstancesFromSnapshotError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateInstancesFromSnapshotError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateInstancesFromSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateInstancesFromSnapshotError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return CreateInstancesFromSnapshotError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateInstancesFromSnapshotError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return CreateInstancesFromSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateInstancesFromSnapshotError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return CreateInstancesFromSnapshotError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateInstancesFromSnapshotError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CreateInstancesFromSnapshotError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return CreateInstancesFromSnapshotError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateInstancesFromSnapshotError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateInstancesFromSnapshotError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(CreateInstancesFromSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateInstancesFromSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateInstancesFromSnapshotError {
-    fn from(err: serde_json::error::Error) -> CreateInstancesFromSnapshotError {
-        CreateInstancesFromSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateInstancesFromSnapshotError {
-    fn from(err: CredentialsError) -> CreateInstancesFromSnapshotError {
-        CreateInstancesFromSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateInstancesFromSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateInstancesFromSnapshotError {
-        CreateInstancesFromSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateInstancesFromSnapshotError {
-    fn from(err: io::Error) -> CreateInstancesFromSnapshotError {
-        CreateInstancesFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateInstancesFromSnapshotError {
@@ -5849,13 +5425,6 @@ impl Error for CreateInstancesFromSnapshotError {
             CreateInstancesFromSnapshotError::OperationFailure(ref cause) => cause,
             CreateInstancesFromSnapshotError::Service(ref cause) => cause,
             CreateInstancesFromSnapshotError::Unauthenticated(ref cause) => cause,
-            CreateInstancesFromSnapshotError::Validation(ref cause) => cause,
-            CreateInstancesFromSnapshotError::Credentials(ref err) => err.description(),
-            CreateInstancesFromSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateInstancesFromSnapshotError::ParseError(ref cause) => cause,
-            CreateInstancesFromSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5876,20 +5445,10 @@ pub enum CreateKeyPairError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateKeyPairError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateKeyPairError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeyPairError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5902,54 +5461,45 @@ impl CreateKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateKeyPairError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateKeyPairError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateKeyPairError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(CreateKeyPairError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateKeyPairError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateKeyPairError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateKeyPairError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateKeyPairError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CreateKeyPairError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CreateKeyPairError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return CreateKeyPairError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateKeyPairError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateKeyPairError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateKeyPairError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateKeyPairError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateKeyPairError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateKeyPairError {
-    fn from(err: serde_json::error::Error) -> CreateKeyPairError {
-        CreateKeyPairError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateKeyPairError {
-    fn from(err: CredentialsError) -> CreateKeyPairError {
-        CreateKeyPairError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateKeyPairError {
-    fn from(err: HttpDispatchError) -> CreateKeyPairError {
-        CreateKeyPairError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateKeyPairError {
-    fn from(err: io::Error) -> CreateKeyPairError {
-        CreateKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateKeyPairError {
@@ -5967,11 +5517,6 @@ impl Error for CreateKeyPairError {
             CreateKeyPairError::OperationFailure(ref cause) => cause,
             CreateKeyPairError::Service(ref cause) => cause,
             CreateKeyPairError::Unauthenticated(ref cause) => cause,
-            CreateKeyPairError::Validation(ref cause) => cause,
-            CreateKeyPairError::Credentials(ref err) => err.description(),
-            CreateKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateKeyPairError::ParseError(ref cause) => cause,
-            CreateKeyPairError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5992,20 +5537,10 @@ pub enum CreateLoadBalancerError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLoadBalancerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoadBalancerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6018,56 +5553,45 @@ impl CreateLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateLoadBalancerError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateLoadBalancerError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateLoadBalancerError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateLoadBalancerError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return CreateLoadBalancerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateLoadBalancerError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateLoadBalancerError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateLoadBalancerError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return CreateLoadBalancerError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(CreateLoadBalancerError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateLoadBalancerError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateLoadBalancerError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return CreateLoadBalancerError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(CreateLoadBalancerError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateLoadBalancerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateLoadBalancerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateLoadBalancerError {
-    fn from(err: serde_json::error::Error) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateLoadBalancerError {
-    fn from(err: CredentialsError) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLoadBalancerError {
-    fn from(err: HttpDispatchError) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLoadBalancerError {
-    fn from(err: io::Error) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateLoadBalancerError {
@@ -6085,13 +5609,6 @@ impl Error for CreateLoadBalancerError {
             CreateLoadBalancerError::OperationFailure(ref cause) => cause,
             CreateLoadBalancerError::Service(ref cause) => cause,
             CreateLoadBalancerError::Unauthenticated(ref cause) => cause,
-            CreateLoadBalancerError::Validation(ref cause) => cause,
-            CreateLoadBalancerError::Credentials(ref err) => err.description(),
-            CreateLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLoadBalancerError::ParseError(ref cause) => cause,
-            CreateLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6112,20 +5629,12 @@ pub enum CreateLoadBalancerTlsCertificateError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoadBalancerTlsCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLoadBalancerTlsCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateLoadBalancerTlsCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6138,70 +5647,55 @@ impl CreateLoadBalancerTlsCertificateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateLoadBalancerTlsCertificateError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return CreateLoadBalancerTlsCertificateError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return CreateLoadBalancerTlsCertificateError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateLoadBalancerTlsCertificateError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return CreateLoadBalancerTlsCertificateError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateLoadBalancerTlsCertificateError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return CreateLoadBalancerTlsCertificateError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateLoadBalancerTlsCertificateError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return CreateLoadBalancerTlsCertificateError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return CreateLoadBalancerTlsCertificateError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        CreateLoadBalancerTlsCertificateError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateLoadBalancerTlsCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateLoadBalancerTlsCertificateError {
-    fn from(err: serde_json::error::Error) -> CreateLoadBalancerTlsCertificateError {
-        CreateLoadBalancerTlsCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateLoadBalancerTlsCertificateError {
-    fn from(err: CredentialsError) -> CreateLoadBalancerTlsCertificateError {
-        CreateLoadBalancerTlsCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLoadBalancerTlsCertificateError {
-    fn from(err: HttpDispatchError) -> CreateLoadBalancerTlsCertificateError {
-        CreateLoadBalancerTlsCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLoadBalancerTlsCertificateError {
-    fn from(err: io::Error) -> CreateLoadBalancerTlsCertificateError {
-        CreateLoadBalancerTlsCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateLoadBalancerTlsCertificateError {
@@ -6219,13 +5713,6 @@ impl Error for CreateLoadBalancerTlsCertificateError {
             CreateLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
             CreateLoadBalancerTlsCertificateError::Service(ref cause) => cause,
             CreateLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::Validation(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::Credentials(ref err) => err.description(),
-            CreateLoadBalancerTlsCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLoadBalancerTlsCertificateError::ParseError(ref cause) => cause,
-            CreateLoadBalancerTlsCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6246,20 +5733,10 @@ pub enum CreateRelationalDatabaseError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRelationalDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRelationalDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6272,60 +5749,47 @@ impl CreateRelationalDatabaseError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateRelationalDatabaseError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return CreateRelationalDatabaseError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRelationalDatabaseError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return CreateRelationalDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateRelationalDatabaseError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateRelationalDatabaseError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateRelationalDatabaseError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return CreateRelationalDatabaseError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRelationalDatabaseError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CreateRelationalDatabaseError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return CreateRelationalDatabaseError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRelationalDatabaseError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateRelationalDatabaseError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(CreateRelationalDatabaseError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRelationalDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRelationalDatabaseError {
-    fn from(err: serde_json::error::Error) -> CreateRelationalDatabaseError {
-        CreateRelationalDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRelationalDatabaseError {
-    fn from(err: CredentialsError) -> CreateRelationalDatabaseError {
-        CreateRelationalDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRelationalDatabaseError {
-    fn from(err: HttpDispatchError) -> CreateRelationalDatabaseError {
-        CreateRelationalDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRelationalDatabaseError {
-    fn from(err: io::Error) -> CreateRelationalDatabaseError {
-        CreateRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRelationalDatabaseError {
@@ -6343,13 +5807,6 @@ impl Error for CreateRelationalDatabaseError {
             CreateRelationalDatabaseError::OperationFailure(ref cause) => cause,
             CreateRelationalDatabaseError::Service(ref cause) => cause,
             CreateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
-            CreateRelationalDatabaseError::Validation(ref cause) => cause,
-            CreateRelationalDatabaseError::Credentials(ref err) => err.description(),
-            CreateRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateRelationalDatabaseError::ParseError(ref cause) => cause,
-            CreateRelationalDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6370,20 +5827,12 @@ pub enum CreateRelationalDatabaseFromSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRelationalDatabaseFromSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRelationalDatabaseFromSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateRelationalDatabaseFromSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6396,70 +5845,57 @@ impl CreateRelationalDatabaseFromSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseFromSnapshotError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseFromSnapshotError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::NotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseFromSnapshotError::NotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OperationFailureException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::OperationFailure(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseFromSnapshotError::OperationFailure(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ServiceException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRelationalDatabaseFromSnapshotError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return CreateRelationalDatabaseFromSnapshotError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseFromSnapshotError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRelationalDatabaseFromSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRelationalDatabaseFromSnapshotError {
-    fn from(err: serde_json::error::Error) -> CreateRelationalDatabaseFromSnapshotError {
-        CreateRelationalDatabaseFromSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRelationalDatabaseFromSnapshotError {
-    fn from(err: CredentialsError) -> CreateRelationalDatabaseFromSnapshotError {
-        CreateRelationalDatabaseFromSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRelationalDatabaseFromSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateRelationalDatabaseFromSnapshotError {
-        CreateRelationalDatabaseFromSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRelationalDatabaseFromSnapshotError {
-    fn from(err: io::Error) -> CreateRelationalDatabaseFromSnapshotError {
-        CreateRelationalDatabaseFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRelationalDatabaseFromSnapshotError {
@@ -6477,13 +5913,6 @@ impl Error for CreateRelationalDatabaseFromSnapshotError {
             CreateRelationalDatabaseFromSnapshotError::OperationFailure(ref cause) => cause,
             CreateRelationalDatabaseFromSnapshotError::Service(ref cause) => cause,
             CreateRelationalDatabaseFromSnapshotError::Unauthenticated(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::Validation(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::Credentials(ref err) => err.description(),
-            CreateRelationalDatabaseFromSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateRelationalDatabaseFromSnapshotError::ParseError(ref cause) => cause,
-            CreateRelationalDatabaseFromSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6504,20 +5933,12 @@ pub enum CreateRelationalDatabaseSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRelationalDatabaseSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRelationalDatabaseSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateRelationalDatabaseSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6530,70 +5951,55 @@ impl CreateRelationalDatabaseSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateRelationalDatabaseSnapshotError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseSnapshotError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return CreateRelationalDatabaseSnapshotError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseSnapshotError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return CreateRelationalDatabaseSnapshotError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRelationalDatabaseSnapshotError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return CreateRelationalDatabaseSnapshotError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseSnapshotError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return CreateRelationalDatabaseSnapshotError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRelationalDatabaseSnapshotError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return CreateRelationalDatabaseSnapshotError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return CreateRelationalDatabaseSnapshotError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        CreateRelationalDatabaseSnapshotError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRelationalDatabaseSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRelationalDatabaseSnapshotError {
-    fn from(err: serde_json::error::Error) -> CreateRelationalDatabaseSnapshotError {
-        CreateRelationalDatabaseSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRelationalDatabaseSnapshotError {
-    fn from(err: CredentialsError) -> CreateRelationalDatabaseSnapshotError {
-        CreateRelationalDatabaseSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRelationalDatabaseSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateRelationalDatabaseSnapshotError {
-        CreateRelationalDatabaseSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRelationalDatabaseSnapshotError {
-    fn from(err: io::Error) -> CreateRelationalDatabaseSnapshotError {
-        CreateRelationalDatabaseSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRelationalDatabaseSnapshotError {
@@ -6611,13 +6017,6 @@ impl Error for CreateRelationalDatabaseSnapshotError {
             CreateRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
             CreateRelationalDatabaseSnapshotError::Service(ref cause) => cause,
             CreateRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::Validation(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::Credentials(ref err) => err.description(),
-            CreateRelationalDatabaseSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateRelationalDatabaseSnapshotError::ParseError(ref cause) => cause,
-            CreateRelationalDatabaseSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6638,20 +6037,10 @@ pub enum DeleteDiskError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDiskError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDiskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDiskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6664,52 +6053,45 @@ impl DeleteDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDiskError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteDiskError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteDiskError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteDiskError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DeleteDiskError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return DeleteDiskError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteDiskError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return DeleteDiskError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteDiskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDiskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDiskError {
-    fn from(err: serde_json::error::Error) -> DeleteDiskError {
-        DeleteDiskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDiskError {
-    fn from(err: CredentialsError) -> DeleteDiskError {
-        DeleteDiskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDiskError {
-    fn from(err: HttpDispatchError) -> DeleteDiskError {
-        DeleteDiskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDiskError {
-    fn from(err: io::Error) -> DeleteDiskError {
-        DeleteDiskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDiskError {
@@ -6727,11 +6109,6 @@ impl Error for DeleteDiskError {
             DeleteDiskError::OperationFailure(ref cause) => cause,
             DeleteDiskError::Service(ref cause) => cause,
             DeleteDiskError::Unauthenticated(ref cause) => cause,
-            DeleteDiskError::Validation(ref cause) => cause,
-            DeleteDiskError::Credentials(ref err) => err.description(),
-            DeleteDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDiskError::ParseError(ref cause) => cause,
-            DeleteDiskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6752,20 +6129,10 @@ pub enum DeleteDiskSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDiskSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDiskSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDiskSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6778,56 +6145,45 @@ impl DeleteDiskSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDiskSnapshotError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskSnapshotError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteDiskSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDiskSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DeleteDiskSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskSnapshotError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteDiskSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskSnapshotError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DeleteDiskSnapshotError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskSnapshotError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteDiskSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteDiskSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteDiskSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDiskSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDiskSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDiskSnapshotError {
-    fn from(err: serde_json::error::Error) -> DeleteDiskSnapshotError {
-        DeleteDiskSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDiskSnapshotError {
-    fn from(err: CredentialsError) -> DeleteDiskSnapshotError {
-        DeleteDiskSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDiskSnapshotError {
-    fn from(err: HttpDispatchError) -> DeleteDiskSnapshotError {
-        DeleteDiskSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDiskSnapshotError {
-    fn from(err: io::Error) -> DeleteDiskSnapshotError {
-        DeleteDiskSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDiskSnapshotError {
@@ -6845,13 +6201,6 @@ impl Error for DeleteDiskSnapshotError {
             DeleteDiskSnapshotError::OperationFailure(ref cause) => cause,
             DeleteDiskSnapshotError::Service(ref cause) => cause,
             DeleteDiskSnapshotError::Unauthenticated(ref cause) => cause,
-            DeleteDiskSnapshotError::Validation(ref cause) => cause,
-            DeleteDiskSnapshotError::Credentials(ref err) => err.description(),
-            DeleteDiskSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDiskSnapshotError::ParseError(ref cause) => cause,
-            DeleteDiskSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6872,20 +6221,10 @@ pub enum DeleteDomainError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6898,54 +6237,45 @@ impl DeleteDomainError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDomainError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteDomainError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteDomainError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DeleteDomainError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DeleteDomainError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteDomainError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDomainError {
-    fn from(err: serde_json::error::Error) -> DeleteDomainError {
-        DeleteDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDomainError {
-    fn from(err: CredentialsError) -> DeleteDomainError {
-        DeleteDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDomainError {
-    fn from(err: HttpDispatchError) -> DeleteDomainError {
-        DeleteDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDomainError {
-    fn from(err: io::Error) -> DeleteDomainError {
-        DeleteDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -6963,11 +6293,6 @@ impl Error for DeleteDomainError {
             DeleteDomainError::OperationFailure(ref cause) => cause,
             DeleteDomainError::Service(ref cause) => cause,
             DeleteDomainError::Unauthenticated(ref cause) => cause,
-            DeleteDomainError::Validation(ref cause) => cause,
-            DeleteDomainError::Credentials(ref err) => err.description(),
-            DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDomainError::ParseError(ref cause) => cause,
-            DeleteDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6988,20 +6313,10 @@ pub enum DeleteDomainEntryError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDomainEntryError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDomainEntryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainEntryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7014,56 +6329,45 @@ impl DeleteDomainEntryError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteDomainEntryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainEntryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteDomainEntryError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDomainEntryError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DeleteDomainEntryError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainEntryError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteDomainEntryError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainEntryError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DeleteDomainEntryError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainEntryError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteDomainEntryError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainEntryError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteDomainEntryError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteDomainEntryError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDomainEntryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDomainEntryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDomainEntryError {
-    fn from(err: serde_json::error::Error) -> DeleteDomainEntryError {
-        DeleteDomainEntryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDomainEntryError {
-    fn from(err: CredentialsError) -> DeleteDomainEntryError {
-        DeleteDomainEntryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDomainEntryError {
-    fn from(err: HttpDispatchError) -> DeleteDomainEntryError {
-        DeleteDomainEntryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDomainEntryError {
-    fn from(err: io::Error) -> DeleteDomainEntryError {
-        DeleteDomainEntryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDomainEntryError {
@@ -7081,13 +6385,6 @@ impl Error for DeleteDomainEntryError {
             DeleteDomainEntryError::OperationFailure(ref cause) => cause,
             DeleteDomainEntryError::Service(ref cause) => cause,
             DeleteDomainEntryError::Unauthenticated(ref cause) => cause,
-            DeleteDomainEntryError::Validation(ref cause) => cause,
-            DeleteDomainEntryError::Credentials(ref err) => err.description(),
-            DeleteDomainEntryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDomainEntryError::ParseError(ref cause) => cause,
-            DeleteDomainEntryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7108,20 +6405,10 @@ pub enum DeleteInstanceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7134,54 +6421,45 @@ impl DeleteInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteInstanceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteInstanceError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteInstanceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DeleteInstanceError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteInstanceError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteInstanceError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteInstanceError {
-    fn from(err: serde_json::error::Error) -> DeleteInstanceError {
-        DeleteInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteInstanceError {
-    fn from(err: CredentialsError) -> DeleteInstanceError {
-        DeleteInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteInstanceError {
-    fn from(err: HttpDispatchError) -> DeleteInstanceError {
-        DeleteInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteInstanceError {
-    fn from(err: io::Error) -> DeleteInstanceError {
-        DeleteInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteInstanceError {
@@ -7199,11 +6477,6 @@ impl Error for DeleteInstanceError {
             DeleteInstanceError::OperationFailure(ref cause) => cause,
             DeleteInstanceError::Service(ref cause) => cause,
             DeleteInstanceError::Unauthenticated(ref cause) => cause,
-            DeleteInstanceError::Validation(ref cause) => cause,
-            DeleteInstanceError::Credentials(ref err) => err.description(),
-            DeleteInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteInstanceError::ParseError(ref cause) => cause,
-            DeleteInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7224,20 +6497,10 @@ pub enum DeleteInstanceSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInstanceSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteInstanceSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7250,58 +6513,47 @@ impl DeleteInstanceSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteInstanceSnapshotError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return DeleteInstanceSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteInstanceSnapshotError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        DeleteInstanceSnapshotError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return DeleteInstanceSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceSnapshotError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteInstanceSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceSnapshotError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return DeleteInstanceSnapshotError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteInstanceSnapshotError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DeleteInstanceSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteInstanceSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteInstanceSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteInstanceSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteInstanceSnapshotError {
-    fn from(err: serde_json::error::Error) -> DeleteInstanceSnapshotError {
-        DeleteInstanceSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteInstanceSnapshotError {
-    fn from(err: CredentialsError) -> DeleteInstanceSnapshotError {
-        DeleteInstanceSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteInstanceSnapshotError {
-    fn from(err: HttpDispatchError) -> DeleteInstanceSnapshotError {
-        DeleteInstanceSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteInstanceSnapshotError {
-    fn from(err: io::Error) -> DeleteInstanceSnapshotError {
-        DeleteInstanceSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteInstanceSnapshotError {
@@ -7319,13 +6571,6 @@ impl Error for DeleteInstanceSnapshotError {
             DeleteInstanceSnapshotError::OperationFailure(ref cause) => cause,
             DeleteInstanceSnapshotError::Service(ref cause) => cause,
             DeleteInstanceSnapshotError::Unauthenticated(ref cause) => cause,
-            DeleteInstanceSnapshotError::Validation(ref cause) => cause,
-            DeleteInstanceSnapshotError::Credentials(ref err) => err.description(),
-            DeleteInstanceSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteInstanceSnapshotError::ParseError(ref cause) => cause,
-            DeleteInstanceSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7346,20 +6591,10 @@ pub enum DeleteKeyPairError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteKeyPairError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteKeyPairError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteKeyPairError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7372,54 +6607,45 @@ impl DeleteKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteKeyPairError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteKeyPairError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteKeyPairError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(DeleteKeyPairError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteKeyPairError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteKeyPairError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteKeyPairError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteKeyPairError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DeleteKeyPairError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteKeyPairError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return DeleteKeyPairError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteKeyPairError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteKeyPairError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteKeyPairError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteKeyPairError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteKeyPairError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteKeyPairError {
-    fn from(err: serde_json::error::Error) -> DeleteKeyPairError {
-        DeleteKeyPairError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteKeyPairError {
-    fn from(err: CredentialsError) -> DeleteKeyPairError {
-        DeleteKeyPairError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteKeyPairError {
-    fn from(err: HttpDispatchError) -> DeleteKeyPairError {
-        DeleteKeyPairError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteKeyPairError {
-    fn from(err: io::Error) -> DeleteKeyPairError {
-        DeleteKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteKeyPairError {
@@ -7437,11 +6663,6 @@ impl Error for DeleteKeyPairError {
             DeleteKeyPairError::OperationFailure(ref cause) => cause,
             DeleteKeyPairError::Service(ref cause) => cause,
             DeleteKeyPairError::Unauthenticated(ref cause) => cause,
-            DeleteKeyPairError::Validation(ref cause) => cause,
-            DeleteKeyPairError::Credentials(ref err) => err.description(),
-            DeleteKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteKeyPairError::ParseError(ref cause) => cause,
-            DeleteKeyPairError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7462,20 +6683,10 @@ pub enum DeleteLoadBalancerError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoadBalancerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoadBalancerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7488,56 +6699,45 @@ impl DeleteLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteLoadBalancerError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteLoadBalancerError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteLoadBalancerError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLoadBalancerError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DeleteLoadBalancerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteLoadBalancerError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteLoadBalancerError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteLoadBalancerError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DeleteLoadBalancerError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteLoadBalancerError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteLoadBalancerError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteLoadBalancerError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteLoadBalancerError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DeleteLoadBalancerError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteLoadBalancerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLoadBalancerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLoadBalancerError {
-    fn from(err: serde_json::error::Error) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoadBalancerError {
-    fn from(err: CredentialsError) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoadBalancerError {
-    fn from(err: HttpDispatchError) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoadBalancerError {
-    fn from(err: io::Error) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLoadBalancerError {
@@ -7555,13 +6755,6 @@ impl Error for DeleteLoadBalancerError {
             DeleteLoadBalancerError::OperationFailure(ref cause) => cause,
             DeleteLoadBalancerError::Service(ref cause) => cause,
             DeleteLoadBalancerError::Unauthenticated(ref cause) => cause,
-            DeleteLoadBalancerError::Validation(ref cause) => cause,
-            DeleteLoadBalancerError::Credentials(ref err) => err.description(),
-            DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoadBalancerError::ParseError(ref cause) => cause,
-            DeleteLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7582,20 +6775,12 @@ pub enum DeleteLoadBalancerTlsCertificateError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoadBalancerTlsCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoadBalancerTlsCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteLoadBalancerTlsCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7608,70 +6793,55 @@ impl DeleteLoadBalancerTlsCertificateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteLoadBalancerTlsCertificateError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteLoadBalancerTlsCertificateError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return DeleteLoadBalancerTlsCertificateError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return DeleteLoadBalancerTlsCertificateError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLoadBalancerTlsCertificateError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return DeleteLoadBalancerTlsCertificateError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteLoadBalancerTlsCertificateError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return DeleteLoadBalancerTlsCertificateError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLoadBalancerTlsCertificateError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteLoadBalancerTlsCertificateError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DeleteLoadBalancerTlsCertificateError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DeleteLoadBalancerTlsCertificateError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLoadBalancerTlsCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLoadBalancerTlsCertificateError {
-    fn from(err: serde_json::error::Error) -> DeleteLoadBalancerTlsCertificateError {
-        DeleteLoadBalancerTlsCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoadBalancerTlsCertificateError {
-    fn from(err: CredentialsError) -> DeleteLoadBalancerTlsCertificateError {
-        DeleteLoadBalancerTlsCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoadBalancerTlsCertificateError {
-    fn from(err: HttpDispatchError) -> DeleteLoadBalancerTlsCertificateError {
-        DeleteLoadBalancerTlsCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoadBalancerTlsCertificateError {
-    fn from(err: io::Error) -> DeleteLoadBalancerTlsCertificateError {
-        DeleteLoadBalancerTlsCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLoadBalancerTlsCertificateError {
@@ -7689,13 +6859,6 @@ impl Error for DeleteLoadBalancerTlsCertificateError {
             DeleteLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
             DeleteLoadBalancerTlsCertificateError::Service(ref cause) => cause,
             DeleteLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::Validation(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::Credentials(ref err) => err.description(),
-            DeleteLoadBalancerTlsCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoadBalancerTlsCertificateError::ParseError(ref cause) => cause,
-            DeleteLoadBalancerTlsCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7716,20 +6879,10 @@ pub enum DeleteRelationalDatabaseError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRelationalDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRelationalDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7742,60 +6895,47 @@ impl DeleteRelationalDatabaseError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteRelationalDatabaseError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return DeleteRelationalDatabaseError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRelationalDatabaseError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        DeleteRelationalDatabaseError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return DeleteRelationalDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteRelationalDatabaseError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteRelationalDatabaseError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteRelationalDatabaseError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return DeleteRelationalDatabaseError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRelationalDatabaseError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DeleteRelationalDatabaseError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return DeleteRelationalDatabaseError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRelationalDatabaseError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteRelationalDatabaseError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DeleteRelationalDatabaseError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRelationalDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRelationalDatabaseError {
-    fn from(err: serde_json::error::Error) -> DeleteRelationalDatabaseError {
-        DeleteRelationalDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRelationalDatabaseError {
-    fn from(err: CredentialsError) -> DeleteRelationalDatabaseError {
-        DeleteRelationalDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRelationalDatabaseError {
-    fn from(err: HttpDispatchError) -> DeleteRelationalDatabaseError {
-        DeleteRelationalDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRelationalDatabaseError {
-    fn from(err: io::Error) -> DeleteRelationalDatabaseError {
-        DeleteRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRelationalDatabaseError {
@@ -7813,13 +6953,6 @@ impl Error for DeleteRelationalDatabaseError {
             DeleteRelationalDatabaseError::OperationFailure(ref cause) => cause,
             DeleteRelationalDatabaseError::Service(ref cause) => cause,
             DeleteRelationalDatabaseError::Unauthenticated(ref cause) => cause,
-            DeleteRelationalDatabaseError::Validation(ref cause) => cause,
-            DeleteRelationalDatabaseError::Credentials(ref err) => err.description(),
-            DeleteRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRelationalDatabaseError::ParseError(ref cause) => cause,
-            DeleteRelationalDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7840,20 +6973,12 @@ pub enum DeleteRelationalDatabaseSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRelationalDatabaseSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRelationalDatabaseSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteRelationalDatabaseSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7866,70 +6991,55 @@ impl DeleteRelationalDatabaseSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteRelationalDatabaseSnapshotError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteRelationalDatabaseSnapshotError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return DeleteRelationalDatabaseSnapshotError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteRelationalDatabaseSnapshotError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return DeleteRelationalDatabaseSnapshotError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRelationalDatabaseSnapshotError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return DeleteRelationalDatabaseSnapshotError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteRelationalDatabaseSnapshotError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return DeleteRelationalDatabaseSnapshotError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRelationalDatabaseSnapshotError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return DeleteRelationalDatabaseSnapshotError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DeleteRelationalDatabaseSnapshotError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DeleteRelationalDatabaseSnapshotError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRelationalDatabaseSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRelationalDatabaseSnapshotError {
-    fn from(err: serde_json::error::Error) -> DeleteRelationalDatabaseSnapshotError {
-        DeleteRelationalDatabaseSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRelationalDatabaseSnapshotError {
-    fn from(err: CredentialsError) -> DeleteRelationalDatabaseSnapshotError {
-        DeleteRelationalDatabaseSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRelationalDatabaseSnapshotError {
-    fn from(err: HttpDispatchError) -> DeleteRelationalDatabaseSnapshotError {
-        DeleteRelationalDatabaseSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRelationalDatabaseSnapshotError {
-    fn from(err: io::Error) -> DeleteRelationalDatabaseSnapshotError {
-        DeleteRelationalDatabaseSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
@@ -7947,13 +7057,6 @@ impl Error for DeleteRelationalDatabaseSnapshotError {
             DeleteRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
             DeleteRelationalDatabaseSnapshotError::Service(ref cause) => cause,
             DeleteRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::Validation(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::Credentials(ref err) => err.description(),
-            DeleteRelationalDatabaseSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRelationalDatabaseSnapshotError::ParseError(ref cause) => cause,
-            DeleteRelationalDatabaseSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7974,20 +7077,10 @@ pub enum DetachDiskError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachDiskError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachDiskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachDiskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8000,52 +7093,45 @@ impl DetachDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetachDiskError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetachDiskError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return DetachDiskError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(DetachDiskError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DetachDiskError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DetachDiskError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DetachDiskError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DetachDiskError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DetachDiskError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DetachDiskError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return DetachDiskError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(DetachDiskError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return DetachDiskError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DetachDiskError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetachDiskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachDiskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachDiskError {
-    fn from(err: serde_json::error::Error) -> DetachDiskError {
-        DetachDiskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachDiskError {
-    fn from(err: CredentialsError) -> DetachDiskError {
-        DetachDiskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachDiskError {
-    fn from(err: HttpDispatchError) -> DetachDiskError {
-        DetachDiskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachDiskError {
-    fn from(err: io::Error) -> DetachDiskError {
-        DetachDiskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachDiskError {
@@ -8063,11 +7149,6 @@ impl Error for DetachDiskError {
             DetachDiskError::OperationFailure(ref cause) => cause,
             DetachDiskError::Service(ref cause) => cause,
             DetachDiskError::Unauthenticated(ref cause) => cause,
-            DetachDiskError::Validation(ref cause) => cause,
-            DetachDiskError::Credentials(ref err) => err.description(),
-            DetachDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachDiskError::ParseError(ref cause) => cause,
-            DetachDiskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8088,20 +7169,12 @@ pub enum DetachInstancesFromLoadBalancerError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachInstancesFromLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachInstancesFromLoadBalancerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DetachInstancesFromLoadBalancerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8114,70 +7187,51 @@ impl DetachInstancesFromLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetachInstancesFromLoadBalancerError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(DetachInstancesFromLoadBalancerError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return DetachInstancesFromLoadBalancerError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DetachInstancesFromLoadBalancerError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return DetachInstancesFromLoadBalancerError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(DetachInstancesFromLoadBalancerError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DetachInstancesFromLoadBalancerError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DetachInstancesFromLoadBalancerError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return DetachInstancesFromLoadBalancerError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DetachInstancesFromLoadBalancerError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return DetachInstancesFromLoadBalancerError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(DetachInstancesFromLoadBalancerError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return DetachInstancesFromLoadBalancerError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DetachInstancesFromLoadBalancerError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DetachInstancesFromLoadBalancerError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachInstancesFromLoadBalancerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachInstancesFromLoadBalancerError {
-    fn from(err: serde_json::error::Error) -> DetachInstancesFromLoadBalancerError {
-        DetachInstancesFromLoadBalancerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachInstancesFromLoadBalancerError {
-    fn from(err: CredentialsError) -> DetachInstancesFromLoadBalancerError {
-        DetachInstancesFromLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachInstancesFromLoadBalancerError {
-    fn from(err: HttpDispatchError) -> DetachInstancesFromLoadBalancerError {
-        DetachInstancesFromLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachInstancesFromLoadBalancerError {
-    fn from(err: io::Error) -> DetachInstancesFromLoadBalancerError {
-        DetachInstancesFromLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachInstancesFromLoadBalancerError {
@@ -8195,13 +7249,6 @@ impl Error for DetachInstancesFromLoadBalancerError {
             DetachInstancesFromLoadBalancerError::OperationFailure(ref cause) => cause,
             DetachInstancesFromLoadBalancerError::Service(ref cause) => cause,
             DetachInstancesFromLoadBalancerError::Unauthenticated(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::Validation(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::Credentials(ref err) => err.description(),
-            DetachInstancesFromLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DetachInstancesFromLoadBalancerError::ParseError(ref cause) => cause,
-            DetachInstancesFromLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8222,20 +7269,10 @@ pub enum DetachStaticIpError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachStaticIpError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachStaticIpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachStaticIpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8248,54 +7285,45 @@ impl DetachStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetachStaticIpError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetachStaticIpError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return DetachStaticIpError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(DetachStaticIpError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DetachStaticIpError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DetachStaticIpError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DetachStaticIpError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DetachStaticIpError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return DetachStaticIpError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(DetachStaticIpError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return DetachStaticIpError::Service(String::from(error_message));
+                    return RusotoError::Service(DetachStaticIpError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DetachStaticIpError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DetachStaticIpError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetachStaticIpError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachStaticIpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachStaticIpError {
-    fn from(err: serde_json::error::Error) -> DetachStaticIpError {
-        DetachStaticIpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachStaticIpError {
-    fn from(err: CredentialsError) -> DetachStaticIpError {
-        DetachStaticIpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachStaticIpError {
-    fn from(err: HttpDispatchError) -> DetachStaticIpError {
-        DetachStaticIpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachStaticIpError {
-    fn from(err: io::Error) -> DetachStaticIpError {
-        DetachStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachStaticIpError {
@@ -8313,11 +7341,6 @@ impl Error for DetachStaticIpError {
             DetachStaticIpError::OperationFailure(ref cause) => cause,
             DetachStaticIpError::Service(ref cause) => cause,
             DetachStaticIpError::Unauthenticated(ref cause) => cause,
-            DetachStaticIpError::Validation(ref cause) => cause,
-            DetachStaticIpError::Credentials(ref err) => err.description(),
-            DetachStaticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachStaticIpError::ParseError(ref cause) => cause,
-            DetachStaticIpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8338,20 +7361,10 @@ pub enum DownloadDefaultKeyPairError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DownloadDefaultKeyPairError {
-    pub fn from_response(res: BufferedHttpResponse) -> DownloadDefaultKeyPairError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DownloadDefaultKeyPairError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8364,58 +7377,47 @@ impl DownloadDefaultKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DownloadDefaultKeyPairError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return DownloadDefaultKeyPairError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(DownloadDefaultKeyPairError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        DownloadDefaultKeyPairError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return DownloadDefaultKeyPairError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DownloadDefaultKeyPairError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DownloadDefaultKeyPairError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DownloadDefaultKeyPairError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return DownloadDefaultKeyPairError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(DownloadDefaultKeyPairError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DownloadDefaultKeyPairError::Service(String::from(error_message));
+                    return RusotoError::Service(DownloadDefaultKeyPairError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return DownloadDefaultKeyPairError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(DownloadDefaultKeyPairError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DownloadDefaultKeyPairError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DownloadDefaultKeyPairError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DownloadDefaultKeyPairError {
-    fn from(err: serde_json::error::Error) -> DownloadDefaultKeyPairError {
-        DownloadDefaultKeyPairError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DownloadDefaultKeyPairError {
-    fn from(err: CredentialsError) -> DownloadDefaultKeyPairError {
-        DownloadDefaultKeyPairError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DownloadDefaultKeyPairError {
-    fn from(err: HttpDispatchError) -> DownloadDefaultKeyPairError {
-        DownloadDefaultKeyPairError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DownloadDefaultKeyPairError {
-    fn from(err: io::Error) -> DownloadDefaultKeyPairError {
-        DownloadDefaultKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DownloadDefaultKeyPairError {
@@ -8433,13 +7435,6 @@ impl Error for DownloadDefaultKeyPairError {
             DownloadDefaultKeyPairError::OperationFailure(ref cause) => cause,
             DownloadDefaultKeyPairError::Service(ref cause) => cause,
             DownloadDefaultKeyPairError::Unauthenticated(ref cause) => cause,
-            DownloadDefaultKeyPairError::Validation(ref cause) => cause,
-            DownloadDefaultKeyPairError::Credentials(ref err) => err.description(),
-            DownloadDefaultKeyPairError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DownloadDefaultKeyPairError::ParseError(ref cause) => cause,
-            DownloadDefaultKeyPairError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8460,20 +7455,10 @@ pub enum ExportSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ExportSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> ExportSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8486,54 +7471,45 @@ impl ExportSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ExportSnapshotError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ExportSnapshotError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return ExportSnapshotError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(ExportSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ExportSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ExportSnapshotError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ExportSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ExportSnapshotError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return ExportSnapshotError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(ExportSnapshotError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return ExportSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(ExportSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return ExportSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(ExportSnapshotError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ExportSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ExportSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ExportSnapshotError {
-    fn from(err: serde_json::error::Error) -> ExportSnapshotError {
-        ExportSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ExportSnapshotError {
-    fn from(err: CredentialsError) -> ExportSnapshotError {
-        ExportSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ExportSnapshotError {
-    fn from(err: HttpDispatchError) -> ExportSnapshotError {
-        ExportSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ExportSnapshotError {
-    fn from(err: io::Error) -> ExportSnapshotError {
-        ExportSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ExportSnapshotError {
@@ -8551,11 +7527,6 @@ impl Error for ExportSnapshotError {
             ExportSnapshotError::OperationFailure(ref cause) => cause,
             ExportSnapshotError::Service(ref cause) => cause,
             ExportSnapshotError::Unauthenticated(ref cause) => cause,
-            ExportSnapshotError::Validation(ref cause) => cause,
-            ExportSnapshotError::Credentials(ref err) => err.description(),
-            ExportSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ExportSnapshotError::ParseError(ref cause) => cause,
-            ExportSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8576,20 +7547,10 @@ pub enum GetActiveNamesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetActiveNamesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetActiveNamesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetActiveNamesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8602,54 +7563,45 @@ impl GetActiveNamesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetActiveNamesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetActiveNamesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetActiveNamesError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetActiveNamesError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetActiveNamesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetActiveNamesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetActiveNamesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetActiveNamesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetActiveNamesError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetActiveNamesError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetActiveNamesError::Service(String::from(error_message));
+                    return RusotoError::Service(GetActiveNamesError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetActiveNamesError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetActiveNamesError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetActiveNamesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetActiveNamesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetActiveNamesError {
-    fn from(err: serde_json::error::Error) -> GetActiveNamesError {
-        GetActiveNamesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetActiveNamesError {
-    fn from(err: CredentialsError) -> GetActiveNamesError {
-        GetActiveNamesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetActiveNamesError {
-    fn from(err: HttpDispatchError) -> GetActiveNamesError {
-        GetActiveNamesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetActiveNamesError {
-    fn from(err: io::Error) -> GetActiveNamesError {
-        GetActiveNamesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetActiveNamesError {
@@ -8667,11 +7619,6 @@ impl Error for GetActiveNamesError {
             GetActiveNamesError::OperationFailure(ref cause) => cause,
             GetActiveNamesError::Service(ref cause) => cause,
             GetActiveNamesError::Unauthenticated(ref cause) => cause,
-            GetActiveNamesError::Validation(ref cause) => cause,
-            GetActiveNamesError::Credentials(ref err) => err.description(),
-            GetActiveNamesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetActiveNamesError::ParseError(ref cause) => cause,
-            GetActiveNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8692,20 +7639,10 @@ pub enum GetBlueprintsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBlueprintsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBlueprintsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBlueprintsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8718,54 +7655,45 @@ impl GetBlueprintsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetBlueprintsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetBlueprintsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetBlueprintsError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetBlueprintsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetBlueprintsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetBlueprintsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetBlueprintsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetBlueprintsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetBlueprintsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetBlueprintsError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return GetBlueprintsError::Service(String::from(error_message));
+                    return RusotoError::Service(GetBlueprintsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetBlueprintsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetBlueprintsError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetBlueprintsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBlueprintsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBlueprintsError {
-    fn from(err: serde_json::error::Error) -> GetBlueprintsError {
-        GetBlueprintsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBlueprintsError {
-    fn from(err: CredentialsError) -> GetBlueprintsError {
-        GetBlueprintsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBlueprintsError {
-    fn from(err: HttpDispatchError) -> GetBlueprintsError {
-        GetBlueprintsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBlueprintsError {
-    fn from(err: io::Error) -> GetBlueprintsError {
-        GetBlueprintsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBlueprintsError {
@@ -8783,11 +7711,6 @@ impl Error for GetBlueprintsError {
             GetBlueprintsError::OperationFailure(ref cause) => cause,
             GetBlueprintsError::Service(ref cause) => cause,
             GetBlueprintsError::Unauthenticated(ref cause) => cause,
-            GetBlueprintsError::Validation(ref cause) => cause,
-            GetBlueprintsError::Credentials(ref err) => err.description(),
-            GetBlueprintsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBlueprintsError::ParseError(ref cause) => cause,
-            GetBlueprintsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8808,20 +7731,10 @@ pub enum GetBundlesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBundlesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBundlesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBundlesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8834,52 +7747,45 @@ impl GetBundlesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetBundlesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetBundlesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetBundlesError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetBundlesError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetBundlesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetBundlesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetBundlesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetBundlesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetBundlesError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetBundlesError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetBundlesError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetBundlesError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetBundlesError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetBundlesError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetBundlesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBundlesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBundlesError {
-    fn from(err: serde_json::error::Error) -> GetBundlesError {
-        GetBundlesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBundlesError {
-    fn from(err: CredentialsError) -> GetBundlesError {
-        GetBundlesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBundlesError {
-    fn from(err: HttpDispatchError) -> GetBundlesError {
-        GetBundlesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBundlesError {
-    fn from(err: io::Error) -> GetBundlesError {
-        GetBundlesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBundlesError {
@@ -8897,11 +7803,6 @@ impl Error for GetBundlesError {
             GetBundlesError::OperationFailure(ref cause) => cause,
             GetBundlesError::Service(ref cause) => cause,
             GetBundlesError::Unauthenticated(ref cause) => cause,
-            GetBundlesError::Validation(ref cause) => cause,
-            GetBundlesError::Credentials(ref err) => err.description(),
-            GetBundlesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBundlesError::ParseError(ref cause) => cause,
-            GetBundlesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8922,20 +7823,12 @@ pub enum GetCloudFormationStackRecordsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCloudFormationStackRecordsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCloudFormationStackRecordsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCloudFormationStackRecordsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8948,64 +7841,51 @@ impl GetCloudFormationStackRecordsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetCloudFormationStackRecordsError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCloudFormationStackRecordsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetCloudFormationStackRecordsError::AccountSetupInProgress(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCloudFormationStackRecordsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return GetCloudFormationStackRecordsError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCloudFormationStackRecordsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetCloudFormationStackRecordsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetCloudFormationStackRecordsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetCloudFormationStackRecordsError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCloudFormationStackRecordsError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return GetCloudFormationStackRecordsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetCloudFormationStackRecordsError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCloudFormationStackRecordsError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetCloudFormationStackRecordsError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        GetCloudFormationStackRecordsError::Unauthenticated(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCloudFormationStackRecordsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCloudFormationStackRecordsError {
-    fn from(err: serde_json::error::Error) -> GetCloudFormationStackRecordsError {
-        GetCloudFormationStackRecordsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCloudFormationStackRecordsError {
-    fn from(err: CredentialsError) -> GetCloudFormationStackRecordsError {
-        GetCloudFormationStackRecordsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCloudFormationStackRecordsError {
-    fn from(err: HttpDispatchError) -> GetCloudFormationStackRecordsError {
-        GetCloudFormationStackRecordsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCloudFormationStackRecordsError {
-    fn from(err: io::Error) -> GetCloudFormationStackRecordsError {
-        GetCloudFormationStackRecordsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCloudFormationStackRecordsError {
@@ -9023,13 +7903,6 @@ impl Error for GetCloudFormationStackRecordsError {
             GetCloudFormationStackRecordsError::OperationFailure(ref cause) => cause,
             GetCloudFormationStackRecordsError::Service(ref cause) => cause,
             GetCloudFormationStackRecordsError::Unauthenticated(ref cause) => cause,
-            GetCloudFormationStackRecordsError::Validation(ref cause) => cause,
-            GetCloudFormationStackRecordsError::Credentials(ref err) => err.description(),
-            GetCloudFormationStackRecordsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCloudFormationStackRecordsError::ParseError(ref cause) => cause,
-            GetCloudFormationStackRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9050,20 +7923,10 @@ pub enum GetDiskError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDiskError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDiskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9076,48 +7939,41 @@ impl GetDiskError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDiskError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetDiskError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDiskError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetDiskError::AccountSetupInProgress(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetDiskError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDiskError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetDiskError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDiskError::NotFound(String::from(error_message)));
+                }
                 "OperationFailureException" => {
-                    return GetDiskError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetDiskError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetDiskError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetDiskError::Service(String::from(error_message)));
+                }
                 "UnauthenticatedException" => {
-                    return GetDiskError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetDiskError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetDiskError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDiskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDiskError {
-    fn from(err: serde_json::error::Error) -> GetDiskError {
-        GetDiskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDiskError {
-    fn from(err: CredentialsError) -> GetDiskError {
-        GetDiskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDiskError {
-    fn from(err: HttpDispatchError) -> GetDiskError {
-        GetDiskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDiskError {
-    fn from(err: io::Error) -> GetDiskError {
-        GetDiskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDiskError {
@@ -9135,11 +7991,6 @@ impl Error for GetDiskError {
             GetDiskError::OperationFailure(ref cause) => cause,
             GetDiskError::Service(ref cause) => cause,
             GetDiskError::Unauthenticated(ref cause) => cause,
-            GetDiskError::Validation(ref cause) => cause,
-            GetDiskError::Credentials(ref err) => err.description(),
-            GetDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDiskError::ParseError(ref cause) => cause,
-            GetDiskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9160,20 +8011,10 @@ pub enum GetDiskSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDiskSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDiskSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiskSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9186,54 +8027,45 @@ impl GetDiskSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDiskSnapshotError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDiskSnapshotError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetDiskSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetDiskSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetDiskSnapshotError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetDiskSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetDiskSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDiskSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDiskSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDiskSnapshotError {
-    fn from(err: serde_json::error::Error) -> GetDiskSnapshotError {
-        GetDiskSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDiskSnapshotError {
-    fn from(err: CredentialsError) -> GetDiskSnapshotError {
-        GetDiskSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDiskSnapshotError {
-    fn from(err: HttpDispatchError) -> GetDiskSnapshotError {
-        GetDiskSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDiskSnapshotError {
-    fn from(err: io::Error) -> GetDiskSnapshotError {
-        GetDiskSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDiskSnapshotError {
@@ -9251,11 +8083,6 @@ impl Error for GetDiskSnapshotError {
             GetDiskSnapshotError::OperationFailure(ref cause) => cause,
             GetDiskSnapshotError::Service(ref cause) => cause,
             GetDiskSnapshotError::Unauthenticated(ref cause) => cause,
-            GetDiskSnapshotError::Validation(ref cause) => cause,
-            GetDiskSnapshotError::Credentials(ref err) => err.description(),
-            GetDiskSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDiskSnapshotError::ParseError(ref cause) => cause,
-            GetDiskSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9276,20 +8103,10 @@ pub enum GetDiskSnapshotsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDiskSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDiskSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiskSnapshotsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9302,56 +8119,45 @@ impl GetDiskSnapshotsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDiskSnapshotsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDiskSnapshotsError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDiskSnapshotsError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetDiskSnapshotsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetDiskSnapshotsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetDiskSnapshotsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotsError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetDiskSnapshotsError::Service(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetDiskSnapshotsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetDiskSnapshotsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDiskSnapshotsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDiskSnapshotsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDiskSnapshotsError {
-    fn from(err: serde_json::error::Error) -> GetDiskSnapshotsError {
-        GetDiskSnapshotsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDiskSnapshotsError {
-    fn from(err: CredentialsError) -> GetDiskSnapshotsError {
-        GetDiskSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDiskSnapshotsError {
-    fn from(err: HttpDispatchError) -> GetDiskSnapshotsError {
-        GetDiskSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDiskSnapshotsError {
-    fn from(err: io::Error) -> GetDiskSnapshotsError {
-        GetDiskSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDiskSnapshotsError {
@@ -9369,11 +8175,6 @@ impl Error for GetDiskSnapshotsError {
             GetDiskSnapshotsError::OperationFailure(ref cause) => cause,
             GetDiskSnapshotsError::Service(ref cause) => cause,
             GetDiskSnapshotsError::Unauthenticated(ref cause) => cause,
-            GetDiskSnapshotsError::Validation(ref cause) => cause,
-            GetDiskSnapshotsError::Credentials(ref err) => err.description(),
-            GetDiskSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDiskSnapshotsError::ParseError(ref cause) => cause,
-            GetDiskSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9394,20 +8195,10 @@ pub enum GetDisksError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDisksError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDisksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDisksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9420,50 +8211,43 @@ impl GetDisksError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDisksError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetDisksError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDisksError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetDisksError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetDisksError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDisksError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetDisksError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDisksError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "OperationFailureException" => {
-                    return GetDisksError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetDisksError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetDisksError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetDisksError::Service(String::from(error_message)));
+                }
                 "UnauthenticatedException" => {
-                    return GetDisksError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetDisksError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDisksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDisksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDisksError {
-    fn from(err: serde_json::error::Error) -> GetDisksError {
-        GetDisksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDisksError {
-    fn from(err: CredentialsError) -> GetDisksError {
-        GetDisksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDisksError {
-    fn from(err: HttpDispatchError) -> GetDisksError {
-        GetDisksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDisksError {
-    fn from(err: io::Error) -> GetDisksError {
-        GetDisksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDisksError {
@@ -9481,11 +8265,6 @@ impl Error for GetDisksError {
             GetDisksError::OperationFailure(ref cause) => cause,
             GetDisksError::Service(ref cause) => cause,
             GetDisksError::Unauthenticated(ref cause) => cause,
-            GetDisksError::Validation(ref cause) => cause,
-            GetDisksError::Credentials(ref err) => err.description(),
-            GetDisksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDisksError::ParseError(ref cause) => cause,
-            GetDisksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9506,20 +8285,10 @@ pub enum GetDomainError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9532,50 +8301,45 @@ impl GetDomainError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDomainError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetDomainError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDomainError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetDomainError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDomainError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetDomainError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDomainError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "OperationFailureException" => {
-                    return GetDomainError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetDomainError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetDomainError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetDomainError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetDomainError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetDomainError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDomainError {
-    fn from(err: serde_json::error::Error) -> GetDomainError {
-        GetDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDomainError {
-    fn from(err: CredentialsError) -> GetDomainError {
-        GetDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDomainError {
-    fn from(err: HttpDispatchError) -> GetDomainError {
-        GetDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDomainError {
-    fn from(err: io::Error) -> GetDomainError {
-        GetDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDomainError {
@@ -9593,11 +8357,6 @@ impl Error for GetDomainError {
             GetDomainError::OperationFailure(ref cause) => cause,
             GetDomainError::Service(ref cause) => cause,
             GetDomainError::Unauthenticated(ref cause) => cause,
-            GetDomainError::Validation(ref cause) => cause,
-            GetDomainError::Credentials(ref err) => err.description(),
-            GetDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDomainError::ParseError(ref cause) => cause,
-            GetDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9618,20 +8377,10 @@ pub enum GetDomainsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDomainsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9644,52 +8393,45 @@ impl GetDomainsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetDomainsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetDomainsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetDomainsError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetDomainsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetDomainsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDomainsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetDomainsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetDomainsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetDomainsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetDomainsError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetDomainsError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetDomainsError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetDomainsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetDomainsError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDomainsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDomainsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDomainsError {
-    fn from(err: serde_json::error::Error) -> GetDomainsError {
-        GetDomainsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDomainsError {
-    fn from(err: CredentialsError) -> GetDomainsError {
-        GetDomainsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDomainsError {
-    fn from(err: HttpDispatchError) -> GetDomainsError {
-        GetDomainsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDomainsError {
-    fn from(err: io::Error) -> GetDomainsError {
-        GetDomainsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDomainsError {
@@ -9707,11 +8449,6 @@ impl Error for GetDomainsError {
             GetDomainsError::OperationFailure(ref cause) => cause,
             GetDomainsError::Service(ref cause) => cause,
             GetDomainsError::Unauthenticated(ref cause) => cause,
-            GetDomainsError::Validation(ref cause) => cause,
-            GetDomainsError::Credentials(ref err) => err.description(),
-            GetDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDomainsError::ParseError(ref cause) => cause,
-            GetDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9732,20 +8469,10 @@ pub enum GetExportSnapshotRecordsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetExportSnapshotRecordsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetExportSnapshotRecordsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExportSnapshotRecordsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9758,60 +8485,47 @@ impl GetExportSnapshotRecordsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetExportSnapshotRecordsError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return GetExportSnapshotRecordsError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetExportSnapshotRecordsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        GetExportSnapshotRecordsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return GetExportSnapshotRecordsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetExportSnapshotRecordsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetExportSnapshotRecordsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetExportSnapshotRecordsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetExportSnapshotRecordsError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetExportSnapshotRecordsError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return GetExportSnapshotRecordsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetExportSnapshotRecordsError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetExportSnapshotRecordsError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetExportSnapshotRecordsError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetExportSnapshotRecordsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetExportSnapshotRecordsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetExportSnapshotRecordsError {
-    fn from(err: serde_json::error::Error) -> GetExportSnapshotRecordsError {
-        GetExportSnapshotRecordsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetExportSnapshotRecordsError {
-    fn from(err: CredentialsError) -> GetExportSnapshotRecordsError {
-        GetExportSnapshotRecordsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetExportSnapshotRecordsError {
-    fn from(err: HttpDispatchError) -> GetExportSnapshotRecordsError {
-        GetExportSnapshotRecordsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetExportSnapshotRecordsError {
-    fn from(err: io::Error) -> GetExportSnapshotRecordsError {
-        GetExportSnapshotRecordsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetExportSnapshotRecordsError {
@@ -9829,13 +8543,6 @@ impl Error for GetExportSnapshotRecordsError {
             GetExportSnapshotRecordsError::OperationFailure(ref cause) => cause,
             GetExportSnapshotRecordsError::Service(ref cause) => cause,
             GetExportSnapshotRecordsError::Unauthenticated(ref cause) => cause,
-            GetExportSnapshotRecordsError::Validation(ref cause) => cause,
-            GetExportSnapshotRecordsError::Credentials(ref err) => err.description(),
-            GetExportSnapshotRecordsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetExportSnapshotRecordsError::ParseError(ref cause) => cause,
-            GetExportSnapshotRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9856,20 +8563,10 @@ pub enum GetInstanceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9882,52 +8579,45 @@ impl GetInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstanceError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetInstanceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetInstanceError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetInstanceError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetInstanceError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceError {
-    fn from(err: serde_json::error::Error) -> GetInstanceError {
-        GetInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceError {
-    fn from(err: CredentialsError) -> GetInstanceError {
-        GetInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceError {
-    fn from(err: HttpDispatchError) -> GetInstanceError {
-        GetInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceError {
-    fn from(err: io::Error) -> GetInstanceError {
-        GetInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceError {
@@ -9945,11 +8635,6 @@ impl Error for GetInstanceError {
             GetInstanceError::OperationFailure(ref cause) => cause,
             GetInstanceError::Service(ref cause) => cause,
             GetInstanceError::Unauthenticated(ref cause) => cause,
-            GetInstanceError::Validation(ref cause) => cause,
-            GetInstanceError::Credentials(ref err) => err.description(),
-            GetInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetInstanceError::ParseError(ref cause) => cause,
-            GetInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9970,20 +8655,10 @@ pub enum GetInstanceAccessDetailsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceAccessDetailsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceAccessDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceAccessDetailsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9996,60 +8671,47 @@ impl GetInstanceAccessDetailsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceAccessDetailsError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return GetInstanceAccessDetailsError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstanceAccessDetailsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        GetInstanceAccessDetailsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return GetInstanceAccessDetailsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstanceAccessDetailsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetInstanceAccessDetailsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceAccessDetailsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceAccessDetailsError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstanceAccessDetailsError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return GetInstanceAccessDetailsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetInstanceAccessDetailsError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstanceAccessDetailsError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetInstanceAccessDetailsError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetInstanceAccessDetailsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceAccessDetailsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceAccessDetailsError {
-    fn from(err: serde_json::error::Error) -> GetInstanceAccessDetailsError {
-        GetInstanceAccessDetailsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceAccessDetailsError {
-    fn from(err: CredentialsError) -> GetInstanceAccessDetailsError {
-        GetInstanceAccessDetailsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceAccessDetailsError {
-    fn from(err: HttpDispatchError) -> GetInstanceAccessDetailsError {
-        GetInstanceAccessDetailsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceAccessDetailsError {
-    fn from(err: io::Error) -> GetInstanceAccessDetailsError {
-        GetInstanceAccessDetailsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceAccessDetailsError {
@@ -10067,13 +8729,6 @@ impl Error for GetInstanceAccessDetailsError {
             GetInstanceAccessDetailsError::OperationFailure(ref cause) => cause,
             GetInstanceAccessDetailsError::Service(ref cause) => cause,
             GetInstanceAccessDetailsError::Unauthenticated(ref cause) => cause,
-            GetInstanceAccessDetailsError::Validation(ref cause) => cause,
-            GetInstanceAccessDetailsError::Credentials(ref err) => err.description(),
-            GetInstanceAccessDetailsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstanceAccessDetailsError::ParseError(ref cause) => cause,
-            GetInstanceAccessDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10094,20 +8749,10 @@ pub enum GetInstanceMetricDataError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceMetricDataError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceMetricDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceMetricDataError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10120,56 +8765,45 @@ impl GetInstanceMetricDataError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceMetricDataError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetInstanceMetricDataError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstanceMetricDataError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstanceMetricDataError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceMetricDataError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstanceMetricDataError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetInstanceMetricDataError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceMetricDataError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceMetricDataError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetInstanceMetricDataError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetInstanceMetricDataError::Service(String::from(error_message));
+                    return RusotoError::Service(GetInstanceMetricDataError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceMetricDataError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetInstanceMetricDataError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetInstanceMetricDataError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceMetricDataError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceMetricDataError {
-    fn from(err: serde_json::error::Error) -> GetInstanceMetricDataError {
-        GetInstanceMetricDataError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceMetricDataError {
-    fn from(err: CredentialsError) -> GetInstanceMetricDataError {
-        GetInstanceMetricDataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceMetricDataError {
-    fn from(err: HttpDispatchError) -> GetInstanceMetricDataError {
-        GetInstanceMetricDataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceMetricDataError {
-    fn from(err: io::Error) -> GetInstanceMetricDataError {
-        GetInstanceMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceMetricDataError {
@@ -10187,13 +8821,6 @@ impl Error for GetInstanceMetricDataError {
             GetInstanceMetricDataError::OperationFailure(ref cause) => cause,
             GetInstanceMetricDataError::Service(ref cause) => cause,
             GetInstanceMetricDataError::Unauthenticated(ref cause) => cause,
-            GetInstanceMetricDataError::Validation(ref cause) => cause,
-            GetInstanceMetricDataError::Credentials(ref err) => err.description(),
-            GetInstanceMetricDataError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstanceMetricDataError::ParseError(ref cause) => cause,
-            GetInstanceMetricDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10214,20 +8841,10 @@ pub enum GetInstancePortStatesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstancePortStatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstancePortStatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstancePortStatesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10240,56 +8857,45 @@ impl GetInstancePortStatesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstancePortStatesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetInstancePortStatesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstancePortStatesError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstancePortStatesError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetInstancePortStatesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstancePortStatesError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetInstancePortStatesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstancePortStatesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetInstancePortStatesError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetInstancePortStatesError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetInstancePortStatesError::Service(String::from(error_message));
+                    return RusotoError::Service(GetInstancePortStatesError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstancePortStatesError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetInstancePortStatesError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetInstancePortStatesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstancePortStatesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstancePortStatesError {
-    fn from(err: serde_json::error::Error) -> GetInstancePortStatesError {
-        GetInstancePortStatesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstancePortStatesError {
-    fn from(err: CredentialsError) -> GetInstancePortStatesError {
-        GetInstancePortStatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstancePortStatesError {
-    fn from(err: HttpDispatchError) -> GetInstancePortStatesError {
-        GetInstancePortStatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstancePortStatesError {
-    fn from(err: io::Error) -> GetInstancePortStatesError {
-        GetInstancePortStatesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstancePortStatesError {
@@ -10307,13 +8913,6 @@ impl Error for GetInstancePortStatesError {
             GetInstancePortStatesError::OperationFailure(ref cause) => cause,
             GetInstancePortStatesError::Service(ref cause) => cause,
             GetInstancePortStatesError::Unauthenticated(ref cause) => cause,
-            GetInstancePortStatesError::Validation(ref cause) => cause,
-            GetInstancePortStatesError::Credentials(ref err) => err.description(),
-            GetInstancePortStatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstancePortStatesError::ParseError(ref cause) => cause,
-            GetInstancePortStatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10334,20 +8933,10 @@ pub enum GetInstanceSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10360,56 +8949,45 @@ impl GetInstanceSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceSnapshotError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstanceSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstanceSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceSnapshotError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetInstanceSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceSnapshotError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetInstanceSnapshotError::Service(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceSnapshotError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetInstanceSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceSnapshotError {
-    fn from(err: serde_json::error::Error) -> GetInstanceSnapshotError {
-        GetInstanceSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceSnapshotError {
-    fn from(err: CredentialsError) -> GetInstanceSnapshotError {
-        GetInstanceSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceSnapshotError {
-    fn from(err: HttpDispatchError) -> GetInstanceSnapshotError {
-        GetInstanceSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceSnapshotError {
-    fn from(err: io::Error) -> GetInstanceSnapshotError {
-        GetInstanceSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceSnapshotError {
@@ -10427,13 +9005,6 @@ impl Error for GetInstanceSnapshotError {
             GetInstanceSnapshotError::OperationFailure(ref cause) => cause,
             GetInstanceSnapshotError::Service(ref cause) => cause,
             GetInstanceSnapshotError::Unauthenticated(ref cause) => cause,
-            GetInstanceSnapshotError::Validation(ref cause) => cause,
-            GetInstanceSnapshotError::Credentials(ref err) => err.description(),
-            GetInstanceSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstanceSnapshotError::ParseError(ref cause) => cause,
-            GetInstanceSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10454,20 +9025,10 @@ pub enum GetInstanceSnapshotsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceSnapshotsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10480,56 +9041,45 @@ impl GetInstanceSnapshotsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceSnapshotsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotsError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstanceSnapshotsError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstanceSnapshotsError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceSnapshotsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetInstanceSnapshotsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceSnapshotsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotsError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetInstanceSnapshotsError::Service(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceSnapshotsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetInstanceSnapshotsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetInstanceSnapshotsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceSnapshotsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceSnapshotsError {
-    fn from(err: serde_json::error::Error) -> GetInstanceSnapshotsError {
-        GetInstanceSnapshotsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceSnapshotsError {
-    fn from(err: CredentialsError) -> GetInstanceSnapshotsError {
-        GetInstanceSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceSnapshotsError {
-    fn from(err: HttpDispatchError) -> GetInstanceSnapshotsError {
-        GetInstanceSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceSnapshotsError {
-    fn from(err: io::Error) -> GetInstanceSnapshotsError {
-        GetInstanceSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceSnapshotsError {
@@ -10547,13 +9097,6 @@ impl Error for GetInstanceSnapshotsError {
             GetInstanceSnapshotsError::OperationFailure(ref cause) => cause,
             GetInstanceSnapshotsError::Service(ref cause) => cause,
             GetInstanceSnapshotsError::Unauthenticated(ref cause) => cause,
-            GetInstanceSnapshotsError::Validation(ref cause) => cause,
-            GetInstanceSnapshotsError::Credentials(ref err) => err.description(),
-            GetInstanceSnapshotsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstanceSnapshotsError::ParseError(ref cause) => cause,
-            GetInstanceSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10574,20 +9117,10 @@ pub enum GetInstanceStateError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceStateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceStateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceStateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10600,56 +9133,45 @@ impl GetInstanceStateError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstanceStateError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetInstanceStateError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstanceStateError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstanceStateError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetInstanceStateError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstanceStateError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetInstanceStateError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceStateError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetInstanceStateError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetInstanceStateError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetInstanceStateError::Service(String::from(error_message));
+                    return RusotoError::Service(GetInstanceStateError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstanceStateError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetInstanceStateError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetInstanceStateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceStateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceStateError {
-    fn from(err: serde_json::error::Error) -> GetInstanceStateError {
-        GetInstanceStateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceStateError {
-    fn from(err: CredentialsError) -> GetInstanceStateError {
-        GetInstanceStateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceStateError {
-    fn from(err: HttpDispatchError) -> GetInstanceStateError {
-        GetInstanceStateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceStateError {
-    fn from(err: io::Error) -> GetInstanceStateError {
-        GetInstanceStateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceStateError {
@@ -10667,11 +9189,6 @@ impl Error for GetInstanceStateError {
             GetInstanceStateError::OperationFailure(ref cause) => cause,
             GetInstanceStateError::Service(ref cause) => cause,
             GetInstanceStateError::Unauthenticated(ref cause) => cause,
-            GetInstanceStateError::Validation(ref cause) => cause,
-            GetInstanceStateError::Credentials(ref err) => err.description(),
-            GetInstanceStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetInstanceStateError::ParseError(ref cause) => cause,
-            GetInstanceStateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10692,20 +9209,10 @@ pub enum GetInstancesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10718,54 +9225,45 @@ impl GetInstancesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetInstancesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetInstancesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetInstancesError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetInstancesError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetInstancesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstancesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetInstancesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstancesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetInstancesError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetInstancesError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return GetInstancesError::Service(String::from(error_message));
+                    return RusotoError::Service(GetInstancesError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetInstancesError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetInstancesError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstancesError {
-    fn from(err: serde_json::error::Error) -> GetInstancesError {
-        GetInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstancesError {
-    fn from(err: CredentialsError) -> GetInstancesError {
-        GetInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstancesError {
-    fn from(err: HttpDispatchError) -> GetInstancesError {
-        GetInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstancesError {
-    fn from(err: io::Error) -> GetInstancesError {
-        GetInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstancesError {
@@ -10783,11 +9281,6 @@ impl Error for GetInstancesError {
             GetInstancesError::OperationFailure(ref cause) => cause,
             GetInstancesError::Service(ref cause) => cause,
             GetInstancesError::Unauthenticated(ref cause) => cause,
-            GetInstancesError::Validation(ref cause) => cause,
-            GetInstancesError::Credentials(ref err) => err.description(),
-            GetInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetInstancesError::ParseError(ref cause) => cause,
-            GetInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10808,20 +9301,10 @@ pub enum GetKeyPairError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetKeyPairError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetKeyPairError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyPairError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10834,52 +9317,45 @@ impl GetKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetKeyPairError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetKeyPairError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetKeyPairError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetKeyPairError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetKeyPairError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetKeyPairError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetKeyPairError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetKeyPairError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetKeyPairError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetKeyPairError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetKeyPairError {
-    fn from(err: serde_json::error::Error) -> GetKeyPairError {
-        GetKeyPairError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetKeyPairError {
-    fn from(err: CredentialsError) -> GetKeyPairError {
-        GetKeyPairError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetKeyPairError {
-    fn from(err: HttpDispatchError) -> GetKeyPairError {
-        GetKeyPairError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetKeyPairError {
-    fn from(err: io::Error) -> GetKeyPairError {
-        GetKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetKeyPairError {
@@ -10897,11 +9373,6 @@ impl Error for GetKeyPairError {
             GetKeyPairError::OperationFailure(ref cause) => cause,
             GetKeyPairError::Service(ref cause) => cause,
             GetKeyPairError::Unauthenticated(ref cause) => cause,
-            GetKeyPairError::Validation(ref cause) => cause,
-            GetKeyPairError::Credentials(ref err) => err.description(),
-            GetKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetKeyPairError::ParseError(ref cause) => cause,
-            GetKeyPairError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10922,20 +9393,10 @@ pub enum GetKeyPairsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetKeyPairsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetKeyPairsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyPairsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10948,52 +9409,45 @@ impl GetKeyPairsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetKeyPairsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetKeyPairsError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetKeyPairsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetKeyPairsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetKeyPairsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairsError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetKeyPairsError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetKeyPairsError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetKeyPairsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetKeyPairsError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetKeyPairsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetKeyPairsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetKeyPairsError {
-    fn from(err: serde_json::error::Error) -> GetKeyPairsError {
-        GetKeyPairsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetKeyPairsError {
-    fn from(err: CredentialsError) -> GetKeyPairsError {
-        GetKeyPairsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetKeyPairsError {
-    fn from(err: HttpDispatchError) -> GetKeyPairsError {
-        GetKeyPairsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetKeyPairsError {
-    fn from(err: io::Error) -> GetKeyPairsError {
-        GetKeyPairsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetKeyPairsError {
@@ -11011,11 +9465,6 @@ impl Error for GetKeyPairsError {
             GetKeyPairsError::OperationFailure(ref cause) => cause,
             GetKeyPairsError::Service(ref cause) => cause,
             GetKeyPairsError::Unauthenticated(ref cause) => cause,
-            GetKeyPairsError::Validation(ref cause) => cause,
-            GetKeyPairsError::Credentials(ref err) => err.description(),
-            GetKeyPairsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetKeyPairsError::ParseError(ref cause) => cause,
-            GetKeyPairsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11036,20 +9485,10 @@ pub enum GetLoadBalancerError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLoadBalancerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoadBalancerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11062,54 +9501,45 @@ impl GetLoadBalancerError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLoadBalancerError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetLoadBalancerError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetLoadBalancerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetLoadBalancerError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetLoadBalancerError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetLoadBalancerError::Service(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetLoadBalancerError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLoadBalancerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLoadBalancerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLoadBalancerError {
-    fn from(err: serde_json::error::Error) -> GetLoadBalancerError {
-        GetLoadBalancerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLoadBalancerError {
-    fn from(err: CredentialsError) -> GetLoadBalancerError {
-        GetLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLoadBalancerError {
-    fn from(err: HttpDispatchError) -> GetLoadBalancerError {
-        GetLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLoadBalancerError {
-    fn from(err: io::Error) -> GetLoadBalancerError {
-        GetLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLoadBalancerError {
@@ -11127,11 +9557,6 @@ impl Error for GetLoadBalancerError {
             GetLoadBalancerError::OperationFailure(ref cause) => cause,
             GetLoadBalancerError::Service(ref cause) => cause,
             GetLoadBalancerError::Unauthenticated(ref cause) => cause,
-            GetLoadBalancerError::Validation(ref cause) => cause,
-            GetLoadBalancerError::Credentials(ref err) => err.description(),
-            GetLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetLoadBalancerError::ParseError(ref cause) => cause,
-            GetLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11152,20 +9577,10 @@ pub enum GetLoadBalancerMetricDataError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoadBalancerMetricDataError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLoadBalancerMetricDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoadBalancerMetricDataError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11178,60 +9593,47 @@ impl GetLoadBalancerMetricDataError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLoadBalancerMetricDataError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return GetLoadBalancerMetricDataError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        GetLoadBalancerMetricDataError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return GetLoadBalancerMetricDataError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetLoadBalancerMetricDataError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetLoadBalancerMetricDataError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return GetLoadBalancerMetricDataError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetLoadBalancerMetricDataError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetLoadBalancerMetricDataError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetLoadBalancerMetricDataError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLoadBalancerMetricDataError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLoadBalancerMetricDataError {
-    fn from(err: serde_json::error::Error) -> GetLoadBalancerMetricDataError {
-        GetLoadBalancerMetricDataError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLoadBalancerMetricDataError {
-    fn from(err: CredentialsError) -> GetLoadBalancerMetricDataError {
-        GetLoadBalancerMetricDataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLoadBalancerMetricDataError {
-    fn from(err: HttpDispatchError) -> GetLoadBalancerMetricDataError {
-        GetLoadBalancerMetricDataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLoadBalancerMetricDataError {
-    fn from(err: io::Error) -> GetLoadBalancerMetricDataError {
-        GetLoadBalancerMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLoadBalancerMetricDataError {
@@ -11249,13 +9651,6 @@ impl Error for GetLoadBalancerMetricDataError {
             GetLoadBalancerMetricDataError::OperationFailure(ref cause) => cause,
             GetLoadBalancerMetricDataError::Service(ref cause) => cause,
             GetLoadBalancerMetricDataError::Unauthenticated(ref cause) => cause,
-            GetLoadBalancerMetricDataError::Validation(ref cause) => cause,
-            GetLoadBalancerMetricDataError::Credentials(ref err) => err.description(),
-            GetLoadBalancerMetricDataError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLoadBalancerMetricDataError::ParseError(ref cause) => cause,
-            GetLoadBalancerMetricDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11276,20 +9671,12 @@ pub enum GetLoadBalancerTlsCertificatesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoadBalancerTlsCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLoadBalancerTlsCertificatesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetLoadBalancerTlsCertificatesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11302,68 +9689,51 @@ impl GetLoadBalancerTlsCertificatesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLoadBalancerTlsCertificatesError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoadBalancerTlsCertificatesError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetLoadBalancerTlsCertificatesError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoadBalancerTlsCertificatesError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetLoadBalancerTlsCertificatesError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoadBalancerTlsCertificatesError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return GetLoadBalancerTlsCertificatesError::OperationFailure(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceException" => {
-                    return GetLoadBalancerTlsCertificatesError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetLoadBalancerTlsCertificatesError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetLoadBalancerTlsCertificatesError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetLoadBalancerTlsCertificatesError::OperationFailure(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceException" => {
+                    return RusotoError::Service(GetLoadBalancerTlsCertificatesError::Service(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        GetLoadBalancerTlsCertificatesError::Unauthenticated(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLoadBalancerTlsCertificatesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLoadBalancerTlsCertificatesError {
-    fn from(err: serde_json::error::Error) -> GetLoadBalancerTlsCertificatesError {
-        GetLoadBalancerTlsCertificatesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLoadBalancerTlsCertificatesError {
-    fn from(err: CredentialsError) -> GetLoadBalancerTlsCertificatesError {
-        GetLoadBalancerTlsCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLoadBalancerTlsCertificatesError {
-    fn from(err: HttpDispatchError) -> GetLoadBalancerTlsCertificatesError {
-        GetLoadBalancerTlsCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLoadBalancerTlsCertificatesError {
-    fn from(err: io::Error) -> GetLoadBalancerTlsCertificatesError {
-        GetLoadBalancerTlsCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLoadBalancerTlsCertificatesError {
@@ -11381,13 +9751,6 @@ impl Error for GetLoadBalancerTlsCertificatesError {
             GetLoadBalancerTlsCertificatesError::OperationFailure(ref cause) => cause,
             GetLoadBalancerTlsCertificatesError::Service(ref cause) => cause,
             GetLoadBalancerTlsCertificatesError::Unauthenticated(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::Validation(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::Credentials(ref err) => err.description(),
-            GetLoadBalancerTlsCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLoadBalancerTlsCertificatesError::ParseError(ref cause) => cause,
-            GetLoadBalancerTlsCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11408,20 +9771,10 @@ pub enum GetLoadBalancersError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoadBalancersError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLoadBalancersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoadBalancersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11434,56 +9787,45 @@ impl GetLoadBalancersError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLoadBalancersError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancersError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetLoadBalancersError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoadBalancersError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetLoadBalancersError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancersError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetLoadBalancersError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancersError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetLoadBalancersError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancersError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetLoadBalancersError::Service(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancersError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetLoadBalancersError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetLoadBalancersError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLoadBalancersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLoadBalancersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLoadBalancersError {
-    fn from(err: serde_json::error::Error) -> GetLoadBalancersError {
-        GetLoadBalancersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLoadBalancersError {
-    fn from(err: CredentialsError) -> GetLoadBalancersError {
-        GetLoadBalancersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLoadBalancersError {
-    fn from(err: HttpDispatchError) -> GetLoadBalancersError {
-        GetLoadBalancersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLoadBalancersError {
-    fn from(err: io::Error) -> GetLoadBalancersError {
-        GetLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLoadBalancersError {
@@ -11501,11 +9843,6 @@ impl Error for GetLoadBalancersError {
             GetLoadBalancersError::OperationFailure(ref cause) => cause,
             GetLoadBalancersError::Service(ref cause) => cause,
             GetLoadBalancersError::Unauthenticated(ref cause) => cause,
-            GetLoadBalancersError::Validation(ref cause) => cause,
-            GetLoadBalancersError::Credentials(ref err) => err.description(),
-            GetLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetLoadBalancersError::ParseError(ref cause) => cause,
-            GetLoadBalancersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11526,20 +9863,10 @@ pub enum GetOperationError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOperationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOperationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11552,54 +9879,45 @@ impl GetOperationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetOperationError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetOperationError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetOperationError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetOperationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetOperationError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return GetOperationError::Service(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetOperationError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetOperationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOperationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOperationError {
-    fn from(err: serde_json::error::Error) -> GetOperationError {
-        GetOperationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOperationError {
-    fn from(err: CredentialsError) -> GetOperationError {
-        GetOperationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOperationError {
-    fn from(err: HttpDispatchError) -> GetOperationError {
-        GetOperationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOperationError {
-    fn from(err: io::Error) -> GetOperationError {
-        GetOperationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOperationError {
@@ -11617,11 +9935,6 @@ impl Error for GetOperationError {
             GetOperationError::OperationFailure(ref cause) => cause,
             GetOperationError::Service(ref cause) => cause,
             GetOperationError::Unauthenticated(ref cause) => cause,
-            GetOperationError::Validation(ref cause) => cause,
-            GetOperationError::Credentials(ref err) => err.description(),
-            GetOperationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetOperationError::ParseError(ref cause) => cause,
-            GetOperationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11642,20 +9955,10 @@ pub enum GetOperationsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOperationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOperationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11668,54 +9971,45 @@ impl GetOperationsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetOperationsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetOperationsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetOperationsError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetOperationsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetOperationsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetOperationsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetOperationsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetOperationsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetOperationsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetOperationsError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return GetOperationsError::Service(String::from(error_message));
+                    return RusotoError::Service(GetOperationsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetOperationsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetOperationsError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetOperationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOperationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOperationsError {
-    fn from(err: serde_json::error::Error) -> GetOperationsError {
-        GetOperationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOperationsError {
-    fn from(err: CredentialsError) -> GetOperationsError {
-        GetOperationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOperationsError {
-    fn from(err: HttpDispatchError) -> GetOperationsError {
-        GetOperationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOperationsError {
-    fn from(err: io::Error) -> GetOperationsError {
-        GetOperationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOperationsError {
@@ -11733,11 +10027,6 @@ impl Error for GetOperationsError {
             GetOperationsError::OperationFailure(ref cause) => cause,
             GetOperationsError::Service(ref cause) => cause,
             GetOperationsError::Unauthenticated(ref cause) => cause,
-            GetOperationsError::Validation(ref cause) => cause,
-            GetOperationsError::Credentials(ref err) => err.description(),
-            GetOperationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetOperationsError::ParseError(ref cause) => cause,
-            GetOperationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11758,20 +10047,10 @@ pub enum GetOperationsForResourceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOperationsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOperationsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationsForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11784,60 +10063,47 @@ impl GetOperationsForResourceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetOperationsForResourceError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return GetOperationsForResourceError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetOperationsForResourceError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        GetOperationsForResourceError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return GetOperationsForResourceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetOperationsForResourceError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetOperationsForResourceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetOperationsForResourceError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetOperationsForResourceError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetOperationsForResourceError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return GetOperationsForResourceError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetOperationsForResourceError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetOperationsForResourceError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetOperationsForResourceError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetOperationsForResourceError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOperationsForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOperationsForResourceError {
-    fn from(err: serde_json::error::Error) -> GetOperationsForResourceError {
-        GetOperationsForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOperationsForResourceError {
-    fn from(err: CredentialsError) -> GetOperationsForResourceError {
-        GetOperationsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOperationsForResourceError {
-    fn from(err: HttpDispatchError) -> GetOperationsForResourceError {
-        GetOperationsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOperationsForResourceError {
-    fn from(err: io::Error) -> GetOperationsForResourceError {
-        GetOperationsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOperationsForResourceError {
@@ -11855,13 +10121,6 @@ impl Error for GetOperationsForResourceError {
             GetOperationsForResourceError::OperationFailure(ref cause) => cause,
             GetOperationsForResourceError::Service(ref cause) => cause,
             GetOperationsForResourceError::Unauthenticated(ref cause) => cause,
-            GetOperationsForResourceError::Validation(ref cause) => cause,
-            GetOperationsForResourceError::Credentials(ref err) => err.description(),
-            GetOperationsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetOperationsForResourceError::ParseError(ref cause) => cause,
-            GetOperationsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11882,20 +10141,10 @@ pub enum GetRegionsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRegionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRegionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11908,52 +10157,45 @@ impl GetRegionsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRegionsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetRegionsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRegionsError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetRegionsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetRegionsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetRegionsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetRegionsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetRegionsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetRegionsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetRegionsError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetRegionsError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetRegionsError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetRegionsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetRegionsError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetRegionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRegionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRegionsError {
-    fn from(err: serde_json::error::Error) -> GetRegionsError {
-        GetRegionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRegionsError {
-    fn from(err: CredentialsError) -> GetRegionsError {
-        GetRegionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRegionsError {
-    fn from(err: HttpDispatchError) -> GetRegionsError {
-        GetRegionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRegionsError {
-    fn from(err: io::Error) -> GetRegionsError {
-        GetRegionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRegionsError {
@@ -11971,11 +10213,6 @@ impl Error for GetRegionsError {
             GetRegionsError::OperationFailure(ref cause) => cause,
             GetRegionsError::Service(ref cause) => cause,
             GetRegionsError::Unauthenticated(ref cause) => cause,
-            GetRegionsError::Validation(ref cause) => cause,
-            GetRegionsError::Credentials(ref err) => err.description(),
-            GetRegionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRegionsError::ParseError(ref cause) => cause,
-            GetRegionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11996,20 +10233,10 @@ pub enum GetRelationalDatabaseError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRelationalDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12022,56 +10249,45 @@ impl GetRelationalDatabaseError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseError::Service(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetRelationalDatabaseError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRelationalDatabaseError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseError {
-        GetRelationalDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseError {
-        GetRelationalDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseError {
-        GetRelationalDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseError {
-    fn from(err: io::Error) -> GetRelationalDatabaseError {
-        GetRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseError {
@@ -12089,13 +10305,6 @@ impl Error for GetRelationalDatabaseError {
             GetRelationalDatabaseError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseError::Service(ref cause) => cause,
             GetRelationalDatabaseError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseError::Validation(ref cause) => cause,
-            GetRelationalDatabaseError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12116,20 +10325,12 @@ pub enum GetRelationalDatabaseBlueprintsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseBlueprintsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseBlueprintsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseBlueprintsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12142,70 +10343,51 @@ impl GetRelationalDatabaseBlueprintsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseBlueprintsError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseBlueprintsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseBlueprintsError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseBlueprintsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseBlueprintsError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseBlueprintsError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseBlueprintsError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseBlueprintsError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseBlueprintsError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseBlueprintsError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return GetRelationalDatabaseBlueprintsError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetRelationalDatabaseBlueprintsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseBlueprintsError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseBlueprintsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseBlueprintsError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseBlueprintsError {
-        GetRelationalDatabaseBlueprintsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseBlueprintsError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseBlueprintsError {
-        GetRelationalDatabaseBlueprintsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseBlueprintsError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseBlueprintsError {
-        GetRelationalDatabaseBlueprintsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseBlueprintsError {
-    fn from(err: io::Error) -> GetRelationalDatabaseBlueprintsError {
-        GetRelationalDatabaseBlueprintsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseBlueprintsError {
@@ -12223,13 +10405,6 @@ impl Error for GetRelationalDatabaseBlueprintsError {
             GetRelationalDatabaseBlueprintsError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseBlueprintsError::Service(ref cause) => cause,
             GetRelationalDatabaseBlueprintsError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::Validation(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseBlueprintsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseBlueprintsError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseBlueprintsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12250,20 +10425,12 @@ pub enum GetRelationalDatabaseBundlesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseBundlesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseBundlesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseBundlesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12276,64 +10443,49 @@ impl GetRelationalDatabaseBundlesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseBundlesError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseBundlesError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseBundlesError::AccountSetupInProgress(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseBundlesError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseBundlesError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseBundlesError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseBundlesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseBundlesError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseBundlesError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseBundlesError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseBundlesError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetRelationalDatabaseBundlesError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseBundlesError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetRelationalDatabaseBundlesError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetRelationalDatabaseBundlesError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseBundlesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseBundlesError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseBundlesError {
-        GetRelationalDatabaseBundlesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseBundlesError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseBundlesError {
-        GetRelationalDatabaseBundlesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseBundlesError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseBundlesError {
-        GetRelationalDatabaseBundlesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseBundlesError {
-    fn from(err: io::Error) -> GetRelationalDatabaseBundlesError {
-        GetRelationalDatabaseBundlesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseBundlesError {
@@ -12351,13 +10503,6 @@ impl Error for GetRelationalDatabaseBundlesError {
             GetRelationalDatabaseBundlesError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseBundlesError::Service(ref cause) => cause,
             GetRelationalDatabaseBundlesError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::Validation(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseBundlesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseBundlesError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseBundlesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12378,20 +10523,12 @@ pub enum GetRelationalDatabaseEventsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseEventsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12404,64 +10541,47 @@ impl GetRelationalDatabaseEventsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseEventsError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseEventsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseEventsError::AccountSetupInProgress(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseEventsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseEventsError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseEventsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseEventsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseEventsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseEventsError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseEventsError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseEventsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetRelationalDatabaseEventsError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseEventsError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetRelationalDatabaseEventsError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetRelationalDatabaseEventsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseEventsError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseEventsError {
-        GetRelationalDatabaseEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseEventsError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseEventsError {
-        GetRelationalDatabaseEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseEventsError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseEventsError {
-        GetRelationalDatabaseEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseEventsError {
-    fn from(err: io::Error) -> GetRelationalDatabaseEventsError {
-        GetRelationalDatabaseEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseEventsError {
@@ -12479,13 +10599,6 @@ impl Error for GetRelationalDatabaseEventsError {
             GetRelationalDatabaseEventsError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseEventsError::Service(ref cause) => cause,
             GetRelationalDatabaseEventsError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseEventsError::Validation(ref cause) => cause,
-            GetRelationalDatabaseEventsError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseEventsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseEventsError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12506,20 +10619,12 @@ pub enum GetRelationalDatabaseLogEventsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseLogEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseLogEventsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseLogEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12532,68 +10637,51 @@ impl GetRelationalDatabaseLogEventsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseLogEventsError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseLogEventsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseLogEventsError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseLogEventsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseLogEventsError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseLogEventsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseLogEventsError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseLogEventsError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseLogEventsError::OperationFailure(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceException" => {
-                    return GetRelationalDatabaseLogEventsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetRelationalDatabaseLogEventsError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetRelationalDatabaseLogEventsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseLogEventsError::OperationFailure(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceException" => {
+                    return RusotoError::Service(GetRelationalDatabaseLogEventsError::Service(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        GetRelationalDatabaseLogEventsError::Unauthenticated(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseLogEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseLogEventsError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseLogEventsError {
-        GetRelationalDatabaseLogEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseLogEventsError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseLogEventsError {
-        GetRelationalDatabaseLogEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseLogEventsError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseLogEventsError {
-        GetRelationalDatabaseLogEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseLogEventsError {
-    fn from(err: io::Error) -> GetRelationalDatabaseLogEventsError {
-        GetRelationalDatabaseLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseLogEventsError {
@@ -12611,13 +10699,6 @@ impl Error for GetRelationalDatabaseLogEventsError {
             GetRelationalDatabaseLogEventsError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseLogEventsError::Service(ref cause) => cause,
             GetRelationalDatabaseLogEventsError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::Validation(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseLogEventsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseLogEventsError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseLogEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12638,20 +10719,12 @@ pub enum GetRelationalDatabaseLogStreamsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseLogStreamsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseLogStreamsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseLogStreamsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12664,70 +10737,51 @@ impl GetRelationalDatabaseLogStreamsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseLogStreamsError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseLogStreamsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseLogStreamsError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseLogStreamsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseLogStreamsError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseLogStreamsError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseLogStreamsError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseLogStreamsError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseLogStreamsError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseLogStreamsError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return GetRelationalDatabaseLogStreamsError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetRelationalDatabaseLogStreamsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseLogStreamsError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseLogStreamsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseLogStreamsError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseLogStreamsError {
-        GetRelationalDatabaseLogStreamsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseLogStreamsError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseLogStreamsError {
-        GetRelationalDatabaseLogStreamsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseLogStreamsError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseLogStreamsError {
-        GetRelationalDatabaseLogStreamsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseLogStreamsError {
-    fn from(err: io::Error) -> GetRelationalDatabaseLogStreamsError {
-        GetRelationalDatabaseLogStreamsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseLogStreamsError {
@@ -12745,13 +10799,6 @@ impl Error for GetRelationalDatabaseLogStreamsError {
             GetRelationalDatabaseLogStreamsError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseLogStreamsError::Service(ref cause) => cause,
             GetRelationalDatabaseLogStreamsError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::Validation(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseLogStreamsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseLogStreamsError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseLogStreamsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12772,22 +10819,12 @@ pub enum GetRelationalDatabaseMasterUserPasswordError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseMasterUserPasswordError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> GetRelationalDatabaseMasterUserPasswordError {
+    ) -> RusotoError<GetRelationalDatabaseMasterUserPasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12800,70 +10837,59 @@ impl GetRelationalDatabaseMasterUserPasswordError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMasterUserPasswordError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMasterUserPasswordError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::NotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMasterUserPasswordError::NotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::OperationFailure(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMasterUserPasswordError::OperationFailure(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::Service(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMasterUserPasswordError::Service(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthenticatedException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return GetRelationalDatabaseMasterUserPasswordError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseMasterUserPasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseMasterUserPasswordError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseMasterUserPasswordError {
-        GetRelationalDatabaseMasterUserPasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseMasterUserPasswordError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseMasterUserPasswordError {
-        GetRelationalDatabaseMasterUserPasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseMasterUserPasswordError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseMasterUserPasswordError {
-        GetRelationalDatabaseMasterUserPasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseMasterUserPasswordError {
-    fn from(err: io::Error) -> GetRelationalDatabaseMasterUserPasswordError {
-        GetRelationalDatabaseMasterUserPasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseMasterUserPasswordError {
@@ -12883,13 +10909,6 @@ impl Error for GetRelationalDatabaseMasterUserPasswordError {
             GetRelationalDatabaseMasterUserPasswordError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseMasterUserPasswordError::Service(ref cause) => cause,
             GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::Validation(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseMasterUserPasswordError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseMasterUserPasswordError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseMasterUserPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12910,20 +10929,12 @@ pub enum GetRelationalDatabaseMetricDataError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseMetricDataError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseMetricDataError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseMetricDataError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12936,70 +10947,51 @@ impl GetRelationalDatabaseMetricDataError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseMetricDataError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseMetricDataError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseMetricDataError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMetricDataError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseMetricDataError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseMetricDataError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseMetricDataError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseMetricDataError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseMetricDataError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMetricDataError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseMetricDataError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseMetricDataError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return GetRelationalDatabaseMetricDataError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetRelationalDatabaseMetricDataError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseMetricDataError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseMetricDataError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseMetricDataError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseMetricDataError {
-        GetRelationalDatabaseMetricDataError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseMetricDataError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseMetricDataError {
-        GetRelationalDatabaseMetricDataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseMetricDataError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseMetricDataError {
-        GetRelationalDatabaseMetricDataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseMetricDataError {
-    fn from(err: io::Error) -> GetRelationalDatabaseMetricDataError {
-        GetRelationalDatabaseMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseMetricDataError {
@@ -13017,13 +11009,6 @@ impl Error for GetRelationalDatabaseMetricDataError {
             GetRelationalDatabaseMetricDataError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseMetricDataError::Service(ref cause) => cause,
             GetRelationalDatabaseMetricDataError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::Validation(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseMetricDataError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseMetricDataError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseMetricDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13044,20 +11029,12 @@ pub enum GetRelationalDatabaseParametersError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseParametersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseParametersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13070,70 +11047,51 @@ impl GetRelationalDatabaseParametersError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseParametersError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseParametersError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseParametersError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseParametersError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseParametersError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseParametersError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseParametersError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseParametersError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseParametersError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseParametersError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseParametersError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseParametersError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return GetRelationalDatabaseParametersError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetRelationalDatabaseParametersError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseParametersError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseParametersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseParametersError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseParametersError {
-        GetRelationalDatabaseParametersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseParametersError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseParametersError {
-        GetRelationalDatabaseParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseParametersError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseParametersError {
-        GetRelationalDatabaseParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseParametersError {
-    fn from(err: io::Error) -> GetRelationalDatabaseParametersError {
-        GetRelationalDatabaseParametersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseParametersError {
@@ -13151,13 +11109,6 @@ impl Error for GetRelationalDatabaseParametersError {
             GetRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseParametersError::Service(ref cause) => cause,
             GetRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseParametersError::Validation(ref cause) => cause,
-            GetRelationalDatabaseParametersError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseParametersError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13178,20 +11129,12 @@ pub enum GetRelationalDatabaseSnapshotError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13204,64 +11147,51 @@ impl GetRelationalDatabaseSnapshotError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseSnapshotError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseSnapshotError::AccountSetupInProgress(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseSnapshotError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseSnapshotError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseSnapshotError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseSnapshotError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRelationalDatabaseSnapshotError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabaseSnapshotError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetRelationalDatabaseSnapshotError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetRelationalDatabaseSnapshotError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        GetRelationalDatabaseSnapshotError::Unauthenticated(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseSnapshotError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseSnapshotError {
-        GetRelationalDatabaseSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseSnapshotError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseSnapshotError {
-        GetRelationalDatabaseSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseSnapshotError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseSnapshotError {
-        GetRelationalDatabaseSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseSnapshotError {
-    fn from(err: io::Error) -> GetRelationalDatabaseSnapshotError {
-        GetRelationalDatabaseSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotError {
@@ -13279,13 +11209,6 @@ impl Error for GetRelationalDatabaseSnapshotError {
             GetRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseSnapshotError::Service(ref cause) => cause,
             GetRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::Validation(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseSnapshotError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13306,20 +11229,12 @@ pub enum GetRelationalDatabaseSnapshotsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabaseSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseSnapshotsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRelationalDatabaseSnapshotsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13332,68 +11247,51 @@ impl GetRelationalDatabaseSnapshotsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabaseSnapshotsError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInputException" => {
-                    return GetRelationalDatabaseSnapshotsError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabaseSnapshotsError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotsError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabaseSnapshotsError::OperationFailure(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceException" => {
-                    return GetRelationalDatabaseSnapshotsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return GetRelationalDatabaseSnapshotsError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetRelationalDatabaseSnapshotsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetRelationalDatabaseSnapshotsError::OperationFailure(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceException" => {
+                    return RusotoError::Service(GetRelationalDatabaseSnapshotsError::Service(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        GetRelationalDatabaseSnapshotsError::Unauthenticated(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabaseSnapshotsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabaseSnapshotsError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseSnapshotsError {
-        GetRelationalDatabaseSnapshotsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabaseSnapshotsError {
-    fn from(err: CredentialsError) -> GetRelationalDatabaseSnapshotsError {
-        GetRelationalDatabaseSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabaseSnapshotsError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabaseSnapshotsError {
-        GetRelationalDatabaseSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabaseSnapshotsError {
-    fn from(err: io::Error) -> GetRelationalDatabaseSnapshotsError {
-        GetRelationalDatabaseSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabaseSnapshotsError {
@@ -13411,13 +11309,6 @@ impl Error for GetRelationalDatabaseSnapshotsError {
             GetRelationalDatabaseSnapshotsError::OperationFailure(ref cause) => cause,
             GetRelationalDatabaseSnapshotsError::Service(ref cause) => cause,
             GetRelationalDatabaseSnapshotsError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::Validation(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::Credentials(ref err) => err.description(),
-            GetRelationalDatabaseSnapshotsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabaseSnapshotsError::ParseError(ref cause) => cause,
-            GetRelationalDatabaseSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13438,20 +11329,10 @@ pub enum GetRelationalDatabasesError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRelationalDatabasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRelationalDatabasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13464,58 +11345,47 @@ impl GetRelationalDatabasesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetRelationalDatabasesError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return GetRelationalDatabasesError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabasesError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        GetRelationalDatabasesError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return GetRelationalDatabasesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabasesError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetRelationalDatabasesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabasesError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return GetRelationalDatabasesError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRelationalDatabasesError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return GetRelationalDatabasesError::Service(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabasesError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetRelationalDatabasesError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetRelationalDatabasesError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRelationalDatabasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRelationalDatabasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRelationalDatabasesError {
-    fn from(err: serde_json::error::Error) -> GetRelationalDatabasesError {
-        GetRelationalDatabasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRelationalDatabasesError {
-    fn from(err: CredentialsError) -> GetRelationalDatabasesError {
-        GetRelationalDatabasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRelationalDatabasesError {
-    fn from(err: HttpDispatchError) -> GetRelationalDatabasesError {
-        GetRelationalDatabasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRelationalDatabasesError {
-    fn from(err: io::Error) -> GetRelationalDatabasesError {
-        GetRelationalDatabasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRelationalDatabasesError {
@@ -13533,13 +11403,6 @@ impl Error for GetRelationalDatabasesError {
             GetRelationalDatabasesError::OperationFailure(ref cause) => cause,
             GetRelationalDatabasesError::Service(ref cause) => cause,
             GetRelationalDatabasesError::Unauthenticated(ref cause) => cause,
-            GetRelationalDatabasesError::Validation(ref cause) => cause,
-            GetRelationalDatabasesError::Credentials(ref err) => err.description(),
-            GetRelationalDatabasesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRelationalDatabasesError::ParseError(ref cause) => cause,
-            GetRelationalDatabasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13560,20 +11423,10 @@ pub enum GetStaticIpError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetStaticIpError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetStaticIpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStaticIpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13586,52 +11439,45 @@ impl GetStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetStaticIpError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetStaticIpError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetStaticIpError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetStaticIpError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetStaticIpError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetStaticIpError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetStaticIpError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return GetStaticIpError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetStaticIpError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetStaticIpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetStaticIpError {
-    fn from(err: serde_json::error::Error) -> GetStaticIpError {
-        GetStaticIpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetStaticIpError {
-    fn from(err: CredentialsError) -> GetStaticIpError {
-        GetStaticIpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetStaticIpError {
-    fn from(err: HttpDispatchError) -> GetStaticIpError {
-        GetStaticIpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetStaticIpError {
-    fn from(err: io::Error) -> GetStaticIpError {
-        GetStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetStaticIpError {
@@ -13649,11 +11495,6 @@ impl Error for GetStaticIpError {
             GetStaticIpError::OperationFailure(ref cause) => cause,
             GetStaticIpError::Service(ref cause) => cause,
             GetStaticIpError::Unauthenticated(ref cause) => cause,
-            GetStaticIpError::Validation(ref cause) => cause,
-            GetStaticIpError::Credentials(ref err) => err.description(),
-            GetStaticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetStaticIpError::ParseError(ref cause) => cause,
-            GetStaticIpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13674,20 +11515,10 @@ pub enum GetStaticIpsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetStaticIpsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetStaticIpsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStaticIpsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13700,54 +11531,45 @@ impl GetStaticIpsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetStaticIpsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return GetStaticIpsError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetStaticIpsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetStaticIpsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return GetStaticIpsError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpsError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return GetStaticIpsError::Service(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return GetStaticIpsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(GetStaticIpsError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetStaticIpsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetStaticIpsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetStaticIpsError {
-    fn from(err: serde_json::error::Error) -> GetStaticIpsError {
-        GetStaticIpsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetStaticIpsError {
-    fn from(err: CredentialsError) -> GetStaticIpsError {
-        GetStaticIpsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetStaticIpsError {
-    fn from(err: HttpDispatchError) -> GetStaticIpsError {
-        GetStaticIpsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetStaticIpsError {
-    fn from(err: io::Error) -> GetStaticIpsError {
-        GetStaticIpsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetStaticIpsError {
@@ -13765,11 +11587,6 @@ impl Error for GetStaticIpsError {
             GetStaticIpsError::OperationFailure(ref cause) => cause,
             GetStaticIpsError::Service(ref cause) => cause,
             GetStaticIpsError::Unauthenticated(ref cause) => cause,
-            GetStaticIpsError::Validation(ref cause) => cause,
-            GetStaticIpsError::Credentials(ref err) => err.description(),
-            GetStaticIpsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetStaticIpsError::ParseError(ref cause) => cause,
-            GetStaticIpsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13790,20 +11607,10 @@ pub enum ImportKeyPairError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportKeyPairError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportKeyPairError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportKeyPairError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13816,54 +11623,45 @@ impl ImportKeyPairError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ImportKeyPairError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ImportKeyPairError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return ImportKeyPairError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(ImportKeyPairError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ImportKeyPairError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ImportKeyPairError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ImportKeyPairError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ImportKeyPairError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return ImportKeyPairError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(ImportKeyPairError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return ImportKeyPairError::Service(String::from(error_message));
+                    return RusotoError::Service(ImportKeyPairError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return ImportKeyPairError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(ImportKeyPairError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ImportKeyPairError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportKeyPairError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportKeyPairError {
-    fn from(err: serde_json::error::Error) -> ImportKeyPairError {
-        ImportKeyPairError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportKeyPairError {
-    fn from(err: CredentialsError) -> ImportKeyPairError {
-        ImportKeyPairError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportKeyPairError {
-    fn from(err: HttpDispatchError) -> ImportKeyPairError {
-        ImportKeyPairError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportKeyPairError {
-    fn from(err: io::Error) -> ImportKeyPairError {
-        ImportKeyPairError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportKeyPairError {
@@ -13881,11 +11679,6 @@ impl Error for ImportKeyPairError {
             ImportKeyPairError::OperationFailure(ref cause) => cause,
             ImportKeyPairError::Service(ref cause) => cause,
             ImportKeyPairError::Unauthenticated(ref cause) => cause,
-            ImportKeyPairError::Validation(ref cause) => cause,
-            ImportKeyPairError::Credentials(ref err) => err.description(),
-            ImportKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ImportKeyPairError::ParseError(ref cause) => cause,
-            ImportKeyPairError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13906,20 +11699,10 @@ pub enum IsVpcPeeredError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl IsVpcPeeredError {
-    pub fn from_response(res: BufferedHttpResponse) -> IsVpcPeeredError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IsVpcPeeredError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13932,52 +11715,45 @@ impl IsVpcPeeredError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return IsVpcPeeredError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(IsVpcPeeredError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return IsVpcPeeredError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(IsVpcPeeredError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return IsVpcPeeredError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(IsVpcPeeredError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return IsVpcPeeredError::NotFound(String::from(error_message));
+                    return RusotoError::Service(IsVpcPeeredError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return IsVpcPeeredError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(IsVpcPeeredError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return IsVpcPeeredError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(IsVpcPeeredError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return IsVpcPeeredError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(IsVpcPeeredError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return IsVpcPeeredError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return IsVpcPeeredError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for IsVpcPeeredError {
-    fn from(err: serde_json::error::Error) -> IsVpcPeeredError {
-        IsVpcPeeredError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for IsVpcPeeredError {
-    fn from(err: CredentialsError) -> IsVpcPeeredError {
-        IsVpcPeeredError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for IsVpcPeeredError {
-    fn from(err: HttpDispatchError) -> IsVpcPeeredError {
-        IsVpcPeeredError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for IsVpcPeeredError {
-    fn from(err: io::Error) -> IsVpcPeeredError {
-        IsVpcPeeredError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for IsVpcPeeredError {
@@ -13995,11 +11771,6 @@ impl Error for IsVpcPeeredError {
             IsVpcPeeredError::OperationFailure(ref cause) => cause,
             IsVpcPeeredError::Service(ref cause) => cause,
             IsVpcPeeredError::Unauthenticated(ref cause) => cause,
-            IsVpcPeeredError::Validation(ref cause) => cause,
-            IsVpcPeeredError::Credentials(ref err) => err.description(),
-            IsVpcPeeredError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            IsVpcPeeredError::ParseError(ref cause) => cause,
-            IsVpcPeeredError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14020,20 +11791,10 @@ pub enum OpenInstancePublicPortsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl OpenInstancePublicPortsError {
-    pub fn from_response(res: BufferedHttpResponse) -> OpenInstancePublicPortsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<OpenInstancePublicPortsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14046,60 +11807,47 @@ impl OpenInstancePublicPortsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return OpenInstancePublicPortsError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return OpenInstancePublicPortsError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(OpenInstancePublicPortsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        OpenInstancePublicPortsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return OpenInstancePublicPortsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(OpenInstancePublicPortsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return OpenInstancePublicPortsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(OpenInstancePublicPortsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return OpenInstancePublicPortsError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(OpenInstancePublicPortsError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return OpenInstancePublicPortsError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return OpenInstancePublicPortsError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(OpenInstancePublicPortsError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return OpenInstancePublicPortsError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(OpenInstancePublicPortsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return OpenInstancePublicPortsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for OpenInstancePublicPortsError {
-    fn from(err: serde_json::error::Error) -> OpenInstancePublicPortsError {
-        OpenInstancePublicPortsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for OpenInstancePublicPortsError {
-    fn from(err: CredentialsError) -> OpenInstancePublicPortsError {
-        OpenInstancePublicPortsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for OpenInstancePublicPortsError {
-    fn from(err: HttpDispatchError) -> OpenInstancePublicPortsError {
-        OpenInstancePublicPortsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for OpenInstancePublicPortsError {
-    fn from(err: io::Error) -> OpenInstancePublicPortsError {
-        OpenInstancePublicPortsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for OpenInstancePublicPortsError {
@@ -14117,13 +11865,6 @@ impl Error for OpenInstancePublicPortsError {
             OpenInstancePublicPortsError::OperationFailure(ref cause) => cause,
             OpenInstancePublicPortsError::Service(ref cause) => cause,
             OpenInstancePublicPortsError::Unauthenticated(ref cause) => cause,
-            OpenInstancePublicPortsError::Validation(ref cause) => cause,
-            OpenInstancePublicPortsError::Credentials(ref err) => err.description(),
-            OpenInstancePublicPortsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            OpenInstancePublicPortsError::ParseError(ref cause) => cause,
-            OpenInstancePublicPortsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14144,20 +11885,10 @@ pub enum PeerVpcError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PeerVpcError {
-    pub fn from_response(res: BufferedHttpResponse) -> PeerVpcError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PeerVpcError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14170,48 +11901,41 @@ impl PeerVpcError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return PeerVpcError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(PeerVpcError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return PeerVpcError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(PeerVpcError::AccountSetupInProgress(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return PeerVpcError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(PeerVpcError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return PeerVpcError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(PeerVpcError::NotFound(String::from(error_message)));
+                }
                 "OperationFailureException" => {
-                    return PeerVpcError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(PeerVpcError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return PeerVpcError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(PeerVpcError::Service(String::from(error_message)));
+                }
                 "UnauthenticatedException" => {
-                    return PeerVpcError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(PeerVpcError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return PeerVpcError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PeerVpcError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PeerVpcError {
-    fn from(err: serde_json::error::Error) -> PeerVpcError {
-        PeerVpcError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PeerVpcError {
-    fn from(err: CredentialsError) -> PeerVpcError {
-        PeerVpcError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PeerVpcError {
-    fn from(err: HttpDispatchError) -> PeerVpcError {
-        PeerVpcError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PeerVpcError {
-    fn from(err: io::Error) -> PeerVpcError {
-        PeerVpcError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PeerVpcError {
@@ -14229,11 +11953,6 @@ impl Error for PeerVpcError {
             PeerVpcError::OperationFailure(ref cause) => cause,
             PeerVpcError::Service(ref cause) => cause,
             PeerVpcError::Unauthenticated(ref cause) => cause,
-            PeerVpcError::Validation(ref cause) => cause,
-            PeerVpcError::Credentials(ref err) => err.description(),
-            PeerVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PeerVpcError::ParseError(ref cause) => cause,
-            PeerVpcError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14254,20 +11973,10 @@ pub enum PutInstancePublicPortsError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutInstancePublicPortsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutInstancePublicPortsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutInstancePublicPortsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14280,58 +11989,47 @@ impl PutInstancePublicPortsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return PutInstancePublicPortsError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return PutInstancePublicPortsError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(PutInstancePublicPortsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        PutInstancePublicPortsError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return PutInstancePublicPortsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(PutInstancePublicPortsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return PutInstancePublicPortsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(PutInstancePublicPortsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return PutInstancePublicPortsError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(PutInstancePublicPortsError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return PutInstancePublicPortsError::Service(String::from(error_message));
+                    return RusotoError::Service(PutInstancePublicPortsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return PutInstancePublicPortsError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(PutInstancePublicPortsError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutInstancePublicPortsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutInstancePublicPortsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutInstancePublicPortsError {
-    fn from(err: serde_json::error::Error) -> PutInstancePublicPortsError {
-        PutInstancePublicPortsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutInstancePublicPortsError {
-    fn from(err: CredentialsError) -> PutInstancePublicPortsError {
-        PutInstancePublicPortsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutInstancePublicPortsError {
-    fn from(err: HttpDispatchError) -> PutInstancePublicPortsError {
-        PutInstancePublicPortsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutInstancePublicPortsError {
-    fn from(err: io::Error) -> PutInstancePublicPortsError {
-        PutInstancePublicPortsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutInstancePublicPortsError {
@@ -14349,13 +12047,6 @@ impl Error for PutInstancePublicPortsError {
             PutInstancePublicPortsError::OperationFailure(ref cause) => cause,
             PutInstancePublicPortsError::Service(ref cause) => cause,
             PutInstancePublicPortsError::Unauthenticated(ref cause) => cause,
-            PutInstancePublicPortsError::Validation(ref cause) => cause,
-            PutInstancePublicPortsError::Credentials(ref err) => err.description(),
-            PutInstancePublicPortsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutInstancePublicPortsError::ParseError(ref cause) => cause,
-            PutInstancePublicPortsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14376,20 +12067,10 @@ pub enum RebootInstanceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RebootInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RebootInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14402,54 +12083,45 @@ impl RebootInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RebootInstanceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(RebootInstanceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return RebootInstanceError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(RebootInstanceError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return RebootInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(RebootInstanceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return RebootInstanceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(RebootInstanceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return RebootInstanceError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(RebootInstanceError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return RebootInstanceError::Service(String::from(error_message));
+                    return RusotoError::Service(RebootInstanceError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return RebootInstanceError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(RebootInstanceError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RebootInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RebootInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RebootInstanceError {
-    fn from(err: serde_json::error::Error) -> RebootInstanceError {
-        RebootInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RebootInstanceError {
-    fn from(err: CredentialsError) -> RebootInstanceError {
-        RebootInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RebootInstanceError {
-    fn from(err: HttpDispatchError) -> RebootInstanceError {
-        RebootInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RebootInstanceError {
-    fn from(err: io::Error) -> RebootInstanceError {
-        RebootInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RebootInstanceError {
@@ -14467,11 +12139,6 @@ impl Error for RebootInstanceError {
             RebootInstanceError::OperationFailure(ref cause) => cause,
             RebootInstanceError::Service(ref cause) => cause,
             RebootInstanceError::Unauthenticated(ref cause) => cause,
-            RebootInstanceError::Validation(ref cause) => cause,
-            RebootInstanceError::Credentials(ref err) => err.description(),
-            RebootInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootInstanceError::ParseError(ref cause) => cause,
-            RebootInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14492,20 +12159,10 @@ pub enum RebootRelationalDatabaseError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RebootRelationalDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> RebootRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootRelationalDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14518,60 +12175,47 @@ impl RebootRelationalDatabaseError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RebootRelationalDatabaseError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return RebootRelationalDatabaseError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(RebootRelationalDatabaseError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        RebootRelationalDatabaseError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return RebootRelationalDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(RebootRelationalDatabaseError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return RebootRelationalDatabaseError::NotFound(String::from(error_message));
+                    return RusotoError::Service(RebootRelationalDatabaseError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return RebootRelationalDatabaseError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(RebootRelationalDatabaseError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return RebootRelationalDatabaseError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return RebootRelationalDatabaseError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(RebootRelationalDatabaseError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RebootRelationalDatabaseError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(RebootRelationalDatabaseError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RebootRelationalDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RebootRelationalDatabaseError {
-    fn from(err: serde_json::error::Error) -> RebootRelationalDatabaseError {
-        RebootRelationalDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RebootRelationalDatabaseError {
-    fn from(err: CredentialsError) -> RebootRelationalDatabaseError {
-        RebootRelationalDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RebootRelationalDatabaseError {
-    fn from(err: HttpDispatchError) -> RebootRelationalDatabaseError {
-        RebootRelationalDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RebootRelationalDatabaseError {
-    fn from(err: io::Error) -> RebootRelationalDatabaseError {
-        RebootRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RebootRelationalDatabaseError {
@@ -14589,13 +12233,6 @@ impl Error for RebootRelationalDatabaseError {
             RebootRelationalDatabaseError::OperationFailure(ref cause) => cause,
             RebootRelationalDatabaseError::Service(ref cause) => cause,
             RebootRelationalDatabaseError::Unauthenticated(ref cause) => cause,
-            RebootRelationalDatabaseError::Validation(ref cause) => cause,
-            RebootRelationalDatabaseError::Credentials(ref err) => err.description(),
-            RebootRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RebootRelationalDatabaseError::ParseError(ref cause) => cause,
-            RebootRelationalDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14616,20 +12253,10 @@ pub enum ReleaseStaticIpError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReleaseStaticIpError {
-    pub fn from_response(res: BufferedHttpResponse) -> ReleaseStaticIpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReleaseStaticIpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14642,54 +12269,45 @@ impl ReleaseStaticIpError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ReleaseStaticIpError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ReleaseStaticIpError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return ReleaseStaticIpError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(ReleaseStaticIpError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ReleaseStaticIpError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ReleaseStaticIpError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ReleaseStaticIpError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ReleaseStaticIpError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return ReleaseStaticIpError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(ReleaseStaticIpError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return ReleaseStaticIpError::Service(String::from(error_message));
+                    return RusotoError::Service(ReleaseStaticIpError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return ReleaseStaticIpError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(ReleaseStaticIpError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ReleaseStaticIpError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ReleaseStaticIpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ReleaseStaticIpError {
-    fn from(err: serde_json::error::Error) -> ReleaseStaticIpError {
-        ReleaseStaticIpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ReleaseStaticIpError {
-    fn from(err: CredentialsError) -> ReleaseStaticIpError {
-        ReleaseStaticIpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReleaseStaticIpError {
-    fn from(err: HttpDispatchError) -> ReleaseStaticIpError {
-        ReleaseStaticIpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReleaseStaticIpError {
-    fn from(err: io::Error) -> ReleaseStaticIpError {
-        ReleaseStaticIpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ReleaseStaticIpError {
@@ -14707,11 +12325,6 @@ impl Error for ReleaseStaticIpError {
             ReleaseStaticIpError::OperationFailure(ref cause) => cause,
             ReleaseStaticIpError::Service(ref cause) => cause,
             ReleaseStaticIpError::Unauthenticated(ref cause) => cause,
-            ReleaseStaticIpError::Validation(ref cause) => cause,
-            ReleaseStaticIpError::Credentials(ref err) => err.description(),
-            ReleaseStaticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReleaseStaticIpError::ParseError(ref cause) => cause,
-            ReleaseStaticIpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14732,20 +12345,10 @@ pub enum StartInstanceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14758,54 +12361,45 @@ impl StartInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartInstanceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(StartInstanceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return StartInstanceError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(StartInstanceError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return StartInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(StartInstanceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return StartInstanceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(StartInstanceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return StartInstanceError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(StartInstanceError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return StartInstanceError::Service(String::from(error_message));
+                    return RusotoError::Service(StartInstanceError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return StartInstanceError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(StartInstanceError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StartInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartInstanceError {
-    fn from(err: serde_json::error::Error) -> StartInstanceError {
-        StartInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartInstanceError {
-    fn from(err: CredentialsError) -> StartInstanceError {
-        StartInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartInstanceError {
-    fn from(err: HttpDispatchError) -> StartInstanceError {
-        StartInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartInstanceError {
-    fn from(err: io::Error) -> StartInstanceError {
-        StartInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartInstanceError {
@@ -14823,11 +12417,6 @@ impl Error for StartInstanceError {
             StartInstanceError::OperationFailure(ref cause) => cause,
             StartInstanceError::Service(ref cause) => cause,
             StartInstanceError::Unauthenticated(ref cause) => cause,
-            StartInstanceError::Validation(ref cause) => cause,
-            StartInstanceError::Credentials(ref err) => err.description(),
-            StartInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartInstanceError::ParseError(ref cause) => cause,
-            StartInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14848,20 +12437,10 @@ pub enum StartRelationalDatabaseError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartRelationalDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartRelationalDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14874,60 +12453,47 @@ impl StartRelationalDatabaseError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartRelationalDatabaseError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return StartRelationalDatabaseError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(StartRelationalDatabaseError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        StartRelationalDatabaseError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return StartRelationalDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(StartRelationalDatabaseError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return StartRelationalDatabaseError::NotFound(String::from(error_message));
+                    return RusotoError::Service(StartRelationalDatabaseError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return StartRelationalDatabaseError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(StartRelationalDatabaseError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return StartRelationalDatabaseError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return StartRelationalDatabaseError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(StartRelationalDatabaseError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartRelationalDatabaseError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(StartRelationalDatabaseError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartRelationalDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartRelationalDatabaseError {
-    fn from(err: serde_json::error::Error) -> StartRelationalDatabaseError {
-        StartRelationalDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartRelationalDatabaseError {
-    fn from(err: CredentialsError) -> StartRelationalDatabaseError {
-        StartRelationalDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartRelationalDatabaseError {
-    fn from(err: HttpDispatchError) -> StartRelationalDatabaseError {
-        StartRelationalDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartRelationalDatabaseError {
-    fn from(err: io::Error) -> StartRelationalDatabaseError {
-        StartRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartRelationalDatabaseError {
@@ -14945,13 +12511,6 @@ impl Error for StartRelationalDatabaseError {
             StartRelationalDatabaseError::OperationFailure(ref cause) => cause,
             StartRelationalDatabaseError::Service(ref cause) => cause,
             StartRelationalDatabaseError::Unauthenticated(ref cause) => cause,
-            StartRelationalDatabaseError::Validation(ref cause) => cause,
-            StartRelationalDatabaseError::Credentials(ref err) => err.description(),
-            StartRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartRelationalDatabaseError::ParseError(ref cause) => cause,
-            StartRelationalDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14972,20 +12531,10 @@ pub enum StopInstanceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14998,54 +12547,45 @@ impl StopInstanceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StopInstanceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(StopInstanceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return StopInstanceError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(StopInstanceError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return StopInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(StopInstanceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return StopInstanceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(StopInstanceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return StopInstanceError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(StopInstanceError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return StopInstanceError::Service(String::from(error_message));
+                    return RusotoError::Service(StopInstanceError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return StopInstanceError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(StopInstanceError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StopInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopInstanceError {
-    fn from(err: serde_json::error::Error) -> StopInstanceError {
-        StopInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopInstanceError {
-    fn from(err: CredentialsError) -> StopInstanceError {
-        StopInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopInstanceError {
-    fn from(err: HttpDispatchError) -> StopInstanceError {
-        StopInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopInstanceError {
-    fn from(err: io::Error) -> StopInstanceError {
-        StopInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopInstanceError {
@@ -15063,11 +12603,6 @@ impl Error for StopInstanceError {
             StopInstanceError::OperationFailure(ref cause) => cause,
             StopInstanceError::Service(ref cause) => cause,
             StopInstanceError::Unauthenticated(ref cause) => cause,
-            StopInstanceError::Validation(ref cause) => cause,
-            StopInstanceError::Credentials(ref err) => err.description(),
-            StopInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopInstanceError::ParseError(ref cause) => cause,
-            StopInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15088,20 +12623,10 @@ pub enum StopRelationalDatabaseError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopRelationalDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRelationalDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15114,58 +12639,47 @@ impl StopRelationalDatabaseError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StopRelationalDatabaseError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return StopRelationalDatabaseError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(StopRelationalDatabaseError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        StopRelationalDatabaseError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return StopRelationalDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(StopRelationalDatabaseError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return StopRelationalDatabaseError::NotFound(String::from(error_message));
+                    return RusotoError::Service(StopRelationalDatabaseError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return StopRelationalDatabaseError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(StopRelationalDatabaseError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return StopRelationalDatabaseError::Service(String::from(error_message));
+                    return RusotoError::Service(StopRelationalDatabaseError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return StopRelationalDatabaseError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(StopRelationalDatabaseError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopRelationalDatabaseError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopRelationalDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopRelationalDatabaseError {
-    fn from(err: serde_json::error::Error) -> StopRelationalDatabaseError {
-        StopRelationalDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopRelationalDatabaseError {
-    fn from(err: CredentialsError) -> StopRelationalDatabaseError {
-        StopRelationalDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopRelationalDatabaseError {
-    fn from(err: HttpDispatchError) -> StopRelationalDatabaseError {
-        StopRelationalDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopRelationalDatabaseError {
-    fn from(err: io::Error) -> StopRelationalDatabaseError {
-        StopRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopRelationalDatabaseError {
@@ -15183,13 +12697,6 @@ impl Error for StopRelationalDatabaseError {
             StopRelationalDatabaseError::OperationFailure(ref cause) => cause,
             StopRelationalDatabaseError::Service(ref cause) => cause,
             StopRelationalDatabaseError::Unauthenticated(ref cause) => cause,
-            StopRelationalDatabaseError::Validation(ref cause) => cause,
-            StopRelationalDatabaseError::Credentials(ref err) => err.description(),
-            StopRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopRelationalDatabaseError::ParseError(ref cause) => cause,
-            StopRelationalDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15210,20 +12717,10 @@ pub enum TagResourceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15236,52 +12733,45 @@ impl TagResourceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return TagResourceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return TagResourceError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return TagResourceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return TagResourceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return TagResourceError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return TagResourceError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(TagResourceError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return TagResourceError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -15299,11 +12789,6 @@ impl Error for TagResourceError {
             TagResourceError::OperationFailure(ref cause) => cause,
             TagResourceError::Service(ref cause) => cause,
             TagResourceError::Unauthenticated(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15324,20 +12809,10 @@ pub enum UnpeerVpcError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UnpeerVpcError {
-    pub fn from_response(res: BufferedHttpResponse) -> UnpeerVpcError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnpeerVpcError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15350,50 +12825,45 @@ impl UnpeerVpcError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UnpeerVpcError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UnpeerVpcError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return UnpeerVpcError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(UnpeerVpcError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UnpeerVpcError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UnpeerVpcError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return UnpeerVpcError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(UnpeerVpcError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "OperationFailureException" => {
-                    return UnpeerVpcError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(UnpeerVpcError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return UnpeerVpcError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(UnpeerVpcError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "UnauthenticatedException" => {
-                    return UnpeerVpcError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(UnpeerVpcError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UnpeerVpcError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UnpeerVpcError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UnpeerVpcError {
-    fn from(err: serde_json::error::Error) -> UnpeerVpcError {
-        UnpeerVpcError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UnpeerVpcError {
-    fn from(err: CredentialsError) -> UnpeerVpcError {
-        UnpeerVpcError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UnpeerVpcError {
-    fn from(err: HttpDispatchError) -> UnpeerVpcError {
-        UnpeerVpcError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UnpeerVpcError {
-    fn from(err: io::Error) -> UnpeerVpcError {
-        UnpeerVpcError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UnpeerVpcError {
@@ -15411,11 +12881,6 @@ impl Error for UnpeerVpcError {
             UnpeerVpcError::OperationFailure(ref cause) => cause,
             UnpeerVpcError::Service(ref cause) => cause,
             UnpeerVpcError::Unauthenticated(ref cause) => cause,
-            UnpeerVpcError::Validation(ref cause) => cause,
-            UnpeerVpcError::Credentials(ref err) => err.description(),
-            UnpeerVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UnpeerVpcError::ParseError(ref cause) => cause,
-            UnpeerVpcError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15436,20 +12901,10 @@ pub enum UntagResourceError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15462,54 +12917,45 @@ impl UntagResourceError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UntagResourceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return UntagResourceError::AccountSetupInProgress(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::AccountSetupInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UntagResourceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UntagResourceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return UntagResourceError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::OperationFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return UntagResourceError::Service(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return UntagResourceError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::Unauthenticated(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -15527,11 +12973,6 @@ impl Error for UntagResourceError {
             UntagResourceError::OperationFailure(ref cause) => cause,
             UntagResourceError::Service(ref cause) => cause,
             UntagResourceError::Unauthenticated(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15552,20 +12993,10 @@ pub enum UpdateDomainEntryError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDomainEntryError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDomainEntryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainEntryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15578,56 +13009,45 @@ impl UpdateDomainEntryError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateDomainEntryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainEntryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AccountSetupInProgressException" => {
-                    return UpdateDomainEntryError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainEntryError::AccountSetupInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return UpdateDomainEntryError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainEntryError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateDomainEntryError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainEntryError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationFailureException" => {
-                    return UpdateDomainEntryError::OperationFailure(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainEntryError::OperationFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return UpdateDomainEntryError::Service(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainEntryError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthenticatedException" => {
-                    return UpdateDomainEntryError::Unauthenticated(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainEntryError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDomainEntryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDomainEntryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDomainEntryError {
-    fn from(err: serde_json::error::Error) -> UpdateDomainEntryError {
-        UpdateDomainEntryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDomainEntryError {
-    fn from(err: CredentialsError) -> UpdateDomainEntryError {
-        UpdateDomainEntryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDomainEntryError {
-    fn from(err: HttpDispatchError) -> UpdateDomainEntryError {
-        UpdateDomainEntryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDomainEntryError {
-    fn from(err: io::Error) -> UpdateDomainEntryError {
-        UpdateDomainEntryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDomainEntryError {
@@ -15645,13 +13065,6 @@ impl Error for UpdateDomainEntryError {
             UpdateDomainEntryError::OperationFailure(ref cause) => cause,
             UpdateDomainEntryError::Service(ref cause) => cause,
             UpdateDomainEntryError::Unauthenticated(ref cause) => cause,
-            UpdateDomainEntryError::Validation(ref cause) => cause,
-            UpdateDomainEntryError::Credentials(ref err) => err.description(),
-            UpdateDomainEntryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDomainEntryError::ParseError(ref cause) => cause,
-            UpdateDomainEntryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15672,20 +13085,12 @@ pub enum UpdateLoadBalancerAttributeError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLoadBalancerAttributeError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateLoadBalancerAttributeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateLoadBalancerAttributeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15698,64 +13103,47 @@ impl UpdateLoadBalancerAttributeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateLoadBalancerAttributeError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateLoadBalancerAttributeError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "AccountSetupInProgressException" => {
-                    return UpdateLoadBalancerAttributeError::AccountSetupInProgress(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateLoadBalancerAttributeError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInputException" => {
-                    return UpdateLoadBalancerAttributeError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateLoadBalancerAttributeError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return UpdateLoadBalancerAttributeError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateLoadBalancerAttributeError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return UpdateLoadBalancerAttributeError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateLoadBalancerAttributeError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return UpdateLoadBalancerAttributeError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return UpdateLoadBalancerAttributeError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateLoadBalancerAttributeError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateLoadBalancerAttributeError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(UpdateLoadBalancerAttributeError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateLoadBalancerAttributeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateLoadBalancerAttributeError {
-    fn from(err: serde_json::error::Error) -> UpdateLoadBalancerAttributeError {
-        UpdateLoadBalancerAttributeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateLoadBalancerAttributeError {
-    fn from(err: CredentialsError) -> UpdateLoadBalancerAttributeError {
-        UpdateLoadBalancerAttributeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateLoadBalancerAttributeError {
-    fn from(err: HttpDispatchError) -> UpdateLoadBalancerAttributeError {
-        UpdateLoadBalancerAttributeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateLoadBalancerAttributeError {
-    fn from(err: io::Error) -> UpdateLoadBalancerAttributeError {
-        UpdateLoadBalancerAttributeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateLoadBalancerAttributeError {
@@ -15773,13 +13161,6 @@ impl Error for UpdateLoadBalancerAttributeError {
             UpdateLoadBalancerAttributeError::OperationFailure(ref cause) => cause,
             UpdateLoadBalancerAttributeError::Service(ref cause) => cause,
             UpdateLoadBalancerAttributeError::Unauthenticated(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::Validation(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::Credentials(ref err) => err.description(),
-            UpdateLoadBalancerAttributeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateLoadBalancerAttributeError::ParseError(ref cause) => cause,
-            UpdateLoadBalancerAttributeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15800,20 +13181,10 @@ pub enum UpdateRelationalDatabaseError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRelationalDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRelationalDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15826,60 +13197,47 @@ impl UpdateRelationalDatabaseError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateRelationalDatabaseError::AccessDenied(String::from(error_message));
-                }
-                "AccountSetupInProgressException" => {
-                    return UpdateRelationalDatabaseError::AccountSetupInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRelationalDatabaseError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(
+                        UpdateRelationalDatabaseError::AccountSetupInProgress(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidInputException" => {
-                    return UpdateRelationalDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateRelationalDatabaseError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateRelationalDatabaseError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateRelationalDatabaseError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationFailureException" => {
-                    return UpdateRelationalDatabaseError::OperationFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRelationalDatabaseError::OperationFailure(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return UpdateRelationalDatabaseError::Service(String::from(error_message));
-                }
-                "UnauthenticatedException" => {
-                    return UpdateRelationalDatabaseError::Unauthenticated(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRelationalDatabaseError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateRelationalDatabaseError::Validation(error_message.to_string());
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(UpdateRelationalDatabaseError::Unauthenticated(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRelationalDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRelationalDatabaseError {
-    fn from(err: serde_json::error::Error) -> UpdateRelationalDatabaseError {
-        UpdateRelationalDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRelationalDatabaseError {
-    fn from(err: CredentialsError) -> UpdateRelationalDatabaseError {
-        UpdateRelationalDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRelationalDatabaseError {
-    fn from(err: HttpDispatchError) -> UpdateRelationalDatabaseError {
-        UpdateRelationalDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRelationalDatabaseError {
-    fn from(err: io::Error) -> UpdateRelationalDatabaseError {
-        UpdateRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRelationalDatabaseError {
@@ -15897,13 +13255,6 @@ impl Error for UpdateRelationalDatabaseError {
             UpdateRelationalDatabaseError::OperationFailure(ref cause) => cause,
             UpdateRelationalDatabaseError::Service(ref cause) => cause,
             UpdateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
-            UpdateRelationalDatabaseError::Validation(ref cause) => cause,
-            UpdateRelationalDatabaseError::Credentials(ref err) => err.description(),
-            UpdateRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRelationalDatabaseError::ParseError(ref cause) => cause,
-            UpdateRelationalDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15924,20 +13275,12 @@ pub enum UpdateRelationalDatabaseParametersError {
     Service(String),
     /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
     Unauthenticated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRelationalDatabaseParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRelationalDatabaseParametersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateRelationalDatabaseParametersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15950,70 +13293,55 @@ impl UpdateRelationalDatabaseParametersError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateRelationalDatabaseParametersError::AccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRelationalDatabaseParametersError::AccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "AccountSetupInProgressException" => {
-                    return UpdateRelationalDatabaseParametersError::AccountSetupInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateRelationalDatabaseParametersError::AccountSetupInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInputException" => {
-                    return UpdateRelationalDatabaseParametersError::InvalidInput(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRelationalDatabaseParametersError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return UpdateRelationalDatabaseParametersError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRelationalDatabaseParametersError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OperationFailureException" => {
-                    return UpdateRelationalDatabaseParametersError::OperationFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRelationalDatabaseParametersError::OperationFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return UpdateRelationalDatabaseParametersError::Service(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRelationalDatabaseParametersError::Service(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthenticatedException" => {
-                    return UpdateRelationalDatabaseParametersError::Unauthenticated(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return UpdateRelationalDatabaseParametersError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        UpdateRelationalDatabaseParametersError::Unauthenticated(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRelationalDatabaseParametersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRelationalDatabaseParametersError {
-    fn from(err: serde_json::error::Error) -> UpdateRelationalDatabaseParametersError {
-        UpdateRelationalDatabaseParametersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRelationalDatabaseParametersError {
-    fn from(err: CredentialsError) -> UpdateRelationalDatabaseParametersError {
-        UpdateRelationalDatabaseParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRelationalDatabaseParametersError {
-    fn from(err: HttpDispatchError) -> UpdateRelationalDatabaseParametersError {
-        UpdateRelationalDatabaseParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRelationalDatabaseParametersError {
-    fn from(err: io::Error) -> UpdateRelationalDatabaseParametersError {
-        UpdateRelationalDatabaseParametersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRelationalDatabaseParametersError {
@@ -16031,13 +13359,6 @@ impl Error for UpdateRelationalDatabaseParametersError {
             UpdateRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
             UpdateRelationalDatabaseParametersError::Service(ref cause) => cause,
             UpdateRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::Validation(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::Credentials(ref err) => err.description(),
-            UpdateRelationalDatabaseParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRelationalDatabaseParametersError::ParseError(ref cause) => cause,
-            UpdateRelationalDatabaseParametersError::Unknown(_) => "unknown error",
         }
     }
 }

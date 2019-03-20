@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1089,22 +1086,12 @@ pub enum CreateChannelError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateChannelError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1129,51 +1116,40 @@ impl CreateChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return CreateChannelError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(CreateChannelError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateChannelError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateChannelError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateChannelError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateChannelError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateChannelError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateChannelError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateChannelError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateChannelError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnprocessableEntityException" => {
-                    return CreateChannelError::UnprocessableEntity(String::from(error_message));
+                    return RusotoError::Service(CreateChannelError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateChannelError {
-    fn from(err: serde_json::error::Error) -> CreateChannelError {
-        CreateChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateChannelError {
-    fn from(err: CredentialsError) -> CreateChannelError {
-        CreateChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateChannelError {
-    fn from(err: HttpDispatchError) -> CreateChannelError {
-        CreateChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateChannelError {
-    fn from(err: io::Error) -> CreateChannelError {
-        CreateChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateChannelError {
@@ -1190,11 +1166,6 @@ impl Error for CreateChannelError {
             CreateChannelError::ServiceUnavailable(ref cause) => cause,
             CreateChannelError::TooManyRequests(ref cause) => cause,
             CreateChannelError::UnprocessableEntity(ref cause) => cause,
-            CreateChannelError::Validation(ref cause) => cause,
-            CreateChannelError::Credentials(ref err) => err.description(),
-            CreateChannelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateChannelError::ParseError(ref cause) => cause,
-            CreateChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1213,22 +1184,12 @@ pub enum CreateOriginEndpointError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateOriginEndpointError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateOriginEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOriginEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1253,57 +1214,40 @@ impl CreateOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return CreateOriginEndpointError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(CreateOriginEndpointError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateOriginEndpointError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOriginEndpointError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return CreateOriginEndpointError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateOriginEndpointError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateOriginEndpointError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOriginEndpointError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateOriginEndpointError::TooManyRequests(String::from(error_message));
-                }
-                "UnprocessableEntityException" => {
-                    return CreateOriginEndpointError::UnprocessableEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateOriginEndpointError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateOriginEndpointError::Validation(error_message.to_string());
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(CreateOriginEndpointError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateOriginEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateOriginEndpointError {
-    fn from(err: serde_json::error::Error) -> CreateOriginEndpointError {
-        CreateOriginEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateOriginEndpointError {
-    fn from(err: CredentialsError) -> CreateOriginEndpointError {
-        CreateOriginEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateOriginEndpointError {
-    fn from(err: HttpDispatchError) -> CreateOriginEndpointError {
-        CreateOriginEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateOriginEndpointError {
-    fn from(err: io::Error) -> CreateOriginEndpointError {
-        CreateOriginEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateOriginEndpointError {
@@ -1320,13 +1264,6 @@ impl Error for CreateOriginEndpointError {
             CreateOriginEndpointError::ServiceUnavailable(ref cause) => cause,
             CreateOriginEndpointError::TooManyRequests(ref cause) => cause,
             CreateOriginEndpointError::UnprocessableEntity(ref cause) => cause,
-            CreateOriginEndpointError::Validation(ref cause) => cause,
-            CreateOriginEndpointError::Credentials(ref err) => err.description(),
-            CreateOriginEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateOriginEndpointError::ParseError(ref cause) => cause,
-            CreateOriginEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1345,22 +1282,12 @@ pub enum DeleteChannelError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteChannelError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1385,51 +1312,40 @@ impl DeleteChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DeleteChannelError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DeleteChannelError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteChannelError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteChannelError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteChannelError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteChannelError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteChannelError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteChannelError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteChannelError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteChannelError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnprocessableEntityException" => {
-                    return DeleteChannelError::UnprocessableEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteChannelError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteChannelError {
-    fn from(err: serde_json::error::Error) -> DeleteChannelError {
-        DeleteChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteChannelError {
-    fn from(err: CredentialsError) -> DeleteChannelError {
-        DeleteChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteChannelError {
-    fn from(err: HttpDispatchError) -> DeleteChannelError {
-        DeleteChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteChannelError {
-    fn from(err: io::Error) -> DeleteChannelError {
-        DeleteChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteChannelError {
@@ -1446,11 +1362,6 @@ impl Error for DeleteChannelError {
             DeleteChannelError::ServiceUnavailable(ref cause) => cause,
             DeleteChannelError::TooManyRequests(ref cause) => cause,
             DeleteChannelError::UnprocessableEntity(ref cause) => cause,
-            DeleteChannelError::Validation(ref cause) => cause,
-            DeleteChannelError::Credentials(ref err) => err.description(),
-            DeleteChannelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteChannelError::ParseError(ref cause) => cause,
-            DeleteChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1469,22 +1380,12 @@ pub enum DeleteOriginEndpointError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteOriginEndpointError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteOriginEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOriginEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1509,57 +1410,40 @@ impl DeleteOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DeleteOriginEndpointError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DeleteOriginEndpointError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteOriginEndpointError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteOriginEndpointError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DeleteOriginEndpointError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteOriginEndpointError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteOriginEndpointError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteOriginEndpointError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteOriginEndpointError::TooManyRequests(String::from(error_message));
-                }
-                "UnprocessableEntityException" => {
-                    return DeleteOriginEndpointError::UnprocessableEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteOriginEndpointError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteOriginEndpointError::Validation(error_message.to_string());
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(DeleteOriginEndpointError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteOriginEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteOriginEndpointError {
-    fn from(err: serde_json::error::Error) -> DeleteOriginEndpointError {
-        DeleteOriginEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteOriginEndpointError {
-    fn from(err: CredentialsError) -> DeleteOriginEndpointError {
-        DeleteOriginEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteOriginEndpointError {
-    fn from(err: HttpDispatchError) -> DeleteOriginEndpointError {
-        DeleteOriginEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteOriginEndpointError {
-    fn from(err: io::Error) -> DeleteOriginEndpointError {
-        DeleteOriginEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteOriginEndpointError {
@@ -1576,13 +1460,6 @@ impl Error for DeleteOriginEndpointError {
             DeleteOriginEndpointError::ServiceUnavailable(ref cause) => cause,
             DeleteOriginEndpointError::TooManyRequests(ref cause) => cause,
             DeleteOriginEndpointError::UnprocessableEntity(ref cause) => cause,
-            DeleteOriginEndpointError::Validation(ref cause) => cause,
-            DeleteOriginEndpointError::Credentials(ref err) => err.description(),
-            DeleteOriginEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteOriginEndpointError::ParseError(ref cause) => cause,
-            DeleteOriginEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1601,22 +1478,12 @@ pub enum DescribeChannelError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeChannelError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1641,51 +1508,40 @@ impl DescribeChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DescribeChannelError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DescribeChannelError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeChannelError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeChannelError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeChannelError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeChannelError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeChannelError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeChannelError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeChannelError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeChannelError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnprocessableEntityException" => {
-                    return DescribeChannelError::UnprocessableEntity(String::from(error_message));
+                    return RusotoError::Service(DescribeChannelError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeChannelError {
-    fn from(err: serde_json::error::Error) -> DescribeChannelError {
-        DescribeChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeChannelError {
-    fn from(err: CredentialsError) -> DescribeChannelError {
-        DescribeChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeChannelError {
-    fn from(err: HttpDispatchError) -> DescribeChannelError {
-        DescribeChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeChannelError {
-    fn from(err: io::Error) -> DescribeChannelError {
-        DescribeChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeChannelError {
@@ -1702,11 +1558,6 @@ impl Error for DescribeChannelError {
             DescribeChannelError::ServiceUnavailable(ref cause) => cause,
             DescribeChannelError::TooManyRequests(ref cause) => cause,
             DescribeChannelError::UnprocessableEntity(ref cause) => cause,
-            DescribeChannelError::Validation(ref cause) => cause,
-            DescribeChannelError::Credentials(ref err) => err.description(),
-            DescribeChannelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeChannelError::ParseError(ref cause) => cause,
-            DescribeChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1725,22 +1576,12 @@ pub enum DescribeOriginEndpointError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeOriginEndpointError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOriginEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOriginEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1765,57 +1606,40 @@ impl DescribeOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return DescribeOriginEndpointError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DescribeOriginEndpointError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeOriginEndpointError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOriginEndpointError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DescribeOriginEndpointError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeOriginEndpointError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeOriginEndpointError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOriginEndpointError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeOriginEndpointError::TooManyRequests(String::from(error_message));
-                }
-                "UnprocessableEntityException" => {
-                    return DescribeOriginEndpointError::UnprocessableEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOriginEndpointError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeOriginEndpointError::Validation(error_message.to_string());
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(DescribeOriginEndpointError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeOriginEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeOriginEndpointError {
-    fn from(err: serde_json::error::Error) -> DescribeOriginEndpointError {
-        DescribeOriginEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOriginEndpointError {
-    fn from(err: CredentialsError) -> DescribeOriginEndpointError {
-        DescribeOriginEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOriginEndpointError {
-    fn from(err: HttpDispatchError) -> DescribeOriginEndpointError {
-        DescribeOriginEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOriginEndpointError {
-    fn from(err: io::Error) -> DescribeOriginEndpointError {
-        DescribeOriginEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeOriginEndpointError {
@@ -1832,13 +1656,6 @@ impl Error for DescribeOriginEndpointError {
             DescribeOriginEndpointError::ServiceUnavailable(ref cause) => cause,
             DescribeOriginEndpointError::TooManyRequests(ref cause) => cause,
             DescribeOriginEndpointError::UnprocessableEntity(ref cause) => cause,
-            DescribeOriginEndpointError::Validation(ref cause) => cause,
-            DescribeOriginEndpointError::Credentials(ref err) => err.description(),
-            DescribeOriginEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOriginEndpointError::ParseError(ref cause) => cause,
-            DescribeOriginEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1857,22 +1674,12 @@ pub enum ListChannelsError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListChannelsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListChannelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListChannelsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1897,51 +1704,40 @@ impl ListChannelsError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return ListChannelsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListChannelsError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListChannelsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListChannelsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListChannelsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListChannelsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListChannelsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListChannelsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListChannelsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListChannelsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnprocessableEntityException" => {
-                    return ListChannelsError::UnprocessableEntity(String::from(error_message));
+                    return RusotoError::Service(ListChannelsError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListChannelsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListChannelsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListChannelsError {
-    fn from(err: serde_json::error::Error) -> ListChannelsError {
-        ListChannelsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListChannelsError {
-    fn from(err: CredentialsError) -> ListChannelsError {
-        ListChannelsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListChannelsError {
-    fn from(err: HttpDispatchError) -> ListChannelsError {
-        ListChannelsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListChannelsError {
-    fn from(err: io::Error) -> ListChannelsError {
-        ListChannelsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListChannelsError {
@@ -1958,11 +1754,6 @@ impl Error for ListChannelsError {
             ListChannelsError::ServiceUnavailable(ref cause) => cause,
             ListChannelsError::TooManyRequests(ref cause) => cause,
             ListChannelsError::UnprocessableEntity(ref cause) => cause,
-            ListChannelsError::Validation(ref cause) => cause,
-            ListChannelsError::Credentials(ref err) => err.description(),
-            ListChannelsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListChannelsError::ParseError(ref cause) => cause,
-            ListChannelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1981,22 +1772,12 @@ pub enum ListOriginEndpointsError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOriginEndpointsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListOriginEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOriginEndpointsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2021,55 +1802,40 @@ impl ListOriginEndpointsError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return ListOriginEndpointsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListOriginEndpointsError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListOriginEndpointsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOriginEndpointsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return ListOriginEndpointsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListOriginEndpointsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListOriginEndpointsError::ServiceUnavailable(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListOriginEndpointsError::TooManyRequests(String::from(error_message));
-                }
-                "UnprocessableEntityException" => {
-                    return ListOriginEndpointsError::UnprocessableEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOriginEndpointsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListOriginEndpointsError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListOriginEndpointsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(ListOriginEndpointsError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOriginEndpointsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOriginEndpointsError {
-    fn from(err: serde_json::error::Error) -> ListOriginEndpointsError {
-        ListOriginEndpointsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOriginEndpointsError {
-    fn from(err: CredentialsError) -> ListOriginEndpointsError {
-        ListOriginEndpointsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOriginEndpointsError {
-    fn from(err: HttpDispatchError) -> ListOriginEndpointsError {
-        ListOriginEndpointsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOriginEndpointsError {
-    fn from(err: io::Error) -> ListOriginEndpointsError {
-        ListOriginEndpointsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOriginEndpointsError {
@@ -2086,13 +1852,6 @@ impl Error for ListOriginEndpointsError {
             ListOriginEndpointsError::ServiceUnavailable(ref cause) => cause,
             ListOriginEndpointsError::TooManyRequests(ref cause) => cause,
             ListOriginEndpointsError::UnprocessableEntity(ref cause) => cause,
-            ListOriginEndpointsError::Validation(ref cause) => cause,
-            ListOriginEndpointsError::Credentials(ref err) => err.description(),
-            ListOriginEndpointsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOriginEndpointsError::ParseError(ref cause) => cause,
-            ListOriginEndpointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2111,22 +1870,12 @@ pub enum RotateChannelCredentialsError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RotateChannelCredentialsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RotateChannelCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RotateChannelCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2151,59 +1900,40 @@ impl RotateChannelCredentialsError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return RotateChannelCredentialsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(RotateChannelCredentialsError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerErrorException" => {
-                    return RotateChannelCredentialsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(RotateChannelCredentialsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return RotateChannelCredentialsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(RotateChannelCredentialsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return RotateChannelCredentialsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(RotateChannelCredentialsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return RotateChannelCredentialsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(RotateChannelCredentialsError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UnprocessableEntityException" => {
-                    return RotateChannelCredentialsError::UnprocessableEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(RotateChannelCredentialsError::UnprocessableEntity(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RotateChannelCredentialsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RotateChannelCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RotateChannelCredentialsError {
-    fn from(err: serde_json::error::Error) -> RotateChannelCredentialsError {
-        RotateChannelCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RotateChannelCredentialsError {
-    fn from(err: CredentialsError) -> RotateChannelCredentialsError {
-        RotateChannelCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RotateChannelCredentialsError {
-    fn from(err: HttpDispatchError) -> RotateChannelCredentialsError {
-        RotateChannelCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RotateChannelCredentialsError {
-    fn from(err: io::Error) -> RotateChannelCredentialsError {
-        RotateChannelCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RotateChannelCredentialsError {
@@ -2220,13 +1950,6 @@ impl Error for RotateChannelCredentialsError {
             RotateChannelCredentialsError::ServiceUnavailable(ref cause) => cause,
             RotateChannelCredentialsError::TooManyRequests(ref cause) => cause,
             RotateChannelCredentialsError::UnprocessableEntity(ref cause) => cause,
-            RotateChannelCredentialsError::Validation(ref cause) => cause,
-            RotateChannelCredentialsError::Credentials(ref err) => err.description(),
-            RotateChannelCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RotateChannelCredentialsError::ParseError(ref cause) => cause,
-            RotateChannelCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2245,22 +1968,14 @@ pub enum RotateIngestEndpointCredentialsError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RotateIngestEndpointCredentialsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RotateIngestEndpointCredentialsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RotateIngestEndpointCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2285,65 +2000,48 @@ impl RotateIngestEndpointCredentialsError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return RotateIngestEndpointCredentialsError::Forbidden(String::from(
-                        error_message,
+                    return RusotoError::Service(RotateIngestEndpointCredentialsError::Forbidden(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerErrorException" => {
-                    return RotateIngestEndpointCredentialsError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RotateIngestEndpointCredentialsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return RotateIngestEndpointCredentialsError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(RotateIngestEndpointCredentialsError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return RotateIngestEndpointCredentialsError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return RotateIngestEndpointCredentialsError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "UnprocessableEntityException" => {
-                    return RotateIngestEndpointCredentialsError::UnprocessableEntity(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return RotateIngestEndpointCredentialsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        RotateIngestEndpointCredentialsError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        RotateIngestEndpointCredentialsError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(
+                        RotateIngestEndpointCredentialsError::UnprocessableEntity(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RotateIngestEndpointCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RotateIngestEndpointCredentialsError {
-    fn from(err: serde_json::error::Error) -> RotateIngestEndpointCredentialsError {
-        RotateIngestEndpointCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RotateIngestEndpointCredentialsError {
-    fn from(err: CredentialsError) -> RotateIngestEndpointCredentialsError {
-        RotateIngestEndpointCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RotateIngestEndpointCredentialsError {
-    fn from(err: HttpDispatchError) -> RotateIngestEndpointCredentialsError {
-        RotateIngestEndpointCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RotateIngestEndpointCredentialsError {
-    fn from(err: io::Error) -> RotateIngestEndpointCredentialsError {
-        RotateIngestEndpointCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RotateIngestEndpointCredentialsError {
@@ -2360,13 +2058,6 @@ impl Error for RotateIngestEndpointCredentialsError {
             RotateIngestEndpointCredentialsError::ServiceUnavailable(ref cause) => cause,
             RotateIngestEndpointCredentialsError::TooManyRequests(ref cause) => cause,
             RotateIngestEndpointCredentialsError::UnprocessableEntity(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::Validation(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::Credentials(ref err) => err.description(),
-            RotateIngestEndpointCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RotateIngestEndpointCredentialsError::ParseError(ref cause) => cause,
-            RotateIngestEndpointCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2385,22 +2076,12 @@ pub enum UpdateChannelError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateChannelError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2425,51 +2106,40 @@ impl UpdateChannelError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return UpdateChannelError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(UpdateChannelError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateChannelError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateChannelError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateChannelError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateChannelError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateChannelError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UpdateChannelError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateChannelError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateChannelError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnprocessableEntityException" => {
-                    return UpdateChannelError::UnprocessableEntity(String::from(error_message));
+                    return RusotoError::Service(UpdateChannelError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateChannelError {
-    fn from(err: serde_json::error::Error) -> UpdateChannelError {
-        UpdateChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateChannelError {
-    fn from(err: CredentialsError) -> UpdateChannelError {
-        UpdateChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateChannelError {
-    fn from(err: HttpDispatchError) -> UpdateChannelError {
-        UpdateChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateChannelError {
-    fn from(err: io::Error) -> UpdateChannelError {
-        UpdateChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateChannelError {
@@ -2486,11 +2156,6 @@ impl Error for UpdateChannelError {
             UpdateChannelError::ServiceUnavailable(ref cause) => cause,
             UpdateChannelError::TooManyRequests(ref cause) => cause,
             UpdateChannelError::UnprocessableEntity(ref cause) => cause,
-            UpdateChannelError::Validation(ref cause) => cause,
-            UpdateChannelError::Credentials(ref err) => err.description(),
-            UpdateChannelError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateChannelError::ParseError(ref cause) => cause,
-            UpdateChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2509,22 +2174,12 @@ pub enum UpdateOriginEndpointError {
     TooManyRequests(String),
     /// <p>The parameters sent in the request are not valid.</p>
     UnprocessableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateOriginEndpointError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateOriginEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateOriginEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2549,57 +2204,40 @@ impl UpdateOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return UpdateOriginEndpointError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(UpdateOriginEndpointError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateOriginEndpointError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateOriginEndpointError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return UpdateOriginEndpointError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateOriginEndpointError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateOriginEndpointError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateOriginEndpointError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateOriginEndpointError::TooManyRequests(String::from(error_message));
-                }
-                "UnprocessableEntityException" => {
-                    return UpdateOriginEndpointError::UnprocessableEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateOriginEndpointError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateOriginEndpointError::Validation(error_message.to_string());
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(UpdateOriginEndpointError::UnprocessableEntity(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateOriginEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateOriginEndpointError {
-    fn from(err: serde_json::error::Error) -> UpdateOriginEndpointError {
-        UpdateOriginEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateOriginEndpointError {
-    fn from(err: CredentialsError) -> UpdateOriginEndpointError {
-        UpdateOriginEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateOriginEndpointError {
-    fn from(err: HttpDispatchError) -> UpdateOriginEndpointError {
-        UpdateOriginEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateOriginEndpointError {
-    fn from(err: io::Error) -> UpdateOriginEndpointError {
-        UpdateOriginEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateOriginEndpointError {
@@ -2616,13 +2254,6 @@ impl Error for UpdateOriginEndpointError {
             UpdateOriginEndpointError::ServiceUnavailable(ref cause) => cause,
             UpdateOriginEndpointError::TooManyRequests(ref cause) => cause,
             UpdateOriginEndpointError::UnprocessableEntity(ref cause) => cause,
-            UpdateOriginEndpointError::Validation(ref cause) => cause,
-            UpdateOriginEndpointError::Credentials(ref err) => err.description(),
-            UpdateOriginEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateOriginEndpointError::ParseError(ref cause) => cause,
-            UpdateOriginEndpointError::Unknown(_) => "unknown error",
         }
     }
 }

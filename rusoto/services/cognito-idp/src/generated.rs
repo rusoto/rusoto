@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -3876,20 +3873,10 @@ pub enum AddCustomAttributesError {
     TooManyRequests(String),
     /// <p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
     UserImportInProgress(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddCustomAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddCustomAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCustomAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3902,53 +3889,40 @@ impl AddCustomAttributesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AddCustomAttributesError::InternalError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return AddCustomAttributesError::InvalidParameter(String::from(error_message));
-                }
-                "NotAuthorizedException" => {
-                    return AddCustomAttributesError::NotAuthorized(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return AddCustomAttributesError::ResourceNotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return AddCustomAttributesError::TooManyRequests(String::from(error_message));
-                }
-                "UserImportInProgressException" => {
-                    return AddCustomAttributesError::UserImportInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(AddCustomAttributesError::InternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddCustomAttributesError::Validation(error_message.to_string());
+                "InvalidParameterException" => {
+                    return RusotoError::Service(AddCustomAttributesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(AddCustomAttributesError::NotAuthorized(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AddCustomAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AddCustomAttributesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "UserImportInProgressException" => {
+                    return RusotoError::Service(AddCustomAttributesError::UserImportInProgress(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddCustomAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddCustomAttributesError {
-    fn from(err: serde_json::error::Error) -> AddCustomAttributesError {
-        AddCustomAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddCustomAttributesError {
-    fn from(err: CredentialsError) -> AddCustomAttributesError {
-        AddCustomAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddCustomAttributesError {
-    fn from(err: HttpDispatchError) -> AddCustomAttributesError {
-        AddCustomAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddCustomAttributesError {
-    fn from(err: io::Error) -> AddCustomAttributesError {
-        AddCustomAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddCustomAttributesError {
@@ -3965,13 +3939,6 @@ impl Error for AddCustomAttributesError {
             AddCustomAttributesError::ResourceNotFound(ref cause) => cause,
             AddCustomAttributesError::TooManyRequests(ref cause) => cause,
             AddCustomAttributesError::UserImportInProgress(ref cause) => cause,
-            AddCustomAttributesError::Validation(ref cause) => cause,
-            AddCustomAttributesError::Credentials(ref err) => err.description(),
-            AddCustomAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddCustomAttributesError::ParseError(ref cause) => cause,
-            AddCustomAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3990,20 +3957,10 @@ pub enum AdminAddUserToGroupError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminAddUserToGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminAddUserToGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminAddUserToGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4016,51 +3973,40 @@ impl AdminAddUserToGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminAddUserToGroupError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminAddUserToGroupError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminAddUserToGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminAddUserToGroupError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminAddUserToGroupError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminAddUserToGroupError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminAddUserToGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminAddUserToGroupError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminAddUserToGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminAddUserToGroupError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminAddUserToGroupError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminAddUserToGroupError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminAddUserToGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminAddUserToGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminAddUserToGroupError {
-    fn from(err: serde_json::error::Error) -> AdminAddUserToGroupError {
-        AdminAddUserToGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminAddUserToGroupError {
-    fn from(err: CredentialsError) -> AdminAddUserToGroupError {
-        AdminAddUserToGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminAddUserToGroupError {
-    fn from(err: HttpDispatchError) -> AdminAddUserToGroupError {
-        AdminAddUserToGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminAddUserToGroupError {
-    fn from(err: io::Error) -> AdminAddUserToGroupError {
-        AdminAddUserToGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminAddUserToGroupError {
@@ -4077,13 +4023,6 @@ impl Error for AdminAddUserToGroupError {
             AdminAddUserToGroupError::ResourceNotFound(ref cause) => cause,
             AdminAddUserToGroupError::TooManyRequests(ref cause) => cause,
             AdminAddUserToGroupError::UserNotFound(ref cause) => cause,
-            AdminAddUserToGroupError::Validation(ref cause) => cause,
-            AdminAddUserToGroupError::Credentials(ref err) => err.description(),
-            AdminAddUserToGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminAddUserToGroupError::ParseError(ref cause) => cause,
-            AdminAddUserToGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4112,20 +4051,10 @@ pub enum AdminConfirmSignUpError {
     UserLambdaValidation(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminConfirmSignUpError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminConfirmSignUpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminConfirmSignUpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4138,72 +4067,65 @@ impl AdminConfirmSignUpError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminConfirmSignUpError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return AdminConfirmSignUpError::InvalidLambdaResponse(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminConfirmSignUpError::InvalidLambdaResponse(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AdminConfirmSignUpError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AdminConfirmSignUpError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminConfirmSignUpError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminConfirmSignUpError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyFailedAttemptsException" => {
-                    return AdminConfirmSignUpError::TooManyFailedAttempts(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminConfirmSignUpError::TooManyFailedAttempts(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminConfirmSignUpError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminConfirmSignUpError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::UnexpectedLambda(
+                        String::from(error_message),
+                    ));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminConfirmSignUpError::UserLambdaValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminConfirmSignUpError::UserLambdaValidation(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminConfirmSignUpError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminConfirmSignUpError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminConfirmSignUpError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminConfirmSignUpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminConfirmSignUpError {
-    fn from(err: serde_json::error::Error) -> AdminConfirmSignUpError {
-        AdminConfirmSignUpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminConfirmSignUpError {
-    fn from(err: CredentialsError) -> AdminConfirmSignUpError {
-        AdminConfirmSignUpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminConfirmSignUpError {
-    fn from(err: HttpDispatchError) -> AdminConfirmSignUpError {
-        AdminConfirmSignUpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminConfirmSignUpError {
-    fn from(err: io::Error) -> AdminConfirmSignUpError {
-        AdminConfirmSignUpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminConfirmSignUpError {
@@ -4225,13 +4147,6 @@ impl Error for AdminConfirmSignUpError {
             AdminConfirmSignUpError::UnexpectedLambda(ref cause) => cause,
             AdminConfirmSignUpError::UserLambdaValidation(ref cause) => cause,
             AdminConfirmSignUpError::UserNotFound(ref cause) => cause,
-            AdminConfirmSignUpError::Validation(ref cause) => cause,
-            AdminConfirmSignUpError::Credentials(ref err) => err.description(),
-            AdminConfirmSignUpError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminConfirmSignUpError::ParseError(ref cause) => cause,
-            AdminConfirmSignUpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4270,20 +4185,10 @@ pub enum AdminCreateUserError {
     UserNotFound(String),
     /// <p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
     UsernameExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminCreateUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminCreateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminCreateUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4296,85 +4201,92 @@ impl AdminCreateUserError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return AdminCreateUserError::CodeDeliveryFailure(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::CodeDeliveryFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return AdminCreateUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidLambdaResponseException" => {
-                    return AdminCreateUserError::InvalidLambdaResponse(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::InvalidLambdaResponse(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminCreateUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPasswordException" => {
-                    return AdminCreateUserError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::InvalidPassword(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return AdminCreateUserError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminCreateUserError::InvalidSmsRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return AdminCreateUserError::InvalidSmsRoleTrustRelationship(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminCreateUserError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return AdminCreateUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PreconditionNotMetException" => {
-                    return AdminCreateUserError::PreconditionNotMet(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::PreconditionNotMet(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminCreateUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminCreateUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminCreateUserError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::UnexpectedLambda(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedUserStateException" => {
-                    return AdminCreateUserError::UnsupportedUserState(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::UnsupportedUserState(
+                        String::from(error_message),
+                    ));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminCreateUserError::UserLambdaValidation(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::UserLambdaValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminCreateUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "UsernameExistsException" => {
-                    return AdminCreateUserError::UsernameExists(String::from(error_message));
+                    return RusotoError::Service(AdminCreateUserError::UsernameExists(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminCreateUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminCreateUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminCreateUserError {
-    fn from(err: serde_json::error::Error) -> AdminCreateUserError {
-        AdminCreateUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminCreateUserError {
-    fn from(err: CredentialsError) -> AdminCreateUserError {
-        AdminCreateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminCreateUserError {
-    fn from(err: HttpDispatchError) -> AdminCreateUserError {
-        AdminCreateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminCreateUserError {
-    fn from(err: io::Error) -> AdminCreateUserError {
-        AdminCreateUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminCreateUserError {
@@ -4401,11 +4313,6 @@ impl Error for AdminCreateUserError {
             AdminCreateUserError::UserLambdaValidation(ref cause) => cause,
             AdminCreateUserError::UserNotFound(ref cause) => cause,
             AdminCreateUserError::UsernameExists(ref cause) => cause,
-            AdminCreateUserError::Validation(ref cause) => cause,
-            AdminCreateUserError::Credentials(ref err) => err.description(),
-            AdminCreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AdminCreateUserError::ParseError(ref cause) => cause,
-            AdminCreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4424,20 +4331,10 @@ pub enum AdminDeleteUserError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminDeleteUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminDeleteUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDeleteUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4450,51 +4347,40 @@ impl AdminDeleteUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminDeleteUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminDeleteUserError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return AdminDeleteUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminDeleteUserError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminDeleteUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminDeleteUserError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminDeleteUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminDeleteUserError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminDeleteUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminDeleteUserError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminDeleteUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminDeleteUserError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminDeleteUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminDeleteUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminDeleteUserError {
-    fn from(err: serde_json::error::Error) -> AdminDeleteUserError {
-        AdminDeleteUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminDeleteUserError {
-    fn from(err: CredentialsError) -> AdminDeleteUserError {
-        AdminDeleteUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminDeleteUserError {
-    fn from(err: HttpDispatchError) -> AdminDeleteUserError {
-        AdminDeleteUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminDeleteUserError {
-    fn from(err: io::Error) -> AdminDeleteUserError {
-        AdminDeleteUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminDeleteUserError {
@@ -4511,11 +4397,6 @@ impl Error for AdminDeleteUserError {
             AdminDeleteUserError::ResourceNotFound(ref cause) => cause,
             AdminDeleteUserError::TooManyRequests(ref cause) => cause,
             AdminDeleteUserError::UserNotFound(ref cause) => cause,
-            AdminDeleteUserError::Validation(ref cause) => cause,
-            AdminDeleteUserError::Credentials(ref err) => err.description(),
-            AdminDeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AdminDeleteUserError::ParseError(ref cause) => cause,
-            AdminDeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4534,20 +4415,10 @@ pub enum AdminDeleteUserAttributesError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminDeleteUserAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminDeleteUserAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDeleteUserAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4560,61 +4431,40 @@ impl AdminDeleteUserAttributesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminDeleteUserAttributesError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDeleteUserAttributesError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AdminDeleteUserAttributesError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDeleteUserAttributesError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminDeleteUserAttributesError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDeleteUserAttributesError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminDeleteUserAttributesError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDeleteUserAttributesError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminDeleteUserAttributesError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDeleteUserAttributesError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminDeleteUserAttributesError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminDeleteUserAttributesError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminDeleteUserAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminDeleteUserAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminDeleteUserAttributesError {
-    fn from(err: serde_json::error::Error) -> AdminDeleteUserAttributesError {
-        AdminDeleteUserAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminDeleteUserAttributesError {
-    fn from(err: CredentialsError) -> AdminDeleteUserAttributesError {
-        AdminDeleteUserAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminDeleteUserAttributesError {
-    fn from(err: HttpDispatchError) -> AdminDeleteUserAttributesError {
-        AdminDeleteUserAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminDeleteUserAttributesError {
-    fn from(err: io::Error) -> AdminDeleteUserAttributesError {
-        AdminDeleteUserAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminDeleteUserAttributesError {
@@ -4631,13 +4481,6 @@ impl Error for AdminDeleteUserAttributesError {
             AdminDeleteUserAttributesError::ResourceNotFound(ref cause) => cause,
             AdminDeleteUserAttributesError::TooManyRequests(ref cause) => cause,
             AdminDeleteUserAttributesError::UserNotFound(ref cause) => cause,
-            AdminDeleteUserAttributesError::Validation(ref cause) => cause,
-            AdminDeleteUserAttributesError::Credentials(ref err) => err.description(),
-            AdminDeleteUserAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminDeleteUserAttributesError::ParseError(ref cause) => cause,
-            AdminDeleteUserAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4658,20 +4501,12 @@ pub enum AdminDisableProviderForUserError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminDisableProviderForUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminDisableProviderForUserError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AdminDisableProviderForUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4684,68 +4519,45 @@ impl AdminDisableProviderForUserError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return AdminDisableProviderForUserError::AliasExists(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDisableProviderForUserError::AliasExists(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return AdminDisableProviderForUserError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDisableProviderForUserError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AdminDisableProviderForUserError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDisableProviderForUserError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminDisableProviderForUserError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDisableProviderForUserError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminDisableProviderForUserError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDisableProviderForUserError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminDisableProviderForUserError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDisableProviderForUserError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminDisableProviderForUserError::UserNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminDisableProviderForUserError::UserNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AdminDisableProviderForUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminDisableProviderForUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminDisableProviderForUserError {
-    fn from(err: serde_json::error::Error) -> AdminDisableProviderForUserError {
-        AdminDisableProviderForUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminDisableProviderForUserError {
-    fn from(err: CredentialsError) -> AdminDisableProviderForUserError {
-        AdminDisableProviderForUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminDisableProviderForUserError {
-    fn from(err: HttpDispatchError) -> AdminDisableProviderForUserError {
-        AdminDisableProviderForUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminDisableProviderForUserError {
-    fn from(err: io::Error) -> AdminDisableProviderForUserError {
-        AdminDisableProviderForUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminDisableProviderForUserError {
@@ -4763,13 +4575,6 @@ impl Error for AdminDisableProviderForUserError {
             AdminDisableProviderForUserError::ResourceNotFound(ref cause) => cause,
             AdminDisableProviderForUserError::TooManyRequests(ref cause) => cause,
             AdminDisableProviderForUserError::UserNotFound(ref cause) => cause,
-            AdminDisableProviderForUserError::Validation(ref cause) => cause,
-            AdminDisableProviderForUserError::Credentials(ref err) => err.description(),
-            AdminDisableProviderForUserError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminDisableProviderForUserError::ParseError(ref cause) => cause,
-            AdminDisableProviderForUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4788,20 +4593,10 @@ pub enum AdminDisableUserError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminDisableUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminDisableUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminDisableUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4814,51 +4609,40 @@ impl AdminDisableUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminDisableUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminDisableUserError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return AdminDisableUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminDisableUserError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminDisableUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminDisableUserError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminDisableUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminDisableUserError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminDisableUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminDisableUserError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminDisableUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminDisableUserError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminDisableUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminDisableUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminDisableUserError {
-    fn from(err: serde_json::error::Error) -> AdminDisableUserError {
-        AdminDisableUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminDisableUserError {
-    fn from(err: CredentialsError) -> AdminDisableUserError {
-        AdminDisableUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminDisableUserError {
-    fn from(err: HttpDispatchError) -> AdminDisableUserError {
-        AdminDisableUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminDisableUserError {
-    fn from(err: io::Error) -> AdminDisableUserError {
-        AdminDisableUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminDisableUserError {
@@ -4875,11 +4659,6 @@ impl Error for AdminDisableUserError {
             AdminDisableUserError::ResourceNotFound(ref cause) => cause,
             AdminDisableUserError::TooManyRequests(ref cause) => cause,
             AdminDisableUserError::UserNotFound(ref cause) => cause,
-            AdminDisableUserError::Validation(ref cause) => cause,
-            AdminDisableUserError::Credentials(ref err) => err.description(),
-            AdminDisableUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AdminDisableUserError::ParseError(ref cause) => cause,
-            AdminDisableUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4898,20 +4677,10 @@ pub enum AdminEnableUserError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminEnableUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminEnableUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminEnableUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4924,51 +4693,40 @@ impl AdminEnableUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminEnableUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminEnableUserError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return AdminEnableUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminEnableUserError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminEnableUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminEnableUserError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminEnableUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminEnableUserError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminEnableUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminEnableUserError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminEnableUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminEnableUserError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminEnableUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminEnableUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminEnableUserError {
-    fn from(err: serde_json::error::Error) -> AdminEnableUserError {
-        AdminEnableUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminEnableUserError {
-    fn from(err: CredentialsError) -> AdminEnableUserError {
-        AdminEnableUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminEnableUserError {
-    fn from(err: HttpDispatchError) -> AdminEnableUserError {
-        AdminEnableUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminEnableUserError {
-    fn from(err: io::Error) -> AdminEnableUserError {
-        AdminEnableUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminEnableUserError {
@@ -4985,11 +4743,6 @@ impl Error for AdminEnableUserError {
             AdminEnableUserError::ResourceNotFound(ref cause) => cause,
             AdminEnableUserError::TooManyRequests(ref cause) => cause,
             AdminEnableUserError::UserNotFound(ref cause) => cause,
-            AdminEnableUserError::Validation(ref cause) => cause,
-            AdminEnableUserError::Credentials(ref err) => err.description(),
-            AdminEnableUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AdminEnableUserError::ParseError(ref cause) => cause,
-            AdminEnableUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5010,20 +4763,10 @@ pub enum AdminForgetDeviceError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminForgetDeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminForgetDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminForgetDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5036,56 +4779,47 @@ impl AdminForgetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminForgetDeviceError::InternalError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return AdminForgetDeviceError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidUserPoolConfigurationException" => {
-                    return AdminForgetDeviceError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminForgetDeviceError::InternalError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(AdminForgetDeviceError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidUserPoolConfigurationException" => {
+                    return RusotoError::Service(
+                        AdminForgetDeviceError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "NotAuthorizedException" => {
-                    return AdminForgetDeviceError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminForgetDeviceError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminForgetDeviceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminForgetDeviceError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminForgetDeviceError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminForgetDeviceError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminForgetDeviceError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminForgetDeviceError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminForgetDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminForgetDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminForgetDeviceError {
-    fn from(err: serde_json::error::Error) -> AdminForgetDeviceError {
-        AdminForgetDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminForgetDeviceError {
-    fn from(err: CredentialsError) -> AdminForgetDeviceError {
-        AdminForgetDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminForgetDeviceError {
-    fn from(err: HttpDispatchError) -> AdminForgetDeviceError {
-        AdminForgetDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminForgetDeviceError {
-    fn from(err: io::Error) -> AdminForgetDeviceError {
-        AdminForgetDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminForgetDeviceError {
@@ -5103,13 +4837,6 @@ impl Error for AdminForgetDeviceError {
             AdminForgetDeviceError::ResourceNotFound(ref cause) => cause,
             AdminForgetDeviceError::TooManyRequests(ref cause) => cause,
             AdminForgetDeviceError::UserNotFound(ref cause) => cause,
-            AdminForgetDeviceError::Validation(ref cause) => cause,
-            AdminForgetDeviceError::Credentials(ref err) => err.description(),
-            AdminForgetDeviceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminForgetDeviceError::ParseError(ref cause) => cause,
-            AdminForgetDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5128,20 +4855,10 @@ pub enum AdminGetDeviceError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminGetDeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminGetDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminGetDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5154,53 +4871,40 @@ impl AdminGetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminGetDeviceError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminGetDeviceError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return AdminGetDeviceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminGetDeviceError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return AdminGetDeviceError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminGetDeviceError::InvalidUserPoolConfiguration(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminGetDeviceError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminGetDeviceError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminGetDeviceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminGetDeviceError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminGetDeviceError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminGetDeviceError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminGetDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminGetDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminGetDeviceError {
-    fn from(err: serde_json::error::Error) -> AdminGetDeviceError {
-        AdminGetDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminGetDeviceError {
-    fn from(err: CredentialsError) -> AdminGetDeviceError {
-        AdminGetDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminGetDeviceError {
-    fn from(err: HttpDispatchError) -> AdminGetDeviceError {
-        AdminGetDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminGetDeviceError {
-    fn from(err: io::Error) -> AdminGetDeviceError {
-        AdminGetDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminGetDeviceError {
@@ -5217,11 +4921,6 @@ impl Error for AdminGetDeviceError {
             AdminGetDeviceError::NotAuthorized(ref cause) => cause,
             AdminGetDeviceError::ResourceNotFound(ref cause) => cause,
             AdminGetDeviceError::TooManyRequests(ref cause) => cause,
-            AdminGetDeviceError::Validation(ref cause) => cause,
-            AdminGetDeviceError::Credentials(ref err) => err.description(),
-            AdminGetDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AdminGetDeviceError::ParseError(ref cause) => cause,
-            AdminGetDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5240,20 +4939,10 @@ pub enum AdminGetUserError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminGetUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminGetUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminGetUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5266,51 +4955,40 @@ impl AdminGetUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminGetUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminGetUserError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return AdminGetUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminGetUserError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return AdminGetUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminGetUserError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminGetUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminGetUserError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return AdminGetUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminGetUserError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return AdminGetUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminGetUserError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminGetUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminGetUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminGetUserError {
-    fn from(err: serde_json::error::Error) -> AdminGetUserError {
-        AdminGetUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminGetUserError {
-    fn from(err: CredentialsError) -> AdminGetUserError {
-        AdminGetUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminGetUserError {
-    fn from(err: HttpDispatchError) -> AdminGetUserError {
-        AdminGetUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminGetUserError {
-    fn from(err: io::Error) -> AdminGetUserError {
-        AdminGetUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminGetUserError {
@@ -5327,11 +5005,6 @@ impl Error for AdminGetUserError {
             AdminGetUserError::ResourceNotFound(ref cause) => cause,
             AdminGetUserError::TooManyRequests(ref cause) => cause,
             AdminGetUserError::UserNotFound(ref cause) => cause,
-            AdminGetUserError::Validation(ref cause) => cause,
-            AdminGetUserError::Credentials(ref err) => err.description(),
-            AdminGetUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AdminGetUserError::ParseError(ref cause) => cause,
-            AdminGetUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5368,20 +5041,10 @@ pub enum AdminInitiateAuthError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminInitiateAuthError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminInitiateAuthError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminInitiateAuthError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5394,88 +5057,89 @@ impl AdminInitiateAuthError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminInitiateAuthError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return AdminInitiateAuthError::InvalidLambdaResponse(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminInitiateAuthError::InvalidLambdaResponse(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AdminInitiateAuthError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return AdminInitiateAuthError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminInitiateAuthError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MFAMethodNotFoundException" => {
-                    return AdminInitiateAuthError::MFAMethodNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::MFAMethodNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminInitiateAuthError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return AdminInitiateAuthError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminInitiateAuthError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminInitiateAuthError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminInitiateAuthError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminInitiateAuthError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::UnexpectedLambda(
+                        String::from(error_message),
+                    ));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminInitiateAuthError::UserLambdaValidation(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::UserLambdaValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return AdminInitiateAuthError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminInitiateAuthError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminInitiateAuthError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AdminInitiateAuthError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminInitiateAuthError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminInitiateAuthError {
-    fn from(err: serde_json::error::Error) -> AdminInitiateAuthError {
-        AdminInitiateAuthError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminInitiateAuthError {
-    fn from(err: CredentialsError) -> AdminInitiateAuthError {
-        AdminInitiateAuthError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminInitiateAuthError {
-    fn from(err: HttpDispatchError) -> AdminInitiateAuthError {
-        AdminInitiateAuthError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminInitiateAuthError {
-    fn from(err: io::Error) -> AdminInitiateAuthError {
-        AdminInitiateAuthError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminInitiateAuthError {
@@ -5501,13 +5165,6 @@ impl Error for AdminInitiateAuthError {
             AdminInitiateAuthError::UserLambdaValidation(ref cause) => cause,
             AdminInitiateAuthError::UserNotConfirmed(ref cause) => cause,
             AdminInitiateAuthError::UserNotFound(ref cause) => cause,
-            AdminInitiateAuthError::Validation(ref cause) => cause,
-            AdminInitiateAuthError::Credentials(ref err) => err.description(),
-            AdminInitiateAuthError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminInitiateAuthError::ParseError(ref cause) => cause,
-            AdminInitiateAuthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5528,20 +5185,10 @@ pub enum AdminLinkProviderForUserError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminLinkProviderForUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminLinkProviderForUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminLinkProviderForUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5554,60 +5201,45 @@ impl AdminLinkProviderForUserError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return AdminLinkProviderForUserError::AliasExists(String::from(error_message));
+                    return RusotoError::Service(AdminLinkProviderForUserError::AliasExists(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return AdminLinkProviderForUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminLinkProviderForUserError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminLinkProviderForUserError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminLinkProviderForUserError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminLinkProviderForUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminLinkProviderForUserError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminLinkProviderForUserError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminLinkProviderForUserError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminLinkProviderForUserError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminLinkProviderForUserError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminLinkProviderForUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminLinkProviderForUserError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminLinkProviderForUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminLinkProviderForUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminLinkProviderForUserError {
-    fn from(err: serde_json::error::Error) -> AdminLinkProviderForUserError {
-        AdminLinkProviderForUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminLinkProviderForUserError {
-    fn from(err: CredentialsError) -> AdminLinkProviderForUserError {
-        AdminLinkProviderForUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminLinkProviderForUserError {
-    fn from(err: HttpDispatchError) -> AdminLinkProviderForUserError {
-        AdminLinkProviderForUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminLinkProviderForUserError {
-    fn from(err: io::Error) -> AdminLinkProviderForUserError {
-        AdminLinkProviderForUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminLinkProviderForUserError {
@@ -5625,13 +5257,6 @@ impl Error for AdminLinkProviderForUserError {
             AdminLinkProviderForUserError::ResourceNotFound(ref cause) => cause,
             AdminLinkProviderForUserError::TooManyRequests(ref cause) => cause,
             AdminLinkProviderForUserError::UserNotFound(ref cause) => cause,
-            AdminLinkProviderForUserError::Validation(ref cause) => cause,
-            AdminLinkProviderForUserError::Credentials(ref err) => err.description(),
-            AdminLinkProviderForUserError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminLinkProviderForUserError::ParseError(ref cause) => cause,
-            AdminLinkProviderForUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5650,20 +5275,10 @@ pub enum AdminListDevicesError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminListDevicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminListDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListDevicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5676,53 +5291,42 @@ impl AdminListDevicesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminListDevicesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminListDevicesError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return AdminListDevicesError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidUserPoolConfigurationException" => {
-                    return AdminListDevicesError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminListDevicesError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidUserPoolConfigurationException" => {
+                    return RusotoError::Service(
+                        AdminListDevicesError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "NotAuthorizedException" => {
-                    return AdminListDevicesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminListDevicesError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminListDevicesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminListDevicesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminListDevicesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminListDevicesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminListDevicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminListDevicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminListDevicesError {
-    fn from(err: serde_json::error::Error) -> AdminListDevicesError {
-        AdminListDevicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminListDevicesError {
-    fn from(err: CredentialsError) -> AdminListDevicesError {
-        AdminListDevicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminListDevicesError {
-    fn from(err: HttpDispatchError) -> AdminListDevicesError {
-        AdminListDevicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminListDevicesError {
-    fn from(err: io::Error) -> AdminListDevicesError {
-        AdminListDevicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminListDevicesError {
@@ -5739,11 +5343,6 @@ impl Error for AdminListDevicesError {
             AdminListDevicesError::NotAuthorized(ref cause) => cause,
             AdminListDevicesError::ResourceNotFound(ref cause) => cause,
             AdminListDevicesError::TooManyRequests(ref cause) => cause,
-            AdminListDevicesError::Validation(ref cause) => cause,
-            AdminListDevicesError::Credentials(ref err) => err.description(),
-            AdminListDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AdminListDevicesError::ParseError(ref cause) => cause,
-            AdminListDevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5762,20 +5361,10 @@ pub enum AdminListGroupsForUserError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminListGroupsForUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminListGroupsForUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListGroupsForUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5788,55 +5377,40 @@ impl AdminListGroupsForUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminListGroupsForUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminListGroupsForUserError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminListGroupsForUserError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminListGroupsForUserError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminListGroupsForUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminListGroupsForUserError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminListGroupsForUserError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminListGroupsForUserError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminListGroupsForUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminListGroupsForUserError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminListGroupsForUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminListGroupsForUserError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminListGroupsForUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminListGroupsForUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminListGroupsForUserError {
-    fn from(err: serde_json::error::Error) -> AdminListGroupsForUserError {
-        AdminListGroupsForUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminListGroupsForUserError {
-    fn from(err: CredentialsError) -> AdminListGroupsForUserError {
-        AdminListGroupsForUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminListGroupsForUserError {
-    fn from(err: HttpDispatchError) -> AdminListGroupsForUserError {
-        AdminListGroupsForUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminListGroupsForUserError {
-    fn from(err: io::Error) -> AdminListGroupsForUserError {
-        AdminListGroupsForUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminListGroupsForUserError {
@@ -5853,13 +5427,6 @@ impl Error for AdminListGroupsForUserError {
             AdminListGroupsForUserError::ResourceNotFound(ref cause) => cause,
             AdminListGroupsForUserError::TooManyRequests(ref cause) => cause,
             AdminListGroupsForUserError::UserNotFound(ref cause) => cause,
-            AdminListGroupsForUserError::Validation(ref cause) => cause,
-            AdminListGroupsForUserError::Credentials(ref err) => err.description(),
-            AdminListGroupsForUserError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminListGroupsForUserError::ParseError(ref cause) => cause,
-            AdminListGroupsForUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5880,20 +5447,10 @@ pub enum AdminListUserAuthEventsError {
     UserNotFound(String),
     /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
     UserPoolAddOnNotEnabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminListUserAuthEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminListUserAuthEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminListUserAuthEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5906,62 +5463,47 @@ impl AdminListUserAuthEventsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminListUserAuthEventsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminListUserAuthEventsError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminListUserAuthEventsError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminListUserAuthEventsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminListUserAuthEventsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminListUserAuthEventsError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminListUserAuthEventsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminListUserAuthEventsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminListUserAuthEventsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminListUserAuthEventsError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminListUserAuthEventsError::UserNotFound(String::from(error_message));
-                }
-                "UserPoolAddOnNotEnabledException" => {
-                    return AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminListUserAuthEventsError::UserNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AdminListUserAuthEventsError::Validation(error_message.to_string());
+                "UserPoolAddOnNotEnabledException" => {
+                    return RusotoError::Service(
+                        AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminListUserAuthEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminListUserAuthEventsError {
-    fn from(err: serde_json::error::Error) -> AdminListUserAuthEventsError {
-        AdminListUserAuthEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminListUserAuthEventsError {
-    fn from(err: CredentialsError) -> AdminListUserAuthEventsError {
-        AdminListUserAuthEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminListUserAuthEventsError {
-    fn from(err: HttpDispatchError) -> AdminListUserAuthEventsError {
-        AdminListUserAuthEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminListUserAuthEventsError {
-    fn from(err: io::Error) -> AdminListUserAuthEventsError {
-        AdminListUserAuthEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminListUserAuthEventsError {
@@ -5979,13 +5521,6 @@ impl Error for AdminListUserAuthEventsError {
             AdminListUserAuthEventsError::TooManyRequests(ref cause) => cause,
             AdminListUserAuthEventsError::UserNotFound(ref cause) => cause,
             AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(ref cause) => cause,
-            AdminListUserAuthEventsError::Validation(ref cause) => cause,
-            AdminListUserAuthEventsError::Credentials(ref err) => err.description(),
-            AdminListUserAuthEventsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminListUserAuthEventsError::ParseError(ref cause) => cause,
-            AdminListUserAuthEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6004,20 +5539,10 @@ pub enum AdminRemoveUserFromGroupError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminRemoveUserFromGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminRemoveUserFromGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminRemoveUserFromGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6030,57 +5555,40 @@ impl AdminRemoveUserFromGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminRemoveUserFromGroupError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminRemoveUserFromGroupError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminRemoveUserFromGroupError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRemoveUserFromGroupError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminRemoveUserFromGroupError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminRemoveUserFromGroupError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminRemoveUserFromGroupError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRemoveUserFromGroupError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminRemoveUserFromGroupError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRemoveUserFromGroupError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminRemoveUserFromGroupError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminRemoveUserFromGroupError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminRemoveUserFromGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminRemoveUserFromGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminRemoveUserFromGroupError {
-    fn from(err: serde_json::error::Error) -> AdminRemoveUserFromGroupError {
-        AdminRemoveUserFromGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminRemoveUserFromGroupError {
-    fn from(err: CredentialsError) -> AdminRemoveUserFromGroupError {
-        AdminRemoveUserFromGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminRemoveUserFromGroupError {
-    fn from(err: HttpDispatchError) -> AdminRemoveUserFromGroupError {
-        AdminRemoveUserFromGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminRemoveUserFromGroupError {
-    fn from(err: io::Error) -> AdminRemoveUserFromGroupError {
-        AdminRemoveUserFromGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminRemoveUserFromGroupError {
@@ -6097,13 +5605,6 @@ impl Error for AdminRemoveUserFromGroupError {
             AdminRemoveUserFromGroupError::ResourceNotFound(ref cause) => cause,
             AdminRemoveUserFromGroupError::TooManyRequests(ref cause) => cause,
             AdminRemoveUserFromGroupError::UserNotFound(ref cause) => cause,
-            AdminRemoveUserFromGroupError::Validation(ref cause) => cause,
-            AdminRemoveUserFromGroupError::Credentials(ref err) => err.description(),
-            AdminRemoveUserFromGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminRemoveUserFromGroupError::ParseError(ref cause) => cause,
-            AdminRemoveUserFromGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6136,20 +5637,10 @@ pub enum AdminResetUserPasswordError {
     UserLambdaValidation(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminResetUserPasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminResetUserPasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminResetUserPasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6162,88 +5653,81 @@ impl AdminResetUserPasswordError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminResetUserPasswordError::InternalError(String::from(error_message));
-                }
-                "InvalidEmailRoleAccessPolicyException" => {
-                    return AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminResetUserPasswordError::InternalError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidEmailRoleAccessPolicyException" => {
+                    return RusotoError::Service(
+                        AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidLambdaResponseException" => {
-                    return AdminResetUserPasswordError::InvalidLambdaResponse(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminResetUserPasswordError::InvalidLambdaResponse(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AdminResetUserPasswordError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminResetUserPasswordError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "LimitExceededException" => {
-                    return AdminResetUserPasswordError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AdminResetUserPasswordError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminResetUserPasswordError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminResetUserPasswordError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminResetUserPasswordError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminResetUserPasswordError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminResetUserPasswordError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminResetUserPasswordError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminResetUserPasswordError::UnexpectedLambda(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminResetUserPasswordError::UnexpectedLambda(
+                        String::from(error_message),
                     ));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminResetUserPasswordError::UserLambdaValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminResetUserPasswordError::UserLambdaValidation(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminResetUserPasswordError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminResetUserPasswordError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminResetUserPasswordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminResetUserPasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminResetUserPasswordError {
-    fn from(err: serde_json::error::Error) -> AdminResetUserPasswordError {
-        AdminResetUserPasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminResetUserPasswordError {
-    fn from(err: CredentialsError) -> AdminResetUserPasswordError {
-        AdminResetUserPasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminResetUserPasswordError {
-    fn from(err: HttpDispatchError) -> AdminResetUserPasswordError {
-        AdminResetUserPasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminResetUserPasswordError {
-    fn from(err: io::Error) -> AdminResetUserPasswordError {
-        AdminResetUserPasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminResetUserPasswordError {
@@ -6267,13 +5751,6 @@ impl Error for AdminResetUserPasswordError {
             AdminResetUserPasswordError::UnexpectedLambda(ref cause) => cause,
             AdminResetUserPasswordError::UserLambdaValidation(ref cause) => cause,
             AdminResetUserPasswordError::UserNotFound(ref cause) => cause,
-            AdminResetUserPasswordError::Validation(ref cause) => cause,
-            AdminResetUserPasswordError::Credentials(ref err) => err.description(),
-            AdminResetUserPasswordError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminResetUserPasswordError::ParseError(ref cause) => cause,
-            AdminResetUserPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6320,20 +5797,12 @@ pub enum AdminRespondToAuthChallengeError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminRespondToAuthChallengeError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminRespondToAuthChallengeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AdminRespondToAuthChallengeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6346,133 +5815,126 @@ impl AdminRespondToAuthChallengeError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return AdminRespondToAuthChallengeError::AliasExists(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::AliasExists(
+                        String::from(error_message),
                     ));
                 }
                 "CodeMismatchException" => {
-                    return AdminRespondToAuthChallengeError::CodeMismatch(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::CodeMismatch(
+                        String::from(error_message),
                     ));
                 }
                 "ExpiredCodeException" => {
-                    return AdminRespondToAuthChallengeError::ExpiredCode(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::ExpiredCode(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return AdminRespondToAuthChallengeError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return AdminRespondToAuthChallengeError::InvalidLambdaResponse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return AdminRespondToAuthChallengeError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPasswordException" => {
-                    return AdminRespondToAuthChallengeError::InvalidPassword(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::InvalidPassword(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "MFAMethodNotFoundException" => {
-                    return AdminRespondToAuthChallengeError::MFAMethodNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::MFAMethodNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return AdminRespondToAuthChallengeError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "PasswordResetRequiredException" => {
-                    return AdminRespondToAuthChallengeError::PasswordResetRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::PasswordResetRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return AdminRespondToAuthChallengeError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "SoftwareTokenMFANotFoundException" => {
-                    return AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManyRequestsException" => {
-                    return AdminRespondToAuthChallengeError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminRespondToAuthChallengeError::UnexpectedLambda(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::UnexpectedLambda(
+                        String::from(error_message),
                     ));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminRespondToAuthChallengeError::UserLambdaValidation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::UserLambdaValidation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UserNotConfirmedException" => {
-                    return AdminRespondToAuthChallengeError::UserNotConfirmed(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::UserNotConfirmed(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminRespondToAuthChallengeError::UserNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminRespondToAuthChallengeError::UserNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AdminRespondToAuthChallengeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminRespondToAuthChallengeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminRespondToAuthChallengeError {
-    fn from(err: serde_json::error::Error) -> AdminRespondToAuthChallengeError {
-        AdminRespondToAuthChallengeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminRespondToAuthChallengeError {
-    fn from(err: CredentialsError) -> AdminRespondToAuthChallengeError {
-        AdminRespondToAuthChallengeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminRespondToAuthChallengeError {
-    fn from(err: HttpDispatchError) -> AdminRespondToAuthChallengeError {
-        AdminRespondToAuthChallengeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminRespondToAuthChallengeError {
-    fn from(err: io::Error) -> AdminRespondToAuthChallengeError {
-        AdminRespondToAuthChallengeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminRespondToAuthChallengeError {
@@ -6503,13 +5965,6 @@ impl Error for AdminRespondToAuthChallengeError {
             AdminRespondToAuthChallengeError::UserLambdaValidation(ref cause) => cause,
             AdminRespondToAuthChallengeError::UserNotConfirmed(ref cause) => cause,
             AdminRespondToAuthChallengeError::UserNotFound(ref cause) => cause,
-            AdminRespondToAuthChallengeError::Validation(ref cause) => cause,
-            AdminRespondToAuthChallengeError::Credentials(ref err) => err.description(),
-            AdminRespondToAuthChallengeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminRespondToAuthChallengeError::ParseError(ref cause) => cause,
-            AdminRespondToAuthChallengeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6530,20 +5985,10 @@ pub enum AdminSetUserMFAPreferenceError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminSetUserMFAPreferenceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminSetUserMFAPreferenceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserMFAPreferenceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6556,66 +6001,47 @@ impl AdminSetUserMFAPreferenceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminSetUserMFAPreferenceError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminSetUserMFAPreferenceError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AdminSetUserMFAPreferenceError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminSetUserMFAPreferenceError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminSetUserMFAPreferenceError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminSetUserMFAPreferenceError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "PasswordResetRequiredException" => {
-                    return AdminSetUserMFAPreferenceError::PasswordResetRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminSetUserMFAPreferenceError::PasswordResetRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return AdminSetUserMFAPreferenceError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminSetUserMFAPreferenceError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotConfirmedException" => {
-                    return AdminSetUserMFAPreferenceError::UserNotConfirmed(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminSetUserMFAPreferenceError::UserNotConfirmed(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminSetUserMFAPreferenceError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminSetUserMFAPreferenceError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminSetUserMFAPreferenceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminSetUserMFAPreferenceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminSetUserMFAPreferenceError {
-    fn from(err: serde_json::error::Error) -> AdminSetUserMFAPreferenceError {
-        AdminSetUserMFAPreferenceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminSetUserMFAPreferenceError {
-    fn from(err: CredentialsError) -> AdminSetUserMFAPreferenceError {
-        AdminSetUserMFAPreferenceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminSetUserMFAPreferenceError {
-    fn from(err: HttpDispatchError) -> AdminSetUserMFAPreferenceError {
-        AdminSetUserMFAPreferenceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminSetUserMFAPreferenceError {
-    fn from(err: io::Error) -> AdminSetUserMFAPreferenceError {
-        AdminSetUserMFAPreferenceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminSetUserMFAPreferenceError {
@@ -6633,13 +6059,6 @@ impl Error for AdminSetUserMFAPreferenceError {
             AdminSetUserMFAPreferenceError::ResourceNotFound(ref cause) => cause,
             AdminSetUserMFAPreferenceError::UserNotConfirmed(ref cause) => cause,
             AdminSetUserMFAPreferenceError::UserNotFound(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::Validation(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::Credentials(ref err) => err.description(),
-            AdminSetUserMFAPreferenceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminSetUserMFAPreferenceError::ParseError(ref cause) => cause,
-            AdminSetUserMFAPreferenceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6656,20 +6075,10 @@ pub enum AdminSetUserSettingsError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminSetUserSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminSetUserSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6682,48 +6091,35 @@ impl AdminSetUserSettingsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminSetUserSettingsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminSetUserSettingsError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminSetUserSettingsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AdminSetUserSettingsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminSetUserSettingsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminSetUserSettingsError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminSetUserSettingsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminSetUserSettingsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminSetUserSettingsError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminSetUserSettingsError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminSetUserSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminSetUserSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminSetUserSettingsError {
-    fn from(err: serde_json::error::Error) -> AdminSetUserSettingsError {
-        AdminSetUserSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminSetUserSettingsError {
-    fn from(err: CredentialsError) -> AdminSetUserSettingsError {
-        AdminSetUserSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminSetUserSettingsError {
-    fn from(err: HttpDispatchError) -> AdminSetUserSettingsError {
-        AdminSetUserSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminSetUserSettingsError {
-    fn from(err: io::Error) -> AdminSetUserSettingsError {
-        AdminSetUserSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminSetUserSettingsError {
@@ -6739,13 +6135,6 @@ impl Error for AdminSetUserSettingsError {
             AdminSetUserSettingsError::NotAuthorized(ref cause) => cause,
             AdminSetUserSettingsError::ResourceNotFound(ref cause) => cause,
             AdminSetUserSettingsError::UserNotFound(ref cause) => cause,
-            AdminSetUserSettingsError::Validation(ref cause) => cause,
-            AdminSetUserSettingsError::Credentials(ref err) => err.description(),
-            AdminSetUserSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminSetUserSettingsError::ParseError(ref cause) => cause,
-            AdminSetUserSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6766,20 +6155,12 @@ pub enum AdminUpdateAuthEventFeedbackError {
     UserNotFound(String),
     /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
     UserPoolAddOnNotEnabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminUpdateAuthEventFeedbackError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminUpdateAuthEventFeedbackError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AdminUpdateAuthEventFeedbackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6792,68 +6173,51 @@ impl AdminUpdateAuthEventFeedbackError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminUpdateAuthEventFeedbackError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateAuthEventFeedbackError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AdminUpdateAuthEventFeedbackError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminUpdateAuthEventFeedbackError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return AdminUpdateAuthEventFeedbackError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateAuthEventFeedbackError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminUpdateAuthEventFeedbackError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminUpdateAuthEventFeedbackError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManyRequestsException" => {
-                    return AdminUpdateAuthEventFeedbackError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateAuthEventFeedbackError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminUpdateAuthEventFeedbackError::UserNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateAuthEventFeedbackError::UserNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "UserPoolAddOnNotEnabledException" => {
-                    return AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AdminUpdateAuthEventFeedbackError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminUpdateAuthEventFeedbackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminUpdateAuthEventFeedbackError {
-    fn from(err: serde_json::error::Error) -> AdminUpdateAuthEventFeedbackError {
-        AdminUpdateAuthEventFeedbackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminUpdateAuthEventFeedbackError {
-    fn from(err: CredentialsError) -> AdminUpdateAuthEventFeedbackError {
-        AdminUpdateAuthEventFeedbackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminUpdateAuthEventFeedbackError {
-    fn from(err: HttpDispatchError) -> AdminUpdateAuthEventFeedbackError {
-        AdminUpdateAuthEventFeedbackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminUpdateAuthEventFeedbackError {
-    fn from(err: io::Error) -> AdminUpdateAuthEventFeedbackError {
-        AdminUpdateAuthEventFeedbackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminUpdateAuthEventFeedbackError {
@@ -6871,13 +6235,6 @@ impl Error for AdminUpdateAuthEventFeedbackError {
             AdminUpdateAuthEventFeedbackError::TooManyRequests(ref cause) => cause,
             AdminUpdateAuthEventFeedbackError::UserNotFound(ref cause) => cause,
             AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::Validation(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::Credentials(ref err) => err.description(),
-            AdminUpdateAuthEventFeedbackError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminUpdateAuthEventFeedbackError::ParseError(ref cause) => cause,
-            AdminUpdateAuthEventFeedbackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6898,20 +6255,10 @@ pub enum AdminUpdateDeviceStatusError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminUpdateDeviceStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminUpdateDeviceStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUpdateDeviceStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6924,62 +6271,47 @@ impl AdminUpdateDeviceStatusError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminUpdateDeviceStatusError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminUpdateDeviceStatusError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminUpdateDeviceStatusError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateDeviceStatusError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return AdminUpdateDeviceStatusError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminUpdateDeviceStatusError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminUpdateDeviceStatusError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateDeviceStatusError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminUpdateDeviceStatusError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateDeviceStatusError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return AdminUpdateDeviceStatusError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminUpdateDeviceStatusError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminUpdateDeviceStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminUpdateDeviceStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminUpdateDeviceStatusError {
-    fn from(err: serde_json::error::Error) -> AdminUpdateDeviceStatusError {
-        AdminUpdateDeviceStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminUpdateDeviceStatusError {
-    fn from(err: CredentialsError) -> AdminUpdateDeviceStatusError {
-        AdminUpdateDeviceStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminUpdateDeviceStatusError {
-    fn from(err: HttpDispatchError) -> AdminUpdateDeviceStatusError {
-        AdminUpdateDeviceStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminUpdateDeviceStatusError {
-    fn from(err: io::Error) -> AdminUpdateDeviceStatusError {
-        AdminUpdateDeviceStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminUpdateDeviceStatusError {
@@ -6997,13 +6329,6 @@ impl Error for AdminUpdateDeviceStatusError {
             AdminUpdateDeviceStatusError::ResourceNotFound(ref cause) => cause,
             AdminUpdateDeviceStatusError::TooManyRequests(ref cause) => cause,
             AdminUpdateDeviceStatusError::UserNotFound(ref cause) => cause,
-            AdminUpdateDeviceStatusError::Validation(ref cause) => cause,
-            AdminUpdateDeviceStatusError::Credentials(ref err) => err.description(),
-            AdminUpdateDeviceStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminUpdateDeviceStatusError::ParseError(ref cause) => cause,
-            AdminUpdateDeviceStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7030,20 +6355,10 @@ pub enum AdminUpdateUserAttributesError {
     UserLambdaValidation(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminUpdateUserAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminUpdateUserAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUpdateUserAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7056,79 +6371,64 @@ impl AdminUpdateUserAttributesError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return AdminUpdateUserAttributesError::AliasExists(String::from(error_message));
+                    return RusotoError::Service(AdminUpdateUserAttributesError::AliasExists(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return AdminUpdateUserAttributesError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateUserAttributesError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return AdminUpdateUserAttributesError::InvalidLambdaResponse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminUpdateUserAttributesError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return AdminUpdateUserAttributesError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateUserAttributesError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminUpdateUserAttributesError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateUserAttributesError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminUpdateUserAttributesError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateUserAttributesError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminUpdateUserAttributesError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateUserAttributesError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UnexpectedLambdaException" => {
-                    return AdminUpdateUserAttributesError::UnexpectedLambda(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUpdateUserAttributesError::UnexpectedLambda(
+                        String::from(error_message),
                     ));
                 }
                 "UserLambdaValidationException" => {
-                    return AdminUpdateUserAttributesError::UserLambdaValidation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AdminUpdateUserAttributesError::UserLambdaValidation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UserNotFoundException" => {
-                    return AdminUpdateUserAttributesError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminUpdateUserAttributesError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminUpdateUserAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminUpdateUserAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminUpdateUserAttributesError {
-    fn from(err: serde_json::error::Error) -> AdminUpdateUserAttributesError {
-        AdminUpdateUserAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminUpdateUserAttributesError {
-    fn from(err: CredentialsError) -> AdminUpdateUserAttributesError {
-        AdminUpdateUserAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminUpdateUserAttributesError {
-    fn from(err: HttpDispatchError) -> AdminUpdateUserAttributesError {
-        AdminUpdateUserAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminUpdateUserAttributesError {
-    fn from(err: io::Error) -> AdminUpdateUserAttributesError {
-        AdminUpdateUserAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminUpdateUserAttributesError {
@@ -7149,13 +6449,6 @@ impl Error for AdminUpdateUserAttributesError {
             AdminUpdateUserAttributesError::UnexpectedLambda(ref cause) => cause,
             AdminUpdateUserAttributesError::UserLambdaValidation(ref cause) => cause,
             AdminUpdateUserAttributesError::UserNotFound(ref cause) => cause,
-            AdminUpdateUserAttributesError::Validation(ref cause) => cause,
-            AdminUpdateUserAttributesError::Credentials(ref err) => err.description(),
-            AdminUpdateUserAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminUpdateUserAttributesError::ParseError(ref cause) => cause,
-            AdminUpdateUserAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7174,20 +6467,10 @@ pub enum AdminUserGlobalSignOutError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AdminUserGlobalSignOutError {
-    pub fn from_response(res: BufferedHttpResponse) -> AdminUserGlobalSignOutError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminUserGlobalSignOutError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7200,55 +6483,40 @@ impl AdminUserGlobalSignOutError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AdminUserGlobalSignOutError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AdminUserGlobalSignOutError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AdminUserGlobalSignOutError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUserGlobalSignOutError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AdminUserGlobalSignOutError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AdminUserGlobalSignOutError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AdminUserGlobalSignOutError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AdminUserGlobalSignOutError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return AdminUserGlobalSignOutError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AdminUserGlobalSignOutError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return AdminUserGlobalSignOutError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(AdminUserGlobalSignOutError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AdminUserGlobalSignOutError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AdminUserGlobalSignOutError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AdminUserGlobalSignOutError {
-    fn from(err: serde_json::error::Error) -> AdminUserGlobalSignOutError {
-        AdminUserGlobalSignOutError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AdminUserGlobalSignOutError {
-    fn from(err: CredentialsError) -> AdminUserGlobalSignOutError {
-        AdminUserGlobalSignOutError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AdminUserGlobalSignOutError {
-    fn from(err: HttpDispatchError) -> AdminUserGlobalSignOutError {
-        AdminUserGlobalSignOutError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AdminUserGlobalSignOutError {
-    fn from(err: io::Error) -> AdminUserGlobalSignOutError {
-        AdminUserGlobalSignOutError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AdminUserGlobalSignOutError {
@@ -7265,13 +6533,6 @@ impl Error for AdminUserGlobalSignOutError {
             AdminUserGlobalSignOutError::ResourceNotFound(ref cause) => cause,
             AdminUserGlobalSignOutError::TooManyRequests(ref cause) => cause,
             AdminUserGlobalSignOutError::UserNotFound(ref cause) => cause,
-            AdminUserGlobalSignOutError::Validation(ref cause) => cause,
-            AdminUserGlobalSignOutError::Credentials(ref err) => err.description(),
-            AdminUserGlobalSignOutError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AdminUserGlobalSignOutError::ParseError(ref cause) => cause,
-            AdminUserGlobalSignOutError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7288,20 +6549,10 @@ pub enum AssociateSoftwareTokenError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the software token TOTP multi-factor authentication (MFA) is not enabled for the user pool.</p>
     SoftwareTokenMFANotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateSoftwareTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateSoftwareTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateSoftwareTokenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7314,54 +6565,37 @@ impl AssociateSoftwareTokenError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return AssociateSoftwareTokenError::InternalError(String::from(error_message));
+                    return RusotoError::Service(AssociateSoftwareTokenError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AssociateSoftwareTokenError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateSoftwareTokenError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return AssociateSoftwareTokenError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(AssociateSoftwareTokenError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateSoftwareTokenError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateSoftwareTokenError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "SoftwareTokenMFANotFoundException" => {
-                    return AssociateSoftwareTokenError::SoftwareTokenMFANotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateSoftwareTokenError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AssociateSoftwareTokenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateSoftwareTokenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateSoftwareTokenError {
-    fn from(err: serde_json::error::Error) -> AssociateSoftwareTokenError {
-        AssociateSoftwareTokenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateSoftwareTokenError {
-    fn from(err: CredentialsError) -> AssociateSoftwareTokenError {
-        AssociateSoftwareTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateSoftwareTokenError {
-    fn from(err: HttpDispatchError) -> AssociateSoftwareTokenError {
-        AssociateSoftwareTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateSoftwareTokenError {
-    fn from(err: io::Error) -> AssociateSoftwareTokenError {
-        AssociateSoftwareTokenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateSoftwareTokenError {
@@ -7377,13 +6611,6 @@ impl Error for AssociateSoftwareTokenError {
             AssociateSoftwareTokenError::NotAuthorized(ref cause) => cause,
             AssociateSoftwareTokenError::ResourceNotFound(ref cause) => cause,
             AssociateSoftwareTokenError::SoftwareTokenMFANotFound(ref cause) => cause,
-            AssociateSoftwareTokenError::Validation(ref cause) => cause,
-            AssociateSoftwareTokenError::Credentials(ref err) => err.description(),
-            AssociateSoftwareTokenError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateSoftwareTokenError::ParseError(ref cause) => cause,
-            AssociateSoftwareTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7410,20 +6637,10 @@ pub enum ChangePasswordError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ChangePasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> ChangePasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangePasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7436,63 +6653,60 @@ impl ChangePasswordError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ChangePasswordError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ChangePasswordError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPasswordException" => {
-                    return ChangePasswordError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::InvalidPassword(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ChangePasswordError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return ChangePasswordError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return ChangePasswordError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ChangePasswordError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ChangePasswordError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return ChangePasswordError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return ChangePasswordError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ChangePasswordError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ChangePasswordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ChangePasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ChangePasswordError {
-    fn from(err: serde_json::error::Error) -> ChangePasswordError {
-        ChangePasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ChangePasswordError {
-    fn from(err: CredentialsError) -> ChangePasswordError {
-        ChangePasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ChangePasswordError {
-    fn from(err: HttpDispatchError) -> ChangePasswordError {
-        ChangePasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ChangePasswordError {
-    fn from(err: io::Error) -> ChangePasswordError {
-        ChangePasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ChangePasswordError {
@@ -7513,11 +6727,6 @@ impl Error for ChangePasswordError {
             ChangePasswordError::TooManyRequests(ref cause) => cause,
             ChangePasswordError::UserNotConfirmed(ref cause) => cause,
             ChangePasswordError::UserNotFound(ref cause) => cause,
-            ChangePasswordError::Validation(ref cause) => cause,
-            ChangePasswordError::Credentials(ref err) => err.description(),
-            ChangePasswordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ChangePasswordError::ParseError(ref cause) => cause,
-            ChangePasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7548,20 +6757,10 @@ pub enum ConfirmDeviceError {
     UserNotFound(String),
     /// <p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
     UsernameExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmDeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConfirmDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7574,71 +6773,70 @@ impl ConfirmDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ConfirmDeviceError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidLambdaResponseException" => {
-                    return ConfirmDeviceError::InvalidLambdaResponse(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::InvalidLambdaResponse(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ConfirmDeviceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPasswordException" => {
-                    return ConfirmDeviceError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::InvalidPassword(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return ConfirmDeviceError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(ConfirmDeviceError::InvalidUserPoolConfiguration(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return ConfirmDeviceError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return ConfirmDeviceError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ConfirmDeviceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ConfirmDeviceError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return ConfirmDeviceError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return ConfirmDeviceError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "UsernameExistsException" => {
-                    return ConfirmDeviceError::UsernameExists(String::from(error_message));
+                    return RusotoError::Service(ConfirmDeviceError::UsernameExists(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ConfirmDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ConfirmDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ConfirmDeviceError {
-    fn from(err: serde_json::error::Error) -> ConfirmDeviceError {
-        ConfirmDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ConfirmDeviceError {
-    fn from(err: CredentialsError) -> ConfirmDeviceError {
-        ConfirmDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConfirmDeviceError {
-    fn from(err: HttpDispatchError) -> ConfirmDeviceError {
-        ConfirmDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConfirmDeviceError {
-    fn from(err: io::Error) -> ConfirmDeviceError {
-        ConfirmDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ConfirmDeviceError {
@@ -7661,11 +6859,6 @@ impl Error for ConfirmDeviceError {
             ConfirmDeviceError::UserNotConfirmed(ref cause) => cause,
             ConfirmDeviceError::UserNotFound(ref cause) => cause,
             ConfirmDeviceError::UsernameExists(ref cause) => cause,
-            ConfirmDeviceError::Validation(ref cause) => cause,
-            ConfirmDeviceError::Credentials(ref err) => err.description(),
-            ConfirmDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ConfirmDeviceError::ParseError(ref cause) => cause,
-            ConfirmDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7702,20 +6895,10 @@ pub enum ConfirmForgotPasswordError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmForgotPasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConfirmForgotPasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmForgotPasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7728,84 +6911,85 @@ impl ConfirmForgotPasswordError {
 
             match *error_type {
                 "CodeMismatchException" => {
-                    return ConfirmForgotPasswordError::CodeMismatch(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::CodeMismatch(
+                        String::from(error_message),
+                    ));
                 }
                 "ExpiredCodeException" => {
-                    return ConfirmForgotPasswordError::ExpiredCode(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::ExpiredCode(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return ConfirmForgotPasswordError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return ConfirmForgotPasswordError::InvalidLambdaResponse(String::from(
-                        error_message,
+                    return RusotoError::Service(ConfirmForgotPasswordError::InvalidLambdaResponse(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return ConfirmForgotPasswordError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPasswordException" => {
-                    return ConfirmForgotPasswordError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::InvalidPassword(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ConfirmForgotPasswordError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ConfirmForgotPasswordError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ConfirmForgotPasswordError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyFailedAttemptsException" => {
-                    return ConfirmForgotPasswordError::TooManyFailedAttempts(String::from(
-                        error_message,
+                    return RusotoError::Service(ConfirmForgotPasswordError::TooManyFailedAttempts(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ConfirmForgotPasswordError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return ConfirmForgotPasswordError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::UnexpectedLambda(
+                        String::from(error_message),
+                    ));
                 }
                 "UserLambdaValidationException" => {
-                    return ConfirmForgotPasswordError::UserLambdaValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(ConfirmForgotPasswordError::UserLambdaValidation(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotConfirmedException" => {
-                    return ConfirmForgotPasswordError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return ConfirmForgotPasswordError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ConfirmForgotPasswordError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ConfirmForgotPasswordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ConfirmForgotPasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ConfirmForgotPasswordError {
-    fn from(err: serde_json::error::Error) -> ConfirmForgotPasswordError {
-        ConfirmForgotPasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ConfirmForgotPasswordError {
-    fn from(err: CredentialsError) -> ConfirmForgotPasswordError {
-        ConfirmForgotPasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConfirmForgotPasswordError {
-    fn from(err: HttpDispatchError) -> ConfirmForgotPasswordError {
-        ConfirmForgotPasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConfirmForgotPasswordError {
-    fn from(err: io::Error) -> ConfirmForgotPasswordError {
-        ConfirmForgotPasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ConfirmForgotPasswordError {
@@ -7831,13 +7015,6 @@ impl Error for ConfirmForgotPasswordError {
             ConfirmForgotPasswordError::UserLambdaValidation(ref cause) => cause,
             ConfirmForgotPasswordError::UserNotConfirmed(ref cause) => cause,
             ConfirmForgotPasswordError::UserNotFound(ref cause) => cause,
-            ConfirmForgotPasswordError::Validation(ref cause) => cause,
-            ConfirmForgotPasswordError::Credentials(ref err) => err.description(),
-            ConfirmForgotPasswordError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ConfirmForgotPasswordError::ParseError(ref cause) => cause,
-            ConfirmForgotPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7872,20 +7049,10 @@ pub enum ConfirmSignUpError {
     UserLambdaValidation(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmSignUpError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConfirmSignUpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmSignUpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7898,75 +7065,80 @@ impl ConfirmSignUpError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return ConfirmSignUpError::AliasExists(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::AliasExists(String::from(
+                        error_message,
+                    )));
                 }
                 "CodeMismatchException" => {
-                    return ConfirmSignUpError::CodeMismatch(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::CodeMismatch(String::from(
+                        error_message,
+                    )));
                 }
                 "ExpiredCodeException" => {
-                    return ConfirmSignUpError::ExpiredCode(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::ExpiredCode(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return ConfirmSignUpError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidLambdaResponseException" => {
-                    return ConfirmSignUpError::InvalidLambdaResponse(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::InvalidLambdaResponse(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ConfirmSignUpError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ConfirmSignUpError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return ConfirmSignUpError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ConfirmSignUpError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyFailedAttemptsException" => {
-                    return ConfirmSignUpError::TooManyFailedAttempts(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::TooManyFailedAttempts(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ConfirmSignUpError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnexpectedLambdaException" => {
-                    return ConfirmSignUpError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::UnexpectedLambda(String::from(
+                        error_message,
+                    )));
                 }
                 "UserLambdaValidationException" => {
-                    return ConfirmSignUpError::UserLambdaValidation(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::UserLambdaValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return ConfirmSignUpError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ConfirmSignUpError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ConfirmSignUpError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ConfirmSignUpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ConfirmSignUpError {
-    fn from(err: serde_json::error::Error) -> ConfirmSignUpError {
-        ConfirmSignUpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ConfirmSignUpError {
-    fn from(err: CredentialsError) -> ConfirmSignUpError {
-        ConfirmSignUpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConfirmSignUpError {
-    fn from(err: HttpDispatchError) -> ConfirmSignUpError {
-        ConfirmSignUpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConfirmSignUpError {
-    fn from(err: io::Error) -> ConfirmSignUpError {
-        ConfirmSignUpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ConfirmSignUpError {
@@ -7991,11 +7163,6 @@ impl Error for ConfirmSignUpError {
             ConfirmSignUpError::UnexpectedLambda(ref cause) => cause,
             ConfirmSignUpError::UserLambdaValidation(ref cause) => cause,
             ConfirmSignUpError::UserNotFound(ref cause) => cause,
-            ConfirmSignUpError::Validation(ref cause) => cause,
-            ConfirmSignUpError::Credentials(ref err) => err.description(),
-            ConfirmSignUpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ConfirmSignUpError::ParseError(ref cause) => cause,
-            ConfirmSignUpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8016,20 +7183,10 @@ pub enum CreateGroupError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8042,54 +7199,45 @@ impl CreateGroupError {
 
             match *error_type {
                 "GroupExistsException" => {
-                    return CreateGroupError::GroupExists(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::GroupExists(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return CreateGroupError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return CreateGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateGroupError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return CreateGroupError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreateGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateGroupError {
-    fn from(err: serde_json::error::Error) -> CreateGroupError {
-        CreateGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateGroupError {
-    fn from(err: CredentialsError) -> CreateGroupError {
-        CreateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGroupError {
-    fn from(err: HttpDispatchError) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGroupError {
-    fn from(err: io::Error) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -8107,11 +7255,6 @@ impl Error for CreateGroupError {
             CreateGroupError::NotAuthorized(ref cause) => cause,
             CreateGroupError::ResourceNotFound(ref cause) => cause,
             CreateGroupError::TooManyRequests(ref cause) => cause,
-            CreateGroupError::Validation(ref cause) => cause,
-            CreateGroupError::Credentials(ref err) => err.description(),
-            CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGroupError::ParseError(ref cause) => cause,
-            CreateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8132,20 +7275,10 @@ pub enum CreateIdentityProviderError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIdentityProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateIdentityProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIdentityProviderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8158,60 +7291,45 @@ impl CreateIdentityProviderError {
 
             match *error_type {
                 "DuplicateProviderException" => {
-                    return CreateIdentityProviderError::DuplicateProvider(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateIdentityProviderError::DuplicateProvider(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return CreateIdentityProviderError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityProviderError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateIdentityProviderError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateIdentityProviderError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return CreateIdentityProviderError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityProviderError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return CreateIdentityProviderError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityProviderError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateIdentityProviderError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateIdentityProviderError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateIdentityProviderError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateIdentityProviderError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateIdentityProviderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateIdentityProviderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateIdentityProviderError {
-    fn from(err: serde_json::error::Error) -> CreateIdentityProviderError {
-        CreateIdentityProviderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateIdentityProviderError {
-    fn from(err: CredentialsError) -> CreateIdentityProviderError {
-        CreateIdentityProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateIdentityProviderError {
-    fn from(err: HttpDispatchError) -> CreateIdentityProviderError {
-        CreateIdentityProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateIdentityProviderError {
-    fn from(err: io::Error) -> CreateIdentityProviderError {
-        CreateIdentityProviderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateIdentityProviderError {
@@ -8229,13 +7347,6 @@ impl Error for CreateIdentityProviderError {
             CreateIdentityProviderError::NotAuthorized(ref cause) => cause,
             CreateIdentityProviderError::ResourceNotFound(ref cause) => cause,
             CreateIdentityProviderError::TooManyRequests(ref cause) => cause,
-            CreateIdentityProviderError::Validation(ref cause) => cause,
-            CreateIdentityProviderError::Credentials(ref err) => err.description(),
-            CreateIdentityProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateIdentityProviderError::ParseError(ref cause) => cause,
-            CreateIdentityProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8254,20 +7365,10 @@ pub enum CreateResourceServerError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateResourceServerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateResourceServerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceServerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8280,51 +7381,40 @@ impl CreateResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateResourceServerError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateResourceServerError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateResourceServerError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateResourceServerError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateResourceServerError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateResourceServerError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return CreateResourceServerError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateResourceServerError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateResourceServerError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateResourceServerError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateResourceServerError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateResourceServerError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateResourceServerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateResourceServerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateResourceServerError {
-    fn from(err: serde_json::error::Error) -> CreateResourceServerError {
-        CreateResourceServerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateResourceServerError {
-    fn from(err: CredentialsError) -> CreateResourceServerError {
-        CreateResourceServerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateResourceServerError {
-    fn from(err: HttpDispatchError) -> CreateResourceServerError {
-        CreateResourceServerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateResourceServerError {
-    fn from(err: io::Error) -> CreateResourceServerError {
-        CreateResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateResourceServerError {
@@ -8341,13 +7431,6 @@ impl Error for CreateResourceServerError {
             CreateResourceServerError::NotAuthorized(ref cause) => cause,
             CreateResourceServerError::ResourceNotFound(ref cause) => cause,
             CreateResourceServerError::TooManyRequests(ref cause) => cause,
-            CreateResourceServerError::Validation(ref cause) => cause,
-            CreateResourceServerError::Credentials(ref err) => err.description(),
-            CreateResourceServerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateResourceServerError::ParseError(ref cause) => cause,
-            CreateResourceServerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8368,20 +7451,10 @@ pub enum CreateUserImportJobError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserImportJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserImportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserImportJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8394,54 +7467,45 @@ impl CreateUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserImportJobError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateUserImportJobError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserImportJobError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateUserImportJobError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateUserImportJobError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateUserImportJobError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserImportJobError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateUserImportJobError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionNotMetException" => {
-                    return CreateUserImportJobError::PreconditionNotMet(String::from(error_message));
+                    return RusotoError::Service(CreateUserImportJobError::PreconditionNotMet(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateUserImportJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateUserImportJobError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUserImportJobError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateUserImportJobError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateUserImportJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserImportJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserImportJobError {
-    fn from(err: serde_json::error::Error) -> CreateUserImportJobError {
-        CreateUserImportJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserImportJobError {
-    fn from(err: CredentialsError) -> CreateUserImportJobError {
-        CreateUserImportJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserImportJobError {
-    fn from(err: HttpDispatchError) -> CreateUserImportJobError {
-        CreateUserImportJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserImportJobError {
-    fn from(err: io::Error) -> CreateUserImportJobError {
-        CreateUserImportJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserImportJobError {
@@ -8459,13 +7523,6 @@ impl Error for CreateUserImportJobError {
             CreateUserImportJobError::PreconditionNotMet(ref cause) => cause,
             CreateUserImportJobError::ResourceNotFound(ref cause) => cause,
             CreateUserImportJobError::TooManyRequests(ref cause) => cause,
-            CreateUserImportJobError::Validation(ref cause) => cause,
-            CreateUserImportJobError::Credentials(ref err) => err.description(),
-            CreateUserImportJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateUserImportJobError::ParseError(ref cause) => cause,
-            CreateUserImportJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8490,20 +7547,10 @@ pub enum CreateUserPoolError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user pool tag cannot be set or updated.</p>
     UserPoolTagging(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8516,66 +7563,57 @@ impl CreateUserPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return CreateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserPoolError::InvalidEmailRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return CreateUserPoolError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserPoolError::InvalidSmsRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return CreateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return CreateUserPoolError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUserPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserPoolTaggingException" => {
-                    return CreateUserPoolError::UserPoolTagging(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolError::UserPoolTagging(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateUserPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserPoolError {
-    fn from(err: serde_json::error::Error) -> CreateUserPoolError {
-        CreateUserPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserPoolError {
-    fn from(err: CredentialsError) -> CreateUserPoolError {
-        CreateUserPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserPoolError {
-    fn from(err: HttpDispatchError) -> CreateUserPoolError {
-        CreateUserPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserPoolError {
-    fn from(err: io::Error) -> CreateUserPoolError {
-        CreateUserPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserPoolError {
@@ -8595,11 +7633,6 @@ impl Error for CreateUserPoolError {
             CreateUserPoolError::NotAuthorized(ref cause) => cause,
             CreateUserPoolError::TooManyRequests(ref cause) => cause,
             CreateUserPoolError::UserPoolTagging(ref cause) => cause,
-            CreateUserPoolError::Validation(ref cause) => cause,
-            CreateUserPoolError::Credentials(ref err) => err.description(),
-            CreateUserPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserPoolError::ParseError(ref cause) => cause,
-            CreateUserPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8622,20 +7655,10 @@ pub enum CreateUserPoolClientError {
     ScopeDoesNotExist(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserPoolClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserPoolClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8648,57 +7671,50 @@ impl CreateUserPoolClientError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserPoolClientError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOAuthFlowException" => {
-                    return CreateUserPoolClientError::InvalidOAuthFlow(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::InvalidOAuthFlow(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserPoolClientError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateUserPoolClientError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserPoolClientError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateUserPoolClientError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ScopeDoesNotExistException" => {
-                    return CreateUserPoolClientError::ScopeDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::ScopeDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateUserPoolClientError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolClientError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateUserPoolClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserPoolClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserPoolClientError {
-    fn from(err: serde_json::error::Error) -> CreateUserPoolClientError {
-        CreateUserPoolClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserPoolClientError {
-    fn from(err: CredentialsError) -> CreateUserPoolClientError {
-        CreateUserPoolClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserPoolClientError {
-    fn from(err: HttpDispatchError) -> CreateUserPoolClientError {
-        CreateUserPoolClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserPoolClientError {
-    fn from(err: io::Error) -> CreateUserPoolClientError {
-        CreateUserPoolClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserPoolClientError {
@@ -8717,13 +7733,6 @@ impl Error for CreateUserPoolClientError {
             CreateUserPoolClientError::ResourceNotFound(ref cause) => cause,
             CreateUserPoolClientError::ScopeDoesNotExist(ref cause) => cause,
             CreateUserPoolClientError::TooManyRequests(ref cause) => cause,
-            CreateUserPoolClientError::Validation(ref cause) => cause,
-            CreateUserPoolClientError::Credentials(ref err) => err.description(),
-            CreateUserPoolClientError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateUserPoolClientError::ParseError(ref cause) => cause,
-            CreateUserPoolClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8740,20 +7749,10 @@ pub enum CreateUserPoolDomainError {
     NotAuthorized(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserPoolDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserPoolDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserPoolDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8766,48 +7765,35 @@ impl CreateUserPoolDomainError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return CreateUserPoolDomainError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolDomainError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserPoolDomainError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolDomainError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateUserPoolDomainError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolDomainError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return CreateUserPoolDomainError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolDomainError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateUserPoolDomainError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateUserPoolDomainError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateUserPoolDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserPoolDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserPoolDomainError {
-    fn from(err: serde_json::error::Error) -> CreateUserPoolDomainError {
-        CreateUserPoolDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserPoolDomainError {
-    fn from(err: CredentialsError) -> CreateUserPoolDomainError {
-        CreateUserPoolDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserPoolDomainError {
-    fn from(err: HttpDispatchError) -> CreateUserPoolDomainError {
-        CreateUserPoolDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserPoolDomainError {
-    fn from(err: io::Error) -> CreateUserPoolDomainError {
-        CreateUserPoolDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserPoolDomainError {
@@ -8823,13 +7809,6 @@ impl Error for CreateUserPoolDomainError {
             CreateUserPoolDomainError::LimitExceeded(ref cause) => cause,
             CreateUserPoolDomainError::NotAuthorized(ref cause) => cause,
             CreateUserPoolDomainError::ResourceNotFound(ref cause) => cause,
-            CreateUserPoolDomainError::Validation(ref cause) => cause,
-            CreateUserPoolDomainError::Credentials(ref err) => err.description(),
-            CreateUserPoolDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateUserPoolDomainError::ParseError(ref cause) => cause,
-            CreateUserPoolDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8846,20 +7825,10 @@ pub enum DeleteGroupError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8872,48 +7841,35 @@ impl DeleteGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteGroupError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteGroupError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteGroupError {
-        DeleteGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGroupError {
-    fn from(err: CredentialsError) -> DeleteGroupError {
-        DeleteGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGroupError {
-    fn from(err: HttpDispatchError) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGroupError {
-    fn from(err: io::Error) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -8929,11 +7885,6 @@ impl Error for DeleteGroupError {
             DeleteGroupError::NotAuthorized(ref cause) => cause,
             DeleteGroupError::ResourceNotFound(ref cause) => cause,
             DeleteGroupError::TooManyRequests(ref cause) => cause,
-            DeleteGroupError::Validation(ref cause) => cause,
-            DeleteGroupError::Credentials(ref err) => err.description(),
-            DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGroupError::ParseError(ref cause) => cause,
-            DeleteGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8952,20 +7903,10 @@ pub enum DeleteIdentityProviderError {
     TooManyRequests(String),
     /// <p>This exception is thrown when the specified identifier is not supported.</p>
     UnsupportedIdentityProvider(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIdentityProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentityProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityProviderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8978,57 +7919,42 @@ impl DeleteIdentityProviderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteIdentityProviderError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentityProviderError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteIdentityProviderError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteIdentityProviderError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteIdentityProviderError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteIdentityProviderError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteIdentityProviderError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteIdentityProviderError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteIdentityProviderError::TooManyRequests(String::from(error_message));
-                }
-                "UnsupportedIdentityProviderException" => {
-                    return DeleteIdentityProviderError::UnsupportedIdentityProvider(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteIdentityProviderError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteIdentityProviderError::Validation(error_message.to_string());
+                "UnsupportedIdentityProviderException" => {
+                    return RusotoError::Service(
+                        DeleteIdentityProviderError::UnsupportedIdentityProvider(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteIdentityProviderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteIdentityProviderError {
-    fn from(err: serde_json::error::Error) -> DeleteIdentityProviderError {
-        DeleteIdentityProviderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIdentityProviderError {
-    fn from(err: CredentialsError) -> DeleteIdentityProviderError {
-        DeleteIdentityProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIdentityProviderError {
-    fn from(err: HttpDispatchError) -> DeleteIdentityProviderError {
-        DeleteIdentityProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIdentityProviderError {
-    fn from(err: io::Error) -> DeleteIdentityProviderError {
-        DeleteIdentityProviderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteIdentityProviderError {
@@ -9045,13 +7971,6 @@ impl Error for DeleteIdentityProviderError {
             DeleteIdentityProviderError::ResourceNotFound(ref cause) => cause,
             DeleteIdentityProviderError::TooManyRequests(ref cause) => cause,
             DeleteIdentityProviderError::UnsupportedIdentityProvider(ref cause) => cause,
-            DeleteIdentityProviderError::Validation(ref cause) => cause,
-            DeleteIdentityProviderError::Credentials(ref err) => err.description(),
-            DeleteIdentityProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteIdentityProviderError::ParseError(ref cause) => cause,
-            DeleteIdentityProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9068,20 +7987,10 @@ pub enum DeleteResourceServerError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteResourceServerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourceServerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceServerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9094,48 +8003,35 @@ impl DeleteResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteResourceServerError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceServerError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteResourceServerError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceServerError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteResourceServerError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceServerError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteResourceServerError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceServerError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteResourceServerError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceServerError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteResourceServerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteResourceServerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteResourceServerError {
-    fn from(err: serde_json::error::Error) -> DeleteResourceServerError {
-        DeleteResourceServerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteResourceServerError {
-    fn from(err: CredentialsError) -> DeleteResourceServerError {
-        DeleteResourceServerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteResourceServerError {
-    fn from(err: HttpDispatchError) -> DeleteResourceServerError {
-        DeleteResourceServerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteResourceServerError {
-    fn from(err: io::Error) -> DeleteResourceServerError {
-        DeleteResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteResourceServerError {
@@ -9151,13 +8047,6 @@ impl Error for DeleteResourceServerError {
             DeleteResourceServerError::NotAuthorized(ref cause) => cause,
             DeleteResourceServerError::ResourceNotFound(ref cause) => cause,
             DeleteResourceServerError::TooManyRequests(ref cause) => cause,
-            DeleteResourceServerError::Validation(ref cause) => cause,
-            DeleteResourceServerError::Credentials(ref err) => err.description(),
-            DeleteResourceServerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteResourceServerError::ParseError(ref cause) => cause,
-            DeleteResourceServerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9180,20 +8069,10 @@ pub enum DeleteUserError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9206,57 +8085,50 @@ impl DeleteUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return DeleteUserError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return DeleteUserError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return DeleteUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserError {
-    fn from(err: serde_json::error::Error) -> DeleteUserError {
-        DeleteUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserError {
-    fn from(err: CredentialsError) -> DeleteUserError {
-        DeleteUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserError {
-    fn from(err: HttpDispatchError) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserError {
-    fn from(err: io::Error) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -9275,11 +8147,6 @@ impl Error for DeleteUserError {
             DeleteUserError::TooManyRequests(ref cause) => cause,
             DeleteUserError::UserNotConfirmed(ref cause) => cause,
             DeleteUserError::UserNotFound(ref cause) => cause,
-            DeleteUserError::Validation(ref cause) => cause,
-            DeleteUserError::Credentials(ref err) => err.description(),
-            DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::ParseError(ref cause) => cause,
-            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9302,20 +8169,10 @@ pub enum DeleteUserAttributesError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9328,59 +8185,50 @@ impl DeleteUserAttributesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserAttributesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteUserAttributesError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserAttributesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteUserAttributesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserAttributesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteUserAttributesError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return DeleteUserAttributesError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteUserAttributesError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserAttributesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserAttributesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteUserAttributesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return DeleteUserAttributesError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(DeleteUserAttributesError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return DeleteUserAttributesError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserAttributesError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteUserAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserAttributesError {
-    fn from(err: serde_json::error::Error) -> DeleteUserAttributesError {
-        DeleteUserAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserAttributesError {
-    fn from(err: CredentialsError) -> DeleteUserAttributesError {
-        DeleteUserAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserAttributesError {
-    fn from(err: HttpDispatchError) -> DeleteUserAttributesError {
-        DeleteUserAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserAttributesError {
-    fn from(err: io::Error) -> DeleteUserAttributesError {
-        DeleteUserAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserAttributesError {
@@ -9399,13 +8247,6 @@ impl Error for DeleteUserAttributesError {
             DeleteUserAttributesError::TooManyRequests(ref cause) => cause,
             DeleteUserAttributesError::UserNotConfirmed(ref cause) => cause,
             DeleteUserAttributesError::UserNotFound(ref cause) => cause,
-            DeleteUserAttributesError::Validation(ref cause) => cause,
-            DeleteUserAttributesError::Credentials(ref err) => err.description(),
-            DeleteUserAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteUserAttributesError::ParseError(ref cause) => cause,
-            DeleteUserAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9424,20 +8265,10 @@ pub enum DeleteUserPoolError {
     TooManyRequests(String),
     /// <p>This exception is thrown when you are trying to modify a user pool while a user import job is in progress for that pool.</p>
     UserImportInProgress(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9450,51 +8281,40 @@ impl DeleteUserPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserPoolError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserImportInProgressException" => {
-                    return DeleteUserPoolError::UserImportInProgress(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolError::UserImportInProgress(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteUserPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserPoolError {
-    fn from(err: serde_json::error::Error) -> DeleteUserPoolError {
-        DeleteUserPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserPoolError {
-    fn from(err: CredentialsError) -> DeleteUserPoolError {
-        DeleteUserPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserPoolError {
-    fn from(err: HttpDispatchError) -> DeleteUserPoolError {
-        DeleteUserPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserPoolError {
-    fn from(err: io::Error) -> DeleteUserPoolError {
-        DeleteUserPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserPoolError {
@@ -9511,11 +8331,6 @@ impl Error for DeleteUserPoolError {
             DeleteUserPoolError::ResourceNotFound(ref cause) => cause,
             DeleteUserPoolError::TooManyRequests(ref cause) => cause,
             DeleteUserPoolError::UserImportInProgress(ref cause) => cause,
-            DeleteUserPoolError::Validation(ref cause) => cause,
-            DeleteUserPoolError::Credentials(ref err) => err.description(),
-            DeleteUserPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserPoolError::ParseError(ref cause) => cause,
-            DeleteUserPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9532,20 +8347,10 @@ pub enum DeleteUserPoolClientError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserPoolClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserPoolClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9558,48 +8363,35 @@ impl DeleteUserPoolClientError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserPoolClientError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolClientError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserPoolClientError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolClientError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserPoolClientError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolClientError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserPoolClientError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolClientError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteUserPoolClientError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolClientError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteUserPoolClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserPoolClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserPoolClientError {
-    fn from(err: serde_json::error::Error) -> DeleteUserPoolClientError {
-        DeleteUserPoolClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserPoolClientError {
-    fn from(err: CredentialsError) -> DeleteUserPoolClientError {
-        DeleteUserPoolClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserPoolClientError {
-    fn from(err: HttpDispatchError) -> DeleteUserPoolClientError {
-        DeleteUserPoolClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserPoolClientError {
-    fn from(err: io::Error) -> DeleteUserPoolClientError {
-        DeleteUserPoolClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserPoolClientError {
@@ -9615,13 +8407,6 @@ impl Error for DeleteUserPoolClientError {
             DeleteUserPoolClientError::NotAuthorized(ref cause) => cause,
             DeleteUserPoolClientError::ResourceNotFound(ref cause) => cause,
             DeleteUserPoolClientError::TooManyRequests(ref cause) => cause,
-            DeleteUserPoolClientError::Validation(ref cause) => cause,
-            DeleteUserPoolClientError::Credentials(ref err) => err.description(),
-            DeleteUserPoolClientError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteUserPoolClientError::ParseError(ref cause) => cause,
-            DeleteUserPoolClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9636,20 +8421,10 @@ pub enum DeleteUserPoolDomainError {
     NotAuthorized(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserPoolDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserPoolDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPoolDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9662,45 +8437,30 @@ impl DeleteUserPoolDomainError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteUserPoolDomainError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolDomainError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserPoolDomainError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolDomainError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DeleteUserPoolDomainError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolDomainError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteUserPoolDomainError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserPoolDomainError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteUserPoolDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserPoolDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserPoolDomainError {
-    fn from(err: serde_json::error::Error) -> DeleteUserPoolDomainError {
-        DeleteUserPoolDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserPoolDomainError {
-    fn from(err: CredentialsError) -> DeleteUserPoolDomainError {
-        DeleteUserPoolDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserPoolDomainError {
-    fn from(err: HttpDispatchError) -> DeleteUserPoolDomainError {
-        DeleteUserPoolDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserPoolDomainError {
-    fn from(err: io::Error) -> DeleteUserPoolDomainError {
-        DeleteUserPoolDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserPoolDomainError {
@@ -9715,13 +8475,6 @@ impl Error for DeleteUserPoolDomainError {
             DeleteUserPoolDomainError::InvalidParameter(ref cause) => cause,
             DeleteUserPoolDomainError::NotAuthorized(ref cause) => cause,
             DeleteUserPoolDomainError::ResourceNotFound(ref cause) => cause,
-            DeleteUserPoolDomainError::Validation(ref cause) => cause,
-            DeleteUserPoolDomainError::Credentials(ref err) => err.description(),
-            DeleteUserPoolDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteUserPoolDomainError::ParseError(ref cause) => cause,
-            DeleteUserPoolDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9738,20 +8491,10 @@ pub enum DescribeIdentityProviderError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIdentityProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeIdentityProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIdentityProviderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9764,54 +8507,35 @@ impl DescribeIdentityProviderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeIdentityProviderError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityProviderError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeIdentityProviderError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeIdentityProviderError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeIdentityProviderError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeIdentityProviderError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeIdentityProviderError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeIdentityProviderError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeIdentityProviderError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeIdentityProviderError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeIdentityProviderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeIdentityProviderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeIdentityProviderError {
-    fn from(err: serde_json::error::Error) -> DescribeIdentityProviderError {
-        DescribeIdentityProviderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeIdentityProviderError {
-    fn from(err: CredentialsError) -> DescribeIdentityProviderError {
-        DescribeIdentityProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeIdentityProviderError {
-    fn from(err: HttpDispatchError) -> DescribeIdentityProviderError {
-        DescribeIdentityProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeIdentityProviderError {
-    fn from(err: io::Error) -> DescribeIdentityProviderError {
-        DescribeIdentityProviderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeIdentityProviderError {
@@ -9827,13 +8551,6 @@ impl Error for DescribeIdentityProviderError {
             DescribeIdentityProviderError::NotAuthorized(ref cause) => cause,
             DescribeIdentityProviderError::ResourceNotFound(ref cause) => cause,
             DescribeIdentityProviderError::TooManyRequests(ref cause) => cause,
-            DescribeIdentityProviderError::Validation(ref cause) => cause,
-            DescribeIdentityProviderError::Credentials(ref err) => err.description(),
-            DescribeIdentityProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeIdentityProviderError::ParseError(ref cause) => cause,
-            DescribeIdentityProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9850,20 +8567,10 @@ pub enum DescribeResourceServerError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeResourceServerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeResourceServerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourceServerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9876,52 +8583,35 @@ impl DescribeResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeResourceServerError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeResourceServerError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeResourceServerError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeResourceServerError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeResourceServerError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeResourceServerError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeResourceServerError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeResourceServerError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeResourceServerError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeResourceServerError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeResourceServerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeResourceServerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeResourceServerError {
-    fn from(err: serde_json::error::Error) -> DescribeResourceServerError {
-        DescribeResourceServerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeResourceServerError {
-    fn from(err: CredentialsError) -> DescribeResourceServerError {
-        DescribeResourceServerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeResourceServerError {
-    fn from(err: HttpDispatchError) -> DescribeResourceServerError {
-        DescribeResourceServerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeResourceServerError {
-    fn from(err: io::Error) -> DescribeResourceServerError {
-        DescribeResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeResourceServerError {
@@ -9937,13 +8627,6 @@ impl Error for DescribeResourceServerError {
             DescribeResourceServerError::NotAuthorized(ref cause) => cause,
             DescribeResourceServerError::ResourceNotFound(ref cause) => cause,
             DescribeResourceServerError::TooManyRequests(ref cause) => cause,
-            DescribeResourceServerError::Validation(ref cause) => cause,
-            DescribeResourceServerError::Credentials(ref err) => err.description(),
-            DescribeResourceServerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeResourceServerError::ParseError(ref cause) => cause,
-            DescribeResourceServerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9962,20 +8645,10 @@ pub enum DescribeRiskConfigurationError {
     TooManyRequests(String),
     /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
     UserPoolAddOnNotEnabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRiskConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeRiskConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRiskConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9988,63 +8661,42 @@ impl DescribeRiskConfigurationError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeRiskConfigurationError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeRiskConfigurationError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeRiskConfigurationError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeRiskConfigurationError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeRiskConfigurationError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeRiskConfigurationError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeRiskConfigurationError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeRiskConfigurationError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeRiskConfigurationError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeRiskConfigurationError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserPoolAddOnNotEnabledException" => {
-                    return DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeRiskConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeRiskConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeRiskConfigurationError {
-    fn from(err: serde_json::error::Error) -> DescribeRiskConfigurationError {
-        DescribeRiskConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeRiskConfigurationError {
-    fn from(err: CredentialsError) -> DescribeRiskConfigurationError {
-        DescribeRiskConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeRiskConfigurationError {
-    fn from(err: HttpDispatchError) -> DescribeRiskConfigurationError {
-        DescribeRiskConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeRiskConfigurationError {
-    fn from(err: io::Error) -> DescribeRiskConfigurationError {
-        DescribeRiskConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeRiskConfigurationError {
@@ -10061,13 +8713,6 @@ impl Error for DescribeRiskConfigurationError {
             DescribeRiskConfigurationError::ResourceNotFound(ref cause) => cause,
             DescribeRiskConfigurationError::TooManyRequests(ref cause) => cause,
             DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => cause,
-            DescribeRiskConfigurationError::Validation(ref cause) => cause,
-            DescribeRiskConfigurationError::Credentials(ref err) => err.description(),
-            DescribeRiskConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeRiskConfigurationError::ParseError(ref cause) => cause,
-            DescribeRiskConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10084,20 +8729,10 @@ pub enum DescribeUserImportJobError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserImportJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserImportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserImportJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10110,48 +8745,35 @@ impl DescribeUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserImportJobError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeUserImportJobError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserImportJobError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeUserImportJobError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserImportJobError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeUserImportJobError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUserImportJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeUserImportJobError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeUserImportJobError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeUserImportJobError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeUserImportJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUserImportJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUserImportJobError {
-    fn from(err: serde_json::error::Error) -> DescribeUserImportJobError {
-        DescribeUserImportJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUserImportJobError {
-    fn from(err: CredentialsError) -> DescribeUserImportJobError {
-        DescribeUserImportJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUserImportJobError {
-    fn from(err: HttpDispatchError) -> DescribeUserImportJobError {
-        DescribeUserImportJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUserImportJobError {
-    fn from(err: io::Error) -> DescribeUserImportJobError {
-        DescribeUserImportJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUserImportJobError {
@@ -10167,13 +8789,6 @@ impl Error for DescribeUserImportJobError {
             DescribeUserImportJobError::NotAuthorized(ref cause) => cause,
             DescribeUserImportJobError::ResourceNotFound(ref cause) => cause,
             DescribeUserImportJobError::TooManyRequests(ref cause) => cause,
-            DescribeUserImportJobError::Validation(ref cause) => cause,
-            DescribeUserImportJobError::Credentials(ref err) => err.description(),
-            DescribeUserImportJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeUserImportJobError::ParseError(ref cause) => cause,
-            DescribeUserImportJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10192,20 +8807,10 @@ pub enum DescribeUserPoolError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user pool tag cannot be set or updated.</p>
     UserPoolTagging(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10218,51 +8823,40 @@ impl DescribeUserPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUserPoolError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeUserPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserPoolTaggingException" => {
-                    return DescribeUserPoolError::UserPoolTagging(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolError::UserPoolTagging(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeUserPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUserPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUserPoolError {
-    fn from(err: serde_json::error::Error) -> DescribeUserPoolError {
-        DescribeUserPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUserPoolError {
-    fn from(err: CredentialsError) -> DescribeUserPoolError {
-        DescribeUserPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUserPoolError {
-    fn from(err: HttpDispatchError) -> DescribeUserPoolError {
-        DescribeUserPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUserPoolError {
-    fn from(err: io::Error) -> DescribeUserPoolError {
-        DescribeUserPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUserPoolError {
@@ -10279,11 +8873,6 @@ impl Error for DescribeUserPoolError {
             DescribeUserPoolError::ResourceNotFound(ref cause) => cause,
             DescribeUserPoolError::TooManyRequests(ref cause) => cause,
             DescribeUserPoolError::UserPoolTagging(ref cause) => cause,
-            DescribeUserPoolError::Validation(ref cause) => cause,
-            DescribeUserPoolError::Credentials(ref err) => err.description(),
-            DescribeUserPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeUserPoolError::ParseError(ref cause) => cause,
-            DescribeUserPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10300,20 +8889,10 @@ pub enum DescribeUserPoolClientError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserPoolClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserPoolClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10326,52 +8905,35 @@ impl DescribeUserPoolClientError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserPoolClientError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolClientError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserPoolClientError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUserPoolClientError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserPoolClientError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolClientError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUserPoolClientError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUserPoolClientError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeUserPoolClientError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolClientError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeUserPoolClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUserPoolClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUserPoolClientError {
-    fn from(err: serde_json::error::Error) -> DescribeUserPoolClientError {
-        DescribeUserPoolClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUserPoolClientError {
-    fn from(err: CredentialsError) -> DescribeUserPoolClientError {
-        DescribeUserPoolClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUserPoolClientError {
-    fn from(err: HttpDispatchError) -> DescribeUserPoolClientError {
-        DescribeUserPoolClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUserPoolClientError {
-    fn from(err: io::Error) -> DescribeUserPoolClientError {
-        DescribeUserPoolClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUserPoolClientError {
@@ -10387,13 +8949,6 @@ impl Error for DescribeUserPoolClientError {
             DescribeUserPoolClientError::NotAuthorized(ref cause) => cause,
             DescribeUserPoolClientError::ResourceNotFound(ref cause) => cause,
             DescribeUserPoolClientError::TooManyRequests(ref cause) => cause,
-            DescribeUserPoolClientError::Validation(ref cause) => cause,
-            DescribeUserPoolClientError::Credentials(ref err) => err.description(),
-            DescribeUserPoolClientError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeUserPoolClientError::ParseError(ref cause) => cause,
-            DescribeUserPoolClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10408,20 +8963,10 @@ pub enum DescribeUserPoolDomainError {
     NotAuthorized(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserPoolDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserPoolDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserPoolDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10434,49 +8979,30 @@ impl DescribeUserPoolDomainError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeUserPoolDomainError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeUserPoolDomainError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserPoolDomainError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUserPoolDomainError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeUserPoolDomainError::NotAuthorized(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return DescribeUserPoolDomainError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUserPoolDomainError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeUserPoolDomainError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeUserPoolDomainError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUserPoolDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUserPoolDomainError {
-    fn from(err: serde_json::error::Error) -> DescribeUserPoolDomainError {
-        DescribeUserPoolDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUserPoolDomainError {
-    fn from(err: CredentialsError) -> DescribeUserPoolDomainError {
-        DescribeUserPoolDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUserPoolDomainError {
-    fn from(err: HttpDispatchError) -> DescribeUserPoolDomainError {
-        DescribeUserPoolDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUserPoolDomainError {
-    fn from(err: io::Error) -> DescribeUserPoolDomainError {
-        DescribeUserPoolDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUserPoolDomainError {
@@ -10491,13 +9017,6 @@ impl Error for DescribeUserPoolDomainError {
             DescribeUserPoolDomainError::InvalidParameter(ref cause) => cause,
             DescribeUserPoolDomainError::NotAuthorized(ref cause) => cause,
             DescribeUserPoolDomainError::ResourceNotFound(ref cause) => cause,
-            DescribeUserPoolDomainError::Validation(ref cause) => cause,
-            DescribeUserPoolDomainError::Credentials(ref err) => err.description(),
-            DescribeUserPoolDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeUserPoolDomainError::ParseError(ref cause) => cause,
-            DescribeUserPoolDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10522,20 +9041,10 @@ pub enum ForgetDeviceError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ForgetDeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ForgetDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgetDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10548,62 +9057,55 @@ impl ForgetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ForgetDeviceError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ForgetDeviceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return ForgetDeviceError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(ForgetDeviceError::InvalidUserPoolConfiguration(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return ForgetDeviceError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return ForgetDeviceError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ForgetDeviceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ForgetDeviceError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return ForgetDeviceError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return ForgetDeviceError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ForgetDeviceError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ForgetDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ForgetDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ForgetDeviceError {
-    fn from(err: serde_json::error::Error) -> ForgetDeviceError {
-        ForgetDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ForgetDeviceError {
-    fn from(err: CredentialsError) -> ForgetDeviceError {
-        ForgetDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ForgetDeviceError {
-    fn from(err: HttpDispatchError) -> ForgetDeviceError {
-        ForgetDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ForgetDeviceError {
-    fn from(err: io::Error) -> ForgetDeviceError {
-        ForgetDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ForgetDeviceError {
@@ -10623,11 +9125,6 @@ impl Error for ForgetDeviceError {
             ForgetDeviceError::TooManyRequests(ref cause) => cause,
             ForgetDeviceError::UserNotConfirmed(ref cause) => cause,
             ForgetDeviceError::UserNotFound(ref cause) => cause,
-            ForgetDeviceError::Validation(ref cause) => cause,
-            ForgetDeviceError::Credentials(ref err) => err.description(),
-            ForgetDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ForgetDeviceError::ParseError(ref cause) => cause,
-            ForgetDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10664,20 +9161,10 @@ pub enum ForgotPasswordError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ForgotPasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> ForgotPasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ForgotPasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10690,84 +9177,87 @@ impl ForgotPasswordError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return ForgotPasswordError::CodeDeliveryFailure(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::CodeDeliveryFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return ForgotPasswordError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return ForgotPasswordError::InvalidEmailRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(ForgotPasswordError::InvalidEmailRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return ForgotPasswordError::InvalidLambdaResponse(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::InvalidLambdaResponse(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ForgotPasswordError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return ForgotPasswordError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(ForgotPasswordError::InvalidSmsRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return ForgotPasswordError::InvalidSmsRoleTrustRelationship(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ForgotPasswordError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return ForgotPasswordError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return ForgotPasswordError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ForgotPasswordError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ForgotPasswordError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnexpectedLambdaException" => {
-                    return ForgotPasswordError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::UnexpectedLambda(
+                        String::from(error_message),
+                    ));
                 }
                 "UserLambdaValidationException" => {
-                    return ForgotPasswordError::UserLambdaValidation(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::UserLambdaValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return ForgotPasswordError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return ForgotPasswordError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ForgotPasswordError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ForgotPasswordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ForgotPasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ForgotPasswordError {
-    fn from(err: serde_json::error::Error) -> ForgotPasswordError {
-        ForgotPasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ForgotPasswordError {
-    fn from(err: CredentialsError) -> ForgotPasswordError {
-        ForgotPasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ForgotPasswordError {
-    fn from(err: HttpDispatchError) -> ForgotPasswordError {
-        ForgotPasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ForgotPasswordError {
-    fn from(err: io::Error) -> ForgotPasswordError {
-        ForgotPasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ForgotPasswordError {
@@ -10793,11 +9283,6 @@ impl Error for ForgotPasswordError {
             ForgotPasswordError::UserLambdaValidation(ref cause) => cause,
             ForgotPasswordError::UserNotConfirmed(ref cause) => cause,
             ForgotPasswordError::UserNotFound(ref cause) => cause,
-            ForgotPasswordError::Validation(ref cause) => cause,
-            ForgotPasswordError::Credentials(ref err) => err.description(),
-            ForgotPasswordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ForgotPasswordError::ParseError(ref cause) => cause,
-            ForgotPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10814,20 +9299,10 @@ pub enum GetCSVHeaderError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCSVHeaderError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCSVHeaderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCSVHeaderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10840,48 +9315,35 @@ impl GetCSVHeaderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetCSVHeaderError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetCSVHeaderError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetCSVHeaderError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetCSVHeaderError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return GetCSVHeaderError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetCSVHeaderError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCSVHeaderError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCSVHeaderError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetCSVHeaderError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetCSVHeaderError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetCSVHeaderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCSVHeaderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCSVHeaderError {
-    fn from(err: serde_json::error::Error) -> GetCSVHeaderError {
-        GetCSVHeaderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCSVHeaderError {
-    fn from(err: CredentialsError) -> GetCSVHeaderError {
-        GetCSVHeaderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCSVHeaderError {
-    fn from(err: HttpDispatchError) -> GetCSVHeaderError {
-        GetCSVHeaderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCSVHeaderError {
-    fn from(err: io::Error) -> GetCSVHeaderError {
-        GetCSVHeaderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCSVHeaderError {
@@ -10897,11 +9359,6 @@ impl Error for GetCSVHeaderError {
             GetCSVHeaderError::NotAuthorized(ref cause) => cause,
             GetCSVHeaderError::ResourceNotFound(ref cause) => cause,
             GetCSVHeaderError::TooManyRequests(ref cause) => cause,
-            GetCSVHeaderError::Validation(ref cause) => cause,
-            GetCSVHeaderError::Credentials(ref err) => err.description(),
-            GetCSVHeaderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCSVHeaderError::ParseError(ref cause) => cause,
-            GetCSVHeaderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10926,20 +9383,10 @@ pub enum GetDeviceError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10952,60 +9399,55 @@ impl GetDeviceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetDeviceError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetDeviceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return GetDeviceError::InvalidUserPoolConfiguration(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::InvalidUserPoolConfiguration(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetDeviceError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return GetDeviceError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDeviceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetDeviceError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return GetDeviceError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return GetDeviceError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeviceError {
-    fn from(err: serde_json::error::Error) -> GetDeviceError {
-        GetDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeviceError {
-    fn from(err: CredentialsError) -> GetDeviceError {
-        GetDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeviceError {
-    fn from(err: HttpDispatchError) -> GetDeviceError {
-        GetDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeviceError {
-    fn from(err: io::Error) -> GetDeviceError {
-        GetDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeviceError {
@@ -11025,11 +9467,6 @@ impl Error for GetDeviceError {
             GetDeviceError::TooManyRequests(ref cause) => cause,
             GetDeviceError::UserNotConfirmed(ref cause) => cause,
             GetDeviceError::UserNotFound(ref cause) => cause,
-            GetDeviceError::Validation(ref cause) => cause,
-            GetDeviceError::Credentials(ref err) => err.description(),
-            GetDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDeviceError::ParseError(ref cause) => cause,
-            GetDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11046,20 +9483,10 @@ pub enum GetGroupError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11072,48 +9499,35 @@ impl GetGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetGroupError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return GetGroupError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetGroupError {
-    fn from(err: serde_json::error::Error) -> GetGroupError {
-        GetGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetGroupError {
-    fn from(err: CredentialsError) -> GetGroupError {
-        GetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGroupError {
-    fn from(err: HttpDispatchError) -> GetGroupError {
-        GetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGroupError {
-    fn from(err: io::Error) -> GetGroupError {
-        GetGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetGroupError {
@@ -11129,11 +9543,6 @@ impl Error for GetGroupError {
             GetGroupError::NotAuthorized(ref cause) => cause,
             GetGroupError::ResourceNotFound(ref cause) => cause,
             GetGroupError::TooManyRequests(ref cause) => cause,
-            GetGroupError::Validation(ref cause) => cause,
-            GetGroupError::Credentials(ref err) => err.description(),
-            GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupError::ParseError(ref cause) => cause,
-            GetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11150,20 +9559,12 @@ pub enum GetIdentityProviderByIdentifierError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIdentityProviderByIdentifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityProviderByIdentifierError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetIdentityProviderByIdentifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11176,60 +9577,45 @@ impl GetIdentityProviderByIdentifierError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetIdentityProviderByIdentifierError::InternalError(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidParameterException" => {
-                    return GetIdentityProviderByIdentifierError::InvalidParameter(String::from(
-                        error_message,
-                    ));
-                }
-                "NotAuthorizedException" => {
-                    return GetIdentityProviderByIdentifierError::NotAuthorized(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceNotFoundException" => {
-                    return GetIdentityProviderByIdentifierError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return GetIdentityProviderByIdentifierError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetIdentityProviderByIdentifierError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetIdentityProviderByIdentifierError::InternalError(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        GetIdentityProviderByIdentifierError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(
+                        GetIdentityProviderByIdentifierError::NotAuthorized(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetIdentityProviderByIdentifierError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        GetIdentityProviderByIdentifierError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIdentityProviderByIdentifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIdentityProviderByIdentifierError {
-    fn from(err: serde_json::error::Error) -> GetIdentityProviderByIdentifierError {
-        GetIdentityProviderByIdentifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIdentityProviderByIdentifierError {
-    fn from(err: CredentialsError) -> GetIdentityProviderByIdentifierError {
-        GetIdentityProviderByIdentifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdentityProviderByIdentifierError {
-    fn from(err: HttpDispatchError) -> GetIdentityProviderByIdentifierError {
-        GetIdentityProviderByIdentifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdentityProviderByIdentifierError {
-    fn from(err: io::Error) -> GetIdentityProviderByIdentifierError {
-        GetIdentityProviderByIdentifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIdentityProviderByIdentifierError {
@@ -11245,13 +9631,6 @@ impl Error for GetIdentityProviderByIdentifierError {
             GetIdentityProviderByIdentifierError::NotAuthorized(ref cause) => cause,
             GetIdentityProviderByIdentifierError::ResourceNotFound(ref cause) => cause,
             GetIdentityProviderByIdentifierError::TooManyRequests(ref cause) => cause,
-            GetIdentityProviderByIdentifierError::Validation(ref cause) => cause,
-            GetIdentityProviderByIdentifierError::Credentials(ref err) => err.description(),
-            GetIdentityProviderByIdentifierError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIdentityProviderByIdentifierError::ParseError(ref cause) => cause,
-            GetIdentityProviderByIdentifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11262,20 +9641,10 @@ pub enum GetSigningCertificateError {
     InternalError(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSigningCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSigningCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSigningCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11288,39 +9657,20 @@ impl GetSigningCertificateError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetSigningCertificateError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetSigningCertificateError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetSigningCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetSigningCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetSigningCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSigningCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSigningCertificateError {
-    fn from(err: serde_json::error::Error) -> GetSigningCertificateError {
-        GetSigningCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSigningCertificateError {
-    fn from(err: CredentialsError) -> GetSigningCertificateError {
-        GetSigningCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSigningCertificateError {
-    fn from(err: HttpDispatchError) -> GetSigningCertificateError {
-        GetSigningCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSigningCertificateError {
-    fn from(err: io::Error) -> GetSigningCertificateError {
-        GetSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSigningCertificateError {
@@ -11333,13 +9683,6 @@ impl Error for GetSigningCertificateError {
         match *self {
             GetSigningCertificateError::InternalError(ref cause) => cause,
             GetSigningCertificateError::ResourceNotFound(ref cause) => cause,
-            GetSigningCertificateError::Validation(ref cause) => cause,
-            GetSigningCertificateError::Credentials(ref err) => err.description(),
-            GetSigningCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSigningCertificateError::ParseError(ref cause) => cause,
-            GetSigningCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11356,20 +9699,10 @@ pub enum GetUICustomizationError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUICustomizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUICustomizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUICustomizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11382,48 +9715,35 @@ impl GetUICustomizationError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetUICustomizationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetUICustomizationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetUICustomizationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetUICustomizationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetUICustomizationError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetUICustomizationError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetUICustomizationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetUICustomizationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return GetUICustomizationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetUICustomizationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetUICustomizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUICustomizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUICustomizationError {
-    fn from(err: serde_json::error::Error) -> GetUICustomizationError {
-        GetUICustomizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUICustomizationError {
-    fn from(err: CredentialsError) -> GetUICustomizationError {
-        GetUICustomizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUICustomizationError {
-    fn from(err: HttpDispatchError) -> GetUICustomizationError {
-        GetUICustomizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUICustomizationError {
-    fn from(err: io::Error) -> GetUICustomizationError {
-        GetUICustomizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUICustomizationError {
@@ -11439,13 +9759,6 @@ impl Error for GetUICustomizationError {
             GetUICustomizationError::NotAuthorized(ref cause) => cause,
             GetUICustomizationError::ResourceNotFound(ref cause) => cause,
             GetUICustomizationError::TooManyRequests(ref cause) => cause,
-            GetUICustomizationError::Validation(ref cause) => cause,
-            GetUICustomizationError::Credentials(ref err) => err.description(),
-            GetUICustomizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetUICustomizationError::ParseError(ref cause) => cause,
-            GetUICustomizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11468,20 +9781,10 @@ pub enum GetUserError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11494,55 +9797,50 @@ impl GetUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetUserError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetUserError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetUserError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return GetUserError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetUserError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return GetUserError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(GetUserError::PasswordResetRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetUserError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetUserError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetUserError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return GetUserError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(GetUserError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return GetUserError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(GetUserError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetUserError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUserError {
-    fn from(err: serde_json::error::Error) -> GetUserError {
-        GetUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUserError {
-    fn from(err: CredentialsError) -> GetUserError {
-        GetUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUserError {
-    fn from(err: HttpDispatchError) -> GetUserError {
-        GetUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUserError {
-    fn from(err: io::Error) -> GetUserError {
-        GetUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUserError {
@@ -11561,11 +9859,6 @@ impl Error for GetUserError {
             GetUserError::TooManyRequests(ref cause) => cause,
             GetUserError::UserNotConfirmed(ref cause) => cause,
             GetUserError::UserNotFound(ref cause) => cause,
-            GetUserError::Validation(ref cause) => cause,
-            GetUserError::Credentials(ref err) => err.description(),
-            GetUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetUserError::ParseError(ref cause) => cause,
-            GetUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11604,20 +9897,12 @@ pub enum GetUserAttributeVerificationCodeError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserAttributeVerificationCodeError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUserAttributeVerificationCodeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetUserAttributeVerificationCodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11630,115 +9915,122 @@ impl GetUserAttributeVerificationCodeError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return GetUserAttributeVerificationCodeError::CodeDeliveryFailure(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::CodeDeliveryFailure(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalErrorException" => {
-                    return GetUserAttributeVerificationCodeError::InternalError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::InternalError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidLambdaResponseException" => {
-                    return GetUserAttributeVerificationCodeError::InvalidLambdaResponse(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidParameterException" => {
-                    return GetUserAttributeVerificationCodeError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "LimitExceededException" => {
-                    return GetUserAttributeVerificationCodeError::LimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::LimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return GetUserAttributeVerificationCodeError::NotAuthorized(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::NotAuthorized(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PasswordResetRequiredException" => {
-                    return GetUserAttributeVerificationCodeError::PasswordResetRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::PasswordResetRequired(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ResourceNotFoundException" => {
-                    return GetUserAttributeVerificationCodeError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManyRequestsException" => {
-                    return GetUserAttributeVerificationCodeError::TooManyRequests(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnexpectedLambdaException" => {
-                    return GetUserAttributeVerificationCodeError::UnexpectedLambda(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::UnexpectedLambda(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UserLambdaValidationException" => {
-                    return GetUserAttributeVerificationCodeError::UserLambdaValidation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::UserLambdaValidation(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UserNotConfirmedException" => {
-                    return GetUserAttributeVerificationCodeError::UserNotConfirmed(String::from(
-                        error_message,
-                    ));
-                }
-                "UserNotFoundException" => {
-                    return GetUserAttributeVerificationCodeError::UserNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetUserAttributeVerificationCodeError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::UserNotConfirmed(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "UserNotFoundException" => {
+                    return RusotoError::Service(
+                        GetUserAttributeVerificationCodeError::UserNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUserAttributeVerificationCodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUserAttributeVerificationCodeError {
-    fn from(err: serde_json::error::Error) -> GetUserAttributeVerificationCodeError {
-        GetUserAttributeVerificationCodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUserAttributeVerificationCodeError {
-    fn from(err: CredentialsError) -> GetUserAttributeVerificationCodeError {
-        GetUserAttributeVerificationCodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUserAttributeVerificationCodeError {
-    fn from(err: HttpDispatchError) -> GetUserAttributeVerificationCodeError {
-        GetUserAttributeVerificationCodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUserAttributeVerificationCodeError {
-    fn from(err: io::Error) -> GetUserAttributeVerificationCodeError {
-        GetUserAttributeVerificationCodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUserAttributeVerificationCodeError {
@@ -11767,13 +10059,6 @@ impl Error for GetUserAttributeVerificationCodeError {
             GetUserAttributeVerificationCodeError::UserLambdaValidation(ref cause) => cause,
             GetUserAttributeVerificationCodeError::UserNotConfirmed(ref cause) => cause,
             GetUserAttributeVerificationCodeError::UserNotFound(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::Validation(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::Credentials(ref err) => err.description(),
-            GetUserAttributeVerificationCodeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetUserAttributeVerificationCodeError::ParseError(ref cause) => cause,
-            GetUserAttributeVerificationCodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11790,20 +10075,10 @@ pub enum GetUserPoolMfaConfigError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserPoolMfaConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUserPoolMfaConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserPoolMfaConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11816,48 +10091,35 @@ impl GetUserPoolMfaConfigError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GetUserPoolMfaConfigError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetUserPoolMfaConfigError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetUserPoolMfaConfigError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetUserPoolMfaConfigError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetUserPoolMfaConfigError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetUserPoolMfaConfigError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetUserPoolMfaConfigError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return GetUserPoolMfaConfigError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetUserPoolMfaConfigError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetUserPoolMfaConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUserPoolMfaConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUserPoolMfaConfigError {
-    fn from(err: serde_json::error::Error) -> GetUserPoolMfaConfigError {
-        GetUserPoolMfaConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUserPoolMfaConfigError {
-    fn from(err: CredentialsError) -> GetUserPoolMfaConfigError {
-        GetUserPoolMfaConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUserPoolMfaConfigError {
-    fn from(err: HttpDispatchError) -> GetUserPoolMfaConfigError {
-        GetUserPoolMfaConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUserPoolMfaConfigError {
-    fn from(err: io::Error) -> GetUserPoolMfaConfigError {
-        GetUserPoolMfaConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUserPoolMfaConfigError {
@@ -11873,13 +10135,6 @@ impl Error for GetUserPoolMfaConfigError {
             GetUserPoolMfaConfigError::NotAuthorized(ref cause) => cause,
             GetUserPoolMfaConfigError::ResourceNotFound(ref cause) => cause,
             GetUserPoolMfaConfigError::TooManyRequests(ref cause) => cause,
-            GetUserPoolMfaConfigError::Validation(ref cause) => cause,
-            GetUserPoolMfaConfigError::Credentials(ref err) => err.description(),
-            GetUserPoolMfaConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetUserPoolMfaConfigError::ParseError(ref cause) => cause,
-            GetUserPoolMfaConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11900,20 +10155,10 @@ pub enum GlobalSignOutError {
     TooManyRequests(String),
     /// <p>This exception is thrown when a user is not confirmed successfully.</p>
     UserNotConfirmed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GlobalSignOutError {
-    pub fn from_response(res: BufferedHttpResponse) -> GlobalSignOutError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GlobalSignOutError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11926,54 +10171,45 @@ impl GlobalSignOutError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return GlobalSignOutError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GlobalSignOutError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GlobalSignOutError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GlobalSignOutError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return GlobalSignOutError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GlobalSignOutError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return GlobalSignOutError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(GlobalSignOutError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GlobalSignOutError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GlobalSignOutError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GlobalSignOutError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GlobalSignOutError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return GlobalSignOutError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(GlobalSignOutError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GlobalSignOutError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GlobalSignOutError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GlobalSignOutError {
-    fn from(err: serde_json::error::Error) -> GlobalSignOutError {
-        GlobalSignOutError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GlobalSignOutError {
-    fn from(err: CredentialsError) -> GlobalSignOutError {
-        GlobalSignOutError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GlobalSignOutError {
-    fn from(err: HttpDispatchError) -> GlobalSignOutError {
-        GlobalSignOutError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GlobalSignOutError {
-    fn from(err: io::Error) -> GlobalSignOutError {
-        GlobalSignOutError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GlobalSignOutError {
@@ -11991,11 +10227,6 @@ impl Error for GlobalSignOutError {
             GlobalSignOutError::ResourceNotFound(ref cause) => cause,
             GlobalSignOutError::TooManyRequests(ref cause) => cause,
             GlobalSignOutError::UserNotConfirmed(ref cause) => cause,
-            GlobalSignOutError::Validation(ref cause) => cause,
-            GlobalSignOutError::Credentials(ref err) => err.description(),
-            GlobalSignOutError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GlobalSignOutError::ParseError(ref cause) => cause,
-            GlobalSignOutError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12026,20 +10257,10 @@ pub enum InitiateAuthError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateAuthError {
-    pub fn from_response(res: BufferedHttpResponse) -> InitiateAuthError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateAuthError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12052,71 +10273,70 @@ impl InitiateAuthError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return InitiateAuthError::InternalError(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidLambdaResponseException" => {
-                    return InitiateAuthError::InvalidLambdaResponse(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::InvalidLambdaResponse(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return InitiateAuthError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return InitiateAuthError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(InitiateAuthError::InvalidUserPoolConfiguration(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return InitiateAuthError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return InitiateAuthError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateAuthError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return InitiateAuthError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnexpectedLambdaException" => {
-                    return InitiateAuthError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::UnexpectedLambda(String::from(
+                        error_message,
+                    )));
                 }
                 "UserLambdaValidationException" => {
-                    return InitiateAuthError::UserLambdaValidation(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::UserLambdaValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return InitiateAuthError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return InitiateAuthError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(InitiateAuthError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return InitiateAuthError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitiateAuthError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitiateAuthError {
-    fn from(err: serde_json::error::Error) -> InitiateAuthError {
-        InitiateAuthError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitiateAuthError {
-    fn from(err: CredentialsError) -> InitiateAuthError {
-        InitiateAuthError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitiateAuthError {
-    fn from(err: HttpDispatchError) -> InitiateAuthError {
-        InitiateAuthError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitiateAuthError {
-    fn from(err: io::Error) -> InitiateAuthError {
-        InitiateAuthError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitiateAuthError {
@@ -12139,11 +10359,6 @@ impl Error for InitiateAuthError {
             InitiateAuthError::UserLambdaValidation(ref cause) => cause,
             InitiateAuthError::UserNotConfirmed(ref cause) => cause,
             InitiateAuthError::UserNotFound(ref cause) => cause,
-            InitiateAuthError::Validation(ref cause) => cause,
-            InitiateAuthError::Credentials(ref err) => err.description(),
-            InitiateAuthError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            InitiateAuthError::ParseError(ref cause) => cause,
-            InitiateAuthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12168,20 +10383,10 @@ pub enum ListDevicesError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDevicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12194,62 +10399,55 @@ impl ListDevicesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListDevicesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListDevicesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return ListDevicesError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDevicesError::InvalidUserPoolConfiguration(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return ListDevicesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return ListDevicesError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListDevicesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListDevicesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotConfirmedException" => {
-                    return ListDevicesError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::UserNotConfirmed(String::from(
+                        error_message,
+                    )));
                 }
                 "UserNotFoundException" => {
-                    return ListDevicesError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListDevicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDevicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDevicesError {
-    fn from(err: serde_json::error::Error) -> ListDevicesError {
-        ListDevicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDevicesError {
-    fn from(err: CredentialsError) -> ListDevicesError {
-        ListDevicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDevicesError {
-    fn from(err: HttpDispatchError) -> ListDevicesError {
-        ListDevicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDevicesError {
-    fn from(err: io::Error) -> ListDevicesError {
-        ListDevicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDevicesError {
@@ -12269,11 +10467,6 @@ impl Error for ListDevicesError {
             ListDevicesError::TooManyRequests(ref cause) => cause,
             ListDevicesError::UserNotConfirmed(ref cause) => cause,
             ListDevicesError::UserNotFound(ref cause) => cause,
-            ListDevicesError::Validation(ref cause) => cause,
-            ListDevicesError::Credentials(ref err) => err.description(),
-            ListDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDevicesError::ParseError(ref cause) => cause,
-            ListDevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12290,20 +10483,10 @@ pub enum ListGroupsError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12316,48 +10499,35 @@ impl ListGroupsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListGroupsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListGroupsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return ListGroupsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListGroupsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListGroupsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGroupsError {
-    fn from(err: serde_json::error::Error) -> ListGroupsError {
-        ListGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupsError {
-    fn from(err: CredentialsError) -> ListGroupsError {
-        ListGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupsError {
-    fn from(err: HttpDispatchError) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupsError {
-    fn from(err: io::Error) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -12373,11 +10543,6 @@ impl Error for ListGroupsError {
             ListGroupsError::NotAuthorized(ref cause) => cause,
             ListGroupsError::ResourceNotFound(ref cause) => cause,
             ListGroupsError::TooManyRequests(ref cause) => cause,
-            ListGroupsError::Validation(ref cause) => cause,
-            ListGroupsError::Credentials(ref err) => err.description(),
-            ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGroupsError::ParseError(ref cause) => cause,
-            ListGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12394,20 +10559,10 @@ pub enum ListIdentityProvidersError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListIdentityProvidersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListIdentityProvidersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityProvidersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12420,48 +10575,35 @@ impl ListIdentityProvidersError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListIdentityProvidersError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListIdentityProvidersError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListIdentityProvidersError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListIdentityProvidersError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListIdentityProvidersError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListIdentityProvidersError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListIdentityProvidersError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListIdentityProvidersError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListIdentityProvidersError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListIdentityProvidersError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListIdentityProvidersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListIdentityProvidersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListIdentityProvidersError {
-    fn from(err: serde_json::error::Error) -> ListIdentityProvidersError {
-        ListIdentityProvidersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListIdentityProvidersError {
-    fn from(err: CredentialsError) -> ListIdentityProvidersError {
-        ListIdentityProvidersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIdentityProvidersError {
-    fn from(err: HttpDispatchError) -> ListIdentityProvidersError {
-        ListIdentityProvidersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIdentityProvidersError {
-    fn from(err: io::Error) -> ListIdentityProvidersError {
-        ListIdentityProvidersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListIdentityProvidersError {
@@ -12477,13 +10619,6 @@ impl Error for ListIdentityProvidersError {
             ListIdentityProvidersError::NotAuthorized(ref cause) => cause,
             ListIdentityProvidersError::ResourceNotFound(ref cause) => cause,
             ListIdentityProvidersError::TooManyRequests(ref cause) => cause,
-            ListIdentityProvidersError::Validation(ref cause) => cause,
-            ListIdentityProvidersError::Credentials(ref err) => err.description(),
-            ListIdentityProvidersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListIdentityProvidersError::ParseError(ref cause) => cause,
-            ListIdentityProvidersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12500,20 +10635,10 @@ pub enum ListResourceServersError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceServersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourceServersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceServersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12526,48 +10651,35 @@ impl ListResourceServersError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListResourceServersError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListResourceServersError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListResourceServersError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListResourceServersError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListResourceServersError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListResourceServersError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListResourceServersError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListResourceServersError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListResourceServersError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListResourceServersError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListResourceServersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListResourceServersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListResourceServersError {
-    fn from(err: serde_json::error::Error) -> ListResourceServersError {
-        ListResourceServersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListResourceServersError {
-    fn from(err: CredentialsError) -> ListResourceServersError {
-        ListResourceServersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourceServersError {
-    fn from(err: HttpDispatchError) -> ListResourceServersError {
-        ListResourceServersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourceServersError {
-    fn from(err: io::Error) -> ListResourceServersError {
-        ListResourceServersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListResourceServersError {
@@ -12583,13 +10695,6 @@ impl Error for ListResourceServersError {
             ListResourceServersError::NotAuthorized(ref cause) => cause,
             ListResourceServersError::ResourceNotFound(ref cause) => cause,
             ListResourceServersError::TooManyRequests(ref cause) => cause,
-            ListResourceServersError::Validation(ref cause) => cause,
-            ListResourceServersError::Credentials(ref err) => err.description(),
-            ListResourceServersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListResourceServersError::ParseError(ref cause) => cause,
-            ListResourceServersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12606,20 +10711,10 @@ pub enum ListUserImportJobsError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserImportJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUserImportJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserImportJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12632,48 +10727,35 @@ impl ListUserImportJobsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUserImportJobsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListUserImportJobsError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListUserImportJobsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListUserImportJobsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListUserImportJobsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListUserImportJobsError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUserImportJobsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListUserImportJobsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListUserImportJobsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListUserImportJobsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListUserImportJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUserImportJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUserImportJobsError {
-    fn from(err: serde_json::error::Error) -> ListUserImportJobsError {
-        ListUserImportJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUserImportJobsError {
-    fn from(err: CredentialsError) -> ListUserImportJobsError {
-        ListUserImportJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUserImportJobsError {
-    fn from(err: HttpDispatchError) -> ListUserImportJobsError {
-        ListUserImportJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUserImportJobsError {
-    fn from(err: io::Error) -> ListUserImportJobsError {
-        ListUserImportJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUserImportJobsError {
@@ -12689,13 +10771,6 @@ impl Error for ListUserImportJobsError {
             ListUserImportJobsError::NotAuthorized(ref cause) => cause,
             ListUserImportJobsError::ResourceNotFound(ref cause) => cause,
             ListUserImportJobsError::TooManyRequests(ref cause) => cause,
-            ListUserImportJobsError::Validation(ref cause) => cause,
-            ListUserImportJobsError::Credentials(ref err) => err.description(),
-            ListUserImportJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListUserImportJobsError::ParseError(ref cause) => cause,
-            ListUserImportJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12712,20 +10787,10 @@ pub enum ListUserPoolClientsError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserPoolClientsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUserPoolClientsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserPoolClientsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12738,48 +10803,35 @@ impl ListUserPoolClientsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUserPoolClientsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolClientsError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListUserPoolClientsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolClientsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListUserPoolClientsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolClientsError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUserPoolClientsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolClientsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListUserPoolClientsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolClientsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListUserPoolClientsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUserPoolClientsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUserPoolClientsError {
-    fn from(err: serde_json::error::Error) -> ListUserPoolClientsError {
-        ListUserPoolClientsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUserPoolClientsError {
-    fn from(err: CredentialsError) -> ListUserPoolClientsError {
-        ListUserPoolClientsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUserPoolClientsError {
-    fn from(err: HttpDispatchError) -> ListUserPoolClientsError {
-        ListUserPoolClientsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUserPoolClientsError {
-    fn from(err: io::Error) -> ListUserPoolClientsError {
-        ListUserPoolClientsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUserPoolClientsError {
@@ -12795,13 +10847,6 @@ impl Error for ListUserPoolClientsError {
             ListUserPoolClientsError::NotAuthorized(ref cause) => cause,
             ListUserPoolClientsError::ResourceNotFound(ref cause) => cause,
             ListUserPoolClientsError::TooManyRequests(ref cause) => cause,
-            ListUserPoolClientsError::Validation(ref cause) => cause,
-            ListUserPoolClientsError::Credentials(ref err) => err.description(),
-            ListUserPoolClientsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListUserPoolClientsError::ParseError(ref cause) => cause,
-            ListUserPoolClientsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12816,20 +10861,10 @@ pub enum ListUserPoolsError {
     NotAuthorized(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserPoolsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUserPoolsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserPoolsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12842,45 +10877,30 @@ impl ListUserPoolsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUserPoolsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolsError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListUserPoolsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return ListUserPoolsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolsError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListUserPoolsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListUserPoolsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListUserPoolsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUserPoolsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUserPoolsError {
-    fn from(err: serde_json::error::Error) -> ListUserPoolsError {
-        ListUserPoolsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUserPoolsError {
-    fn from(err: CredentialsError) -> ListUserPoolsError {
-        ListUserPoolsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUserPoolsError {
-    fn from(err: HttpDispatchError) -> ListUserPoolsError {
-        ListUserPoolsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUserPoolsError {
-    fn from(err: io::Error) -> ListUserPoolsError {
-        ListUserPoolsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUserPoolsError {
@@ -12895,11 +10915,6 @@ impl Error for ListUserPoolsError {
             ListUserPoolsError::InvalidParameter(ref cause) => cause,
             ListUserPoolsError::NotAuthorized(ref cause) => cause,
             ListUserPoolsError::TooManyRequests(ref cause) => cause,
-            ListUserPoolsError::Validation(ref cause) => cause,
-            ListUserPoolsError::Credentials(ref err) => err.description(),
-            ListUserPoolsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUserPoolsError::ParseError(ref cause) => cause,
-            ListUserPoolsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12916,20 +10931,10 @@ pub enum ListUsersError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUsersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12942,48 +10947,35 @@ impl ListUsersError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUsersError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListUsersError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return ListUsersError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUsersError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListUsersError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListUsersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUsersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUsersError {
-    fn from(err: serde_json::error::Error) -> ListUsersError {
-        ListUsersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUsersError {
-    fn from(err: CredentialsError) -> ListUsersError {
-        ListUsersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUsersError {
-    fn from(err: HttpDispatchError) -> ListUsersError {
-        ListUsersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUsersError {
-    fn from(err: io::Error) -> ListUsersError {
-        ListUsersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUsersError {
@@ -12999,11 +10991,6 @@ impl Error for ListUsersError {
             ListUsersError::NotAuthorized(ref cause) => cause,
             ListUsersError::ResourceNotFound(ref cause) => cause,
             ListUsersError::TooManyRequests(ref cause) => cause,
-            ListUsersError::Validation(ref cause) => cause,
-            ListUsersError::Credentials(ref err) => err.description(),
-            ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUsersError::ParseError(ref cause) => cause,
-            ListUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13020,20 +11007,10 @@ pub enum ListUsersInGroupError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUsersInGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUsersInGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersInGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13046,48 +11023,35 @@ impl ListUsersInGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return ListUsersInGroupError::InternalError(String::from(error_message));
+                    return RusotoError::Service(ListUsersInGroupError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListUsersInGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListUsersInGroupError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ListUsersInGroupError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListUsersInGroupError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUsersInGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListUsersInGroupError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListUsersInGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListUsersInGroupError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListUsersInGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUsersInGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUsersInGroupError {
-    fn from(err: serde_json::error::Error) -> ListUsersInGroupError {
-        ListUsersInGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUsersInGroupError {
-    fn from(err: CredentialsError) -> ListUsersInGroupError {
-        ListUsersInGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUsersInGroupError {
-    fn from(err: HttpDispatchError) -> ListUsersInGroupError {
-        ListUsersInGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUsersInGroupError {
-    fn from(err: io::Error) -> ListUsersInGroupError {
-        ListUsersInGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUsersInGroupError {
@@ -13103,11 +11067,6 @@ impl Error for ListUsersInGroupError {
             ListUsersInGroupError::NotAuthorized(ref cause) => cause,
             ListUsersInGroupError::ResourceNotFound(ref cause) => cause,
             ListUsersInGroupError::TooManyRequests(ref cause) => cause,
-            ListUsersInGroupError::Validation(ref cause) => cause,
-            ListUsersInGroupError::Credentials(ref err) => err.description(),
-            ListUsersInGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUsersInGroupError::ParseError(ref cause) => cause,
-            ListUsersInGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13142,20 +11101,10 @@ pub enum ResendConfirmationCodeError {
     UserLambdaValidation(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResendConfirmationCodeError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResendConfirmationCodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResendConfirmationCodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13168,93 +11117,86 @@ impl ResendConfirmationCodeError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return ResendConfirmationCodeError::CodeDeliveryFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendConfirmationCodeError::CodeDeliveryFailure(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return ResendConfirmationCodeError::InternalError(String::from(error_message));
-                }
-                "InvalidEmailRoleAccessPolicyException" => {
-                    return ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendConfirmationCodeError::InternalError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidEmailRoleAccessPolicyException" => {
+                    return RusotoError::Service(
+                        ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidLambdaResponseException" => {
-                    return ResendConfirmationCodeError::InvalidLambdaResponse(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendConfirmationCodeError::InvalidLambdaResponse(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return ResendConfirmationCodeError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendConfirmationCodeError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "LimitExceededException" => {
-                    return ResendConfirmationCodeError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ResendConfirmationCodeError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return ResendConfirmationCodeError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ResendConfirmationCodeError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ResendConfirmationCodeError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendConfirmationCodeError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ResendConfirmationCodeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ResendConfirmationCodeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return ResendConfirmationCodeError::UnexpectedLambda(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendConfirmationCodeError::UnexpectedLambda(
+                        String::from(error_message),
                     ));
                 }
                 "UserLambdaValidationException" => {
-                    return ResendConfirmationCodeError::UserLambdaValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendConfirmationCodeError::UserLambdaValidation(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return ResendConfirmationCodeError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(ResendConfirmationCodeError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ResendConfirmationCodeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResendConfirmationCodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResendConfirmationCodeError {
-    fn from(err: serde_json::error::Error) -> ResendConfirmationCodeError {
-        ResendConfirmationCodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResendConfirmationCodeError {
-    fn from(err: CredentialsError) -> ResendConfirmationCodeError {
-        ResendConfirmationCodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResendConfirmationCodeError {
-    fn from(err: HttpDispatchError) -> ResendConfirmationCodeError {
-        ResendConfirmationCodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResendConfirmationCodeError {
-    fn from(err: io::Error) -> ResendConfirmationCodeError {
-        ResendConfirmationCodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResendConfirmationCodeError {
@@ -13279,13 +11221,6 @@ impl Error for ResendConfirmationCodeError {
             ResendConfirmationCodeError::UnexpectedLambda(ref cause) => cause,
             ResendConfirmationCodeError::UserLambdaValidation(ref cause) => cause,
             ResendConfirmationCodeError::UserNotFound(ref cause) => cause,
-            ResendConfirmationCodeError::Validation(ref cause) => cause,
-            ResendConfirmationCodeError::Credentials(ref err) => err.description(),
-            ResendConfirmationCodeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ResendConfirmationCodeError::ParseError(ref cause) => cause,
-            ResendConfirmationCodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13332,20 +11267,10 @@ pub enum RespondToAuthChallengeError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RespondToAuthChallengeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RespondToAuthChallengeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RespondToAuthChallengeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13358,117 +11283,118 @@ impl RespondToAuthChallengeError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return RespondToAuthChallengeError::AliasExists(String::from(error_message));
+                    return RusotoError::Service(RespondToAuthChallengeError::AliasExists(
+                        String::from(error_message),
+                    ));
                 }
                 "CodeMismatchException" => {
-                    return RespondToAuthChallengeError::CodeMismatch(String::from(error_message));
+                    return RusotoError::Service(RespondToAuthChallengeError::CodeMismatch(
+                        String::from(error_message),
+                    ));
                 }
                 "ExpiredCodeException" => {
-                    return RespondToAuthChallengeError::ExpiredCode(String::from(error_message));
+                    return RusotoError::Service(RespondToAuthChallengeError::ExpiredCode(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return RespondToAuthChallengeError::InternalError(String::from(error_message));
+                    return RusotoError::Service(RespondToAuthChallengeError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return RespondToAuthChallengeError::InvalidLambdaResponse(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::InvalidLambdaResponse(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return RespondToAuthChallengeError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPasswordException" => {
-                    return RespondToAuthChallengeError::InvalidPassword(String::from(error_message));
-                }
-                "InvalidSmsRoleAccessPolicyException" => {
-                    return RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::InvalidPassword(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidSmsRoleAccessPolicyException" => {
+                    return RusotoError::Service(
+                        RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidUserPoolConfigurationException" => {
-                    return RespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MFAMethodNotFoundException" => {
-                    return RespondToAuthChallengeError::MFAMethodNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::MFAMethodNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return RespondToAuthChallengeError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(RespondToAuthChallengeError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return RespondToAuthChallengeError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return RespondToAuthChallengeError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "SoftwareTokenMFANotFoundException" => {
-                    return RespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManyRequestsException" => {
-                    return RespondToAuthChallengeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(RespondToAuthChallengeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return RespondToAuthChallengeError::UnexpectedLambda(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::UnexpectedLambda(
+                        String::from(error_message),
                     ));
                 }
                 "UserLambdaValidationException" => {
-                    return RespondToAuthChallengeError::UserLambdaValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::UserLambdaValidation(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotConfirmedException" => {
-                    return RespondToAuthChallengeError::UserNotConfirmed(String::from(
-                        error_message,
+                    return RusotoError::Service(RespondToAuthChallengeError::UserNotConfirmed(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return RespondToAuthChallengeError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(RespondToAuthChallengeError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RespondToAuthChallengeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RespondToAuthChallengeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RespondToAuthChallengeError {
-    fn from(err: serde_json::error::Error) -> RespondToAuthChallengeError {
-        RespondToAuthChallengeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RespondToAuthChallengeError {
-    fn from(err: CredentialsError) -> RespondToAuthChallengeError {
-        RespondToAuthChallengeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RespondToAuthChallengeError {
-    fn from(err: HttpDispatchError) -> RespondToAuthChallengeError {
-        RespondToAuthChallengeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RespondToAuthChallengeError {
-    fn from(err: io::Error) -> RespondToAuthChallengeError {
-        RespondToAuthChallengeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RespondToAuthChallengeError {
@@ -13499,13 +11425,6 @@ impl Error for RespondToAuthChallengeError {
             RespondToAuthChallengeError::UserLambdaValidation(ref cause) => cause,
             RespondToAuthChallengeError::UserNotConfirmed(ref cause) => cause,
             RespondToAuthChallengeError::UserNotFound(ref cause) => cause,
-            RespondToAuthChallengeError::Validation(ref cause) => cause,
-            RespondToAuthChallengeError::Credentials(ref err) => err.description(),
-            RespondToAuthChallengeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RespondToAuthChallengeError::ParseError(ref cause) => cause,
-            RespondToAuthChallengeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13528,20 +11447,10 @@ pub enum SetRiskConfigurationError {
     TooManyRequests(String),
     /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
     UserPoolAddOnNotEnabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetRiskConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetRiskConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetRiskConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13554,63 +11463,52 @@ impl SetRiskConfigurationError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return SetRiskConfigurationError::CodeDeliveryFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(SetRiskConfigurationError::CodeDeliveryFailure(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return SetRiskConfigurationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(SetRiskConfigurationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return SetRiskConfigurationError::InvalidParameter(String::from(error_message));
-                }
-                "NotAuthorizedException" => {
-                    return SetRiskConfigurationError::NotAuthorized(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return SetRiskConfigurationError::ResourceNotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return SetRiskConfigurationError::TooManyRequests(String::from(error_message));
-                }
-                "UserPoolAddOnNotEnabledException" => {
-                    return SetRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(SetRiskConfigurationError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return SetRiskConfigurationError::Validation(error_message.to_string());
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(SetRiskConfigurationError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(SetRiskConfigurationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(SetRiskConfigurationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "UserPoolAddOnNotEnabledException" => {
+                    return RusotoError::Service(SetRiskConfigurationError::UserPoolAddOnNotEnabled(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetRiskConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetRiskConfigurationError {
-    fn from(err: serde_json::error::Error) -> SetRiskConfigurationError {
-        SetRiskConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetRiskConfigurationError {
-    fn from(err: CredentialsError) -> SetRiskConfigurationError {
-        SetRiskConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetRiskConfigurationError {
-    fn from(err: HttpDispatchError) -> SetRiskConfigurationError {
-        SetRiskConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetRiskConfigurationError {
-    fn from(err: io::Error) -> SetRiskConfigurationError {
-        SetRiskConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetRiskConfigurationError {
@@ -13629,13 +11527,6 @@ impl Error for SetRiskConfigurationError {
             SetRiskConfigurationError::ResourceNotFound(ref cause) => cause,
             SetRiskConfigurationError::TooManyRequests(ref cause) => cause,
             SetRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => cause,
-            SetRiskConfigurationError::Validation(ref cause) => cause,
-            SetRiskConfigurationError::Credentials(ref err) => err.description(),
-            SetRiskConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetRiskConfigurationError::ParseError(ref cause) => cause,
-            SetRiskConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13652,20 +11543,10 @@ pub enum SetUICustomizationError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetUICustomizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetUICustomizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUICustomizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13678,48 +11559,35 @@ impl SetUICustomizationError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUICustomizationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(SetUICustomizationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return SetUICustomizationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SetUICustomizationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return SetUICustomizationError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(SetUICustomizationError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUICustomizationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SetUICustomizationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return SetUICustomizationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(SetUICustomizationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return SetUICustomizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetUICustomizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetUICustomizationError {
-    fn from(err: serde_json::error::Error) -> SetUICustomizationError {
-        SetUICustomizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetUICustomizationError {
-    fn from(err: CredentialsError) -> SetUICustomizationError {
-        SetUICustomizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetUICustomizationError {
-    fn from(err: HttpDispatchError) -> SetUICustomizationError {
-        SetUICustomizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetUICustomizationError {
-    fn from(err: io::Error) -> SetUICustomizationError {
-        SetUICustomizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetUICustomizationError {
@@ -13735,13 +11603,6 @@ impl Error for SetUICustomizationError {
             SetUICustomizationError::NotAuthorized(ref cause) => cause,
             SetUICustomizationError::ResourceNotFound(ref cause) => cause,
             SetUICustomizationError::TooManyRequests(ref cause) => cause,
-            SetUICustomizationError::Validation(ref cause) => cause,
-            SetUICustomizationError::Credentials(ref err) => err.description(),
-            SetUICustomizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetUICustomizationError::ParseError(ref cause) => cause,
-            SetUICustomizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13762,20 +11623,10 @@ pub enum SetUserMFAPreferenceError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetUserMFAPreferenceError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetUserMFAPreferenceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserMFAPreferenceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13788,56 +11639,45 @@ impl SetUserMFAPreferenceError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUserMFAPreferenceError::InternalError(String::from(error_message));
+                    return RusotoError::Service(SetUserMFAPreferenceError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return SetUserMFAPreferenceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SetUserMFAPreferenceError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return SetUserMFAPreferenceError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(SetUserMFAPreferenceError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return SetUserMFAPreferenceError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(SetUserMFAPreferenceError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUserMFAPreferenceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SetUserMFAPreferenceError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return SetUserMFAPreferenceError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(SetUserMFAPreferenceError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return SetUserMFAPreferenceError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(SetUserMFAPreferenceError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return SetUserMFAPreferenceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetUserMFAPreferenceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetUserMFAPreferenceError {
-    fn from(err: serde_json::error::Error) -> SetUserMFAPreferenceError {
-        SetUserMFAPreferenceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetUserMFAPreferenceError {
-    fn from(err: CredentialsError) -> SetUserMFAPreferenceError {
-        SetUserMFAPreferenceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetUserMFAPreferenceError {
-    fn from(err: HttpDispatchError) -> SetUserMFAPreferenceError {
-        SetUserMFAPreferenceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetUserMFAPreferenceError {
-    fn from(err: io::Error) -> SetUserMFAPreferenceError {
-        SetUserMFAPreferenceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetUserMFAPreferenceError {
@@ -13855,13 +11695,6 @@ impl Error for SetUserMFAPreferenceError {
             SetUserMFAPreferenceError::ResourceNotFound(ref cause) => cause,
             SetUserMFAPreferenceError::UserNotConfirmed(ref cause) => cause,
             SetUserMFAPreferenceError::UserNotFound(ref cause) => cause,
-            SetUserMFAPreferenceError::Validation(ref cause) => cause,
-            SetUserMFAPreferenceError::Credentials(ref err) => err.description(),
-            SetUserMFAPreferenceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetUserMFAPreferenceError::ParseError(ref cause) => cause,
-            SetUserMFAPreferenceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13882,20 +11715,10 @@ pub enum SetUserPoolMfaConfigError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetUserPoolMfaConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetUserPoolMfaConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserPoolMfaConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -13908,58 +11731,49 @@ impl SetUserPoolMfaConfigError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUserPoolMfaConfigError::InternalError(String::from(error_message));
+                    return RusotoError::Service(SetUserPoolMfaConfigError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return SetUserPoolMfaConfigError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SetUserPoolMfaConfigError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return SetUserPoolMfaConfigError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(SetUserPoolMfaConfigError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SetUserPoolMfaConfigError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return SetUserPoolMfaConfigError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(SetUserPoolMfaConfigError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return SetUserPoolMfaConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetUserPoolMfaConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetUserPoolMfaConfigError {
-    fn from(err: serde_json::error::Error) -> SetUserPoolMfaConfigError {
-        SetUserPoolMfaConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetUserPoolMfaConfigError {
-    fn from(err: CredentialsError) -> SetUserPoolMfaConfigError {
-        SetUserPoolMfaConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetUserPoolMfaConfigError {
-    fn from(err: HttpDispatchError) -> SetUserPoolMfaConfigError {
-        SetUserPoolMfaConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetUserPoolMfaConfigError {
-    fn from(err: io::Error) -> SetUserPoolMfaConfigError {
-        SetUserPoolMfaConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetUserPoolMfaConfigError {
@@ -13977,13 +11791,6 @@ impl Error for SetUserPoolMfaConfigError {
             SetUserPoolMfaConfigError::NotAuthorized(ref cause) => cause,
             SetUserPoolMfaConfigError::ResourceNotFound(ref cause) => cause,
             SetUserPoolMfaConfigError::TooManyRequests(ref cause) => cause,
-            SetUserPoolMfaConfigError::Validation(ref cause) => cause,
-            SetUserPoolMfaConfigError::Credentials(ref err) => err.description(),
-            SetUserPoolMfaConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetUserPoolMfaConfigError::ParseError(ref cause) => cause,
-            SetUserPoolMfaConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14004,20 +11811,10 @@ pub enum SetUserSettingsError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetUserSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetUserSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetUserSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14030,54 +11827,45 @@ impl SetUserSettingsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return SetUserSettingsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(SetUserSettingsError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return SetUserSettingsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SetUserSettingsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return SetUserSettingsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(SetUserSettingsError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "PasswordResetRequiredException" => {
-                    return SetUserSettingsError::PasswordResetRequired(String::from(error_message));
+                    return RusotoError::Service(SetUserSettingsError::PasswordResetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetUserSettingsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SetUserSettingsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return SetUserSettingsError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(SetUserSettingsError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return SetUserSettingsError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(SetUserSettingsError::UserNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return SetUserSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetUserSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetUserSettingsError {
-    fn from(err: serde_json::error::Error) -> SetUserSettingsError {
-        SetUserSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetUserSettingsError {
-    fn from(err: CredentialsError) -> SetUserSettingsError {
-        SetUserSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetUserSettingsError {
-    fn from(err: HttpDispatchError) -> SetUserSettingsError {
-        SetUserSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetUserSettingsError {
-    fn from(err: io::Error) -> SetUserSettingsError {
-        SetUserSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetUserSettingsError {
@@ -14095,11 +11883,6 @@ impl Error for SetUserSettingsError {
             SetUserSettingsError::ResourceNotFound(ref cause) => cause,
             SetUserSettingsError::UserNotConfirmed(ref cause) => cause,
             SetUserSettingsError::UserNotFound(ref cause) => cause,
-            SetUserSettingsError::Validation(ref cause) => cause,
-            SetUserSettingsError::Credentials(ref err) => err.description(),
-            SetUserSettingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetUserSettingsError::ParseError(ref cause) => cause,
-            SetUserSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14134,20 +11917,10 @@ pub enum SignUpError {
     UserLambdaValidation(String),
     /// <p>This exception is thrown when Amazon Cognito encounters a user name that already exists in the user pool.</p>
     UsernameExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SignUpError {
-    pub fn from_response(res: BufferedHttpResponse) -> SignUpError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignUpError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14160,73 +11933,80 @@ impl SignUpError {
 
             match *error_type {
                 "CodeDeliveryFailureException" => {
-                    return SignUpError::CodeDeliveryFailure(String::from(error_message));
+                    return RusotoError::Service(SignUpError::CodeDeliveryFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return SignUpError::InternalError(String::from(error_message));
+                    return RusotoError::Service(SignUpError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return SignUpError::InvalidEmailRoleAccessPolicy(String::from(error_message));
+                    return RusotoError::Service(SignUpError::InvalidEmailRoleAccessPolicy(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidLambdaResponseException" => {
-                    return SignUpError::InvalidLambdaResponse(String::from(error_message));
+                    return RusotoError::Service(SignUpError::InvalidLambdaResponse(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return SignUpError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SignUpError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPasswordException" => {
-                    return SignUpError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(SignUpError::InvalidPassword(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return SignUpError::InvalidSmsRoleAccessPolicy(String::from(error_message));
+                    return RusotoError::Service(SignUpError::InvalidSmsRoleAccessPolicy(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return SignUpError::InvalidSmsRoleTrustRelationship(String::from(error_message));
+                    return RusotoError::Service(SignUpError::InvalidSmsRoleTrustRelationship(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return SignUpError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(SignUpError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return SignUpError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SignUpError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return SignUpError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(SignUpError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnexpectedLambdaException" => {
-                    return SignUpError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(SignUpError::UnexpectedLambda(String::from(
+                        error_message,
+                    )));
                 }
                 "UserLambdaValidationException" => {
-                    return SignUpError::UserLambdaValidation(String::from(error_message));
+                    return RusotoError::Service(SignUpError::UserLambdaValidation(String::from(
+                        error_message,
+                    )));
                 }
                 "UsernameExistsException" => {
-                    return SignUpError::UsernameExists(String::from(error_message));
+                    return RusotoError::Service(SignUpError::UsernameExists(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return SignUpError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SignUpError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SignUpError {
-    fn from(err: serde_json::error::Error) -> SignUpError {
-        SignUpError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SignUpError {
-    fn from(err: CredentialsError) -> SignUpError {
-        SignUpError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SignUpError {
-    fn from(err: HttpDispatchError) -> SignUpError {
-        SignUpError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SignUpError {
-    fn from(err: io::Error) -> SignUpError {
-        SignUpError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SignUpError {
@@ -14251,11 +12031,6 @@ impl Error for SignUpError {
             SignUpError::UnexpectedLambda(ref cause) => cause,
             SignUpError::UserLambdaValidation(ref cause) => cause,
             SignUpError::UsernameExists(ref cause) => cause,
-            SignUpError::Validation(ref cause) => cause,
-            SignUpError::Credentials(ref err) => err.description(),
-            SignUpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SignUpError::ParseError(ref cause) => cause,
-            SignUpError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14274,20 +12049,10 @@ pub enum StartUserImportJobError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartUserImportJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartUserImportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartUserImportJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14300,51 +12065,40 @@ impl StartUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return StartUserImportJobError::InternalError(String::from(error_message));
+                    return RusotoError::Service(StartUserImportJobError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartUserImportJobError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StartUserImportJobError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return StartUserImportJobError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(StartUserImportJobError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionNotMetException" => {
-                    return StartUserImportJobError::PreconditionNotMet(String::from(error_message));
+                    return RusotoError::Service(StartUserImportJobError::PreconditionNotMet(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StartUserImportJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartUserImportJobError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return StartUserImportJobError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(StartUserImportJobError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartUserImportJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartUserImportJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartUserImportJobError {
-    fn from(err: serde_json::error::Error) -> StartUserImportJobError {
-        StartUserImportJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartUserImportJobError {
-    fn from(err: CredentialsError) -> StartUserImportJobError {
-        StartUserImportJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartUserImportJobError {
-    fn from(err: HttpDispatchError) -> StartUserImportJobError {
-        StartUserImportJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartUserImportJobError {
-    fn from(err: io::Error) -> StartUserImportJobError {
-        StartUserImportJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartUserImportJobError {
@@ -14361,13 +12115,6 @@ impl Error for StartUserImportJobError {
             StartUserImportJobError::PreconditionNotMet(ref cause) => cause,
             StartUserImportJobError::ResourceNotFound(ref cause) => cause,
             StartUserImportJobError::TooManyRequests(ref cause) => cause,
-            StartUserImportJobError::Validation(ref cause) => cause,
-            StartUserImportJobError::Credentials(ref err) => err.description(),
-            StartUserImportJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartUserImportJobError::ParseError(ref cause) => cause,
-            StartUserImportJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14386,20 +12133,10 @@ pub enum StopUserImportJobError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopUserImportJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopUserImportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopUserImportJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14412,51 +12149,40 @@ impl StopUserImportJobError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return StopUserImportJobError::InternalError(String::from(error_message));
+                    return RusotoError::Service(StopUserImportJobError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StopUserImportJobError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StopUserImportJobError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return StopUserImportJobError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(StopUserImportJobError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionNotMetException" => {
-                    return StopUserImportJobError::PreconditionNotMet(String::from(error_message));
+                    return RusotoError::Service(StopUserImportJobError::PreconditionNotMet(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StopUserImportJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StopUserImportJobError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return StopUserImportJobError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(StopUserImportJobError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopUserImportJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopUserImportJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopUserImportJobError {
-    fn from(err: serde_json::error::Error) -> StopUserImportJobError {
-        StopUserImportJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopUserImportJobError {
-    fn from(err: CredentialsError) -> StopUserImportJobError {
-        StopUserImportJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopUserImportJobError {
-    fn from(err: HttpDispatchError) -> StopUserImportJobError {
-        StopUserImportJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopUserImportJobError {
-    fn from(err: io::Error) -> StopUserImportJobError {
-        StopUserImportJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopUserImportJobError {
@@ -14473,13 +12199,6 @@ impl Error for StopUserImportJobError {
             StopUserImportJobError::PreconditionNotMet(ref cause) => cause,
             StopUserImportJobError::ResourceNotFound(ref cause) => cause,
             StopUserImportJobError::TooManyRequests(ref cause) => cause,
-            StopUserImportJobError::Validation(ref cause) => cause,
-            StopUserImportJobError::Credentials(ref err) => err.description(),
-            StopUserImportJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopUserImportJobError::ParseError(ref cause) => cause,
-            StopUserImportJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14500,20 +12219,10 @@ pub enum UpdateAuthEventFeedbackError {
     UserNotFound(String),
     /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
     UserPoolAddOnNotEnabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAuthEventFeedbackError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAuthEventFeedbackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAuthEventFeedbackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14526,62 +12235,47 @@ impl UpdateAuthEventFeedbackError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateAuthEventFeedbackError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateAuthEventFeedbackError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateAuthEventFeedbackError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateAuthEventFeedbackError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateAuthEventFeedbackError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateAuthEventFeedbackError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateAuthEventFeedbackError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateAuthEventFeedbackError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateAuthEventFeedbackError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateAuthEventFeedbackError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotFoundException" => {
-                    return UpdateAuthEventFeedbackError::UserNotFound(String::from(error_message));
-                }
-                "UserPoolAddOnNotEnabledException" => {
-                    return UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateAuthEventFeedbackError::UserNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateAuthEventFeedbackError::Validation(error_message.to_string());
+                "UserPoolAddOnNotEnabledException" => {
+                    return RusotoError::Service(
+                        UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateAuthEventFeedbackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateAuthEventFeedbackError {
-    fn from(err: serde_json::error::Error) -> UpdateAuthEventFeedbackError {
-        UpdateAuthEventFeedbackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAuthEventFeedbackError {
-    fn from(err: CredentialsError) -> UpdateAuthEventFeedbackError {
-        UpdateAuthEventFeedbackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAuthEventFeedbackError {
-    fn from(err: HttpDispatchError) -> UpdateAuthEventFeedbackError {
-        UpdateAuthEventFeedbackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAuthEventFeedbackError {
-    fn from(err: io::Error) -> UpdateAuthEventFeedbackError {
-        UpdateAuthEventFeedbackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateAuthEventFeedbackError {
@@ -14599,13 +12293,6 @@ impl Error for UpdateAuthEventFeedbackError {
             UpdateAuthEventFeedbackError::TooManyRequests(ref cause) => cause,
             UpdateAuthEventFeedbackError::UserNotFound(ref cause) => cause,
             UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => cause,
-            UpdateAuthEventFeedbackError::Validation(ref cause) => cause,
-            UpdateAuthEventFeedbackError::Credentials(ref err) => err.description(),
-            UpdateAuthEventFeedbackError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateAuthEventFeedbackError::ParseError(ref cause) => cause,
-            UpdateAuthEventFeedbackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14630,20 +12317,10 @@ pub enum UpdateDeviceStatusError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDeviceStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDeviceStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14656,64 +12333,57 @@ impl UpdateDeviceStatusError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateDeviceStatusError::InternalError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return UpdateDeviceStatusError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidUserPoolConfigurationException" => {
-                    return UpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeviceStatusError::InternalError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateDeviceStatusError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidUserPoolConfigurationException" => {
+                    return RusotoError::Service(
+                        UpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "NotAuthorizedException" => {
-                    return UpdateDeviceStatusError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStatusError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return UpdateDeviceStatusError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeviceStatusError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDeviceStatusError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStatusError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateDeviceStatusError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStatusError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return UpdateDeviceStatusError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStatusError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return UpdateDeviceStatusError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStatusError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDeviceStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDeviceStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDeviceStatusError {
-    fn from(err: serde_json::error::Error) -> UpdateDeviceStatusError {
-        UpdateDeviceStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDeviceStatusError {
-    fn from(err: CredentialsError) -> UpdateDeviceStatusError {
-        UpdateDeviceStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDeviceStatusError {
-    fn from(err: HttpDispatchError) -> UpdateDeviceStatusError {
-        UpdateDeviceStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDeviceStatusError {
-    fn from(err: io::Error) -> UpdateDeviceStatusError {
-        UpdateDeviceStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDeviceStatusError {
@@ -14733,13 +12403,6 @@ impl Error for UpdateDeviceStatusError {
             UpdateDeviceStatusError::TooManyRequests(ref cause) => cause,
             UpdateDeviceStatusError::UserNotConfirmed(ref cause) => cause,
             UpdateDeviceStatusError::UserNotFound(ref cause) => cause,
-            UpdateDeviceStatusError::Validation(ref cause) => cause,
-            UpdateDeviceStatusError::Credentials(ref err) => err.description(),
-            UpdateDeviceStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDeviceStatusError::ParseError(ref cause) => cause,
-            UpdateDeviceStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14756,20 +12419,10 @@ pub enum UpdateGroupError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14782,48 +12435,35 @@ impl UpdateGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateGroupError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return UpdateGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateGroupError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateGroupError {
-        UpdateGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGroupError {
-    fn from(err: CredentialsError) -> UpdateGroupError {
-        UpdateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGroupError {
-    fn from(err: HttpDispatchError) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGroupError {
-    fn from(err: io::Error) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGroupError {
@@ -14839,11 +12479,6 @@ impl Error for UpdateGroupError {
             UpdateGroupError::NotAuthorized(ref cause) => cause,
             UpdateGroupError::ResourceNotFound(ref cause) => cause,
             UpdateGroupError::TooManyRequests(ref cause) => cause,
-            UpdateGroupError::Validation(ref cause) => cause,
-            UpdateGroupError::Credentials(ref err) => err.description(),
-            UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateGroupError::ParseError(ref cause) => cause,
-            UpdateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14862,20 +12497,10 @@ pub enum UpdateIdentityProviderError {
     TooManyRequests(String),
     /// <p>This exception is thrown when the specified identifier is not supported.</p>
     UnsupportedIdentityProvider(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateIdentityProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateIdentityProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIdentityProviderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -14888,57 +12513,42 @@ impl UpdateIdentityProviderError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateIdentityProviderError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityProviderError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateIdentityProviderError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateIdentityProviderError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateIdentityProviderError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateIdentityProviderError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateIdentityProviderError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateIdentityProviderError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateIdentityProviderError::TooManyRequests(String::from(error_message));
-                }
-                "UnsupportedIdentityProviderException" => {
-                    return UpdateIdentityProviderError::UnsupportedIdentityProvider(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateIdentityProviderError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateIdentityProviderError::Validation(error_message.to_string());
+                "UnsupportedIdentityProviderException" => {
+                    return RusotoError::Service(
+                        UpdateIdentityProviderError::UnsupportedIdentityProvider(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateIdentityProviderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateIdentityProviderError {
-    fn from(err: serde_json::error::Error) -> UpdateIdentityProviderError {
-        UpdateIdentityProviderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateIdentityProviderError {
-    fn from(err: CredentialsError) -> UpdateIdentityProviderError {
-        UpdateIdentityProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateIdentityProviderError {
-    fn from(err: HttpDispatchError) -> UpdateIdentityProviderError {
-        UpdateIdentityProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateIdentityProviderError {
-    fn from(err: io::Error) -> UpdateIdentityProviderError {
-        UpdateIdentityProviderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateIdentityProviderError {
@@ -14955,13 +12565,6 @@ impl Error for UpdateIdentityProviderError {
             UpdateIdentityProviderError::ResourceNotFound(ref cause) => cause,
             UpdateIdentityProviderError::TooManyRequests(ref cause) => cause,
             UpdateIdentityProviderError::UnsupportedIdentityProvider(ref cause) => cause,
-            UpdateIdentityProviderError::Validation(ref cause) => cause,
-            UpdateIdentityProviderError::Credentials(ref err) => err.description(),
-            UpdateIdentityProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateIdentityProviderError::ParseError(ref cause) => cause,
-            UpdateIdentityProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14978,20 +12581,10 @@ pub enum UpdateResourceServerError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateResourceServerError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateResourceServerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceServerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15004,48 +12597,35 @@ impl UpdateResourceServerError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateResourceServerError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceServerError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateResourceServerError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceServerError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateResourceServerError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceServerError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateResourceServerError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceServerError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateResourceServerError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceServerError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateResourceServerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateResourceServerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateResourceServerError {
-    fn from(err: serde_json::error::Error) -> UpdateResourceServerError {
-        UpdateResourceServerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateResourceServerError {
-    fn from(err: CredentialsError) -> UpdateResourceServerError {
-        UpdateResourceServerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateResourceServerError {
-    fn from(err: HttpDispatchError) -> UpdateResourceServerError {
-        UpdateResourceServerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateResourceServerError {
-    fn from(err: io::Error) -> UpdateResourceServerError {
-        UpdateResourceServerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateResourceServerError {
@@ -15061,13 +12641,6 @@ impl Error for UpdateResourceServerError {
             UpdateResourceServerError::NotAuthorized(ref cause) => cause,
             UpdateResourceServerError::ResourceNotFound(ref cause) => cause,
             UpdateResourceServerError::TooManyRequests(ref cause) => cause,
-            UpdateResourceServerError::Validation(ref cause) => cause,
-            UpdateResourceServerError::Credentials(ref err) => err.description(),
-            UpdateResourceServerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateResourceServerError::ParseError(ref cause) => cause,
-            UpdateResourceServerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15110,20 +12683,10 @@ pub enum UpdateUserAttributesError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15136,101 +12699,106 @@ impl UpdateUserAttributesError {
 
             match *error_type {
                 "AliasExistsException" => {
-                    return UpdateUserAttributesError::AliasExists(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::AliasExists(
+                        String::from(error_message),
+                    ));
                 }
                 "CodeDeliveryFailureException" => {
-                    return UpdateUserAttributesError::CodeDeliveryFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserAttributesError::CodeDeliveryFailure(
+                        String::from(error_message),
                     ));
                 }
                 "CodeMismatchException" => {
-                    return UpdateUserAttributesError::CodeMismatch(String::from(error_message));
-                }
-                "ExpiredCodeException" => {
-                    return UpdateUserAttributesError::ExpiredCode(String::from(error_message));
-                }
-                "InternalErrorException" => {
-                    return UpdateUserAttributesError::InternalError(String::from(error_message));
-                }
-                "InvalidEmailRoleAccessPolicyException" => {
-                    return UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserAttributesError::CodeMismatch(
+                        String::from(error_message),
                     ));
                 }
+                "ExpiredCodeException" => {
+                    return RusotoError::Service(UpdateUserAttributesError::ExpiredCode(
+                        String::from(error_message),
+                    ));
+                }
+                "InternalErrorException" => {
+                    return RusotoError::Service(UpdateUserAttributesError::InternalError(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidEmailRoleAccessPolicyException" => {
+                    return RusotoError::Service(
+                        UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidLambdaResponseException" => {
-                    return UpdateUserAttributesError::InvalidLambdaResponse(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserAttributesError::InvalidLambdaResponse(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserAttributesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return UpdateUserAttributesError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return UpdateUserAttributesError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserAttributesError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserAttributesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUserAttributesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnexpectedLambdaException" => {
-                    return UpdateUserAttributesError::UnexpectedLambda(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::UnexpectedLambda(
+                        String::from(error_message),
+                    ));
                 }
                 "UserLambdaValidationException" => {
-                    return UpdateUserAttributesError::UserLambdaValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserAttributesError::UserLambdaValidation(
+                        String::from(error_message),
                     ));
                 }
                 "UserNotConfirmedException" => {
-                    return UpdateUserAttributesError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return UpdateUserAttributesError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateUserAttributesError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateUserAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUserAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUserAttributesError {
-    fn from(err: serde_json::error::Error) -> UpdateUserAttributesError {
-        UpdateUserAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserAttributesError {
-    fn from(err: CredentialsError) -> UpdateUserAttributesError {
-        UpdateUserAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserAttributesError {
-    fn from(err: HttpDispatchError) -> UpdateUserAttributesError {
-        UpdateUserAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserAttributesError {
-    fn from(err: io::Error) -> UpdateUserAttributesError {
-        UpdateUserAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUserAttributesError {
@@ -15259,13 +12827,6 @@ impl Error for UpdateUserAttributesError {
             UpdateUserAttributesError::UserLambdaValidation(ref cause) => cause,
             UpdateUserAttributesError::UserNotConfirmed(ref cause) => cause,
             UpdateUserAttributesError::UserNotFound(ref cause) => cause,
-            UpdateUserAttributesError::Validation(ref cause) => cause,
-            UpdateUserAttributesError::Credentials(ref err) => err.description(),
-            UpdateUserAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateUserAttributesError::ParseError(ref cause) => cause,
-            UpdateUserAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15294,20 +12855,10 @@ pub enum UpdateUserPoolError {
     UserImportInProgress(String),
     /// <p>This exception is thrown when a user pool tag cannot be set or updated.</p>
     UserPoolTagging(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserPoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15320,72 +12871,67 @@ impl UpdateUserPoolError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateUserPoolError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return UpdateUserPoolError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
-                    return UpdateUserPoolError::InvalidEmailRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserPoolError::InvalidEmailRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserPoolError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return UpdateUserPoolError::InvalidSmsRoleAccessPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserPoolError::InvalidSmsRoleAccessPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
-                    return UpdateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotAuthorizedException" => {
-                    return UpdateUserPoolError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserPoolError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUserPoolError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UserImportInProgressException" => {
-                    return UpdateUserPoolError::UserImportInProgress(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::UserImportInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "UserPoolTaggingException" => {
-                    return UpdateUserPoolError::UserPoolTagging(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolError::UserPoolTagging(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateUserPoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUserPoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUserPoolError {
-    fn from(err: serde_json::error::Error) -> UpdateUserPoolError {
-        UpdateUserPoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserPoolError {
-    fn from(err: CredentialsError) -> UpdateUserPoolError {
-        UpdateUserPoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserPoolError {
-    fn from(err: HttpDispatchError) -> UpdateUserPoolError {
-        UpdateUserPoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserPoolError {
-    fn from(err: io::Error) -> UpdateUserPoolError {
-        UpdateUserPoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUserPoolError {
@@ -15407,11 +12953,6 @@ impl Error for UpdateUserPoolError {
             UpdateUserPoolError::TooManyRequests(ref cause) => cause,
             UpdateUserPoolError::UserImportInProgress(ref cause) => cause,
             UpdateUserPoolError::UserPoolTagging(ref cause) => cause,
-            UpdateUserPoolError::Validation(ref cause) => cause,
-            UpdateUserPoolError::Credentials(ref err) => err.description(),
-            UpdateUserPoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateUserPoolError::ParseError(ref cause) => cause,
-            UpdateUserPoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15434,20 +12975,10 @@ pub enum UpdateUserPoolClientError {
     ScopeDoesNotExist(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserPoolClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserPoolClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15460,59 +12991,50 @@ impl UpdateUserPoolClientError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateUserPoolClientError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserPoolClientError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return UpdateUserPoolClientError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolClientError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOAuthFlowException" => {
-                    return UpdateUserPoolClientError::InvalidOAuthFlow(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolClientError::InvalidOAuthFlow(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserPoolClientError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolClientError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateUserPoolClientError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolClientError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserPoolClientError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolClientError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ScopeDoesNotExistException" => {
-                    return UpdateUserPoolClientError::ScopeDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolClientError::ScopeDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUserPoolClientError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolClientError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateUserPoolClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUserPoolClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUserPoolClientError {
-    fn from(err: serde_json::error::Error) -> UpdateUserPoolClientError {
-        UpdateUserPoolClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserPoolClientError {
-    fn from(err: CredentialsError) -> UpdateUserPoolClientError {
-        UpdateUserPoolClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserPoolClientError {
-    fn from(err: HttpDispatchError) -> UpdateUserPoolClientError {
-        UpdateUserPoolClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserPoolClientError {
-    fn from(err: io::Error) -> UpdateUserPoolClientError {
-        UpdateUserPoolClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUserPoolClientError {
@@ -15531,13 +13053,6 @@ impl Error for UpdateUserPoolClientError {
             UpdateUserPoolClientError::ResourceNotFound(ref cause) => cause,
             UpdateUserPoolClientError::ScopeDoesNotExist(ref cause) => cause,
             UpdateUserPoolClientError::TooManyRequests(ref cause) => cause,
-            UpdateUserPoolClientError::Validation(ref cause) => cause,
-            UpdateUserPoolClientError::Credentials(ref err) => err.description(),
-            UpdateUserPoolClientError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateUserPoolClientError::ParseError(ref cause) => cause,
-            UpdateUserPoolClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15554,20 +13069,10 @@ pub enum UpdateUserPoolDomainError {
     ResourceNotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserPoolDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserPoolDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserPoolDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15580,48 +13085,35 @@ impl UpdateUserPoolDomainError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateUserPoolDomainError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolDomainError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateUserPoolDomainError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolDomainError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return UpdateUserPoolDomainError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolDomainError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateUserPoolDomainError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolDomainError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateUserPoolDomainError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateUserPoolDomainError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateUserPoolDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUserPoolDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUserPoolDomainError {
-    fn from(err: serde_json::error::Error) -> UpdateUserPoolDomainError {
-        UpdateUserPoolDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserPoolDomainError {
-    fn from(err: CredentialsError) -> UpdateUserPoolDomainError {
-        UpdateUserPoolDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserPoolDomainError {
-    fn from(err: HttpDispatchError) -> UpdateUserPoolDomainError {
-        UpdateUserPoolDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserPoolDomainError {
-    fn from(err: io::Error) -> UpdateUserPoolDomainError {
-        UpdateUserPoolDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUserPoolDomainError {
@@ -15637,13 +13129,6 @@ impl Error for UpdateUserPoolDomainError {
             UpdateUserPoolDomainError::NotAuthorized(ref cause) => cause,
             UpdateUserPoolDomainError::ResourceNotFound(ref cause) => cause,
             UpdateUserPoolDomainError::TooManyRequests(ref cause) => cause,
-            UpdateUserPoolDomainError::Validation(ref cause) => cause,
-            UpdateUserPoolDomainError::Credentials(ref err) => err.description(),
-            UpdateUserPoolDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateUserPoolDomainError::ParseError(ref cause) => cause,
-            UpdateUserPoolDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15674,20 +13159,10 @@ pub enum VerifySoftwareTokenError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl VerifySoftwareTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> VerifySoftwareTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifySoftwareTokenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15700,77 +13175,72 @@ impl VerifySoftwareTokenError {
 
             match *error_type {
                 "CodeMismatchException" => {
-                    return VerifySoftwareTokenError::CodeMismatch(String::from(error_message));
+                    return RusotoError::Service(VerifySoftwareTokenError::CodeMismatch(
+                        String::from(error_message),
+                    ));
                 }
                 "EnableSoftwareTokenMFAException" => {
-                    return VerifySoftwareTokenError::EnableSoftwareTokenMFA(String::from(
-                        error_message,
+                    return RusotoError::Service(VerifySoftwareTokenError::EnableSoftwareTokenMFA(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return VerifySoftwareTokenError::InternalError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return VerifySoftwareTokenError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidUserPoolConfigurationException" => {
-                    return VerifySoftwareTokenError::InvalidUserPoolConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(VerifySoftwareTokenError::InternalError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(VerifySoftwareTokenError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidUserPoolConfigurationException" => {
+                    return RusotoError::Service(
+                        VerifySoftwareTokenError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "NotAuthorizedException" => {
-                    return VerifySoftwareTokenError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(VerifySoftwareTokenError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return VerifySoftwareTokenError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(VerifySoftwareTokenError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return VerifySoftwareTokenError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(VerifySoftwareTokenError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "SoftwareTokenMFANotFoundException" => {
-                    return VerifySoftwareTokenError::SoftwareTokenMFANotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(VerifySoftwareTokenError::SoftwareTokenMFANotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return VerifySoftwareTokenError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(VerifySoftwareTokenError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return VerifySoftwareTokenError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(VerifySoftwareTokenError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return VerifySoftwareTokenError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(VerifySoftwareTokenError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return VerifySoftwareTokenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return VerifySoftwareTokenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for VerifySoftwareTokenError {
-    fn from(err: serde_json::error::Error) -> VerifySoftwareTokenError {
-        VerifySoftwareTokenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for VerifySoftwareTokenError {
-    fn from(err: CredentialsError) -> VerifySoftwareTokenError {
-        VerifySoftwareTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for VerifySoftwareTokenError {
-    fn from(err: HttpDispatchError) -> VerifySoftwareTokenError {
-        VerifySoftwareTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for VerifySoftwareTokenError {
-    fn from(err: io::Error) -> VerifySoftwareTokenError {
-        VerifySoftwareTokenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for VerifySoftwareTokenError {
@@ -15793,13 +13263,6 @@ impl Error for VerifySoftwareTokenError {
             VerifySoftwareTokenError::TooManyRequests(ref cause) => cause,
             VerifySoftwareTokenError::UserNotConfirmed(ref cause) => cause,
             VerifySoftwareTokenError::UserNotFound(ref cause) => cause,
-            VerifySoftwareTokenError::Validation(ref cause) => cause,
-            VerifySoftwareTokenError::Credentials(ref err) => err.description(),
-            VerifySoftwareTokenError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            VerifySoftwareTokenError::ParseError(ref cause) => cause,
-            VerifySoftwareTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15828,20 +13291,10 @@ pub enum VerifyUserAttributeError {
     UserNotConfirmed(String),
     /// <p>This exception is thrown when a user is not found.</p>
     UserNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl VerifyUserAttributeError {
-    pub fn from_response(res: BufferedHttpResponse) -> VerifyUserAttributeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyUserAttributeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -15854,68 +13307,65 @@ impl VerifyUserAttributeError {
 
             match *error_type {
                 "CodeMismatchException" => {
-                    return VerifyUserAttributeError::CodeMismatch(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::CodeMismatch(
+                        String::from(error_message),
+                    ));
                 }
                 "ExpiredCodeException" => {
-                    return VerifyUserAttributeError::ExpiredCode(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::ExpiredCode(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return VerifyUserAttributeError::InternalError(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return VerifyUserAttributeError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return VerifyUserAttributeError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return VerifyUserAttributeError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
                 "PasswordResetRequiredException" => {
-                    return VerifyUserAttributeError::PasswordResetRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(VerifyUserAttributeError::PasswordResetRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return VerifyUserAttributeError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return VerifyUserAttributeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotConfirmedException" => {
-                    return VerifyUserAttributeError::UserNotConfirmed(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::UserNotConfirmed(
+                        String::from(error_message),
+                    ));
                 }
                 "UserNotFoundException" => {
-                    return VerifyUserAttributeError::UserNotFound(String::from(error_message));
+                    return RusotoError::Service(VerifyUserAttributeError::UserNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return VerifyUserAttributeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return VerifyUserAttributeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for VerifyUserAttributeError {
-    fn from(err: serde_json::error::Error) -> VerifyUserAttributeError {
-        VerifyUserAttributeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for VerifyUserAttributeError {
-    fn from(err: CredentialsError) -> VerifyUserAttributeError {
-        VerifyUserAttributeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for VerifyUserAttributeError {
-    fn from(err: HttpDispatchError) -> VerifyUserAttributeError {
-        VerifyUserAttributeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for VerifyUserAttributeError {
-    fn from(err: io::Error) -> VerifyUserAttributeError {
-        VerifyUserAttributeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for VerifyUserAttributeError {
@@ -15937,13 +13387,6 @@ impl Error for VerifyUserAttributeError {
             VerifyUserAttributeError::TooManyRequests(ref cause) => cause,
             VerifyUserAttributeError::UserNotConfirmed(ref cause) => cause,
             VerifyUserAttributeError::UserNotFound(ref cause) => cause,
-            VerifyUserAttributeError::Validation(ref cause) => cause,
-            VerifyUserAttributeError::Credentials(ref err) => err.description(),
-            VerifyUserAttributeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            VerifyUserAttributeError::ParseError(ref cause) => cause,
-            VerifyUserAttributeError::Unknown(_) => "unknown error",
         }
     }
 }

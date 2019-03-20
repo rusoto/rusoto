@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -10264,20 +10261,10 @@ impl VirtualizationTypeDeserializer {
 pub enum AbortEnvironmentUpdateError {
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AbortEnvironmentUpdateError {
-    pub fn from_response(res: BufferedHttpResponse) -> AbortEnvironmentUpdateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortEnvironmentUpdateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10285,15 +10272,17 @@ impl AbortEnvironmentUpdateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return AbortEnvironmentUpdateError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AbortEnvironmentUpdateError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AbortEnvironmentUpdateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10302,28 +10291,6 @@ impl AbortEnvironmentUpdateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AbortEnvironmentUpdateError {
-    fn from(err: XmlParseError) -> AbortEnvironmentUpdateError {
-        let XmlParseError(message) = err;
-        AbortEnvironmentUpdateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AbortEnvironmentUpdateError {
-    fn from(err: CredentialsError) -> AbortEnvironmentUpdateError {
-        AbortEnvironmentUpdateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AbortEnvironmentUpdateError {
-    fn from(err: HttpDispatchError) -> AbortEnvironmentUpdateError {
-        AbortEnvironmentUpdateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AbortEnvironmentUpdateError {
-    fn from(err: io::Error) -> AbortEnvironmentUpdateError {
-        AbortEnvironmentUpdateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AbortEnvironmentUpdateError {
@@ -10335,13 +10302,6 @@ impl Error for AbortEnvironmentUpdateError {
     fn description(&self) -> &str {
         match *self {
             AbortEnvironmentUpdateError::InsufficientPrivileges(ref cause) => cause,
-            AbortEnvironmentUpdateError::Validation(ref cause) => cause,
-            AbortEnvironmentUpdateError::Credentials(ref err) => err.description(),
-            AbortEnvironmentUpdateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AbortEnvironmentUpdateError::ParseError(ref cause) => cause,
-            AbortEnvironmentUpdateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10352,20 +10312,12 @@ pub enum ApplyEnvironmentManagedActionError {
     ElasticBeanstalkService(String),
     /// <p>Cannot modify the managed action in its current state.</p>
     ManagedActionInvalidState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ApplyEnvironmentManagedActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ApplyEnvironmentManagedActionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ApplyEnvironmentManagedActionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10373,20 +10325,24 @@ impl ApplyEnvironmentManagedActionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return ApplyEnvironmentManagedActionError::ElasticBeanstalkService(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplyEnvironmentManagedActionError::ElasticBeanstalkService(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ManagedActionInvalidStateException" => {
-                        return ApplyEnvironmentManagedActionError::ManagedActionInvalidState(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplyEnvironmentManagedActionError::ManagedActionInvalidState(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ApplyEnvironmentManagedActionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10395,28 +10351,6 @@ impl ApplyEnvironmentManagedActionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ApplyEnvironmentManagedActionError {
-    fn from(err: XmlParseError) -> ApplyEnvironmentManagedActionError {
-        let XmlParseError(message) = err;
-        ApplyEnvironmentManagedActionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ApplyEnvironmentManagedActionError {
-    fn from(err: CredentialsError) -> ApplyEnvironmentManagedActionError {
-        ApplyEnvironmentManagedActionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ApplyEnvironmentManagedActionError {
-    fn from(err: HttpDispatchError) -> ApplyEnvironmentManagedActionError {
-        ApplyEnvironmentManagedActionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ApplyEnvironmentManagedActionError {
-    fn from(err: io::Error) -> ApplyEnvironmentManagedActionError {
-        ApplyEnvironmentManagedActionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ApplyEnvironmentManagedActionError {
@@ -10429,33 +10363,15 @@ impl Error for ApplyEnvironmentManagedActionError {
         match *self {
             ApplyEnvironmentManagedActionError::ElasticBeanstalkService(ref cause) => cause,
             ApplyEnvironmentManagedActionError::ManagedActionInvalidState(ref cause) => cause,
-            ApplyEnvironmentManagedActionError::Validation(ref cause) => cause,
-            ApplyEnvironmentManagedActionError::Credentials(ref err) => err.description(),
-            ApplyEnvironmentManagedActionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ApplyEnvironmentManagedActionError::ParseError(ref cause) => cause,
-            ApplyEnvironmentManagedActionError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by CheckDNSAvailability
 #[derive(Debug, PartialEq)]
-pub enum CheckDNSAvailabilityError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum CheckDNSAvailabilityError {}
 
 impl CheckDNSAvailabilityError {
-    pub fn from_response(res: BufferedHttpResponse) -> CheckDNSAvailabilityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckDNSAvailabilityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10466,7 +10382,7 @@ impl CheckDNSAvailabilityError {
                 }
             }
         }
-        CheckDNSAvailabilityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10475,28 +10391,6 @@ impl CheckDNSAvailabilityError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CheckDNSAvailabilityError {
-    fn from(err: XmlParseError) -> CheckDNSAvailabilityError {
-        let XmlParseError(message) = err;
-        CheckDNSAvailabilityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CheckDNSAvailabilityError {
-    fn from(err: CredentialsError) -> CheckDNSAvailabilityError {
-        CheckDNSAvailabilityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CheckDNSAvailabilityError {
-    fn from(err: HttpDispatchError) -> CheckDNSAvailabilityError {
-        CheckDNSAvailabilityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CheckDNSAvailabilityError {
-    fn from(err: io::Error) -> CheckDNSAvailabilityError {
-        CheckDNSAvailabilityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CheckDNSAvailabilityError {
@@ -10506,15 +10400,7 @@ impl fmt::Display for CheckDNSAvailabilityError {
 }
 impl Error for CheckDNSAvailabilityError {
     fn description(&self) -> &str {
-        match *self {
-            CheckDNSAvailabilityError::Validation(ref cause) => cause,
-            CheckDNSAvailabilityError::Credentials(ref err) => err.description(),
-            CheckDNSAvailabilityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CheckDNSAvailabilityError::ParseError(ref cause) => cause,
-            CheckDNSAvailabilityError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ComposeEnvironments
@@ -10524,20 +10410,10 @@ pub enum ComposeEnvironmentsError {
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of environments.</p>
     TooManyEnvironments(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ComposeEnvironmentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ComposeEnvironmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ComposeEnvironmentsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10545,20 +10421,22 @@ impl ComposeEnvironmentsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return ComposeEnvironmentsError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ComposeEnvironmentsError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyEnvironmentsException" => {
-                        return ComposeEnvironmentsError::TooManyEnvironments(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ComposeEnvironmentsError::TooManyEnvironments(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ComposeEnvironmentsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10567,28 +10445,6 @@ impl ComposeEnvironmentsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ComposeEnvironmentsError {
-    fn from(err: XmlParseError) -> ComposeEnvironmentsError {
-        let XmlParseError(message) = err;
-        ComposeEnvironmentsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ComposeEnvironmentsError {
-    fn from(err: CredentialsError) -> ComposeEnvironmentsError {
-        ComposeEnvironmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ComposeEnvironmentsError {
-    fn from(err: HttpDispatchError) -> ComposeEnvironmentsError {
-        ComposeEnvironmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ComposeEnvironmentsError {
-    fn from(err: io::Error) -> ComposeEnvironmentsError {
-        ComposeEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ComposeEnvironmentsError {
@@ -10601,13 +10457,6 @@ impl Error for ComposeEnvironmentsError {
         match *self {
             ComposeEnvironmentsError::InsufficientPrivileges(ref cause) => cause,
             ComposeEnvironmentsError::TooManyEnvironments(ref cause) => cause,
-            ComposeEnvironmentsError::Validation(ref cause) => cause,
-            ComposeEnvironmentsError::Credentials(ref err) => err.description(),
-            ComposeEnvironmentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ComposeEnvironmentsError::ParseError(ref cause) => cause,
-            ComposeEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10616,20 +10465,10 @@ impl Error for ComposeEnvironmentsError {
 pub enum CreateApplicationError {
     /// <p>The specified account has reached its limit of applications.</p>
     TooManyApplications(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10637,15 +10476,15 @@ impl CreateApplicationError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "TooManyApplicationsException" => {
-                        return CreateApplicationError::TooManyApplications(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateApplicationError::TooManyApplications(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateApplicationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10654,28 +10493,6 @@ impl CreateApplicationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateApplicationError {
-    fn from(err: XmlParseError) -> CreateApplicationError {
-        let XmlParseError(message) = err;
-        CreateApplicationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateApplicationError {
-    fn from(err: CredentialsError) -> CreateApplicationError {
-        CreateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateApplicationError {
-    fn from(err: HttpDispatchError) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateApplicationError {
-    fn from(err: io::Error) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -10687,13 +10504,6 @@ impl Error for CreateApplicationError {
     fn description(&self) -> &str {
         match *self {
             CreateApplicationError::TooManyApplications(ref cause) => cause,
-            CreateApplicationError::Validation(ref cause) => cause,
-            CreateApplicationError::Credentials(ref err) => err.description(),
-            CreateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateApplicationError::ParseError(ref cause) => cause,
-            CreateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10710,20 +10520,10 @@ pub enum CreateApplicationVersionError {
     TooManyApplicationVersions(String),
     /// <p>The specified account has reached its limit of applications.</p>
     TooManyApplications(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10731,35 +10531,45 @@ impl CreateApplicationVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CodeBuildNotInServiceRegionException" => {
-                        return CreateApplicationVersionError::CodeBuildNotInServiceRegion(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateApplicationVersionError::CodeBuildNotInServiceRegion(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InsufficientPrivilegesException" => {
-                        return CreateApplicationVersionError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateApplicationVersionError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "S3LocationNotInServiceRegionException" => {
-                        return CreateApplicationVersionError::S3LocationNotInServiceRegion(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateApplicationVersionError::S3LocationNotInServiceRegion(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TooManyApplicationVersionsException" => {
-                        return CreateApplicationVersionError::TooManyApplicationVersions(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateApplicationVersionError::TooManyApplicationVersions(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TooManyApplicationsException" => {
-                        return CreateApplicationVersionError::TooManyApplications(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateApplicationVersionError::TooManyApplications(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateApplicationVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10768,28 +10578,6 @@ impl CreateApplicationVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateApplicationVersionError {
-    fn from(err: XmlParseError) -> CreateApplicationVersionError {
-        let XmlParseError(message) = err;
-        CreateApplicationVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateApplicationVersionError {
-    fn from(err: CredentialsError) -> CreateApplicationVersionError {
-        CreateApplicationVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateApplicationVersionError {
-    fn from(err: HttpDispatchError) -> CreateApplicationVersionError {
-        CreateApplicationVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateApplicationVersionError {
-    fn from(err: io::Error) -> CreateApplicationVersionError {
-        CreateApplicationVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateApplicationVersionError {
@@ -10805,13 +10593,6 @@ impl Error for CreateApplicationVersionError {
             CreateApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,
             CreateApplicationVersionError::TooManyApplicationVersions(ref cause) => cause,
             CreateApplicationVersionError::TooManyApplications(ref cause) => cause,
-            CreateApplicationVersionError::Validation(ref cause) => cause,
-            CreateApplicationVersionError::Credentials(ref err) => err.description(),
-            CreateApplicationVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateApplicationVersionError::ParseError(ref cause) => cause,
-            CreateApplicationVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10824,20 +10605,12 @@ pub enum CreateConfigurationTemplateError {
     TooManyBuckets(String),
     /// <p>The specified account has reached its limit of configuration templates.</p>
     TooManyConfigurationTemplates(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateConfigurationTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10845,25 +10618,31 @@ impl CreateConfigurationTemplateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return CreateConfigurationTemplateError::InsufficientPrivileges(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateConfigurationTemplateError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "TooManyBucketsException" => {
-                        return CreateConfigurationTemplateError::TooManyBuckets(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateConfigurationTemplateError::TooManyBuckets(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyConfigurationTemplatesException" => {
-                        return CreateConfigurationTemplateError::TooManyConfigurationTemplates(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateConfigurationTemplateError::TooManyConfigurationTemplates(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateConfigurationTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10872,28 +10651,6 @@ impl CreateConfigurationTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateConfigurationTemplateError {
-    fn from(err: XmlParseError) -> CreateConfigurationTemplateError {
-        let XmlParseError(message) = err;
-        CreateConfigurationTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateConfigurationTemplateError {
-    fn from(err: CredentialsError) -> CreateConfigurationTemplateError {
-        CreateConfigurationTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateConfigurationTemplateError {
-    fn from(err: HttpDispatchError) -> CreateConfigurationTemplateError {
-        CreateConfigurationTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateConfigurationTemplateError {
-    fn from(err: io::Error) -> CreateConfigurationTemplateError {
-        CreateConfigurationTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateConfigurationTemplateError {
@@ -10907,13 +10664,6 @@ impl Error for CreateConfigurationTemplateError {
             CreateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,
             CreateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,
             CreateConfigurationTemplateError::TooManyConfigurationTemplates(ref cause) => cause,
-            CreateConfigurationTemplateError::Validation(ref cause) => cause,
-            CreateConfigurationTemplateError::Credentials(ref err) => err.description(),
-            CreateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateConfigurationTemplateError::ParseError(ref cause) => cause,
-            CreateConfigurationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10924,20 +10674,10 @@ pub enum CreateEnvironmentError {
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of environments.</p>
     TooManyEnvironments(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEnvironmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEnvironmentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10945,20 +10685,20 @@ impl CreateEnvironmentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return CreateEnvironmentError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateEnvironmentError::InsufficientPrivileges(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyEnvironmentsException" => {
-                        return CreateEnvironmentError::TooManyEnvironments(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateEnvironmentError::TooManyEnvironments(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateEnvironmentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10967,28 +10707,6 @@ impl CreateEnvironmentError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateEnvironmentError {
-    fn from(err: XmlParseError) -> CreateEnvironmentError {
-        let XmlParseError(message) = err;
-        CreateEnvironmentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateEnvironmentError {
-    fn from(err: CredentialsError) -> CreateEnvironmentError {
-        CreateEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateEnvironmentError {
-    fn from(err: HttpDispatchError) -> CreateEnvironmentError {
-        CreateEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateEnvironmentError {
-    fn from(err: io::Error) -> CreateEnvironmentError {
-        CreateEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEnvironmentError {
@@ -11001,13 +10719,6 @@ impl Error for CreateEnvironmentError {
         match *self {
             CreateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
             CreateEnvironmentError::TooManyEnvironments(ref cause) => cause,
-            CreateEnvironmentError::Validation(ref cause) => cause,
-            CreateEnvironmentError::Credentials(ref err) => err.description(),
-            CreateEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateEnvironmentError::ParseError(ref cause) => cause,
-            CreateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11020,20 +10731,10 @@ pub enum CreatePlatformVersionError {
     InsufficientPrivileges(String),
     /// <p>You have exceeded the maximum number of allowed platforms associated with the account.</p>
     TooManyPlatforms(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePlatformVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePlatformVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePlatformVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11041,25 +10742,29 @@ impl CreatePlatformVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return CreatePlatformVersionError::ElasticBeanstalkService(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreatePlatformVersionError::ElasticBeanstalkService(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientPrivilegesException" => {
-                        return CreatePlatformVersionError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreatePlatformVersionError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyPlatformsException" => {
-                        return CreatePlatformVersionError::TooManyPlatforms(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreatePlatformVersionError::TooManyPlatforms(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreatePlatformVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11068,28 +10773,6 @@ impl CreatePlatformVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreatePlatformVersionError {
-    fn from(err: XmlParseError) -> CreatePlatformVersionError {
-        let XmlParseError(message) = err;
-        CreatePlatformVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreatePlatformVersionError {
-    fn from(err: CredentialsError) -> CreatePlatformVersionError {
-        CreatePlatformVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePlatformVersionError {
-    fn from(err: HttpDispatchError) -> CreatePlatformVersionError {
-        CreatePlatformVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePlatformVersionError {
-    fn from(err: io::Error) -> CreatePlatformVersionError {
-        CreatePlatformVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePlatformVersionError {
@@ -11103,13 +10786,6 @@ impl Error for CreatePlatformVersionError {
             CreatePlatformVersionError::ElasticBeanstalkService(ref cause) => cause,
             CreatePlatformVersionError::InsufficientPrivileges(ref cause) => cause,
             CreatePlatformVersionError::TooManyPlatforms(ref cause) => cause,
-            CreatePlatformVersionError::Validation(ref cause) => cause,
-            CreatePlatformVersionError::Credentials(ref err) => err.description(),
-            CreatePlatformVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreatePlatformVersionError::ParseError(ref cause) => cause,
-            CreatePlatformVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11122,20 +10798,10 @@ pub enum CreateStorageLocationError {
     S3SubscriptionRequired(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStorageLocationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateStorageLocationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStorageLocationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11143,25 +10809,29 @@ impl CreateStorageLocationError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return CreateStorageLocationError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateStorageLocationError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "S3SubscriptionRequiredException" => {
-                        return CreateStorageLocationError::S3SubscriptionRequired(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateStorageLocationError::S3SubscriptionRequired(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyBucketsException" => {
-                        return CreateStorageLocationError::TooManyBuckets(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateStorageLocationError::TooManyBuckets(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateStorageLocationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11170,28 +10840,6 @@ impl CreateStorageLocationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateStorageLocationError {
-    fn from(err: XmlParseError) -> CreateStorageLocationError {
-        let XmlParseError(message) = err;
-        CreateStorageLocationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateStorageLocationError {
-    fn from(err: CredentialsError) -> CreateStorageLocationError {
-        CreateStorageLocationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateStorageLocationError {
-    fn from(err: HttpDispatchError) -> CreateStorageLocationError {
-        CreateStorageLocationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateStorageLocationError {
-    fn from(err: io::Error) -> CreateStorageLocationError {
-        CreateStorageLocationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateStorageLocationError {
@@ -11205,13 +10853,6 @@ impl Error for CreateStorageLocationError {
             CreateStorageLocationError::InsufficientPrivileges(ref cause) => cause,
             CreateStorageLocationError::S3SubscriptionRequired(ref cause) => cause,
             CreateStorageLocationError::TooManyBuckets(ref cause) => cause,
-            CreateStorageLocationError::Validation(ref cause) => cause,
-            CreateStorageLocationError::Credentials(ref err) => err.description(),
-            CreateStorageLocationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateStorageLocationError::ParseError(ref cause) => cause,
-            CreateStorageLocationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11220,20 +10861,10 @@ impl Error for CreateStorageLocationError {
 pub enum DeleteApplicationError {
     /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11241,15 +10872,15 @@ impl DeleteApplicationError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OperationInProgressFailure" => {
-                        return DeleteApplicationError::OperationInProgress(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteApplicationError::OperationInProgress(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteApplicationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11258,28 +10889,6 @@ impl DeleteApplicationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteApplicationError {
-    fn from(err: XmlParseError) -> DeleteApplicationError {
-        let XmlParseError(message) = err;
-        DeleteApplicationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationError {
-    fn from(err: CredentialsError) -> DeleteApplicationError {
-        DeleteApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationError {
-    fn from(err: io::Error) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -11291,13 +10900,6 @@ impl Error for DeleteApplicationError {
     fn description(&self) -> &str {
         match *self {
             DeleteApplicationError::OperationInProgress(ref cause) => cause,
-            DeleteApplicationError::Validation(ref cause) => cause,
-            DeleteApplicationError::Credentials(ref err) => err.description(),
-            DeleteApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationError::ParseError(ref cause) => cause,
-            DeleteApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11312,20 +10914,10 @@ pub enum DeleteApplicationVersionError {
     S3LocationNotInServiceRegion(String),
     /// <p>Unable to delete the Amazon S3 source bundle associated with the application version. The application version was deleted successfully.</p>
     SourceBundleDeletion(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11333,30 +10925,38 @@ impl DeleteApplicationVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return DeleteApplicationVersionError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteApplicationVersionError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OperationInProgressFailure" => {
-                        return DeleteApplicationVersionError::OperationInProgress(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteApplicationVersionError::OperationInProgress(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "S3LocationNotInServiceRegionException" => {
-                        return DeleteApplicationVersionError::S3LocationNotInServiceRegion(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteApplicationVersionError::S3LocationNotInServiceRegion(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SourceBundleDeletionFailure" => {
-                        return DeleteApplicationVersionError::SourceBundleDeletion(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteApplicationVersionError::SourceBundleDeletion(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteApplicationVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11365,28 +10965,6 @@ impl DeleteApplicationVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteApplicationVersionError {
-    fn from(err: XmlParseError) -> DeleteApplicationVersionError {
-        let XmlParseError(message) = err;
-        DeleteApplicationVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationVersionError {
-    fn from(err: CredentialsError) -> DeleteApplicationVersionError {
-        DeleteApplicationVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationVersionError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationVersionError {
-        DeleteApplicationVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationVersionError {
-    fn from(err: io::Error) -> DeleteApplicationVersionError {
-        DeleteApplicationVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteApplicationVersionError {
@@ -11401,13 +10979,6 @@ impl Error for DeleteApplicationVersionError {
             DeleteApplicationVersionError::OperationInProgress(ref cause) => cause,
             DeleteApplicationVersionError::S3LocationNotInServiceRegion(ref cause) => cause,
             DeleteApplicationVersionError::SourceBundleDeletion(ref cause) => cause,
-            DeleteApplicationVersionError::Validation(ref cause) => cause,
-            DeleteApplicationVersionError::Credentials(ref err) => err.description(),
-            DeleteApplicationVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationVersionError::ParseError(ref cause) => cause,
-            DeleteApplicationVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11416,20 +10987,12 @@ impl Error for DeleteApplicationVersionError {
 pub enum DeleteConfigurationTemplateError {
     /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
     OperationInProgress(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteConfigurationTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11437,15 +11000,17 @@ impl DeleteConfigurationTemplateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OperationInProgressFailure" => {
-                        return DeleteConfigurationTemplateError::OperationInProgress(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteConfigurationTemplateError::OperationInProgress(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteConfigurationTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11454,28 +11019,6 @@ impl DeleteConfigurationTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteConfigurationTemplateError {
-    fn from(err: XmlParseError) -> DeleteConfigurationTemplateError {
-        let XmlParseError(message) = err;
-        DeleteConfigurationTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConfigurationTemplateError {
-    fn from(err: CredentialsError) -> DeleteConfigurationTemplateError {
-        DeleteConfigurationTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConfigurationTemplateError {
-    fn from(err: HttpDispatchError) -> DeleteConfigurationTemplateError {
-        DeleteConfigurationTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConfigurationTemplateError {
-    fn from(err: io::Error) -> DeleteConfigurationTemplateError {
-        DeleteConfigurationTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConfigurationTemplateError {
@@ -11487,33 +11030,17 @@ impl Error for DeleteConfigurationTemplateError {
     fn description(&self) -> &str {
         match *self {
             DeleteConfigurationTemplateError::OperationInProgress(ref cause) => cause,
-            DeleteConfigurationTemplateError::Validation(ref cause) => cause,
-            DeleteConfigurationTemplateError::Credentials(ref err) => err.description(),
-            DeleteConfigurationTemplateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteConfigurationTemplateError::ParseError(ref cause) => cause,
-            DeleteConfigurationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DeleteEnvironmentConfiguration
 #[derive(Debug, PartialEq)]
-pub enum DeleteEnvironmentConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteEnvironmentConfigurationError {}
 
 impl DeleteEnvironmentConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEnvironmentConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteEnvironmentConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11524,7 +11051,7 @@ impl DeleteEnvironmentConfigurationError {
                 }
             }
         }
-        DeleteEnvironmentConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11535,28 +11062,6 @@ impl DeleteEnvironmentConfigurationError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for DeleteEnvironmentConfigurationError {
-    fn from(err: XmlParseError) -> DeleteEnvironmentConfigurationError {
-        let XmlParseError(message) = err;
-        DeleteEnvironmentConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEnvironmentConfigurationError {
-    fn from(err: CredentialsError) -> DeleteEnvironmentConfigurationError {
-        DeleteEnvironmentConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEnvironmentConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteEnvironmentConfigurationError {
-        DeleteEnvironmentConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEnvironmentConfigurationError {
-    fn from(err: io::Error) -> DeleteEnvironmentConfigurationError {
-        DeleteEnvironmentConfigurationError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for DeleteEnvironmentConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -11564,15 +11069,7 @@ impl fmt::Display for DeleteEnvironmentConfigurationError {
 }
 impl Error for DeleteEnvironmentConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteEnvironmentConfigurationError::Validation(ref cause) => cause,
-            DeleteEnvironmentConfigurationError::Credentials(ref err) => err.description(),
-            DeleteEnvironmentConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEnvironmentConfigurationError::ParseError(ref cause) => cause,
-            DeleteEnvironmentConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeletePlatformVersion
@@ -11586,20 +11083,10 @@ pub enum DeletePlatformVersionError {
     OperationInProgress(String),
     /// <p>You cannot delete the platform version because there are still environments running on it.</p>
     PlatformVersionStillReferenced(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePlatformVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePlatformVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePlatformVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11607,30 +11094,38 @@ impl DeletePlatformVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return DeletePlatformVersionError::ElasticBeanstalkService(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeletePlatformVersionError::ElasticBeanstalkService(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientPrivilegesException" => {
-                        return DeletePlatformVersionError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeletePlatformVersionError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OperationInProgressFailure" => {
-                        return DeletePlatformVersionError::OperationInProgress(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeletePlatformVersionError::OperationInProgress(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "PlatformVersionStillReferencedException" => {
-                        return DeletePlatformVersionError::PlatformVersionStillReferenced(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeletePlatformVersionError::PlatformVersionStillReferenced(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeletePlatformVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11639,28 +11134,6 @@ impl DeletePlatformVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeletePlatformVersionError {
-    fn from(err: XmlParseError) -> DeletePlatformVersionError {
-        let XmlParseError(message) = err;
-        DeletePlatformVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeletePlatformVersionError {
-    fn from(err: CredentialsError) -> DeletePlatformVersionError {
-        DeletePlatformVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePlatformVersionError {
-    fn from(err: HttpDispatchError) -> DeletePlatformVersionError {
-        DeletePlatformVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePlatformVersionError {
-    fn from(err: io::Error) -> DeletePlatformVersionError {
-        DeletePlatformVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePlatformVersionError {
@@ -11675,13 +11148,6 @@ impl Error for DeletePlatformVersionError {
             DeletePlatformVersionError::InsufficientPrivileges(ref cause) => cause,
             DeletePlatformVersionError::OperationInProgress(ref cause) => cause,
             DeletePlatformVersionError::PlatformVersionStillReferenced(ref cause) => cause,
-            DeletePlatformVersionError::Validation(ref cause) => cause,
-            DeletePlatformVersionError::Credentials(ref err) => err.description(),
-            DeletePlatformVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeletePlatformVersionError::ParseError(ref cause) => cause,
-            DeletePlatformVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11690,20 +11156,10 @@ impl Error for DeletePlatformVersionError {
 pub enum DescribeAccountAttributesError {
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAccountAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11711,15 +11167,17 @@ impl DescribeAccountAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return DescribeAccountAttributesError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeAccountAttributesError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeAccountAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11728,28 +11186,6 @@ impl DescribeAccountAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeAccountAttributesError {
-    fn from(err: XmlParseError) -> DescribeAccountAttributesError {
-        let XmlParseError(message) = err;
-        DescribeAccountAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAccountAttributesError {
-    fn from(err: CredentialsError) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAccountAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAccountAttributesError {
-    fn from(err: io::Error) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -11761,33 +11197,17 @@ impl Error for DescribeAccountAttributesError {
     fn description(&self) -> &str {
         match *self {
             DescribeAccountAttributesError::InsufficientPrivileges(ref cause) => cause,
-            DescribeAccountAttributesError::Validation(ref cause) => cause,
-            DescribeAccountAttributesError::Credentials(ref err) => err.description(),
-            DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAccountAttributesError::ParseError(ref cause) => cause,
-            DescribeAccountAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeApplicationVersions
 #[derive(Debug, PartialEq)]
-pub enum DescribeApplicationVersionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeApplicationVersionsError {}
 
 impl DescribeApplicationVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeApplicationVersionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeApplicationVersionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11798,7 +11218,7 @@ impl DescribeApplicationVersionsError {
                 }
             }
         }
-        DescribeApplicationVersionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11807,28 +11227,6 @@ impl DescribeApplicationVersionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeApplicationVersionsError {
-    fn from(err: XmlParseError) -> DescribeApplicationVersionsError {
-        let XmlParseError(message) = err;
-        DescribeApplicationVersionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeApplicationVersionsError {
-    fn from(err: CredentialsError) -> DescribeApplicationVersionsError {
-        DescribeApplicationVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeApplicationVersionsError {
-    fn from(err: HttpDispatchError) -> DescribeApplicationVersionsError {
-        DescribeApplicationVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeApplicationVersionsError {
-    fn from(err: io::Error) -> DescribeApplicationVersionsError {
-        DescribeApplicationVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeApplicationVersionsError {
@@ -11838,34 +11236,15 @@ impl fmt::Display for DescribeApplicationVersionsError {
 }
 impl Error for DescribeApplicationVersionsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeApplicationVersionsError::Validation(ref cause) => cause,
-            DescribeApplicationVersionsError::Credentials(ref err) => err.description(),
-            DescribeApplicationVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeApplicationVersionsError::ParseError(ref cause) => cause,
-            DescribeApplicationVersionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeApplications
 #[derive(Debug, PartialEq)]
-pub enum DescribeApplicationsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeApplicationsError {}
 
 impl DescribeApplicationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeApplicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeApplicationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11876,7 +11255,7 @@ impl DescribeApplicationsError {
                 }
             }
         }
-        DescribeApplicationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11885,28 +11264,6 @@ impl DescribeApplicationsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeApplicationsError {
-    fn from(err: XmlParseError) -> DescribeApplicationsError {
-        let XmlParseError(message) = err;
-        DescribeApplicationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeApplicationsError {
-    fn from(err: CredentialsError) -> DescribeApplicationsError {
-        DescribeApplicationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeApplicationsError {
-    fn from(err: HttpDispatchError) -> DescribeApplicationsError {
-        DescribeApplicationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeApplicationsError {
-    fn from(err: io::Error) -> DescribeApplicationsError {
-        DescribeApplicationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeApplicationsError {
@@ -11916,15 +11273,7 @@ impl fmt::Display for DescribeApplicationsError {
 }
 impl Error for DescribeApplicationsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeApplicationsError::Validation(ref cause) => cause,
-            DescribeApplicationsError::Credentials(ref err) => err.description(),
-            DescribeApplicationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeApplicationsError::ParseError(ref cause) => cause,
-            DescribeApplicationsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeConfigurationOptions
@@ -11932,20 +11281,12 @@ impl Error for DescribeApplicationsError {
 pub enum DescribeConfigurationOptionsError {
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConfigurationOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11953,15 +11294,17 @@ impl DescribeConfigurationOptionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "TooManyBucketsException" => {
-                        return DescribeConfigurationOptionsError::TooManyBuckets(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeConfigurationOptionsError::TooManyBuckets(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeConfigurationOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11970,28 +11313,6 @@ impl DescribeConfigurationOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeConfigurationOptionsError {
-    fn from(err: XmlParseError) -> DescribeConfigurationOptionsError {
-        let XmlParseError(message) = err;
-        DescribeConfigurationOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationOptionsError {
-    fn from(err: CredentialsError) -> DescribeConfigurationOptionsError {
-        DescribeConfigurationOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationOptionsError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationOptionsError {
-        DescribeConfigurationOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationOptionsError {
-    fn from(err: io::Error) -> DescribeConfigurationOptionsError {
-        DescribeConfigurationOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConfigurationOptionsError {
@@ -12003,13 +11324,6 @@ impl Error for DescribeConfigurationOptionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeConfigurationOptionsError::TooManyBuckets(ref cause) => cause,
-            DescribeConfigurationOptionsError::Validation(ref cause) => cause,
-            DescribeConfigurationOptionsError::Credentials(ref err) => err.description(),
-            DescribeConfigurationOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationOptionsError::ParseError(ref cause) => cause,
-            DescribeConfigurationOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12018,20 +11332,12 @@ impl Error for DescribeConfigurationOptionsError {
 pub enum DescribeConfigurationSettingsError {
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConfigurationSettingsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12039,15 +11345,17 @@ impl DescribeConfigurationSettingsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "TooManyBucketsException" => {
-                        return DescribeConfigurationSettingsError::TooManyBuckets(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeConfigurationSettingsError::TooManyBuckets(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeConfigurationSettingsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12056,28 +11364,6 @@ impl DescribeConfigurationSettingsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeConfigurationSettingsError {
-    fn from(err: XmlParseError) -> DescribeConfigurationSettingsError {
-        let XmlParseError(message) = err;
-        DescribeConfigurationSettingsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationSettingsError {
-    fn from(err: CredentialsError) -> DescribeConfigurationSettingsError {
-        DescribeConfigurationSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationSettingsError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationSettingsError {
-        DescribeConfigurationSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationSettingsError {
-    fn from(err: io::Error) -> DescribeConfigurationSettingsError {
-        DescribeConfigurationSettingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConfigurationSettingsError {
@@ -12089,13 +11375,6 @@ impl Error for DescribeConfigurationSettingsError {
     fn description(&self) -> &str {
         match *self {
             DescribeConfigurationSettingsError::TooManyBuckets(ref cause) => cause,
-            DescribeConfigurationSettingsError::Validation(ref cause) => cause,
-            DescribeConfigurationSettingsError::Credentials(ref err) => err.description(),
-            DescribeConfigurationSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationSettingsError::ParseError(ref cause) => cause,
-            DescribeConfigurationSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12106,20 +11385,10 @@ pub enum DescribeEnvironmentHealthError {
     ElasticBeanstalkService(String),
     /// <p>One or more input parameters is not valid. Please correct the input parameters and try the operation again.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentHealthError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentHealthError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentHealthError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12127,20 +11396,22 @@ impl DescribeEnvironmentHealthError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return DescribeEnvironmentHealthError::ElasticBeanstalkService(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeEnvironmentHealthError::ElasticBeanstalkService(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidRequestException" => {
-                        return DescribeEnvironmentHealthError::InvalidRequest(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeEnvironmentHealthError::InvalidRequest(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeEnvironmentHealthError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12149,28 +11420,6 @@ impl DescribeEnvironmentHealthError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEnvironmentHealthError {
-    fn from(err: XmlParseError) -> DescribeEnvironmentHealthError {
-        let XmlParseError(message) = err;
-        DescribeEnvironmentHealthError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentHealthError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentHealthError {
-        DescribeEnvironmentHealthError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentHealthError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentHealthError {
-        DescribeEnvironmentHealthError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentHealthError {
-    fn from(err: io::Error) -> DescribeEnvironmentHealthError {
-        DescribeEnvironmentHealthError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEnvironmentHealthError {
@@ -12183,13 +11432,6 @@ impl Error for DescribeEnvironmentHealthError {
         match *self {
             DescribeEnvironmentHealthError::ElasticBeanstalkService(ref cause) => cause,
             DescribeEnvironmentHealthError::InvalidRequest(ref cause) => cause,
-            DescribeEnvironmentHealthError::Validation(ref cause) => cause,
-            DescribeEnvironmentHealthError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentHealthError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentHealthError::ParseError(ref cause) => cause,
-            DescribeEnvironmentHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12198,22 +11440,12 @@ impl Error for DescribeEnvironmentHealthError {
 pub enum DescribeEnvironmentManagedActionHistoryError {
     /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentManagedActionHistoryError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DescribeEnvironmentManagedActionHistoryError {
+    ) -> RusotoError<DescribeEnvironmentManagedActionHistoryError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12221,15 +11453,17 @@ impl DescribeEnvironmentManagedActionHistoryError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeEnvironmentManagedActionHistoryError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12238,28 +11472,6 @@ impl DescribeEnvironmentManagedActionHistoryError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEnvironmentManagedActionHistoryError {
-    fn from(err: XmlParseError) -> DescribeEnvironmentManagedActionHistoryError {
-        let XmlParseError(message) = err;
-        DescribeEnvironmentManagedActionHistoryError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentManagedActionHistoryError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentManagedActionHistoryError {
-        DescribeEnvironmentManagedActionHistoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentManagedActionHistoryError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentManagedActionHistoryError {
-        DescribeEnvironmentManagedActionHistoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentManagedActionHistoryError {
-    fn from(err: io::Error) -> DescribeEnvironmentManagedActionHistoryError {
-        DescribeEnvironmentManagedActionHistoryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEnvironmentManagedActionHistoryError {
@@ -12273,13 +11485,6 @@ impl Error for DescribeEnvironmentManagedActionHistoryError {
             DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(ref cause) => {
                 cause
             }
-            DescribeEnvironmentManagedActionHistoryError::Validation(ref cause) => cause,
-            DescribeEnvironmentManagedActionHistoryError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentManagedActionHistoryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentManagedActionHistoryError::ParseError(ref cause) => cause,
-            DescribeEnvironmentManagedActionHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12288,20 +11493,12 @@ impl Error for DescribeEnvironmentManagedActionHistoryError {
 pub enum DescribeEnvironmentManagedActionsError {
     /// <p>A generic service exception has occurred.</p>
     ElasticBeanstalkService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentManagedActionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentManagedActionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEnvironmentManagedActionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12309,15 +11506,17 @@ impl DescribeEnvironmentManagedActionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeEnvironmentManagedActionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12326,28 +11525,6 @@ impl DescribeEnvironmentManagedActionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEnvironmentManagedActionsError {
-    fn from(err: XmlParseError) -> DescribeEnvironmentManagedActionsError {
-        let XmlParseError(message) = err;
-        DescribeEnvironmentManagedActionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentManagedActionsError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentManagedActionsError {
-        DescribeEnvironmentManagedActionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentManagedActionsError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentManagedActionsError {
-        DescribeEnvironmentManagedActionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentManagedActionsError {
-    fn from(err: io::Error) -> DescribeEnvironmentManagedActionsError {
-        DescribeEnvironmentManagedActionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEnvironmentManagedActionsError {
@@ -12359,13 +11536,6 @@ impl Error for DescribeEnvironmentManagedActionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(ref cause) => cause,
-            DescribeEnvironmentManagedActionsError::Validation(ref cause) => cause,
-            DescribeEnvironmentManagedActionsError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentManagedActionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentManagedActionsError::ParseError(ref cause) => cause,
-            DescribeEnvironmentManagedActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12374,20 +11544,12 @@ impl Error for DescribeEnvironmentManagedActionsError {
 pub enum DescribeEnvironmentResourcesError {
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentResourcesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEnvironmentResourcesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12395,15 +11557,17 @@ impl DescribeEnvironmentResourcesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return DescribeEnvironmentResourcesError::InsufficientPrivileges(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeEnvironmentResourcesError::InsufficientPrivileges(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeEnvironmentResourcesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12412,28 +11576,6 @@ impl DescribeEnvironmentResourcesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEnvironmentResourcesError {
-    fn from(err: XmlParseError) -> DescribeEnvironmentResourcesError {
-        let XmlParseError(message) = err;
-        DescribeEnvironmentResourcesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentResourcesError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentResourcesError {
-        DescribeEnvironmentResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentResourcesError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentResourcesError {
-        DescribeEnvironmentResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentResourcesError {
-    fn from(err: io::Error) -> DescribeEnvironmentResourcesError {
-        DescribeEnvironmentResourcesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEnvironmentResourcesError {
@@ -12445,33 +11587,15 @@ impl Error for DescribeEnvironmentResourcesError {
     fn description(&self) -> &str {
         match *self {
             DescribeEnvironmentResourcesError::InsufficientPrivileges(ref cause) => cause,
-            DescribeEnvironmentResourcesError::Validation(ref cause) => cause,
-            DescribeEnvironmentResourcesError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentResourcesError::ParseError(ref cause) => cause,
-            DescribeEnvironmentResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeEnvironments
 #[derive(Debug, PartialEq)]
-pub enum DescribeEnvironmentsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEnvironmentsError {}
 
 impl DescribeEnvironmentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12482,7 +11606,7 @@ impl DescribeEnvironmentsError {
                 }
             }
         }
-        DescribeEnvironmentsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12491,28 +11615,6 @@ impl DescribeEnvironmentsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEnvironmentsError {
-    fn from(err: XmlParseError) -> DescribeEnvironmentsError {
-        let XmlParseError(message) = err;
-        DescribeEnvironmentsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentsError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentsError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentsError {
-    fn from(err: io::Error) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEnvironmentsError {
@@ -12522,34 +11624,15 @@ impl fmt::Display for DescribeEnvironmentsError {
 }
 impl Error for DescribeEnvironmentsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEnvironmentsError::Validation(ref cause) => cause,
-            DescribeEnvironmentsError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentsError::ParseError(ref cause) => cause,
-            DescribeEnvironmentsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
-pub enum DescribeEventsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEventsError {}
 
 impl DescribeEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12560,7 +11643,7 @@ impl DescribeEventsError {
                 }
             }
         }
-        DescribeEventsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12569,28 +11652,6 @@ impl DescribeEventsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEventsError {
-    fn from(err: XmlParseError) -> DescribeEventsError {
-        let XmlParseError(message) = err;
-        DescribeEventsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventsError {
-    fn from(err: CredentialsError) -> DescribeEventsError {
-        DescribeEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventsError {
-    fn from(err: HttpDispatchError) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventsError {
-    fn from(err: io::Error) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -12600,13 +11661,7 @@ impl fmt::Display for DescribeEventsError {
 }
 impl Error for DescribeEventsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEventsError::Validation(ref cause) => cause,
-            DescribeEventsError::Credentials(ref err) => err.description(),
-            DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::ParseError(ref cause) => cause,
-            DescribeEventsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeInstancesHealth
@@ -12616,20 +11671,10 @@ pub enum DescribeInstancesHealthError {
     ElasticBeanstalkService(String),
     /// <p>One or more input parameters is not valid. Please correct the input parameters and try the operation again.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInstancesHealthError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeInstancesHealthError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInstancesHealthError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12637,20 +11682,22 @@ impl DescribeInstancesHealthError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return DescribeInstancesHealthError::ElasticBeanstalkService(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeInstancesHealthError::ElasticBeanstalkService(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidRequestException" => {
-                        return DescribeInstancesHealthError::InvalidRequest(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeInstancesHealthError::InvalidRequest(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeInstancesHealthError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12659,28 +11706,6 @@ impl DescribeInstancesHealthError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeInstancesHealthError {
-    fn from(err: XmlParseError) -> DescribeInstancesHealthError {
-        let XmlParseError(message) = err;
-        DescribeInstancesHealthError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeInstancesHealthError {
-    fn from(err: CredentialsError) -> DescribeInstancesHealthError {
-        DescribeInstancesHealthError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeInstancesHealthError {
-    fn from(err: HttpDispatchError) -> DescribeInstancesHealthError {
-        DescribeInstancesHealthError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeInstancesHealthError {
-    fn from(err: io::Error) -> DescribeInstancesHealthError {
-        DescribeInstancesHealthError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeInstancesHealthError {
@@ -12693,13 +11718,6 @@ impl Error for DescribeInstancesHealthError {
         match *self {
             DescribeInstancesHealthError::ElasticBeanstalkService(ref cause) => cause,
             DescribeInstancesHealthError::InvalidRequest(ref cause) => cause,
-            DescribeInstancesHealthError::Validation(ref cause) => cause,
-            DescribeInstancesHealthError::Credentials(ref err) => err.description(),
-            DescribeInstancesHealthError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeInstancesHealthError::ParseError(ref cause) => cause,
-            DescribeInstancesHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12710,20 +11728,10 @@ pub enum DescribePlatformVersionError {
     ElasticBeanstalkService(String),
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePlatformVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribePlatformVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePlatformVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12731,20 +11739,24 @@ impl DescribePlatformVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return DescribePlatformVersionError::ElasticBeanstalkService(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribePlatformVersionError::ElasticBeanstalkService(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientPrivilegesException" => {
-                        return DescribePlatformVersionError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribePlatformVersionError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribePlatformVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12753,28 +11765,6 @@ impl DescribePlatformVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribePlatformVersionError {
-    fn from(err: XmlParseError) -> DescribePlatformVersionError {
-        let XmlParseError(message) = err;
-        DescribePlatformVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribePlatformVersionError {
-    fn from(err: CredentialsError) -> DescribePlatformVersionError {
-        DescribePlatformVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribePlatformVersionError {
-    fn from(err: HttpDispatchError) -> DescribePlatformVersionError {
-        DescribePlatformVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribePlatformVersionError {
-    fn from(err: io::Error) -> DescribePlatformVersionError {
-        DescribePlatformVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePlatformVersionError {
@@ -12787,33 +11777,17 @@ impl Error for DescribePlatformVersionError {
         match *self {
             DescribePlatformVersionError::ElasticBeanstalkService(ref cause) => cause,
             DescribePlatformVersionError::InsufficientPrivileges(ref cause) => cause,
-            DescribePlatformVersionError::Validation(ref cause) => cause,
-            DescribePlatformVersionError::Credentials(ref err) => err.description(),
-            DescribePlatformVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribePlatformVersionError::ParseError(ref cause) => cause,
-            DescribePlatformVersionError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListAvailableSolutionStacks
 #[derive(Debug, PartialEq)]
-pub enum ListAvailableSolutionStacksError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListAvailableSolutionStacksError {}
 
 impl ListAvailableSolutionStacksError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAvailableSolutionStacksError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListAvailableSolutionStacksError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12824,7 +11798,7 @@ impl ListAvailableSolutionStacksError {
                 }
             }
         }
-        ListAvailableSolutionStacksError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12833,28 +11807,6 @@ impl ListAvailableSolutionStacksError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListAvailableSolutionStacksError {
-    fn from(err: XmlParseError) -> ListAvailableSolutionStacksError {
-        let XmlParseError(message) = err;
-        ListAvailableSolutionStacksError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListAvailableSolutionStacksError {
-    fn from(err: CredentialsError) -> ListAvailableSolutionStacksError {
-        ListAvailableSolutionStacksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAvailableSolutionStacksError {
-    fn from(err: HttpDispatchError) -> ListAvailableSolutionStacksError {
-        ListAvailableSolutionStacksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAvailableSolutionStacksError {
-    fn from(err: io::Error) -> ListAvailableSolutionStacksError {
-        ListAvailableSolutionStacksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAvailableSolutionStacksError {
@@ -12864,15 +11816,7 @@ impl fmt::Display for ListAvailableSolutionStacksError {
 }
 impl Error for ListAvailableSolutionStacksError {
     fn description(&self) -> &str {
-        match *self {
-            ListAvailableSolutionStacksError::Validation(ref cause) => cause,
-            ListAvailableSolutionStacksError::Credentials(ref err) => err.description(),
-            ListAvailableSolutionStacksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAvailableSolutionStacksError::ParseError(ref cause) => cause,
-            ListAvailableSolutionStacksError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListPlatformVersions
@@ -12882,20 +11826,10 @@ pub enum ListPlatformVersionsError {
     ElasticBeanstalkService(String),
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPlatformVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPlatformVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPlatformVersionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12903,20 +11837,24 @@ impl ListPlatformVersionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ElasticBeanstalkServiceException" => {
-                        return ListPlatformVersionsError::ElasticBeanstalkService(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListPlatformVersionsError::ElasticBeanstalkService(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientPrivilegesException" => {
-                        return ListPlatformVersionsError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListPlatformVersionsError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListPlatformVersionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12925,28 +11863,6 @@ impl ListPlatformVersionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListPlatformVersionsError {
-    fn from(err: XmlParseError) -> ListPlatformVersionsError {
-        let XmlParseError(message) = err;
-        ListPlatformVersionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListPlatformVersionsError {
-    fn from(err: CredentialsError) -> ListPlatformVersionsError {
-        ListPlatformVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPlatformVersionsError {
-    fn from(err: HttpDispatchError) -> ListPlatformVersionsError {
-        ListPlatformVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPlatformVersionsError {
-    fn from(err: io::Error) -> ListPlatformVersionsError {
-        ListPlatformVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPlatformVersionsError {
@@ -12959,13 +11875,6 @@ impl Error for ListPlatformVersionsError {
         match *self {
             ListPlatformVersionsError::ElasticBeanstalkService(ref cause) => cause,
             ListPlatformVersionsError::InsufficientPrivileges(ref cause) => cause,
-            ListPlatformVersionsError::Validation(ref cause) => cause,
-            ListPlatformVersionsError::Credentials(ref err) => err.description(),
-            ListPlatformVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPlatformVersionsError::ParseError(ref cause) => cause,
-            ListPlatformVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12978,20 +11887,10 @@ pub enum ListTagsForResourceError {
     ResourceNotFound(String),
     /// <p>The type of the specified Amazon Resource Name (ARN) isn't supported for this operation.</p>
     ResourceTypeNotSupported(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12999,25 +11898,29 @@ impl ListTagsForResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return ListTagsForResourceError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTagsForResourceError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ResourceNotFoundException" => {
-                        return ListTagsForResourceError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceTypeNotSupportedException" => {
-                        return ListTagsForResourceError::ResourceTypeNotSupported(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTagsForResourceError::ResourceTypeNotSupported(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListTagsForResourceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13026,28 +11929,6 @@ impl ListTagsForResourceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTagsForResourceError {
-    fn from(err: XmlParseError) -> ListTagsForResourceError {
-        let XmlParseError(message) = err;
-        ListTagsForResourceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -13061,13 +11942,6 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::InsufficientPrivileges(ref cause) => cause,
             ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
             ListTagsForResourceError::ResourceTypeNotSupported(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13076,20 +11950,10 @@ impl Error for ListTagsForResourceError {
 pub enum RebuildEnvironmentError {
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RebuildEnvironmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> RebuildEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebuildEnvironmentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13097,15 +11961,17 @@ impl RebuildEnvironmentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return RebuildEnvironmentError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RebuildEnvironmentError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RebuildEnvironmentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13114,28 +11980,6 @@ impl RebuildEnvironmentError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RebuildEnvironmentError {
-    fn from(err: XmlParseError) -> RebuildEnvironmentError {
-        let XmlParseError(message) = err;
-        RebuildEnvironmentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RebuildEnvironmentError {
-    fn from(err: CredentialsError) -> RebuildEnvironmentError {
-        RebuildEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RebuildEnvironmentError {
-    fn from(err: HttpDispatchError) -> RebuildEnvironmentError {
-        RebuildEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RebuildEnvironmentError {
-    fn from(err: io::Error) -> RebuildEnvironmentError {
-        RebuildEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RebuildEnvironmentError {
@@ -13147,33 +11991,15 @@ impl Error for RebuildEnvironmentError {
     fn description(&self) -> &str {
         match *self {
             RebuildEnvironmentError::InsufficientPrivileges(ref cause) => cause,
-            RebuildEnvironmentError::Validation(ref cause) => cause,
-            RebuildEnvironmentError::Credentials(ref err) => err.description(),
-            RebuildEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RebuildEnvironmentError::ParseError(ref cause) => cause,
-            RebuildEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by RequestEnvironmentInfo
 #[derive(Debug, PartialEq)]
-pub enum RequestEnvironmentInfoError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum RequestEnvironmentInfoError {}
 
 impl RequestEnvironmentInfoError {
-    pub fn from_response(res: BufferedHttpResponse) -> RequestEnvironmentInfoError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestEnvironmentInfoError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13184,7 +12010,7 @@ impl RequestEnvironmentInfoError {
                 }
             }
         }
-        RequestEnvironmentInfoError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13193,28 +12019,6 @@ impl RequestEnvironmentInfoError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RequestEnvironmentInfoError {
-    fn from(err: XmlParseError) -> RequestEnvironmentInfoError {
-        let XmlParseError(message) = err;
-        RequestEnvironmentInfoError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RequestEnvironmentInfoError {
-    fn from(err: CredentialsError) -> RequestEnvironmentInfoError {
-        RequestEnvironmentInfoError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RequestEnvironmentInfoError {
-    fn from(err: HttpDispatchError) -> RequestEnvironmentInfoError {
-        RequestEnvironmentInfoError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RequestEnvironmentInfoError {
-    fn from(err: io::Error) -> RequestEnvironmentInfoError {
-        RequestEnvironmentInfoError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RequestEnvironmentInfoError {
@@ -13224,34 +12028,15 @@ impl fmt::Display for RequestEnvironmentInfoError {
 }
 impl Error for RequestEnvironmentInfoError {
     fn description(&self) -> &str {
-        match *self {
-            RequestEnvironmentInfoError::Validation(ref cause) => cause,
-            RequestEnvironmentInfoError::Credentials(ref err) => err.description(),
-            RequestEnvironmentInfoError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RequestEnvironmentInfoError::ParseError(ref cause) => cause,
-            RequestEnvironmentInfoError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by RestartAppServer
 #[derive(Debug, PartialEq)]
-pub enum RestartAppServerError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum RestartAppServerError {}
 
 impl RestartAppServerError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestartAppServerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestartAppServerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13262,7 +12047,7 @@ impl RestartAppServerError {
                 }
             }
         }
-        RestartAppServerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13271,28 +12056,6 @@ impl RestartAppServerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestartAppServerError {
-    fn from(err: XmlParseError) -> RestartAppServerError {
-        let XmlParseError(message) = err;
-        RestartAppServerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestartAppServerError {
-    fn from(err: CredentialsError) -> RestartAppServerError {
-        RestartAppServerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestartAppServerError {
-    fn from(err: HttpDispatchError) -> RestartAppServerError {
-        RestartAppServerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestartAppServerError {
-    fn from(err: io::Error) -> RestartAppServerError {
-        RestartAppServerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestartAppServerError {
@@ -13302,32 +12065,15 @@ impl fmt::Display for RestartAppServerError {
 }
 impl Error for RestartAppServerError {
     fn description(&self) -> &str {
-        match *self {
-            RestartAppServerError::Validation(ref cause) => cause,
-            RestartAppServerError::Credentials(ref err) => err.description(),
-            RestartAppServerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RestartAppServerError::ParseError(ref cause) => cause,
-            RestartAppServerError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by RetrieveEnvironmentInfo
 #[derive(Debug, PartialEq)]
-pub enum RetrieveEnvironmentInfoError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum RetrieveEnvironmentInfoError {}
 
 impl RetrieveEnvironmentInfoError {
-    pub fn from_response(res: BufferedHttpResponse) -> RetrieveEnvironmentInfoError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveEnvironmentInfoError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13338,7 +12084,7 @@ impl RetrieveEnvironmentInfoError {
                 }
             }
         }
-        RetrieveEnvironmentInfoError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13347,28 +12093,6 @@ impl RetrieveEnvironmentInfoError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RetrieveEnvironmentInfoError {
-    fn from(err: XmlParseError) -> RetrieveEnvironmentInfoError {
-        let XmlParseError(message) = err;
-        RetrieveEnvironmentInfoError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RetrieveEnvironmentInfoError {
-    fn from(err: CredentialsError) -> RetrieveEnvironmentInfoError {
-        RetrieveEnvironmentInfoError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RetrieveEnvironmentInfoError {
-    fn from(err: HttpDispatchError) -> RetrieveEnvironmentInfoError {
-        RetrieveEnvironmentInfoError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RetrieveEnvironmentInfoError {
-    fn from(err: io::Error) -> RetrieveEnvironmentInfoError {
-        RetrieveEnvironmentInfoError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RetrieveEnvironmentInfoError {
@@ -13378,34 +12102,15 @@ impl fmt::Display for RetrieveEnvironmentInfoError {
 }
 impl Error for RetrieveEnvironmentInfoError {
     fn description(&self) -> &str {
-        match *self {
-            RetrieveEnvironmentInfoError::Validation(ref cause) => cause,
-            RetrieveEnvironmentInfoError::Credentials(ref err) => err.description(),
-            RetrieveEnvironmentInfoError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RetrieveEnvironmentInfoError::ParseError(ref cause) => cause,
-            RetrieveEnvironmentInfoError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by SwapEnvironmentCNAMEs
 #[derive(Debug, PartialEq)]
-pub enum SwapEnvironmentCNAMEsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum SwapEnvironmentCNAMEsError {}
 
 impl SwapEnvironmentCNAMEsError {
-    pub fn from_response(res: BufferedHttpResponse) -> SwapEnvironmentCNAMEsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SwapEnvironmentCNAMEsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13416,7 +12121,7 @@ impl SwapEnvironmentCNAMEsError {
                 }
             }
         }
-        SwapEnvironmentCNAMEsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13425,28 +12130,6 @@ impl SwapEnvironmentCNAMEsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SwapEnvironmentCNAMEsError {
-    fn from(err: XmlParseError) -> SwapEnvironmentCNAMEsError {
-        let XmlParseError(message) = err;
-        SwapEnvironmentCNAMEsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SwapEnvironmentCNAMEsError {
-    fn from(err: CredentialsError) -> SwapEnvironmentCNAMEsError {
-        SwapEnvironmentCNAMEsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SwapEnvironmentCNAMEsError {
-    fn from(err: HttpDispatchError) -> SwapEnvironmentCNAMEsError {
-        SwapEnvironmentCNAMEsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SwapEnvironmentCNAMEsError {
-    fn from(err: io::Error) -> SwapEnvironmentCNAMEsError {
-        SwapEnvironmentCNAMEsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SwapEnvironmentCNAMEsError {
@@ -13456,15 +12139,7 @@ impl fmt::Display for SwapEnvironmentCNAMEsError {
 }
 impl Error for SwapEnvironmentCNAMEsError {
     fn description(&self) -> &str {
-        match *self {
-            SwapEnvironmentCNAMEsError::Validation(ref cause) => cause,
-            SwapEnvironmentCNAMEsError::Credentials(ref err) => err.description(),
-            SwapEnvironmentCNAMEsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SwapEnvironmentCNAMEsError::ParseError(ref cause) => cause,
-            SwapEnvironmentCNAMEsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by TerminateEnvironment
@@ -13472,20 +12147,10 @@ impl Error for SwapEnvironmentCNAMEsError {
 pub enum TerminateEnvironmentError {
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateEnvironmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> TerminateEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateEnvironmentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13493,15 +12158,17 @@ impl TerminateEnvironmentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return TerminateEnvironmentError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            TerminateEnvironmentError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        TerminateEnvironmentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13510,28 +12177,6 @@ impl TerminateEnvironmentError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for TerminateEnvironmentError {
-    fn from(err: XmlParseError) -> TerminateEnvironmentError {
-        let XmlParseError(message) = err;
-        TerminateEnvironmentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for TerminateEnvironmentError {
-    fn from(err: CredentialsError) -> TerminateEnvironmentError {
-        TerminateEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TerminateEnvironmentError {
-    fn from(err: HttpDispatchError) -> TerminateEnvironmentError {
-        TerminateEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TerminateEnvironmentError {
-    fn from(err: io::Error) -> TerminateEnvironmentError {
-        TerminateEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TerminateEnvironmentError {
@@ -13543,33 +12188,15 @@ impl Error for TerminateEnvironmentError {
     fn description(&self) -> &str {
         match *self {
             TerminateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
-            TerminateEnvironmentError::Validation(ref cause) => cause,
-            TerminateEnvironmentError::Credentials(ref err) => err.description(),
-            TerminateEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            TerminateEnvironmentError::ParseError(ref cause) => cause,
-            TerminateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
-pub enum UpdateApplicationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum UpdateApplicationError {}
 
 impl UpdateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13580,7 +12207,7 @@ impl UpdateApplicationError {
                 }
             }
         }
-        UpdateApplicationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13589,28 +12216,6 @@ impl UpdateApplicationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateApplicationError {
-    fn from(err: XmlParseError) -> UpdateApplicationError {
-        let XmlParseError(message) = err;
-        UpdateApplicationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateApplicationError {
-    fn from(err: CredentialsError) -> UpdateApplicationError {
-        UpdateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateApplicationError {
-    fn from(err: HttpDispatchError) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateApplicationError {
-    fn from(err: io::Error) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -13620,15 +12225,7 @@ impl fmt::Display for UpdateApplicationError {
 }
 impl Error for UpdateApplicationError {
     fn description(&self) -> &str {
-        match *self {
-            UpdateApplicationError::Validation(ref cause) => cause,
-            UpdateApplicationError::Credentials(ref err) => err.description(),
-            UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateApplicationError::ParseError(ref cause) => cause,
-            UpdateApplicationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by UpdateApplicationResourceLifecycle
@@ -13636,20 +12233,12 @@ impl Error for UpdateApplicationError {
 pub enum UpdateApplicationResourceLifecycleError {
     /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
     InsufficientPrivileges(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationResourceLifecycleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationResourceLifecycleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateApplicationResourceLifecycleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13657,15 +12246,17 @@ impl UpdateApplicationResourceLifecycleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return UpdateApplicationResourceLifecycleError::InsufficientPrivileges(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateApplicationResourceLifecycleError::InsufficientPrivileges(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateApplicationResourceLifecycleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13674,28 +12265,6 @@ impl UpdateApplicationResourceLifecycleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateApplicationResourceLifecycleError {
-    fn from(err: XmlParseError) -> UpdateApplicationResourceLifecycleError {
-        let XmlParseError(message) = err;
-        UpdateApplicationResourceLifecycleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateApplicationResourceLifecycleError {
-    fn from(err: CredentialsError) -> UpdateApplicationResourceLifecycleError {
-        UpdateApplicationResourceLifecycleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateApplicationResourceLifecycleError {
-    fn from(err: HttpDispatchError) -> UpdateApplicationResourceLifecycleError {
-        UpdateApplicationResourceLifecycleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateApplicationResourceLifecycleError {
-    fn from(err: io::Error) -> UpdateApplicationResourceLifecycleError {
-        UpdateApplicationResourceLifecycleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateApplicationResourceLifecycleError {
@@ -13707,33 +12276,15 @@ impl Error for UpdateApplicationResourceLifecycleError {
     fn description(&self) -> &str {
         match *self {
             UpdateApplicationResourceLifecycleError::InsufficientPrivileges(ref cause) => cause,
-            UpdateApplicationResourceLifecycleError::Validation(ref cause) => cause,
-            UpdateApplicationResourceLifecycleError::Credentials(ref err) => err.description(),
-            UpdateApplicationResourceLifecycleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateApplicationResourceLifecycleError::ParseError(ref cause) => cause,
-            UpdateApplicationResourceLifecycleError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by UpdateApplicationVersion
 #[derive(Debug, PartialEq)]
-pub enum UpdateApplicationVersionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum UpdateApplicationVersionError {}
 
 impl UpdateApplicationVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13744,7 +12295,7 @@ impl UpdateApplicationVersionError {
                 }
             }
         }
-        UpdateApplicationVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13753,28 +12304,6 @@ impl UpdateApplicationVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateApplicationVersionError {
-    fn from(err: XmlParseError) -> UpdateApplicationVersionError {
-        let XmlParseError(message) = err;
-        UpdateApplicationVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateApplicationVersionError {
-    fn from(err: CredentialsError) -> UpdateApplicationVersionError {
-        UpdateApplicationVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateApplicationVersionError {
-    fn from(err: HttpDispatchError) -> UpdateApplicationVersionError {
-        UpdateApplicationVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateApplicationVersionError {
-    fn from(err: io::Error) -> UpdateApplicationVersionError {
-        UpdateApplicationVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateApplicationVersionError {
@@ -13784,15 +12313,7 @@ impl fmt::Display for UpdateApplicationVersionError {
 }
 impl Error for UpdateApplicationVersionError {
     fn description(&self) -> &str {
-        match *self {
-            UpdateApplicationVersionError::Validation(ref cause) => cause,
-            UpdateApplicationVersionError::Credentials(ref err) => err.description(),
-            UpdateApplicationVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateApplicationVersionError::ParseError(ref cause) => cause,
-            UpdateApplicationVersionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by UpdateConfigurationTemplate
@@ -13802,20 +12323,12 @@ pub enum UpdateConfigurationTemplateError {
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateConfigurationTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13823,20 +12336,24 @@ impl UpdateConfigurationTemplateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return UpdateConfigurationTemplateError::InsufficientPrivileges(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateConfigurationTemplateError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "TooManyBucketsException" => {
-                        return UpdateConfigurationTemplateError::TooManyBuckets(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateConfigurationTemplateError::TooManyBuckets(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateConfigurationTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13845,28 +12362,6 @@ impl UpdateConfigurationTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateConfigurationTemplateError {
-    fn from(err: XmlParseError) -> UpdateConfigurationTemplateError {
-        let XmlParseError(message) = err;
-        UpdateConfigurationTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateConfigurationTemplateError {
-    fn from(err: CredentialsError) -> UpdateConfigurationTemplateError {
-        UpdateConfigurationTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateConfigurationTemplateError {
-    fn from(err: HttpDispatchError) -> UpdateConfigurationTemplateError {
-        UpdateConfigurationTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateConfigurationTemplateError {
-    fn from(err: io::Error) -> UpdateConfigurationTemplateError {
-        UpdateConfigurationTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateConfigurationTemplateError {
@@ -13879,13 +12374,6 @@ impl Error for UpdateConfigurationTemplateError {
         match *self {
             UpdateConfigurationTemplateError::InsufficientPrivileges(ref cause) => cause,
             UpdateConfigurationTemplateError::TooManyBuckets(ref cause) => cause,
-            UpdateConfigurationTemplateError::Validation(ref cause) => cause,
-            UpdateConfigurationTemplateError::Credentials(ref err) => err.description(),
-            UpdateConfigurationTemplateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateConfigurationTemplateError::ParseError(ref cause) => cause,
-            UpdateConfigurationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13896,20 +12384,10 @@ pub enum UpdateEnvironmentError {
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEnvironmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEnvironmentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13917,20 +12395,20 @@ impl UpdateEnvironmentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return UpdateEnvironmentError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateEnvironmentError::InsufficientPrivileges(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyBucketsException" => {
-                        return UpdateEnvironmentError::TooManyBuckets(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateEnvironmentError::TooManyBuckets(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateEnvironmentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13939,28 +12417,6 @@ impl UpdateEnvironmentError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateEnvironmentError {
-    fn from(err: XmlParseError) -> UpdateEnvironmentError {
-        let XmlParseError(message) = err;
-        UpdateEnvironmentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateEnvironmentError {
-    fn from(err: CredentialsError) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateEnvironmentError {
-    fn from(err: HttpDispatchError) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateEnvironmentError {
-    fn from(err: io::Error) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateEnvironmentError {
@@ -13973,13 +12429,6 @@ impl Error for UpdateEnvironmentError {
         match *self {
             UpdateEnvironmentError::InsufficientPrivileges(ref cause) => cause,
             UpdateEnvironmentError::TooManyBuckets(ref cause) => cause,
-            UpdateEnvironmentError::Validation(ref cause) => cause,
-            UpdateEnvironmentError::Credentials(ref err) => err.description(),
-            UpdateEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateEnvironmentError::ParseError(ref cause) => cause,
-            UpdateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13996,20 +12445,10 @@ pub enum UpdateTagsForResourceError {
     ResourceTypeNotSupported(String),
     /// <p>The number of tags in the resource would exceed the number of tags that each resource can have.</p> <p>To calculate this, the operation considers both the number of tags the resource already has and the tags this operation would add if it succeeded.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTagsForResourceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14017,35 +12456,41 @@ impl UpdateTagsForResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return UpdateTagsForResourceError::InsufficientPrivileges(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateTagsForResourceError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OperationInProgressFailure" => {
-                        return UpdateTagsForResourceError::OperationInProgress(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateTagsForResourceError::OperationInProgress(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ResourceNotFoundException" => {
-                        return UpdateTagsForResourceError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateTagsForResourceError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceTypeNotSupportedException" => {
-                        return UpdateTagsForResourceError::ResourceTypeNotSupported(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateTagsForResourceError::ResourceTypeNotSupported(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTagsException" => {
-                        return UpdateTagsForResourceError::TooManyTags(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateTagsForResourceError::TooManyTags(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateTagsForResourceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14054,28 +12499,6 @@ impl UpdateTagsForResourceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateTagsForResourceError {
-    fn from(err: XmlParseError) -> UpdateTagsForResourceError {
-        let XmlParseError(message) = err;
-        UpdateTagsForResourceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTagsForResourceError {
-    fn from(err: CredentialsError) -> UpdateTagsForResourceError {
-        UpdateTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTagsForResourceError {
-    fn from(err: HttpDispatchError) -> UpdateTagsForResourceError {
-        UpdateTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTagsForResourceError {
-    fn from(err: io::Error) -> UpdateTagsForResourceError {
-        UpdateTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateTagsForResourceError {
@@ -14091,13 +12514,6 @@ impl Error for UpdateTagsForResourceError {
             UpdateTagsForResourceError::ResourceNotFound(ref cause) => cause,
             UpdateTagsForResourceError::ResourceTypeNotSupported(ref cause) => cause,
             UpdateTagsForResourceError::TooManyTags(ref cause) => cause,
-            UpdateTagsForResourceError::Validation(ref cause) => cause,
-            UpdateTagsForResourceError::Credentials(ref err) => err.description(),
-            UpdateTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateTagsForResourceError::ParseError(ref cause) => cause,
-            UpdateTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14108,20 +12524,12 @@ pub enum ValidateConfigurationSettingsError {
     InsufficientPrivileges(String),
     /// <p>The specified account has reached its limit of Amazon S3 buckets.</p>
     TooManyBuckets(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ValidateConfigurationSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ValidateConfigurationSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ValidateConfigurationSettingsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14129,20 +12537,24 @@ impl ValidateConfigurationSettingsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return ValidateConfigurationSettingsError::InsufficientPrivileges(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ValidateConfigurationSettingsError::InsufficientPrivileges(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TooManyBucketsException" => {
-                        return ValidateConfigurationSettingsError::TooManyBuckets(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ValidateConfigurationSettingsError::TooManyBuckets(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ValidateConfigurationSettingsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14151,28 +12563,6 @@ impl ValidateConfigurationSettingsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ValidateConfigurationSettingsError {
-    fn from(err: XmlParseError) -> ValidateConfigurationSettingsError {
-        let XmlParseError(message) = err;
-        ValidateConfigurationSettingsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ValidateConfigurationSettingsError {
-    fn from(err: CredentialsError) -> ValidateConfigurationSettingsError {
-        ValidateConfigurationSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ValidateConfigurationSettingsError {
-    fn from(err: HttpDispatchError) -> ValidateConfigurationSettingsError {
-        ValidateConfigurationSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ValidateConfigurationSettingsError {
-    fn from(err: io::Error) -> ValidateConfigurationSettingsError {
-        ValidateConfigurationSettingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ValidateConfigurationSettingsError {
@@ -14185,13 +12575,6 @@ impl Error for ValidateConfigurationSettingsError {
         match *self {
             ValidateConfigurationSettingsError::InsufficientPrivileges(ref cause) => cause,
             ValidateConfigurationSettingsError::TooManyBuckets(ref cause) => cause,
-            ValidateConfigurationSettingsError::Validation(ref cause) => cause,
-            ValidateConfigurationSettingsError::Credentials(ref err) => err.description(),
-            ValidateConfigurationSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ValidateConfigurationSettingsError::ParseError(ref cause) => cause,
-            ValidateConfigurationSettingsError::Unknown(_) => "unknown error",
         }
     }
 }

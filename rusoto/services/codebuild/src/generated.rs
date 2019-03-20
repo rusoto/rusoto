@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1307,20 +1304,10 @@ pub struct WebhookFilter {
 pub enum BatchDeleteBuildsError {
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteBuildsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteBuildsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteBuildsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1333,36 +1320,15 @@ impl BatchDeleteBuildsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return BatchDeleteBuildsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteBuildsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchDeleteBuildsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDeleteBuildsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDeleteBuildsError {
-    fn from(err: serde_json::error::Error) -> BatchDeleteBuildsError {
-        BatchDeleteBuildsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteBuildsError {
-    fn from(err: CredentialsError) -> BatchDeleteBuildsError {
-        BatchDeleteBuildsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteBuildsError {
-    fn from(err: HttpDispatchError) -> BatchDeleteBuildsError {
-        BatchDeleteBuildsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteBuildsError {
-    fn from(err: io::Error) -> BatchDeleteBuildsError {
-        BatchDeleteBuildsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDeleteBuildsError {
@@ -1374,13 +1340,6 @@ impl Error for BatchDeleteBuildsError {
     fn description(&self) -> &str {
         match *self {
             BatchDeleteBuildsError::InvalidInput(ref cause) => cause,
-            BatchDeleteBuildsError::Validation(ref cause) => cause,
-            BatchDeleteBuildsError::Credentials(ref err) => err.description(),
-            BatchDeleteBuildsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDeleteBuildsError::ParseError(ref cause) => cause,
-            BatchDeleteBuildsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1389,20 +1348,10 @@ impl Error for BatchDeleteBuildsError {
 pub enum BatchGetBuildsError {
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetBuildsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetBuildsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetBuildsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1415,36 +1364,15 @@ impl BatchGetBuildsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return BatchGetBuildsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(BatchGetBuildsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchGetBuildsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetBuildsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetBuildsError {
-    fn from(err: serde_json::error::Error) -> BatchGetBuildsError {
-        BatchGetBuildsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetBuildsError {
-    fn from(err: CredentialsError) -> BatchGetBuildsError {
-        BatchGetBuildsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetBuildsError {
-    fn from(err: HttpDispatchError) -> BatchGetBuildsError {
-        BatchGetBuildsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetBuildsError {
-    fn from(err: io::Error) -> BatchGetBuildsError {
-        BatchGetBuildsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetBuildsError {
@@ -1456,11 +1384,6 @@ impl Error for BatchGetBuildsError {
     fn description(&self) -> &str {
         match *self {
             BatchGetBuildsError::InvalidInput(ref cause) => cause,
-            BatchGetBuildsError::Validation(ref cause) => cause,
-            BatchGetBuildsError::Credentials(ref err) => err.description(),
-            BatchGetBuildsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchGetBuildsError::ParseError(ref cause) => cause,
-            BatchGetBuildsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1469,20 +1392,10 @@ impl Error for BatchGetBuildsError {
 pub enum BatchGetProjectsError {
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetProjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetProjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1495,36 +1408,15 @@ impl BatchGetProjectsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return BatchGetProjectsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(BatchGetProjectsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchGetProjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetProjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetProjectsError {
-    fn from(err: serde_json::error::Error) -> BatchGetProjectsError {
-        BatchGetProjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetProjectsError {
-    fn from(err: CredentialsError) -> BatchGetProjectsError {
-        BatchGetProjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetProjectsError {
-    fn from(err: HttpDispatchError) -> BatchGetProjectsError {
-        BatchGetProjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetProjectsError {
-    fn from(err: io::Error) -> BatchGetProjectsError {
-        BatchGetProjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetProjectsError {
@@ -1536,11 +1428,6 @@ impl Error for BatchGetProjectsError {
     fn description(&self) -> &str {
         match *self {
             BatchGetProjectsError::InvalidInput(ref cause) => cause,
-            BatchGetProjectsError::Validation(ref cause) => cause,
-            BatchGetProjectsError::Credentials(ref err) => err.description(),
-            BatchGetProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchGetProjectsError::ParseError(ref cause) => cause,
-            BatchGetProjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1553,20 +1440,10 @@ pub enum CreateProjectError {
     InvalidInput(String),
     /// <p>The specified AWS resource cannot be created, because an AWS resource with the same settings already exists.</p>
     ResourceAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1579,42 +1456,25 @@ impl CreateProjectError {
 
             match *error_type {
                 "AccountLimitExceededException" => {
-                    return CreateProjectError::AccountLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::AccountLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return CreateProjectError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateProjectError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateProjectError {
-    fn from(err: serde_json::error::Error) -> CreateProjectError {
-        CreateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateProjectError {
-    fn from(err: CredentialsError) -> CreateProjectError {
-        CreateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateProjectError {
-    fn from(err: HttpDispatchError) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateProjectError {
-    fn from(err: io::Error) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -1628,11 +1488,6 @@ impl Error for CreateProjectError {
             CreateProjectError::AccountLimitExceeded(ref cause) => cause,
             CreateProjectError::InvalidInput(ref cause) => cause,
             CreateProjectError::ResourceAlreadyExists(ref cause) => cause,
-            CreateProjectError::Validation(ref cause) => cause,
-            CreateProjectError::Credentials(ref err) => err.description(),
-            CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProjectError::ParseError(ref cause) => cause,
-            CreateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1647,20 +1502,10 @@ pub enum CreateWebhookError {
     ResourceAlreadyExists(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateWebhookError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebhookError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1673,45 +1518,30 @@ impl CreateWebhookError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return CreateWebhookError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateWebhookError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OAuthProviderException" => {
-                    return CreateWebhookError::OAuthProvider(String::from(error_message));
+                    return RusotoError::Service(CreateWebhookError::OAuthProvider(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateWebhookError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateWebhookError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateWebhookError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateWebhookError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateWebhookError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateWebhookError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateWebhookError {
-    fn from(err: serde_json::error::Error) -> CreateWebhookError {
-        CreateWebhookError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateWebhookError {
-    fn from(err: CredentialsError) -> CreateWebhookError {
-        CreateWebhookError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateWebhookError {
-    fn from(err: HttpDispatchError) -> CreateWebhookError {
-        CreateWebhookError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateWebhookError {
-    fn from(err: io::Error) -> CreateWebhookError {
-        CreateWebhookError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateWebhookError {
@@ -1726,11 +1556,6 @@ impl Error for CreateWebhookError {
             CreateWebhookError::OAuthProvider(ref cause) => cause,
             CreateWebhookError::ResourceAlreadyExists(ref cause) => cause,
             CreateWebhookError::ResourceNotFound(ref cause) => cause,
-            CreateWebhookError::Validation(ref cause) => cause,
-            CreateWebhookError::Credentials(ref err) => err.description(),
-            CreateWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateWebhookError::ParseError(ref cause) => cause,
-            CreateWebhookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1739,20 +1564,10 @@ impl Error for CreateWebhookError {
 pub enum DeleteProjectError {
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1765,36 +1580,15 @@ impl DeleteProjectError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return DeleteProjectError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteProjectError {
-    fn from(err: serde_json::error::Error) -> DeleteProjectError {
-        DeleteProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteProjectError {
-    fn from(err: CredentialsError) -> DeleteProjectError {
-        DeleteProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteProjectError {
-    fn from(err: HttpDispatchError) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteProjectError {
-    fn from(err: io::Error) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -1806,11 +1600,6 @@ impl Error for DeleteProjectError {
     fn description(&self) -> &str {
         match *self {
             DeleteProjectError::InvalidInput(ref cause) => cause,
-            DeleteProjectError::Validation(ref cause) => cause,
-            DeleteProjectError::Credentials(ref err) => err.description(),
-            DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProjectError::ParseError(ref cause) => cause,
-            DeleteProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1821,20 +1610,10 @@ pub enum DeleteSourceCredentialsError {
     InvalidInput(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSourceCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSourceCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSourceCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1847,41 +1626,20 @@ impl DeleteSourceCredentialsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return DeleteSourceCredentialsError::InvalidInput(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return DeleteSourceCredentialsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSourceCredentialsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteSourceCredentialsError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteSourceCredentialsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSourceCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSourceCredentialsError {
-    fn from(err: serde_json::error::Error) -> DeleteSourceCredentialsError {
-        DeleteSourceCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSourceCredentialsError {
-    fn from(err: CredentialsError) -> DeleteSourceCredentialsError {
-        DeleteSourceCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSourceCredentialsError {
-    fn from(err: HttpDispatchError) -> DeleteSourceCredentialsError {
-        DeleteSourceCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSourceCredentialsError {
-    fn from(err: io::Error) -> DeleteSourceCredentialsError {
-        DeleteSourceCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSourceCredentialsError {
@@ -1894,13 +1652,6 @@ impl Error for DeleteSourceCredentialsError {
         match *self {
             DeleteSourceCredentialsError::InvalidInput(ref cause) => cause,
             DeleteSourceCredentialsError::ResourceNotFound(ref cause) => cause,
-            DeleteSourceCredentialsError::Validation(ref cause) => cause,
-            DeleteSourceCredentialsError::Credentials(ref err) => err.description(),
-            DeleteSourceCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSourceCredentialsError::ParseError(ref cause) => cause,
-            DeleteSourceCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1913,20 +1664,10 @@ pub enum DeleteWebhookError {
     OAuthProvider(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteWebhookError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1939,42 +1680,25 @@ impl DeleteWebhookError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return DeleteWebhookError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteWebhookError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OAuthProviderException" => {
-                    return DeleteWebhookError::OAuthProvider(String::from(error_message));
+                    return RusotoError::Service(DeleteWebhookError::OAuthProvider(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteWebhookError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteWebhookError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteWebhookError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteWebhookError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteWebhookError {
-    fn from(err: serde_json::error::Error) -> DeleteWebhookError {
-        DeleteWebhookError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteWebhookError {
-    fn from(err: CredentialsError) -> DeleteWebhookError {
-        DeleteWebhookError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteWebhookError {
-    fn from(err: HttpDispatchError) -> DeleteWebhookError {
-        DeleteWebhookError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteWebhookError {
-    fn from(err: io::Error) -> DeleteWebhookError {
-        DeleteWebhookError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteWebhookError {
@@ -1988,11 +1712,6 @@ impl Error for DeleteWebhookError {
             DeleteWebhookError::InvalidInput(ref cause) => cause,
             DeleteWebhookError::OAuthProvider(ref cause) => cause,
             DeleteWebhookError::ResourceNotFound(ref cause) => cause,
-            DeleteWebhookError::Validation(ref cause) => cause,
-            DeleteWebhookError::Credentials(ref err) => err.description(),
-            DeleteWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteWebhookError::ParseError(ref cause) => cause,
-            DeleteWebhookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2003,20 +1722,10 @@ pub enum ImportSourceCredentialsError {
     AccountLimitExceeded(String),
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportSourceCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportSourceCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportSourceCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2029,41 +1738,20 @@ impl ImportSourceCredentialsError {
 
             match *error_type {
                 "AccountLimitExceededException" => {
-                    return ImportSourceCredentialsError::AccountLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(ImportSourceCredentialsError::AccountLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return ImportSourceCredentialsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ImportSourceCredentialsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ImportSourceCredentialsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportSourceCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportSourceCredentialsError {
-    fn from(err: serde_json::error::Error) -> ImportSourceCredentialsError {
-        ImportSourceCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportSourceCredentialsError {
-    fn from(err: CredentialsError) -> ImportSourceCredentialsError {
-        ImportSourceCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportSourceCredentialsError {
-    fn from(err: HttpDispatchError) -> ImportSourceCredentialsError {
-        ImportSourceCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportSourceCredentialsError {
-    fn from(err: io::Error) -> ImportSourceCredentialsError {
-        ImportSourceCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportSourceCredentialsError {
@@ -2076,13 +1764,6 @@ impl Error for ImportSourceCredentialsError {
         match *self {
             ImportSourceCredentialsError::AccountLimitExceeded(ref cause) => cause,
             ImportSourceCredentialsError::InvalidInput(ref cause) => cause,
-            ImportSourceCredentialsError::Validation(ref cause) => cause,
-            ImportSourceCredentialsError::Credentials(ref err) => err.description(),
-            ImportSourceCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ImportSourceCredentialsError::ParseError(ref cause) => cause,
-            ImportSourceCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2093,20 +1774,10 @@ pub enum InvalidateProjectCacheError {
     InvalidInput(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InvalidateProjectCacheError {
-    pub fn from_response(res: BufferedHttpResponse) -> InvalidateProjectCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvalidateProjectCacheError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2119,41 +1790,20 @@ impl InvalidateProjectCacheError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return InvalidateProjectCacheError::InvalidInput(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return InvalidateProjectCacheError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(InvalidateProjectCacheError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return InvalidateProjectCacheError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(InvalidateProjectCacheError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InvalidateProjectCacheError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InvalidateProjectCacheError {
-    fn from(err: serde_json::error::Error) -> InvalidateProjectCacheError {
-        InvalidateProjectCacheError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InvalidateProjectCacheError {
-    fn from(err: CredentialsError) -> InvalidateProjectCacheError {
-        InvalidateProjectCacheError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InvalidateProjectCacheError {
-    fn from(err: HttpDispatchError) -> InvalidateProjectCacheError {
-        InvalidateProjectCacheError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InvalidateProjectCacheError {
-    fn from(err: io::Error) -> InvalidateProjectCacheError {
-        InvalidateProjectCacheError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InvalidateProjectCacheError {
@@ -2166,13 +1816,6 @@ impl Error for InvalidateProjectCacheError {
         match *self {
             InvalidateProjectCacheError::InvalidInput(ref cause) => cause,
             InvalidateProjectCacheError::ResourceNotFound(ref cause) => cause,
-            InvalidateProjectCacheError::Validation(ref cause) => cause,
-            InvalidateProjectCacheError::Credentials(ref err) => err.description(),
-            InvalidateProjectCacheError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InvalidateProjectCacheError::ParseError(ref cause) => cause,
-            InvalidateProjectCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2181,20 +1824,10 @@ impl Error for InvalidateProjectCacheError {
 pub enum ListBuildsError {
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListBuildsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBuildsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2207,36 +1840,15 @@ impl ListBuildsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return ListBuildsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListBuildsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListBuildsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListBuildsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListBuildsError {
-    fn from(err: serde_json::error::Error) -> ListBuildsError {
-        ListBuildsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListBuildsError {
-    fn from(err: CredentialsError) -> ListBuildsError {
-        ListBuildsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBuildsError {
-    fn from(err: HttpDispatchError) -> ListBuildsError {
-        ListBuildsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBuildsError {
-    fn from(err: io::Error) -> ListBuildsError {
-        ListBuildsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListBuildsError {
@@ -2248,11 +1860,6 @@ impl Error for ListBuildsError {
     fn description(&self) -> &str {
         match *self {
             ListBuildsError::InvalidInput(ref cause) => cause,
-            ListBuildsError::Validation(ref cause) => cause,
-            ListBuildsError::Credentials(ref err) => err.description(),
-            ListBuildsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBuildsError::ParseError(ref cause) => cause,
-            ListBuildsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2263,20 +1870,10 @@ pub enum ListBuildsForProjectError {
     InvalidInput(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListBuildsForProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBuildsForProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBuildsForProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2289,39 +1886,20 @@ impl ListBuildsForProjectError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return ListBuildsForProjectError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListBuildsForProjectError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListBuildsForProjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListBuildsForProjectError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListBuildsForProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListBuildsForProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListBuildsForProjectError {
-    fn from(err: serde_json::error::Error) -> ListBuildsForProjectError {
-        ListBuildsForProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListBuildsForProjectError {
-    fn from(err: CredentialsError) -> ListBuildsForProjectError {
-        ListBuildsForProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBuildsForProjectError {
-    fn from(err: HttpDispatchError) -> ListBuildsForProjectError {
-        ListBuildsForProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBuildsForProjectError {
-    fn from(err: io::Error) -> ListBuildsForProjectError {
-        ListBuildsForProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListBuildsForProjectError {
@@ -2334,33 +1912,17 @@ impl Error for ListBuildsForProjectError {
         match *self {
             ListBuildsForProjectError::InvalidInput(ref cause) => cause,
             ListBuildsForProjectError::ResourceNotFound(ref cause) => cause,
-            ListBuildsForProjectError::Validation(ref cause) => cause,
-            ListBuildsForProjectError::Credentials(ref err) => err.description(),
-            ListBuildsForProjectError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListBuildsForProjectError::ParseError(ref cause) => cause,
-            ListBuildsForProjectError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListCuratedEnvironmentImages
 #[derive(Debug, PartialEq)]
-pub enum ListCuratedEnvironmentImagesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListCuratedEnvironmentImagesError {}
 
 impl ListCuratedEnvironmentImagesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListCuratedEnvironmentImagesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCuratedEnvironmentImagesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2372,34 +1934,11 @@ impl ListCuratedEnvironmentImagesError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return ListCuratedEnvironmentImagesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListCuratedEnvironmentImagesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListCuratedEnvironmentImagesError {
-    fn from(err: serde_json::error::Error) -> ListCuratedEnvironmentImagesError {
-        ListCuratedEnvironmentImagesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListCuratedEnvironmentImagesError {
-    fn from(err: CredentialsError) -> ListCuratedEnvironmentImagesError {
-        ListCuratedEnvironmentImagesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListCuratedEnvironmentImagesError {
-    fn from(err: HttpDispatchError) -> ListCuratedEnvironmentImagesError {
-        ListCuratedEnvironmentImagesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListCuratedEnvironmentImagesError {
-    fn from(err: io::Error) -> ListCuratedEnvironmentImagesError {
-        ListCuratedEnvironmentImagesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListCuratedEnvironmentImagesError {
@@ -2409,15 +1948,7 @@ impl fmt::Display for ListCuratedEnvironmentImagesError {
 }
 impl Error for ListCuratedEnvironmentImagesError {
     fn description(&self) -> &str {
-        match *self {
-            ListCuratedEnvironmentImagesError::Validation(ref cause) => cause,
-            ListCuratedEnvironmentImagesError::Credentials(ref err) => err.description(),
-            ListCuratedEnvironmentImagesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListCuratedEnvironmentImagesError::ParseError(ref cause) => cause,
-            ListCuratedEnvironmentImagesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListProjects
@@ -2425,20 +1956,10 @@ impl Error for ListCuratedEnvironmentImagesError {
 pub enum ListProjectsError {
     /// <p>The input value that was provided is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListProjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2451,36 +1972,15 @@ impl ListProjectsError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return ListProjectsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListProjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListProjectsError {
-    fn from(err: serde_json::error::Error) -> ListProjectsError {
-        ListProjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListProjectsError {
-    fn from(err: CredentialsError) -> ListProjectsError {
-        ListProjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListProjectsError {
-    fn from(err: HttpDispatchError) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListProjectsError {
-    fn from(err: io::Error) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -2492,31 +1992,15 @@ impl Error for ListProjectsError {
     fn description(&self) -> &str {
         match *self {
             ListProjectsError::InvalidInput(ref cause) => cause,
-            ListProjectsError::Validation(ref cause) => cause,
-            ListProjectsError::Credentials(ref err) => err.description(),
-            ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListProjectsError::ParseError(ref cause) => cause,
-            ListProjectsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListSourceCredentials
 #[derive(Debug, PartialEq)]
-pub enum ListSourceCredentialsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListSourceCredentialsError {}
 
 impl ListSourceCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSourceCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSourceCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2528,34 +2012,11 @@ impl ListSourceCredentialsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return ListSourceCredentialsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListSourceCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListSourceCredentialsError {
-    fn from(err: serde_json::error::Error) -> ListSourceCredentialsError {
-        ListSourceCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListSourceCredentialsError {
-    fn from(err: CredentialsError) -> ListSourceCredentialsError {
-        ListSourceCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSourceCredentialsError {
-    fn from(err: HttpDispatchError) -> ListSourceCredentialsError {
-        ListSourceCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSourceCredentialsError {
-    fn from(err: io::Error) -> ListSourceCredentialsError {
-        ListSourceCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListSourceCredentialsError {
@@ -2565,15 +2026,7 @@ impl fmt::Display for ListSourceCredentialsError {
 }
 impl Error for ListSourceCredentialsError {
     fn description(&self) -> &str {
-        match *self {
-            ListSourceCredentialsError::Validation(ref cause) => cause,
-            ListSourceCredentialsError::Credentials(ref err) => err.description(),
-            ListSourceCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSourceCredentialsError::ParseError(ref cause) => cause,
-            ListSourceCredentialsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by StartBuild
@@ -2585,20 +2038,10 @@ pub enum StartBuildError {
     InvalidInput(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartBuildError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartBuildError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBuildError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2611,42 +2054,25 @@ impl StartBuildError {
 
             match *error_type {
                 "AccountLimitExceededException" => {
-                    return StartBuildError::AccountLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StartBuildError::AccountLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return StartBuildError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(StartBuildError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return StartBuildError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartBuildError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StartBuildError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartBuildError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartBuildError {
-    fn from(err: serde_json::error::Error) -> StartBuildError {
-        StartBuildError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartBuildError {
-    fn from(err: CredentialsError) -> StartBuildError {
-        StartBuildError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartBuildError {
-    fn from(err: HttpDispatchError) -> StartBuildError {
-        StartBuildError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartBuildError {
-    fn from(err: io::Error) -> StartBuildError {
-        StartBuildError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartBuildError {
@@ -2660,11 +2086,6 @@ impl Error for StartBuildError {
             StartBuildError::AccountLimitExceeded(ref cause) => cause,
             StartBuildError::InvalidInput(ref cause) => cause,
             StartBuildError::ResourceNotFound(ref cause) => cause,
-            StartBuildError::Validation(ref cause) => cause,
-            StartBuildError::Credentials(ref err) => err.description(),
-            StartBuildError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartBuildError::ParseError(ref cause) => cause,
-            StartBuildError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2675,20 +2096,10 @@ pub enum StopBuildError {
     InvalidInput(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopBuildError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopBuildError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBuildError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2701,39 +2112,20 @@ impl StopBuildError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return StopBuildError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(StopBuildError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return StopBuildError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StopBuildError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StopBuildError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopBuildError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopBuildError {
-    fn from(err: serde_json::error::Error) -> StopBuildError {
-        StopBuildError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopBuildError {
-    fn from(err: CredentialsError) -> StopBuildError {
-        StopBuildError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopBuildError {
-    fn from(err: HttpDispatchError) -> StopBuildError {
-        StopBuildError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopBuildError {
-    fn from(err: io::Error) -> StopBuildError {
-        StopBuildError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopBuildError {
@@ -2746,11 +2138,6 @@ impl Error for StopBuildError {
         match *self {
             StopBuildError::InvalidInput(ref cause) => cause,
             StopBuildError::ResourceNotFound(ref cause) => cause,
-            StopBuildError::Validation(ref cause) => cause,
-            StopBuildError::Credentials(ref err) => err.description(),
-            StopBuildError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopBuildError::ParseError(ref cause) => cause,
-            StopBuildError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2761,20 +2148,10 @@ pub enum UpdateProjectError {
     InvalidInput(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2787,39 +2164,20 @@ impl UpdateProjectError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return UpdateProjectError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateProjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateProjectError {
-    fn from(err: serde_json::error::Error) -> UpdateProjectError {
-        UpdateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateProjectError {
-    fn from(err: CredentialsError) -> UpdateProjectError {
-        UpdateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateProjectError {
-    fn from(err: HttpDispatchError) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateProjectError {
-    fn from(err: io::Error) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -2832,11 +2190,6 @@ impl Error for UpdateProjectError {
         match *self {
             UpdateProjectError::InvalidInput(ref cause) => cause,
             UpdateProjectError::ResourceNotFound(ref cause) => cause,
-            UpdateProjectError::Validation(ref cause) => cause,
-            UpdateProjectError::Credentials(ref err) => err.description(),
-            UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProjectError::ParseError(ref cause) => cause,
-            UpdateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2849,20 +2202,10 @@ pub enum UpdateWebhookError {
     OAuthProvider(String),
     /// <p>The specified AWS resource cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateWebhookError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebhookError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2875,42 +2218,25 @@ impl UpdateWebhookError {
 
             match *error_type {
                 "InvalidInputException" => {
-                    return UpdateWebhookError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateWebhookError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OAuthProviderException" => {
-                    return UpdateWebhookError::OAuthProvider(String::from(error_message));
+                    return RusotoError::Service(UpdateWebhookError::OAuthProvider(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateWebhookError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateWebhookError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateWebhookError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateWebhookError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateWebhookError {
-    fn from(err: serde_json::error::Error) -> UpdateWebhookError {
-        UpdateWebhookError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateWebhookError {
-    fn from(err: CredentialsError) -> UpdateWebhookError {
-        UpdateWebhookError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateWebhookError {
-    fn from(err: HttpDispatchError) -> UpdateWebhookError {
-        UpdateWebhookError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateWebhookError {
-    fn from(err: io::Error) -> UpdateWebhookError {
-        UpdateWebhookError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateWebhookError {
@@ -2924,11 +2250,6 @@ impl Error for UpdateWebhookError {
             UpdateWebhookError::InvalidInput(ref cause) => cause,
             UpdateWebhookError::OAuthProvider(ref cause) => cause,
             UpdateWebhookError::ResourceNotFound(ref cause) => cause,
-            UpdateWebhookError::Validation(ref cause) => cause,
-            UpdateWebhookError::Credentials(ref err) => err.description(),
-            UpdateWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateWebhookError::ParseError(ref cause) => cause,
-            UpdateWebhookError::Unknown(_) => "unknown error",
         }
     }
 }

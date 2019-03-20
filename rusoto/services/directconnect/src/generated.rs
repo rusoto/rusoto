@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1442,20 +1439,12 @@ pub enum AllocateConnectionOnInterconnectError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AllocateConnectionOnInterconnectError {
-    pub fn from_response(res: BufferedHttpResponse) -> AllocateConnectionOnInterconnectError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AllocateConnectionOnInterconnectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1468,45 +1457,24 @@ impl AllocateConnectionOnInterconnectError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
-                }
-                "DirectConnectServerException" => {
-                    return AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return AllocateConnectionOnInterconnectError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        AllocateConnectionOnInterconnectError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(
+                        AllocateConnectionOnInterconnectError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AllocateConnectionOnInterconnectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AllocateConnectionOnInterconnectError {
-    fn from(err: serde_json::error::Error) -> AllocateConnectionOnInterconnectError {
-        AllocateConnectionOnInterconnectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AllocateConnectionOnInterconnectError {
-    fn from(err: CredentialsError) -> AllocateConnectionOnInterconnectError {
-        AllocateConnectionOnInterconnectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AllocateConnectionOnInterconnectError {
-    fn from(err: HttpDispatchError) -> AllocateConnectionOnInterconnectError {
-        AllocateConnectionOnInterconnectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AllocateConnectionOnInterconnectError {
-    fn from(err: io::Error) -> AllocateConnectionOnInterconnectError {
-        AllocateConnectionOnInterconnectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AllocateConnectionOnInterconnectError {
@@ -1519,13 +1487,6 @@ impl Error for AllocateConnectionOnInterconnectError {
         match *self {
             AllocateConnectionOnInterconnectError::DirectConnectClient(ref cause) => cause,
             AllocateConnectionOnInterconnectError::DirectConnectServer(ref cause) => cause,
-            AllocateConnectionOnInterconnectError::Validation(ref cause) => cause,
-            AllocateConnectionOnInterconnectError::Credentials(ref err) => err.description(),
-            AllocateConnectionOnInterconnectError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AllocateConnectionOnInterconnectError::ParseError(ref cause) => cause,
-            AllocateConnectionOnInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1536,20 +1497,10 @@ pub enum AllocateHostedConnectionError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AllocateHostedConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> AllocateHostedConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AllocateHostedConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1562,43 +1513,20 @@ impl AllocateHostedConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return AllocateHostedConnectionError::DirectConnectClient(String::from(
-                        error_message,
+                    return RusotoError::Service(AllocateHostedConnectionError::DirectConnectClient(
+                        String::from(error_message),
                     ));
                 }
                 "DirectConnectServerException" => {
-                    return AllocateHostedConnectionError::DirectConnectServer(String::from(
-                        error_message,
+                    return RusotoError::Service(AllocateHostedConnectionError::DirectConnectServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AllocateHostedConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AllocateHostedConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AllocateHostedConnectionError {
-    fn from(err: serde_json::error::Error) -> AllocateHostedConnectionError {
-        AllocateHostedConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AllocateHostedConnectionError {
-    fn from(err: CredentialsError) -> AllocateHostedConnectionError {
-        AllocateHostedConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AllocateHostedConnectionError {
-    fn from(err: HttpDispatchError) -> AllocateHostedConnectionError {
-        AllocateHostedConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AllocateHostedConnectionError {
-    fn from(err: io::Error) -> AllocateHostedConnectionError {
-        AllocateHostedConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AllocateHostedConnectionError {
@@ -1611,13 +1539,6 @@ impl Error for AllocateHostedConnectionError {
         match *self {
             AllocateHostedConnectionError::DirectConnectClient(ref cause) => cause,
             AllocateHostedConnectionError::DirectConnectServer(ref cause) => cause,
-            AllocateHostedConnectionError::Validation(ref cause) => cause,
-            AllocateHostedConnectionError::Credentials(ref err) => err.description(),
-            AllocateHostedConnectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AllocateHostedConnectionError::ParseError(ref cause) => cause,
-            AllocateHostedConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1628,20 +1549,12 @@ pub enum AllocatePrivateVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AllocatePrivateVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AllocatePrivateVirtualInterfaceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AllocatePrivateVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1654,45 +1567,24 @@ impl AllocatePrivateVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
-                }
-                "DirectConnectServerException" => {
-                    return AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return AllocatePrivateVirtualInterfaceError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        AllocatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(
+                        AllocatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AllocatePrivateVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AllocatePrivateVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> AllocatePrivateVirtualInterfaceError {
-        AllocatePrivateVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AllocatePrivateVirtualInterfaceError {
-    fn from(err: CredentialsError) -> AllocatePrivateVirtualInterfaceError {
-        AllocatePrivateVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AllocatePrivateVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> AllocatePrivateVirtualInterfaceError {
-        AllocatePrivateVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AllocatePrivateVirtualInterfaceError {
-    fn from(err: io::Error) -> AllocatePrivateVirtualInterfaceError {
-        AllocatePrivateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AllocatePrivateVirtualInterfaceError {
@@ -1705,13 +1597,6 @@ impl Error for AllocatePrivateVirtualInterfaceError {
         match *self {
             AllocatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             AllocatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            AllocatePrivateVirtualInterfaceError::Validation(ref cause) => cause,
-            AllocatePrivateVirtualInterfaceError::Credentials(ref err) => err.description(),
-            AllocatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AllocatePrivateVirtualInterfaceError::ParseError(ref cause) => cause,
-            AllocatePrivateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1722,20 +1607,12 @@ pub enum AllocatePublicVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AllocatePublicVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AllocatePublicVirtualInterfaceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AllocatePublicVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1748,45 +1625,24 @@ impl AllocatePublicVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
-                }
-                "DirectConnectServerException" => {
-                    return AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return AllocatePublicVirtualInterfaceError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        AllocatePublicVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(
+                        AllocatePublicVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AllocatePublicVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AllocatePublicVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> AllocatePublicVirtualInterfaceError {
-        AllocatePublicVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AllocatePublicVirtualInterfaceError {
-    fn from(err: CredentialsError) -> AllocatePublicVirtualInterfaceError {
-        AllocatePublicVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AllocatePublicVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> AllocatePublicVirtualInterfaceError {
-        AllocatePublicVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AllocatePublicVirtualInterfaceError {
-    fn from(err: io::Error) -> AllocatePublicVirtualInterfaceError {
-        AllocatePublicVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AllocatePublicVirtualInterfaceError {
@@ -1799,13 +1655,6 @@ impl Error for AllocatePublicVirtualInterfaceError {
         match *self {
             AllocatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             AllocatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            AllocatePublicVirtualInterfaceError::Validation(ref cause) => cause,
-            AllocatePublicVirtualInterfaceError::Credentials(ref err) => err.description(),
-            AllocatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AllocatePublicVirtualInterfaceError::ParseError(ref cause) => cause,
-            AllocatePublicVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1816,20 +1665,12 @@ pub enum AssociateConnectionWithLagError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateConnectionWithLagError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateConnectionWithLagError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateConnectionWithLagError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1842,43 +1683,24 @@ impl AssociateConnectionWithLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return AssociateConnectionWithLagError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateConnectionWithLagError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return AssociateConnectionWithLagError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateConnectionWithLagError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AssociateConnectionWithLagError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateConnectionWithLagError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateConnectionWithLagError {
-    fn from(err: serde_json::error::Error) -> AssociateConnectionWithLagError {
-        AssociateConnectionWithLagError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateConnectionWithLagError {
-    fn from(err: CredentialsError) -> AssociateConnectionWithLagError {
-        AssociateConnectionWithLagError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateConnectionWithLagError {
-    fn from(err: HttpDispatchError) -> AssociateConnectionWithLagError {
-        AssociateConnectionWithLagError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateConnectionWithLagError {
-    fn from(err: io::Error) -> AssociateConnectionWithLagError {
-        AssociateConnectionWithLagError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateConnectionWithLagError {
@@ -1891,13 +1713,6 @@ impl Error for AssociateConnectionWithLagError {
         match *self {
             AssociateConnectionWithLagError::DirectConnectClient(ref cause) => cause,
             AssociateConnectionWithLagError::DirectConnectServer(ref cause) => cause,
-            AssociateConnectionWithLagError::Validation(ref cause) => cause,
-            AssociateConnectionWithLagError::Credentials(ref err) => err.description(),
-            AssociateConnectionWithLagError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateConnectionWithLagError::ParseError(ref cause) => cause,
-            AssociateConnectionWithLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1908,20 +1723,10 @@ pub enum AssociateHostedConnectionError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateHostedConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateHostedConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateHostedConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1934,43 +1739,24 @@ impl AssociateHostedConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return AssociateHostedConnectionError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateHostedConnectionError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return AssociateHostedConnectionError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateHostedConnectionError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AssociateHostedConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateHostedConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateHostedConnectionError {
-    fn from(err: serde_json::error::Error) -> AssociateHostedConnectionError {
-        AssociateHostedConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateHostedConnectionError {
-    fn from(err: CredentialsError) -> AssociateHostedConnectionError {
-        AssociateHostedConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateHostedConnectionError {
-    fn from(err: HttpDispatchError) -> AssociateHostedConnectionError {
-        AssociateHostedConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateHostedConnectionError {
-    fn from(err: io::Error) -> AssociateHostedConnectionError {
-        AssociateHostedConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateHostedConnectionError {
@@ -1983,13 +1769,6 @@ impl Error for AssociateHostedConnectionError {
         match *self {
             AssociateHostedConnectionError::DirectConnectClient(ref cause) => cause,
             AssociateHostedConnectionError::DirectConnectServer(ref cause) => cause,
-            AssociateHostedConnectionError::Validation(ref cause) => cause,
-            AssociateHostedConnectionError::Credentials(ref err) => err.description(),
-            AssociateHostedConnectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateHostedConnectionError::ParseError(ref cause) => cause,
-            AssociateHostedConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2000,20 +1779,10 @@ pub enum AssociateVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateVirtualInterfaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2026,43 +1795,24 @@ impl AssociateVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return AssociateVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return AssociateVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AssociateVirtualInterfaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> AssociateVirtualInterfaceError {
-        AssociateVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateVirtualInterfaceError {
-    fn from(err: CredentialsError) -> AssociateVirtualInterfaceError {
-        AssociateVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> AssociateVirtualInterfaceError {
-        AssociateVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateVirtualInterfaceError {
-    fn from(err: io::Error) -> AssociateVirtualInterfaceError {
-        AssociateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateVirtualInterfaceError {
@@ -2075,13 +1825,6 @@ impl Error for AssociateVirtualInterfaceError {
         match *self {
             AssociateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             AssociateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            AssociateVirtualInterfaceError::Validation(ref cause) => cause,
-            AssociateVirtualInterfaceError::Credentials(ref err) => err.description(),
-            AssociateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateVirtualInterfaceError::ParseError(ref cause) => cause,
-            AssociateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2092,20 +1835,10 @@ pub enum ConfirmConnectionError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConfirmConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfirmConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2118,39 +1851,20 @@ impl ConfirmConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return ConfirmConnectionError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(ConfirmConnectionError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return ConfirmConnectionError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(ConfirmConnectionError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ConfirmConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ConfirmConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ConfirmConnectionError {
-    fn from(err: serde_json::error::Error) -> ConfirmConnectionError {
-        ConfirmConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ConfirmConnectionError {
-    fn from(err: CredentialsError) -> ConfirmConnectionError {
-        ConfirmConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConfirmConnectionError {
-    fn from(err: HttpDispatchError) -> ConfirmConnectionError {
-        ConfirmConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConfirmConnectionError {
-    fn from(err: io::Error) -> ConfirmConnectionError {
-        ConfirmConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ConfirmConnectionError {
@@ -2163,13 +1877,6 @@ impl Error for ConfirmConnectionError {
         match *self {
             ConfirmConnectionError::DirectConnectClient(ref cause) => cause,
             ConfirmConnectionError::DirectConnectServer(ref cause) => cause,
-            ConfirmConnectionError::Validation(ref cause) => cause,
-            ConfirmConnectionError::Credentials(ref err) => err.description(),
-            ConfirmConnectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ConfirmConnectionError::ParseError(ref cause) => cause,
-            ConfirmConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2180,20 +1887,12 @@ pub enum ConfirmPrivateVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmPrivateVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConfirmPrivateVirtualInterfaceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ConfirmPrivateVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2206,45 +1905,24 @@ impl ConfirmPrivateVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
-                }
-                "DirectConnectServerException" => {
-                    return ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return ConfirmPrivateVirtualInterfaceError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        ConfirmPrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(
+                        ConfirmPrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ConfirmPrivateVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ConfirmPrivateVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> ConfirmPrivateVirtualInterfaceError {
-        ConfirmPrivateVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ConfirmPrivateVirtualInterfaceError {
-    fn from(err: CredentialsError) -> ConfirmPrivateVirtualInterfaceError {
-        ConfirmPrivateVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConfirmPrivateVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> ConfirmPrivateVirtualInterfaceError {
-        ConfirmPrivateVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConfirmPrivateVirtualInterfaceError {
-    fn from(err: io::Error) -> ConfirmPrivateVirtualInterfaceError {
-        ConfirmPrivateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ConfirmPrivateVirtualInterfaceError {
@@ -2257,13 +1935,6 @@ impl Error for ConfirmPrivateVirtualInterfaceError {
         match *self {
             ConfirmPrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             ConfirmPrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            ConfirmPrivateVirtualInterfaceError::Validation(ref cause) => cause,
-            ConfirmPrivateVirtualInterfaceError::Credentials(ref err) => err.description(),
-            ConfirmPrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ConfirmPrivateVirtualInterfaceError::ParseError(ref cause) => cause,
-            ConfirmPrivateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2274,20 +1945,12 @@ pub enum ConfirmPublicVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConfirmPublicVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConfirmPublicVirtualInterfaceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ConfirmPublicVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2300,43 +1963,24 @@ impl ConfirmPublicVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ConfirmPublicVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ConfirmPublicVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ConfirmPublicVirtualInterfaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ConfirmPublicVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ConfirmPublicVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> ConfirmPublicVirtualInterfaceError {
-        ConfirmPublicVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ConfirmPublicVirtualInterfaceError {
-    fn from(err: CredentialsError) -> ConfirmPublicVirtualInterfaceError {
-        ConfirmPublicVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConfirmPublicVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> ConfirmPublicVirtualInterfaceError {
-        ConfirmPublicVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConfirmPublicVirtualInterfaceError {
-    fn from(err: io::Error) -> ConfirmPublicVirtualInterfaceError {
-        ConfirmPublicVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ConfirmPublicVirtualInterfaceError {
@@ -2349,13 +1993,6 @@ impl Error for ConfirmPublicVirtualInterfaceError {
         match *self {
             ConfirmPublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             ConfirmPublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            ConfirmPublicVirtualInterfaceError::Validation(ref cause) => cause,
-            ConfirmPublicVirtualInterfaceError::Credentials(ref err) => err.description(),
-            ConfirmPublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ConfirmPublicVirtualInterfaceError::ParseError(ref cause) => cause,
-            ConfirmPublicVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2366,20 +2003,10 @@ pub enum CreateBGPPeerError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBGPPeerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateBGPPeerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBGPPeerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2392,39 +2019,20 @@ impl CreateBGPPeerError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateBGPPeerError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(CreateBGPPeerError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return CreateBGPPeerError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(CreateBGPPeerError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateBGPPeerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateBGPPeerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateBGPPeerError {
-    fn from(err: serde_json::error::Error) -> CreateBGPPeerError {
-        CreateBGPPeerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateBGPPeerError {
-    fn from(err: CredentialsError) -> CreateBGPPeerError {
-        CreateBGPPeerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateBGPPeerError {
-    fn from(err: HttpDispatchError) -> CreateBGPPeerError {
-        CreateBGPPeerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateBGPPeerError {
-    fn from(err: io::Error) -> CreateBGPPeerError {
-        CreateBGPPeerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateBGPPeerError {
@@ -2437,11 +2045,6 @@ impl Error for CreateBGPPeerError {
         match *self {
             CreateBGPPeerError::DirectConnectClient(ref cause) => cause,
             CreateBGPPeerError::DirectConnectServer(ref cause) => cause,
-            CreateBGPPeerError::Validation(ref cause) => cause,
-            CreateBGPPeerError::Credentials(ref err) => err.description(),
-            CreateBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBGPPeerError::ParseError(ref cause) => cause,
-            CreateBGPPeerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2452,20 +2055,10 @@ pub enum CreateConnectionError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2478,39 +2071,20 @@ impl CreateConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateConnectionError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(CreateConnectionError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return CreateConnectionError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(CreateConnectionError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateConnectionError {
-    fn from(err: serde_json::error::Error) -> CreateConnectionError {
-        CreateConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateConnectionError {
-    fn from(err: CredentialsError) -> CreateConnectionError {
-        CreateConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateConnectionError {
-    fn from(err: HttpDispatchError) -> CreateConnectionError {
-        CreateConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateConnectionError {
-    fn from(err: io::Error) -> CreateConnectionError {
-        CreateConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateConnectionError {
@@ -2523,11 +2097,6 @@ impl Error for CreateConnectionError {
         match *self {
             CreateConnectionError::DirectConnectClient(ref cause) => cause,
             CreateConnectionError::DirectConnectServer(ref cause) => cause,
-            CreateConnectionError::Validation(ref cause) => cause,
-            CreateConnectionError::Credentials(ref err) => err.description(),
-            CreateConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateConnectionError::ParseError(ref cause) => cause,
-            CreateConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2538,20 +2107,12 @@ pub enum CreateDirectConnectGatewayError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDirectConnectGatewayError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDirectConnectGatewayError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateDirectConnectGatewayError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2564,43 +2125,24 @@ impl CreateDirectConnectGatewayError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateDirectConnectGatewayError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDirectConnectGatewayError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return CreateDirectConnectGatewayError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDirectConnectGatewayError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreateDirectConnectGatewayError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDirectConnectGatewayError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDirectConnectGatewayError {
-    fn from(err: serde_json::error::Error) -> CreateDirectConnectGatewayError {
-        CreateDirectConnectGatewayError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDirectConnectGatewayError {
-    fn from(err: CredentialsError) -> CreateDirectConnectGatewayError {
-        CreateDirectConnectGatewayError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDirectConnectGatewayError {
-    fn from(err: HttpDispatchError) -> CreateDirectConnectGatewayError {
-        CreateDirectConnectGatewayError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDirectConnectGatewayError {
-    fn from(err: io::Error) -> CreateDirectConnectGatewayError {
-        CreateDirectConnectGatewayError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayError {
@@ -2613,13 +2155,6 @@ impl Error for CreateDirectConnectGatewayError {
         match *self {
             CreateDirectConnectGatewayError::DirectConnectClient(ref cause) => cause,
             CreateDirectConnectGatewayError::DirectConnectServer(ref cause) => cause,
-            CreateDirectConnectGatewayError::Validation(ref cause) => cause,
-            CreateDirectConnectGatewayError::Credentials(ref err) => err.description(),
-            CreateDirectConnectGatewayError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDirectConnectGatewayError::ParseError(ref cause) => cause,
-            CreateDirectConnectGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2630,20 +2165,12 @@ pub enum CreateDirectConnectGatewayAssociationError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDirectConnectGatewayAssociationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDirectConnectGatewayAssociationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateDirectConnectGatewayAssociationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2656,45 +2183,24 @@ impl CreateDirectConnectGatewayAssociationError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateDirectConnectGatewayAssociationError::DirectConnectClient(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDirectConnectGatewayAssociationError::DirectConnectClient(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectConnectServerException" => {
-                    return CreateDirectConnectGatewayAssociationError::DirectConnectServer(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDirectConnectGatewayAssociationError::DirectConnectServer(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return CreateDirectConnectGatewayAssociationError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDirectConnectGatewayAssociationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDirectConnectGatewayAssociationError {
-    fn from(err: serde_json::error::Error) -> CreateDirectConnectGatewayAssociationError {
-        CreateDirectConnectGatewayAssociationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDirectConnectGatewayAssociationError {
-    fn from(err: CredentialsError) -> CreateDirectConnectGatewayAssociationError {
-        CreateDirectConnectGatewayAssociationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDirectConnectGatewayAssociationError {
-    fn from(err: HttpDispatchError) -> CreateDirectConnectGatewayAssociationError {
-        CreateDirectConnectGatewayAssociationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDirectConnectGatewayAssociationError {
-    fn from(err: io::Error) -> CreateDirectConnectGatewayAssociationError {
-        CreateDirectConnectGatewayAssociationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDirectConnectGatewayAssociationError {
@@ -2707,13 +2213,6 @@ impl Error for CreateDirectConnectGatewayAssociationError {
         match *self {
             CreateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => cause,
             CreateDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => cause,
-            CreateDirectConnectGatewayAssociationError::Validation(ref cause) => cause,
-            CreateDirectConnectGatewayAssociationError::Credentials(ref err) => err.description(),
-            CreateDirectConnectGatewayAssociationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDirectConnectGatewayAssociationError::ParseError(ref cause) => cause,
-            CreateDirectConnectGatewayAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2724,20 +2223,10 @@ pub enum CreateInterconnectError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInterconnectError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateInterconnectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInterconnectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2750,39 +2239,20 @@ impl CreateInterconnectError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateInterconnectError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(CreateInterconnectError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return CreateInterconnectError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(CreateInterconnectError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateInterconnectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateInterconnectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateInterconnectError {
-    fn from(err: serde_json::error::Error) -> CreateInterconnectError {
-        CreateInterconnectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateInterconnectError {
-    fn from(err: CredentialsError) -> CreateInterconnectError {
-        CreateInterconnectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateInterconnectError {
-    fn from(err: HttpDispatchError) -> CreateInterconnectError {
-        CreateInterconnectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateInterconnectError {
-    fn from(err: io::Error) -> CreateInterconnectError {
-        CreateInterconnectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateInterconnectError {
@@ -2795,13 +2265,6 @@ impl Error for CreateInterconnectError {
         match *self {
             CreateInterconnectError::DirectConnectClient(ref cause) => cause,
             CreateInterconnectError::DirectConnectServer(ref cause) => cause,
-            CreateInterconnectError::Validation(ref cause) => cause,
-            CreateInterconnectError::Credentials(ref err) => err.description(),
-            CreateInterconnectError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateInterconnectError::ParseError(ref cause) => cause,
-            CreateInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2812,20 +2275,10 @@ pub enum CreateLagError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLagError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLagError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLagError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2838,39 +2291,20 @@ impl CreateLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreateLagError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(CreateLagError::DirectConnectClient(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectConnectServerException" => {
-                    return CreateLagError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(CreateLagError::DirectConnectServer(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateLagError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateLagError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateLagError {
-    fn from(err: serde_json::error::Error) -> CreateLagError {
-        CreateLagError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateLagError {
-    fn from(err: CredentialsError) -> CreateLagError {
-        CreateLagError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLagError {
-    fn from(err: HttpDispatchError) -> CreateLagError {
-        CreateLagError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLagError {
-    fn from(err: io::Error) -> CreateLagError {
-        CreateLagError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateLagError {
@@ -2883,11 +2317,6 @@ impl Error for CreateLagError {
         match *self {
             CreateLagError::DirectConnectClient(ref cause) => cause,
             CreateLagError::DirectConnectServer(ref cause) => cause,
-            CreateLagError::Validation(ref cause) => cause,
-            CreateLagError::Credentials(ref err) => err.description(),
-            CreateLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateLagError::ParseError(ref cause) => cause,
-            CreateLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2898,20 +2327,12 @@ pub enum CreatePrivateVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePrivateVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePrivateVirtualInterfaceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreatePrivateVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2924,43 +2345,24 @@ impl CreatePrivateVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePrivateVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePrivateVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreatePrivateVirtualInterfaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePrivateVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePrivateVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> CreatePrivateVirtualInterfaceError {
-        CreatePrivateVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePrivateVirtualInterfaceError {
-    fn from(err: CredentialsError) -> CreatePrivateVirtualInterfaceError {
-        CreatePrivateVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePrivateVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> CreatePrivateVirtualInterfaceError {
-        CreatePrivateVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePrivateVirtualInterfaceError {
-    fn from(err: io::Error) -> CreatePrivateVirtualInterfaceError {
-        CreatePrivateVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePrivateVirtualInterfaceError {
@@ -2973,13 +2375,6 @@ impl Error for CreatePrivateVirtualInterfaceError {
         match *self {
             CreatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             CreatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            CreatePrivateVirtualInterfaceError::Validation(ref cause) => cause,
-            CreatePrivateVirtualInterfaceError::Credentials(ref err) => err.description(),
-            CreatePrivateVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreatePrivateVirtualInterfaceError::ParseError(ref cause) => cause,
-            CreatePrivateVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2990,20 +2385,12 @@ pub enum CreatePublicVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePublicVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePublicVirtualInterfaceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreatePublicVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3016,43 +2403,24 @@ impl CreatePublicVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePublicVirtualInterfaceError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePublicVirtualInterfaceError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreatePublicVirtualInterfaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePublicVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePublicVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> CreatePublicVirtualInterfaceError {
-        CreatePublicVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePublicVirtualInterfaceError {
-    fn from(err: CredentialsError) -> CreatePublicVirtualInterfaceError {
-        CreatePublicVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePublicVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> CreatePublicVirtualInterfaceError {
-        CreatePublicVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePublicVirtualInterfaceError {
-    fn from(err: io::Error) -> CreatePublicVirtualInterfaceError {
-        CreatePublicVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePublicVirtualInterfaceError {
@@ -3065,13 +2433,6 @@ impl Error for CreatePublicVirtualInterfaceError {
         match *self {
             CreatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             CreatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            CreatePublicVirtualInterfaceError::Validation(ref cause) => cause,
-            CreatePublicVirtualInterfaceError::Credentials(ref err) => err.description(),
-            CreatePublicVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreatePublicVirtualInterfaceError::ParseError(ref cause) => cause,
-            CreatePublicVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3082,20 +2443,10 @@ pub enum DeleteBGPPeerError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBGPPeerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBGPPeerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBGPPeerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3108,39 +2459,20 @@ impl DeleteBGPPeerError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteBGPPeerError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DeleteBGPPeerError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteBGPPeerError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DeleteBGPPeerError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteBGPPeerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBGPPeerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBGPPeerError {
-    fn from(err: serde_json::error::Error) -> DeleteBGPPeerError {
-        DeleteBGPPeerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBGPPeerError {
-    fn from(err: CredentialsError) -> DeleteBGPPeerError {
-        DeleteBGPPeerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBGPPeerError {
-    fn from(err: HttpDispatchError) -> DeleteBGPPeerError {
-        DeleteBGPPeerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBGPPeerError {
-    fn from(err: io::Error) -> DeleteBGPPeerError {
-        DeleteBGPPeerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBGPPeerError {
@@ -3153,11 +2485,6 @@ impl Error for DeleteBGPPeerError {
         match *self {
             DeleteBGPPeerError::DirectConnectClient(ref cause) => cause,
             DeleteBGPPeerError::DirectConnectServer(ref cause) => cause,
-            DeleteBGPPeerError::Validation(ref cause) => cause,
-            DeleteBGPPeerError::Credentials(ref err) => err.description(),
-            DeleteBGPPeerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBGPPeerError::ParseError(ref cause) => cause,
-            DeleteBGPPeerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3168,20 +2495,10 @@ pub enum DeleteConnectionError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3194,39 +2511,20 @@ impl DeleteConnectionError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteConnectionError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DeleteConnectionError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteConnectionError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DeleteConnectionError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteConnectionError {
-    fn from(err: serde_json::error::Error) -> DeleteConnectionError {
-        DeleteConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConnectionError {
-    fn from(err: CredentialsError) -> DeleteConnectionError {
-        DeleteConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConnectionError {
-    fn from(err: HttpDispatchError) -> DeleteConnectionError {
-        DeleteConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConnectionError {
-    fn from(err: io::Error) -> DeleteConnectionError {
-        DeleteConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -3239,11 +2537,6 @@ impl Error for DeleteConnectionError {
         match *self {
             DeleteConnectionError::DirectConnectClient(ref cause) => cause,
             DeleteConnectionError::DirectConnectServer(ref cause) => cause,
-            DeleteConnectionError::Validation(ref cause) => cause,
-            DeleteConnectionError::Credentials(ref err) => err.description(),
-            DeleteConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteConnectionError::ParseError(ref cause) => cause,
-            DeleteConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3254,20 +2547,12 @@ pub enum DeleteDirectConnectGatewayError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDirectConnectGatewayError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDirectConnectGatewayError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteDirectConnectGatewayError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3280,43 +2565,24 @@ impl DeleteDirectConnectGatewayError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DeleteDirectConnectGatewayError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDirectConnectGatewayError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDirectConnectGatewayError {
-    fn from(err: serde_json::error::Error) -> DeleteDirectConnectGatewayError {
-        DeleteDirectConnectGatewayError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDirectConnectGatewayError {
-    fn from(err: CredentialsError) -> DeleteDirectConnectGatewayError {
-        DeleteDirectConnectGatewayError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDirectConnectGatewayError {
-    fn from(err: HttpDispatchError) -> DeleteDirectConnectGatewayError {
-        DeleteDirectConnectGatewayError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDirectConnectGatewayError {
-    fn from(err: io::Error) -> DeleteDirectConnectGatewayError {
-        DeleteDirectConnectGatewayError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayError {
@@ -3329,13 +2595,6 @@ impl Error for DeleteDirectConnectGatewayError {
         match *self {
             DeleteDirectConnectGatewayError::DirectConnectClient(ref cause) => cause,
             DeleteDirectConnectGatewayError::DirectConnectServer(ref cause) => cause,
-            DeleteDirectConnectGatewayError::Validation(ref cause) => cause,
-            DeleteDirectConnectGatewayError::Credentials(ref err) => err.description(),
-            DeleteDirectConnectGatewayError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDirectConnectGatewayError::ParseError(ref cause) => cause,
-            DeleteDirectConnectGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3346,20 +2605,12 @@ pub enum DeleteDirectConnectGatewayAssociationError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDirectConnectGatewayAssociationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDirectConnectGatewayAssociationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteDirectConnectGatewayAssociationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3372,45 +2623,24 @@ impl DeleteDirectConnectGatewayAssociationError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectConnectServerException" => {
-                    return DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteDirectConnectGatewayAssociationError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDirectConnectGatewayAssociationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDirectConnectGatewayAssociationError {
-    fn from(err: serde_json::error::Error) -> DeleteDirectConnectGatewayAssociationError {
-        DeleteDirectConnectGatewayAssociationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDirectConnectGatewayAssociationError {
-    fn from(err: CredentialsError) -> DeleteDirectConnectGatewayAssociationError {
-        DeleteDirectConnectGatewayAssociationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDirectConnectGatewayAssociationError {
-    fn from(err: HttpDispatchError) -> DeleteDirectConnectGatewayAssociationError {
-        DeleteDirectConnectGatewayAssociationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDirectConnectGatewayAssociationError {
-    fn from(err: io::Error) -> DeleteDirectConnectGatewayAssociationError {
-        DeleteDirectConnectGatewayAssociationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDirectConnectGatewayAssociationError {
@@ -3423,13 +2653,6 @@ impl Error for DeleteDirectConnectGatewayAssociationError {
         match *self {
             DeleteDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => cause,
             DeleteDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => cause,
-            DeleteDirectConnectGatewayAssociationError::Validation(ref cause) => cause,
-            DeleteDirectConnectGatewayAssociationError::Credentials(ref err) => err.description(),
-            DeleteDirectConnectGatewayAssociationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDirectConnectGatewayAssociationError::ParseError(ref cause) => cause,
-            DeleteDirectConnectGatewayAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3440,20 +2663,10 @@ pub enum DeleteInterconnectError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInterconnectError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteInterconnectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInterconnectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3466,39 +2679,20 @@ impl DeleteInterconnectError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteInterconnectError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DeleteInterconnectError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteInterconnectError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DeleteInterconnectError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteInterconnectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteInterconnectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteInterconnectError {
-    fn from(err: serde_json::error::Error) -> DeleteInterconnectError {
-        DeleteInterconnectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteInterconnectError {
-    fn from(err: CredentialsError) -> DeleteInterconnectError {
-        DeleteInterconnectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteInterconnectError {
-    fn from(err: HttpDispatchError) -> DeleteInterconnectError {
-        DeleteInterconnectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteInterconnectError {
-    fn from(err: io::Error) -> DeleteInterconnectError {
-        DeleteInterconnectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteInterconnectError {
@@ -3511,13 +2705,6 @@ impl Error for DeleteInterconnectError {
         match *self {
             DeleteInterconnectError::DirectConnectClient(ref cause) => cause,
             DeleteInterconnectError::DirectConnectServer(ref cause) => cause,
-            DeleteInterconnectError::Validation(ref cause) => cause,
-            DeleteInterconnectError::Credentials(ref err) => err.description(),
-            DeleteInterconnectError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteInterconnectError::ParseError(ref cause) => cause,
-            DeleteInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3528,20 +2715,10 @@ pub enum DeleteLagError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLagError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLagError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLagError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3554,39 +2731,20 @@ impl DeleteLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteLagError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DeleteLagError::DirectConnectClient(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteLagError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DeleteLagError::DirectConnectServer(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteLagError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLagError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLagError {
-    fn from(err: serde_json::error::Error) -> DeleteLagError {
-        DeleteLagError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLagError {
-    fn from(err: CredentialsError) -> DeleteLagError {
-        DeleteLagError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLagError {
-    fn from(err: HttpDispatchError) -> DeleteLagError {
-        DeleteLagError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLagError {
-    fn from(err: io::Error) -> DeleteLagError {
-        DeleteLagError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLagError {
@@ -3599,11 +2757,6 @@ impl Error for DeleteLagError {
         match *self {
             DeleteLagError::DirectConnectClient(ref cause) => cause,
             DeleteLagError::DirectConnectServer(ref cause) => cause,
-            DeleteLagError::Validation(ref cause) => cause,
-            DeleteLagError::Credentials(ref err) => err.description(),
-            DeleteLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteLagError::ParseError(ref cause) => cause,
-            DeleteLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3614,20 +2767,10 @@ pub enum DeleteVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVirtualInterfaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVirtualInterfaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualInterfaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3640,43 +2783,20 @@ impl DeleteVirtualInterfaceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DeleteVirtualInterfaceError::DirectConnectClient(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteVirtualInterfaceError::DirectConnectClient(
+                        String::from(error_message),
                     ));
                 }
                 "DirectConnectServerException" => {
-                    return DeleteVirtualInterfaceError::DirectConnectServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteVirtualInterfaceError::DirectConnectServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteVirtualInterfaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteVirtualInterfaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteVirtualInterfaceError {
-    fn from(err: serde_json::error::Error) -> DeleteVirtualInterfaceError {
-        DeleteVirtualInterfaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVirtualInterfaceError {
-    fn from(err: CredentialsError) -> DeleteVirtualInterfaceError {
-        DeleteVirtualInterfaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVirtualInterfaceError {
-    fn from(err: HttpDispatchError) -> DeleteVirtualInterfaceError {
-        DeleteVirtualInterfaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVirtualInterfaceError {
-    fn from(err: io::Error) -> DeleteVirtualInterfaceError {
-        DeleteVirtualInterfaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteVirtualInterfaceError {
@@ -3689,13 +2809,6 @@ impl Error for DeleteVirtualInterfaceError {
         match *self {
             DeleteVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             DeleteVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
-            DeleteVirtualInterfaceError::Validation(ref cause) => cause,
-            DeleteVirtualInterfaceError::Credentials(ref err) => err.description(),
-            DeleteVirtualInterfaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteVirtualInterfaceError::ParseError(ref cause) => cause,
-            DeleteVirtualInterfaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3706,20 +2819,10 @@ pub enum DescribeConnectionLoaError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConnectionLoaError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConnectionLoaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionLoaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3732,43 +2835,20 @@ impl DescribeConnectionLoaError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeConnectionLoaError::DirectConnectClient(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConnectionLoaError::DirectConnectClient(
+                        String::from(error_message),
                     ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeConnectionLoaError::DirectConnectServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConnectionLoaError::DirectConnectServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeConnectionLoaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConnectionLoaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConnectionLoaError {
-    fn from(err: serde_json::error::Error) -> DescribeConnectionLoaError {
-        DescribeConnectionLoaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConnectionLoaError {
-    fn from(err: CredentialsError) -> DescribeConnectionLoaError {
-        DescribeConnectionLoaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConnectionLoaError {
-    fn from(err: HttpDispatchError) -> DescribeConnectionLoaError {
-        DescribeConnectionLoaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConnectionLoaError {
-    fn from(err: io::Error) -> DescribeConnectionLoaError {
-        DescribeConnectionLoaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConnectionLoaError {
@@ -3781,13 +2861,6 @@ impl Error for DescribeConnectionLoaError {
         match *self {
             DescribeConnectionLoaError::DirectConnectClient(ref cause) => cause,
             DescribeConnectionLoaError::DirectConnectServer(ref cause) => cause,
-            DescribeConnectionLoaError::Validation(ref cause) => cause,
-            DescribeConnectionLoaError::Credentials(ref err) => err.description(),
-            DescribeConnectionLoaError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConnectionLoaError::ParseError(ref cause) => cause,
-            DescribeConnectionLoaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3798,20 +2871,10 @@ pub enum DescribeConnectionsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConnectionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConnectionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3824,43 +2887,20 @@ impl DescribeConnectionsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeConnectionsError::DirectConnectClient(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConnectionsError::DirectConnectClient(
+                        String::from(error_message),
                     ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeConnectionsError::DirectConnectServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConnectionsError::DirectConnectServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeConnectionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConnectionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConnectionsError {
-    fn from(err: serde_json::error::Error) -> DescribeConnectionsError {
-        DescribeConnectionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConnectionsError {
-    fn from(err: CredentialsError) -> DescribeConnectionsError {
-        DescribeConnectionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConnectionsError {
-    fn from(err: HttpDispatchError) -> DescribeConnectionsError {
-        DescribeConnectionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConnectionsError {
-    fn from(err: io::Error) -> DescribeConnectionsError {
-        DescribeConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConnectionsError {
@@ -3873,13 +2913,6 @@ impl Error for DescribeConnectionsError {
         match *self {
             DescribeConnectionsError::DirectConnectClient(ref cause) => cause,
             DescribeConnectionsError::DirectConnectServer(ref cause) => cause,
-            DescribeConnectionsError::Validation(ref cause) => cause,
-            DescribeConnectionsError::Credentials(ref err) => err.description(),
-            DescribeConnectionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConnectionsError::ParseError(ref cause) => cause,
-            DescribeConnectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3890,20 +2923,12 @@ pub enum DescribeConnectionsOnInterconnectError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConnectionsOnInterconnectError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConnectionsOnInterconnectError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConnectionsOnInterconnectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3916,45 +2941,24 @@ impl DescribeConnectionsOnInterconnectError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeConnectionsOnInterconnectError::DirectConnectClient(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeConnectionsOnInterconnectError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "DirectConnectServerException" => {
-                    return DescribeConnectionsOnInterconnectError::DirectConnectServer(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeConnectionsOnInterconnectError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeConnectionsOnInterconnectError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConnectionsOnInterconnectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConnectionsOnInterconnectError {
-    fn from(err: serde_json::error::Error) -> DescribeConnectionsOnInterconnectError {
-        DescribeConnectionsOnInterconnectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConnectionsOnInterconnectError {
-    fn from(err: CredentialsError) -> DescribeConnectionsOnInterconnectError {
-        DescribeConnectionsOnInterconnectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConnectionsOnInterconnectError {
-    fn from(err: HttpDispatchError) -> DescribeConnectionsOnInterconnectError {
-        DescribeConnectionsOnInterconnectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConnectionsOnInterconnectError {
-    fn from(err: io::Error) -> DescribeConnectionsOnInterconnectError {
-        DescribeConnectionsOnInterconnectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConnectionsOnInterconnectError {
@@ -3967,13 +2971,6 @@ impl Error for DescribeConnectionsOnInterconnectError {
         match *self {
             DescribeConnectionsOnInterconnectError::DirectConnectClient(ref cause) => cause,
             DescribeConnectionsOnInterconnectError::DirectConnectServer(ref cause) => cause,
-            DescribeConnectionsOnInterconnectError::Validation(ref cause) => cause,
-            DescribeConnectionsOnInterconnectError::Credentials(ref err) => err.description(),
-            DescribeConnectionsOnInterconnectError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConnectionsOnInterconnectError::ParseError(ref cause) => cause,
-            DescribeConnectionsOnInterconnectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3984,22 +2981,12 @@ pub enum DescribeDirectConnectGatewayAssociationsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDirectConnectGatewayAssociationsError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DescribeDirectConnectGatewayAssociationsError {
+    ) -> RusotoError<DescribeDirectConnectGatewayAssociationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4012,45 +2999,24 @@ impl DescribeDirectConnectGatewayAssociationsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectConnectServerException" => {
-                    return DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeDirectConnectGatewayAssociationsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDirectConnectGatewayAssociationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDirectConnectGatewayAssociationsError {
-    fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewayAssociationsError {
-        DescribeDirectConnectGatewayAssociationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDirectConnectGatewayAssociationsError {
-    fn from(err: CredentialsError) -> DescribeDirectConnectGatewayAssociationsError {
-        DescribeDirectConnectGatewayAssociationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDirectConnectGatewayAssociationsError {
-    fn from(err: HttpDispatchError) -> DescribeDirectConnectGatewayAssociationsError {
-        DescribeDirectConnectGatewayAssociationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDirectConnectGatewayAssociationsError {
-    fn from(err: io::Error) -> DescribeDirectConnectGatewayAssociationsError {
-        DescribeDirectConnectGatewayAssociationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAssociationsError {
@@ -4063,15 +3029,6 @@ impl Error for DescribeDirectConnectGatewayAssociationsError {
         match *self {
             DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(ref cause) => cause,
             DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(ref cause) => cause,
-            DescribeDirectConnectGatewayAssociationsError::Validation(ref cause) => cause,
-            DescribeDirectConnectGatewayAssociationsError::Credentials(ref err) => {
-                err.description()
-            }
-            DescribeDirectConnectGatewayAssociationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDirectConnectGatewayAssociationsError::ParseError(ref cause) => cause,
-            DescribeDirectConnectGatewayAssociationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4082,22 +3039,12 @@ pub enum DescribeDirectConnectGatewayAttachmentsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDirectConnectGatewayAttachmentsError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DescribeDirectConnectGatewayAttachmentsError {
+    ) -> RusotoError<DescribeDirectConnectGatewayAttachmentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4110,45 +3057,24 @@ impl DescribeDirectConnectGatewayAttachmentsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectConnectServerException" => {
-                    return DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeDirectConnectGatewayAttachmentsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDirectConnectGatewayAttachmentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDirectConnectGatewayAttachmentsError {
-    fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewayAttachmentsError {
-        DescribeDirectConnectGatewayAttachmentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDirectConnectGatewayAttachmentsError {
-    fn from(err: CredentialsError) -> DescribeDirectConnectGatewayAttachmentsError {
-        DescribeDirectConnectGatewayAttachmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDirectConnectGatewayAttachmentsError {
-    fn from(err: HttpDispatchError) -> DescribeDirectConnectGatewayAttachmentsError {
-        DescribeDirectConnectGatewayAttachmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDirectConnectGatewayAttachmentsError {
-    fn from(err: io::Error) -> DescribeDirectConnectGatewayAttachmentsError {
-        DescribeDirectConnectGatewayAttachmentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewayAttachmentsError {
@@ -4161,13 +3087,6 @@ impl Error for DescribeDirectConnectGatewayAttachmentsError {
         match *self {
             DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(ref cause) => cause,
             DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(ref cause) => cause,
-            DescribeDirectConnectGatewayAttachmentsError::Validation(ref cause) => cause,
-            DescribeDirectConnectGatewayAttachmentsError::Credentials(ref err) => err.description(),
-            DescribeDirectConnectGatewayAttachmentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDirectConnectGatewayAttachmentsError::ParseError(ref cause) => cause,
-            DescribeDirectConnectGatewayAttachmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4178,20 +3097,12 @@ pub enum DescribeDirectConnectGatewaysError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDirectConnectGatewaysError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDirectConnectGatewaysError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDirectConnectGatewaysError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4204,43 +3115,24 @@ impl DescribeDirectConnectGatewaysError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeDirectConnectGatewaysError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDirectConnectGatewaysError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDirectConnectGatewaysError {
-    fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewaysError {
-        DescribeDirectConnectGatewaysError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDirectConnectGatewaysError {
-    fn from(err: CredentialsError) -> DescribeDirectConnectGatewaysError {
-        DescribeDirectConnectGatewaysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDirectConnectGatewaysError {
-    fn from(err: HttpDispatchError) -> DescribeDirectConnectGatewaysError {
-        DescribeDirectConnectGatewaysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDirectConnectGatewaysError {
-    fn from(err: io::Error) -> DescribeDirectConnectGatewaysError {
-        DescribeDirectConnectGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDirectConnectGatewaysError {
@@ -4253,13 +3145,6 @@ impl Error for DescribeDirectConnectGatewaysError {
         match *self {
             DescribeDirectConnectGatewaysError::DirectConnectClient(ref cause) => cause,
             DescribeDirectConnectGatewaysError::DirectConnectServer(ref cause) => cause,
-            DescribeDirectConnectGatewaysError::Validation(ref cause) => cause,
-            DescribeDirectConnectGatewaysError::Credentials(ref err) => err.description(),
-            DescribeDirectConnectGatewaysError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDirectConnectGatewaysError::ParseError(ref cause) => cause,
-            DescribeDirectConnectGatewaysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4270,20 +3155,10 @@ pub enum DescribeHostedConnectionsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHostedConnectionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeHostedConnectionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHostedConnectionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4296,43 +3171,24 @@ impl DescribeHostedConnectionsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeHostedConnectionsError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeHostedConnectionsError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return DescribeHostedConnectionsError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeHostedConnectionsError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeHostedConnectionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeHostedConnectionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeHostedConnectionsError {
-    fn from(err: serde_json::error::Error) -> DescribeHostedConnectionsError {
-        DescribeHostedConnectionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeHostedConnectionsError {
-    fn from(err: CredentialsError) -> DescribeHostedConnectionsError {
-        DescribeHostedConnectionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeHostedConnectionsError {
-    fn from(err: HttpDispatchError) -> DescribeHostedConnectionsError {
-        DescribeHostedConnectionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeHostedConnectionsError {
-    fn from(err: io::Error) -> DescribeHostedConnectionsError {
-        DescribeHostedConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeHostedConnectionsError {
@@ -4345,13 +3201,6 @@ impl Error for DescribeHostedConnectionsError {
         match *self {
             DescribeHostedConnectionsError::DirectConnectClient(ref cause) => cause,
             DescribeHostedConnectionsError::DirectConnectServer(ref cause) => cause,
-            DescribeHostedConnectionsError::Validation(ref cause) => cause,
-            DescribeHostedConnectionsError::Credentials(ref err) => err.description(),
-            DescribeHostedConnectionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeHostedConnectionsError::ParseError(ref cause) => cause,
-            DescribeHostedConnectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4362,20 +3211,10 @@ pub enum DescribeInterconnectLoaError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInterconnectLoaError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeInterconnectLoaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInterconnectLoaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4388,43 +3227,20 @@ impl DescribeInterconnectLoaError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeInterconnectLoaError::DirectConnectClient(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeInterconnectLoaError::DirectConnectClient(
+                        String::from(error_message),
                     ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeInterconnectLoaError::DirectConnectServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeInterconnectLoaError::DirectConnectServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeInterconnectLoaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeInterconnectLoaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeInterconnectLoaError {
-    fn from(err: serde_json::error::Error) -> DescribeInterconnectLoaError {
-        DescribeInterconnectLoaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeInterconnectLoaError {
-    fn from(err: CredentialsError) -> DescribeInterconnectLoaError {
-        DescribeInterconnectLoaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeInterconnectLoaError {
-    fn from(err: HttpDispatchError) -> DescribeInterconnectLoaError {
-        DescribeInterconnectLoaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeInterconnectLoaError {
-    fn from(err: io::Error) -> DescribeInterconnectLoaError {
-        DescribeInterconnectLoaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeInterconnectLoaError {
@@ -4437,13 +3253,6 @@ impl Error for DescribeInterconnectLoaError {
         match *self {
             DescribeInterconnectLoaError::DirectConnectClient(ref cause) => cause,
             DescribeInterconnectLoaError::DirectConnectServer(ref cause) => cause,
-            DescribeInterconnectLoaError::Validation(ref cause) => cause,
-            DescribeInterconnectLoaError::Credentials(ref err) => err.description(),
-            DescribeInterconnectLoaError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeInterconnectLoaError::ParseError(ref cause) => cause,
-            DescribeInterconnectLoaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4454,20 +3263,10 @@ pub enum DescribeInterconnectsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeInterconnectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeInterconnectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeInterconnectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4480,43 +3279,20 @@ impl DescribeInterconnectsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeInterconnectsError::DirectConnectClient(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeInterconnectsError::DirectConnectClient(
+                        String::from(error_message),
                     ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeInterconnectsError::DirectConnectServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeInterconnectsError::DirectConnectServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeInterconnectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeInterconnectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeInterconnectsError {
-    fn from(err: serde_json::error::Error) -> DescribeInterconnectsError {
-        DescribeInterconnectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeInterconnectsError {
-    fn from(err: CredentialsError) -> DescribeInterconnectsError {
-        DescribeInterconnectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeInterconnectsError {
-    fn from(err: HttpDispatchError) -> DescribeInterconnectsError {
-        DescribeInterconnectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeInterconnectsError {
-    fn from(err: io::Error) -> DescribeInterconnectsError {
-        DescribeInterconnectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeInterconnectsError {
@@ -4529,13 +3305,6 @@ impl Error for DescribeInterconnectsError {
         match *self {
             DescribeInterconnectsError::DirectConnectClient(ref cause) => cause,
             DescribeInterconnectsError::DirectConnectServer(ref cause) => cause,
-            DescribeInterconnectsError::Validation(ref cause) => cause,
-            DescribeInterconnectsError::Credentials(ref err) => err.description(),
-            DescribeInterconnectsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeInterconnectsError::ParseError(ref cause) => cause,
-            DescribeInterconnectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4546,20 +3315,10 @@ pub enum DescribeLagsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4572,39 +3331,20 @@ impl DescribeLagsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeLagsError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DescribeLagsError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeLagsError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DescribeLagsError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeLagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLagsError {
-    fn from(err: serde_json::error::Error) -> DescribeLagsError {
-        DescribeLagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLagsError {
-    fn from(err: CredentialsError) -> DescribeLagsError {
-        DescribeLagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLagsError {
-    fn from(err: HttpDispatchError) -> DescribeLagsError {
-        DescribeLagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLagsError {
-    fn from(err: io::Error) -> DescribeLagsError {
-        DescribeLagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLagsError {
@@ -4617,11 +3357,6 @@ impl Error for DescribeLagsError {
         match *self {
             DescribeLagsError::DirectConnectClient(ref cause) => cause,
             DescribeLagsError::DirectConnectServer(ref cause) => cause,
-            DescribeLagsError::Validation(ref cause) => cause,
-            DescribeLagsError::Credentials(ref err) => err.description(),
-            DescribeLagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeLagsError::ParseError(ref cause) => cause,
-            DescribeLagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4632,20 +3367,10 @@ pub enum DescribeLoaError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoaError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4658,39 +3383,20 @@ impl DescribeLoaError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeLoaError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DescribeLoaError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeLoaError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DescribeLoaError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeLoaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLoaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLoaError {
-    fn from(err: serde_json::error::Error) -> DescribeLoaError {
-        DescribeLoaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoaError {
-    fn from(err: CredentialsError) -> DescribeLoaError {
-        DescribeLoaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoaError {
-    fn from(err: HttpDispatchError) -> DescribeLoaError {
-        DescribeLoaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoaError {
-    fn from(err: io::Error) -> DescribeLoaError {
-        DescribeLoaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLoaError {
@@ -4703,11 +3409,6 @@ impl Error for DescribeLoaError {
         match *self {
             DescribeLoaError::DirectConnectClient(ref cause) => cause,
             DescribeLoaError::DirectConnectServer(ref cause) => cause,
-            DescribeLoaError::Validation(ref cause) => cause,
-            DescribeLoaError::Credentials(ref err) => err.description(),
-            DescribeLoaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeLoaError::ParseError(ref cause) => cause,
-            DescribeLoaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4718,20 +3419,10 @@ pub enum DescribeLocationsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLocationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLocationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLocationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4744,39 +3435,20 @@ impl DescribeLocationsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeLocationsError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DescribeLocationsError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeLocationsError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DescribeLocationsError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeLocationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLocationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLocationsError {
-    fn from(err: serde_json::error::Error) -> DescribeLocationsError {
-        DescribeLocationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLocationsError {
-    fn from(err: CredentialsError) -> DescribeLocationsError {
-        DescribeLocationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLocationsError {
-    fn from(err: HttpDispatchError) -> DescribeLocationsError {
-        DescribeLocationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLocationsError {
-    fn from(err: io::Error) -> DescribeLocationsError {
-        DescribeLocationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLocationsError {
@@ -4789,13 +3461,6 @@ impl Error for DescribeLocationsError {
         match *self {
             DescribeLocationsError::DirectConnectClient(ref cause) => cause,
             DescribeLocationsError::DirectConnectServer(ref cause) => cause,
-            DescribeLocationsError::Validation(ref cause) => cause,
-            DescribeLocationsError::Credentials(ref err) => err.description(),
-            DescribeLocationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLocationsError::ParseError(ref cause) => cause,
-            DescribeLocationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4806,20 +3471,10 @@ pub enum DescribeTagsError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4832,39 +3487,20 @@ impl DescribeTagsError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeTagsError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeTagsError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTagsError {
-    fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTagsError {
-    fn from(err: CredentialsError) -> DescribeTagsError {
-        DescribeTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTagsError {
-    fn from(err: HttpDispatchError) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTagsError {
-    fn from(err: io::Error) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -4877,11 +3513,6 @@ impl Error for DescribeTagsError {
         match *self {
             DescribeTagsError::DirectConnectClient(ref cause) => cause,
             DescribeTagsError::DirectConnectServer(ref cause) => cause,
-            DescribeTagsError::Validation(ref cause) => cause,
-            DescribeTagsError::Credentials(ref err) => err.description(),
-            DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::ParseError(ref cause) => cause,
-            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4892,20 +3523,10 @@ pub enum DescribeVirtualGatewaysError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVirtualGatewaysError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeVirtualGatewaysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualGatewaysError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4918,43 +3539,20 @@ impl DescribeVirtualGatewaysError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeVirtualGatewaysError::DirectConnectClient(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeVirtualGatewaysError::DirectConnectClient(
+                        String::from(error_message),
                     ));
                 }
                 "DirectConnectServerException" => {
-                    return DescribeVirtualGatewaysError::DirectConnectServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeVirtualGatewaysError::DirectConnectServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeVirtualGatewaysError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeVirtualGatewaysError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeVirtualGatewaysError {
-    fn from(err: serde_json::error::Error) -> DescribeVirtualGatewaysError {
-        DescribeVirtualGatewaysError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeVirtualGatewaysError {
-    fn from(err: CredentialsError) -> DescribeVirtualGatewaysError {
-        DescribeVirtualGatewaysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeVirtualGatewaysError {
-    fn from(err: HttpDispatchError) -> DescribeVirtualGatewaysError {
-        DescribeVirtualGatewaysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeVirtualGatewaysError {
-    fn from(err: io::Error) -> DescribeVirtualGatewaysError {
-        DescribeVirtualGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeVirtualGatewaysError {
@@ -4967,13 +3565,6 @@ impl Error for DescribeVirtualGatewaysError {
         match *self {
             DescribeVirtualGatewaysError::DirectConnectClient(ref cause) => cause,
             DescribeVirtualGatewaysError::DirectConnectServer(ref cause) => cause,
-            DescribeVirtualGatewaysError::Validation(ref cause) => cause,
-            DescribeVirtualGatewaysError::Credentials(ref err) => err.description(),
-            DescribeVirtualGatewaysError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeVirtualGatewaysError::ParseError(ref cause) => cause,
-            DescribeVirtualGatewaysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4984,20 +3575,10 @@ pub enum DescribeVirtualInterfacesError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVirtualInterfacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeVirtualInterfacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVirtualInterfacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5010,43 +3591,24 @@ impl DescribeVirtualInterfacesError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DescribeVirtualInterfacesError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeVirtualInterfacesError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return DescribeVirtualInterfacesError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeVirtualInterfacesError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeVirtualInterfacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeVirtualInterfacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeVirtualInterfacesError {
-    fn from(err: serde_json::error::Error) -> DescribeVirtualInterfacesError {
-        DescribeVirtualInterfacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeVirtualInterfacesError {
-    fn from(err: CredentialsError) -> DescribeVirtualInterfacesError {
-        DescribeVirtualInterfacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeVirtualInterfacesError {
-    fn from(err: HttpDispatchError) -> DescribeVirtualInterfacesError {
-        DescribeVirtualInterfacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeVirtualInterfacesError {
-    fn from(err: io::Error) -> DescribeVirtualInterfacesError {
-        DescribeVirtualInterfacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeVirtualInterfacesError {
@@ -5059,13 +3621,6 @@ impl Error for DescribeVirtualInterfacesError {
         match *self {
             DescribeVirtualInterfacesError::DirectConnectClient(ref cause) => cause,
             DescribeVirtualInterfacesError::DirectConnectServer(ref cause) => cause,
-            DescribeVirtualInterfacesError::Validation(ref cause) => cause,
-            DescribeVirtualInterfacesError::Credentials(ref err) => err.description(),
-            DescribeVirtualInterfacesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeVirtualInterfacesError::ParseError(ref cause) => cause,
-            DescribeVirtualInterfacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5076,20 +3631,12 @@ pub enum DisassociateConnectionFromLagError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateConnectionFromLagError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateConnectionFromLagError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateConnectionFromLagError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5102,43 +3649,24 @@ impl DisassociateConnectionFromLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return DisassociateConnectionFromLagError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateConnectionFromLagError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectConnectServerException" => {
-                    return DisassociateConnectionFromLagError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateConnectionFromLagError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DisassociateConnectionFromLagError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateConnectionFromLagError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateConnectionFromLagError {
-    fn from(err: serde_json::error::Error) -> DisassociateConnectionFromLagError {
-        DisassociateConnectionFromLagError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateConnectionFromLagError {
-    fn from(err: CredentialsError) -> DisassociateConnectionFromLagError {
-        DisassociateConnectionFromLagError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateConnectionFromLagError {
-    fn from(err: HttpDispatchError) -> DisassociateConnectionFromLagError {
-        DisassociateConnectionFromLagError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateConnectionFromLagError {
-    fn from(err: io::Error) -> DisassociateConnectionFromLagError {
-        DisassociateConnectionFromLagError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateConnectionFromLagError {
@@ -5151,13 +3679,6 @@ impl Error for DisassociateConnectionFromLagError {
         match *self {
             DisassociateConnectionFromLagError::DirectConnectClient(ref cause) => cause,
             DisassociateConnectionFromLagError::DirectConnectServer(ref cause) => cause,
-            DisassociateConnectionFromLagError::Validation(ref cause) => cause,
-            DisassociateConnectionFromLagError::Credentials(ref err) => err.description(),
-            DisassociateConnectionFromLagError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateConnectionFromLagError::ParseError(ref cause) => cause,
-            DisassociateConnectionFromLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5172,20 +3693,10 @@ pub enum TagResourceError {
     DuplicateTagKeys(String),
     /// <p>You have reached the limit on the number of tags that can be assigned.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5198,45 +3709,30 @@ impl TagResourceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return TagResourceError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return TagResourceError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicateTagKeysException" => {
-                    return TagResourceError::DuplicateTagKeys(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::DuplicateTagKeys(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyTagsException" => {
-                    return TagResourceError::TooManyTags(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::TooManyTags(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5251,11 +3747,6 @@ impl Error for TagResourceError {
             TagResourceError::DirectConnectServer(ref cause) => cause,
             TagResourceError::DuplicateTagKeys(ref cause) => cause,
             TagResourceError::TooManyTags(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5266,20 +3757,10 @@ pub enum UntagResourceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5292,39 +3773,20 @@ impl UntagResourceError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return UntagResourceError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::DirectConnectClient(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectConnectServerException" => {
-                    return UntagResourceError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::DirectConnectServer(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5337,11 +3799,6 @@ impl Error for UntagResourceError {
         match *self {
             UntagResourceError::DirectConnectClient(ref cause) => cause,
             UntagResourceError::DirectConnectServer(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5352,20 +3809,10 @@ pub enum UpdateLagError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLagError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateLagError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLagError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5378,39 +3825,20 @@ impl UpdateLagError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return UpdateLagError::DirectConnectClient(String::from(error_message));
+                    return RusotoError::Service(UpdateLagError::DirectConnectClient(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectConnectServerException" => {
-                    return UpdateLagError::DirectConnectServer(String::from(error_message));
+                    return RusotoError::Service(UpdateLagError::DirectConnectServer(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateLagError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateLagError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateLagError {
-    fn from(err: serde_json::error::Error) -> UpdateLagError {
-        UpdateLagError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateLagError {
-    fn from(err: CredentialsError) -> UpdateLagError {
-        UpdateLagError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateLagError {
-    fn from(err: HttpDispatchError) -> UpdateLagError {
-        UpdateLagError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateLagError {
-    fn from(err: io::Error) -> UpdateLagError {
-        UpdateLagError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateLagError {
@@ -5423,11 +3851,6 @@ impl Error for UpdateLagError {
         match *self {
             UpdateLagError::DirectConnectClient(ref cause) => cause,
             UpdateLagError::DirectConnectServer(ref cause) => cause,
-            UpdateLagError::Validation(ref cause) => cause,
-            UpdateLagError::Credentials(ref err) => err.description(),
-            UpdateLagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateLagError::ParseError(ref cause) => cause,
-            UpdateLagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5438,20 +3861,12 @@ pub enum UpdateVirtualInterfaceAttributesError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateVirtualInterfaceAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateVirtualInterfaceAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateVirtualInterfaceAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5464,45 +3879,24 @@ impl UpdateVirtualInterfaceAttributesError {
 
             match *error_type {
                 "DirectConnectClientException" => {
-                    return UpdateVirtualInterfaceAttributesError::DirectConnectClient(String::from(
-                        error_message,
-                    ));
-                }
-                "DirectConnectServerException" => {
-                    return UpdateVirtualInterfaceAttributesError::DirectConnectServer(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return UpdateVirtualInterfaceAttributesError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        UpdateVirtualInterfaceAttributesError::DirectConnectClient(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(
+                        UpdateVirtualInterfaceAttributesError::DirectConnectServer(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateVirtualInterfaceAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateVirtualInterfaceAttributesError {
-    fn from(err: serde_json::error::Error) -> UpdateVirtualInterfaceAttributesError {
-        UpdateVirtualInterfaceAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateVirtualInterfaceAttributesError {
-    fn from(err: CredentialsError) -> UpdateVirtualInterfaceAttributesError {
-        UpdateVirtualInterfaceAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateVirtualInterfaceAttributesError {
-    fn from(err: HttpDispatchError) -> UpdateVirtualInterfaceAttributesError {
-        UpdateVirtualInterfaceAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateVirtualInterfaceAttributesError {
-    fn from(err: io::Error) -> UpdateVirtualInterfaceAttributesError {
-        UpdateVirtualInterfaceAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateVirtualInterfaceAttributesError {
@@ -5515,13 +3909,6 @@ impl Error for UpdateVirtualInterfaceAttributesError {
         match *self {
             UpdateVirtualInterfaceAttributesError::DirectConnectClient(ref cause) => cause,
             UpdateVirtualInterfaceAttributesError::DirectConnectServer(ref cause) => cause,
-            UpdateVirtualInterfaceAttributesError::Validation(ref cause) => cause,
-            UpdateVirtualInterfaceAttributesError::Credentials(ref err) => err.description(),
-            UpdateVirtualInterfaceAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateVirtualInterfaceAttributesError::ParseError(ref cause) => cause,
-            UpdateVirtualInterfaceAttributesError::Unknown(_) => "unknown error",
         }
     }
 }

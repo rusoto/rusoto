@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -122,22 +119,12 @@ pub enum DeleteThingShadowError {
     Unauthorized(String),
     /// <p>The document encoding is not supported.</p>
     UnsupportedDocumentEncoding(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteThingShadowError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteThingShadowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThingShadowError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -162,59 +149,52 @@ impl DeleteThingShadowError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteThingShadowError::InternalFailure(String::from(error_message));
-                }
-                "InvalidRequestException" => {
-                    return DeleteThingShadowError::InvalidRequest(String::from(error_message));
-                }
-                "MethodNotAllowedException" => {
-                    return DeleteThingShadowError::MethodNotAllowed(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return DeleteThingShadowError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DeleteThingShadowError::ServiceUnavailable(String::from(error_message));
-                }
-                "ThrottlingException" => {
-                    return DeleteThingShadowError::Throttling(String::from(error_message));
-                }
-                "UnauthorizedException" => {
-                    return DeleteThingShadowError::Unauthorized(String::from(error_message));
-                }
-                "UnsupportedDocumentEncodingException" => {
-                    return DeleteThingShadowError::UnsupportedDocumentEncoding(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteThingShadowError::InternalFailure(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteThingShadowError::Validation(error_message.to_string());
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteThingShadowError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "MethodNotAllowedException" => {
+                    return RusotoError::Service(DeleteThingShadowError::MethodNotAllowed(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteThingShadowError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteThingShadowError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteThingShadowError::Throttling(String::from(
+                        error_message,
+                    )));
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteThingShadowError::Unauthorized(String::from(
+                        error_message,
+                    )));
+                }
+                "UnsupportedDocumentEncodingException" => {
+                    return RusotoError::Service(
+                        DeleteThingShadowError::UnsupportedDocumentEncoding(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteThingShadowError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteThingShadowError {
-    fn from(err: serde_json::error::Error) -> DeleteThingShadowError {
-        DeleteThingShadowError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteThingShadowError {
-    fn from(err: CredentialsError) -> DeleteThingShadowError {
-        DeleteThingShadowError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteThingShadowError {
-    fn from(err: HttpDispatchError) -> DeleteThingShadowError {
-        DeleteThingShadowError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteThingShadowError {
-    fn from(err: io::Error) -> DeleteThingShadowError {
-        DeleteThingShadowError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteThingShadowError {
@@ -233,13 +213,6 @@ impl Error for DeleteThingShadowError {
             DeleteThingShadowError::Throttling(ref cause) => cause,
             DeleteThingShadowError::Unauthorized(ref cause) => cause,
             DeleteThingShadowError::UnsupportedDocumentEncoding(ref cause) => cause,
-            DeleteThingShadowError::Validation(ref cause) => cause,
-            DeleteThingShadowError::Credentials(ref err) => err.description(),
-            DeleteThingShadowError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteThingShadowError::ParseError(ref cause) => cause,
-            DeleteThingShadowError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -262,22 +235,12 @@ pub enum GetThingShadowError {
     Unauthorized(String),
     /// <p>The document encoding is not supported.</p>
     UnsupportedDocumentEncoding(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetThingShadowError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetThingShadowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetThingShadowError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -302,59 +265,50 @@ impl GetThingShadowError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return GetThingShadowError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetThingShadowError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return GetThingShadowError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetThingShadowError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "MethodNotAllowedException" => {
-                    return GetThingShadowError::MethodNotAllowed(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return GetThingShadowError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return GetThingShadowError::ServiceUnavailable(String::from(error_message));
-                }
-                "ThrottlingException" => {
-                    return GetThingShadowError::Throttling(String::from(error_message));
-                }
-                "UnauthorizedException" => {
-                    return GetThingShadowError::Unauthorized(String::from(error_message));
-                }
-                "UnsupportedDocumentEncodingException" => {
-                    return GetThingShadowError::UnsupportedDocumentEncoding(String::from(
-                        error_message,
+                    return RusotoError::Service(GetThingShadowError::MethodNotAllowed(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetThingShadowError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetThingShadowError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetThingShadowError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetThingShadowError::Throttling(String::from(
+                        error_message,
+                    )));
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetThingShadowError::Unauthorized(String::from(
+                        error_message,
+                    )));
+                }
+                "UnsupportedDocumentEncodingException" => {
+                    return RusotoError::Service(GetThingShadowError::UnsupportedDocumentEncoding(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetThingShadowError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetThingShadowError {
-    fn from(err: serde_json::error::Error) -> GetThingShadowError {
-        GetThingShadowError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetThingShadowError {
-    fn from(err: CredentialsError) -> GetThingShadowError {
-        GetThingShadowError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetThingShadowError {
-    fn from(err: HttpDispatchError) -> GetThingShadowError {
-        GetThingShadowError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetThingShadowError {
-    fn from(err: io::Error) -> GetThingShadowError {
-        GetThingShadowError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetThingShadowError {
@@ -373,11 +327,6 @@ impl Error for GetThingShadowError {
             GetThingShadowError::Throttling(ref cause) => cause,
             GetThingShadowError::Unauthorized(ref cause) => cause,
             GetThingShadowError::UnsupportedDocumentEncoding(ref cause) => cause,
-            GetThingShadowError::Validation(ref cause) => cause,
-            GetThingShadowError::Credentials(ref err) => err.description(),
-            GetThingShadowError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetThingShadowError::ParseError(ref cause) => cause,
-            GetThingShadowError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -392,22 +341,12 @@ pub enum PublishError {
     MethodNotAllowed(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PublishError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PublishError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -432,43 +371,30 @@ impl PublishError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return PublishError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(PublishError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return PublishError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(PublishError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "MethodNotAllowedException" => {
-                    return PublishError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(PublishError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return PublishError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(PublishError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return PublishError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PublishError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PublishError {
-    fn from(err: serde_json::error::Error) -> PublishError {
-        PublishError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PublishError {
-    fn from(err: CredentialsError) -> PublishError {
-        PublishError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PublishError {
-    fn from(err: HttpDispatchError) -> PublishError {
-        PublishError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PublishError {
-    fn from(err: io::Error) -> PublishError {
-        PublishError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PublishError {
@@ -483,11 +409,6 @@ impl Error for PublishError {
             PublishError::InvalidRequest(ref cause) => cause,
             PublishError::MethodNotAllowed(ref cause) => cause,
             PublishError::Unauthorized(ref cause) => cause,
-            PublishError::Validation(ref cause) => cause,
-            PublishError::Credentials(ref err) => err.description(),
-            PublishError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PublishError::ParseError(ref cause) => cause,
-            PublishError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -512,22 +433,12 @@ pub enum UpdateThingShadowError {
     Unauthorized(String),
     /// <p>The document encoding is not supported.</p>
     UnsupportedDocumentEncoding(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateThingShadowError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateThingShadowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThingShadowError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -552,64 +463,57 @@ impl UpdateThingShadowError {
 
             match error_type {
                 "ConflictException" => {
-                    return UpdateThingShadowError::Conflict(String::from(error_message));
+                    return RusotoError::Service(UpdateThingShadowError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return UpdateThingShadowError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(UpdateThingShadowError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateThingShadowError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateThingShadowError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return UpdateThingShadowError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(UpdateThingShadowError::MethodNotAllowed(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestEntityTooLargeException" => {
-                    return UpdateThingShadowError::RequestEntityTooLarge(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateThingShadowError::RequestEntityTooLarge(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateThingShadowError::ServiceUnavailable(String::from(error_message));
-                }
-                "ThrottlingException" => {
-                    return UpdateThingShadowError::Throttling(String::from(error_message));
-                }
-                "UnauthorizedException" => {
-                    return UpdateThingShadowError::Unauthorized(String::from(error_message));
-                }
-                "UnsupportedDocumentEncodingException" => {
-                    return UpdateThingShadowError::UnsupportedDocumentEncoding(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateThingShadowError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateThingShadowError::Validation(error_message.to_string());
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateThingShadowError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateThingShadowError::Unauthorized(String::from(
+                        error_message,
+                    )));
+                }
+                "UnsupportedDocumentEncodingException" => {
+                    return RusotoError::Service(
+                        UpdateThingShadowError::UnsupportedDocumentEncoding(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateThingShadowError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateThingShadowError {
-    fn from(err: serde_json::error::Error) -> UpdateThingShadowError {
-        UpdateThingShadowError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateThingShadowError {
-    fn from(err: CredentialsError) -> UpdateThingShadowError {
-        UpdateThingShadowError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateThingShadowError {
-    fn from(err: HttpDispatchError) -> UpdateThingShadowError {
-        UpdateThingShadowError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateThingShadowError {
-    fn from(err: io::Error) -> UpdateThingShadowError {
-        UpdateThingShadowError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateThingShadowError {
@@ -629,13 +533,6 @@ impl Error for UpdateThingShadowError {
             UpdateThingShadowError::Throttling(ref cause) => cause,
             UpdateThingShadowError::Unauthorized(ref cause) => cause,
             UpdateThingShadowError::UnsupportedDocumentEncoding(ref cause) => cause,
-            UpdateThingShadowError::Validation(ref cause) => cause,
-            UpdateThingShadowError::Credentials(ref err) => err.description(),
-            UpdateThingShadowError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateThingShadowError::ParseError(ref cause) => cause,
-            UpdateThingShadowError::Unknown(_) => "unknown error",
         }
     }
 }

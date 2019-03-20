@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -559,20 +556,12 @@ pub enum CreateCertificateAuthorityError {
     InvalidTag(String),
     /// <p>An ACM PCA limit has been exceeded. See the exception message returned to determine the limit that was exceeded.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCertificateAuthorityError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCertificateAuthorityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCertificateAuthorityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -585,49 +574,30 @@ impl CreateCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArgsException" => {
-                    return CreateCertificateAuthorityError::InvalidArgs(String::from(error_message));
+                    return RusotoError::Service(CreateCertificateAuthorityError::InvalidArgs(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPolicyException" => {
-                    return CreateCertificateAuthorityError::InvalidPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCertificateAuthorityError::InvalidPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidTagException" => {
-                    return CreateCertificateAuthorityError::InvalidTag(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return CreateCertificateAuthorityError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCertificateAuthorityError::InvalidTag(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateCertificateAuthorityError::Validation(error_message.to_string());
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateCertificateAuthorityError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCertificateAuthorityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCertificateAuthorityError {
-    fn from(err: serde_json::error::Error) -> CreateCertificateAuthorityError {
-        CreateCertificateAuthorityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCertificateAuthorityError {
-    fn from(err: CredentialsError) -> CreateCertificateAuthorityError {
-        CreateCertificateAuthorityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCertificateAuthorityError {
-    fn from(err: HttpDispatchError) -> CreateCertificateAuthorityError {
-        CreateCertificateAuthorityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCertificateAuthorityError {
-    fn from(err: io::Error) -> CreateCertificateAuthorityError {
-        CreateCertificateAuthorityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCertificateAuthorityError {
@@ -642,13 +612,6 @@ impl Error for CreateCertificateAuthorityError {
             CreateCertificateAuthorityError::InvalidPolicy(ref cause) => cause,
             CreateCertificateAuthorityError::InvalidTag(ref cause) => cause,
             CreateCertificateAuthorityError::LimitExceeded(ref cause) => cause,
-            CreateCertificateAuthorityError::Validation(ref cause) => cause,
-            CreateCertificateAuthorityError::Credentials(ref err) => err.description(),
-            CreateCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCertificateAuthorityError::ParseError(ref cause) => cause,
-            CreateCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -667,20 +630,12 @@ pub enum CreateCertificateAuthorityAuditReportError {
     RequestInProgress(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCertificateAuthorityAuditReportError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCertificateAuthorityAuditReportError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCertificateAuthorityAuditReportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -693,65 +648,52 @@ impl CreateCertificateAuthorityAuditReportError {
 
             match *error_type {
                 "InvalidArgsException" => {
-                    return CreateCertificateAuthorityAuditReportError::InvalidArgs(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCertificateAuthorityAuditReportError::InvalidArgs(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidArnException" => {
-                    return CreateCertificateAuthorityAuditReportError::InvalidArn(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCertificateAuthorityAuditReportError::InvalidArn(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidStateException" => {
-                    return CreateCertificateAuthorityAuditReportError::InvalidState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCertificateAuthorityAuditReportError::InvalidState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RequestFailedException" => {
-                    return CreateCertificateAuthorityAuditReportError::RequestFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCertificateAuthorityAuditReportError::RequestFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RequestInProgressException" => {
-                    return CreateCertificateAuthorityAuditReportError::RequestInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateCertificateAuthorityAuditReportError::RequestInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ResourceNotFoundException" => {
-                    return CreateCertificateAuthorityAuditReportError::ResourceNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateCertificateAuthorityAuditReportError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return CreateCertificateAuthorityAuditReportError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCertificateAuthorityAuditReportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCertificateAuthorityAuditReportError {
-    fn from(err: serde_json::error::Error) -> CreateCertificateAuthorityAuditReportError {
-        CreateCertificateAuthorityAuditReportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCertificateAuthorityAuditReportError {
-    fn from(err: CredentialsError) -> CreateCertificateAuthorityAuditReportError {
-        CreateCertificateAuthorityAuditReportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCertificateAuthorityAuditReportError {
-    fn from(err: HttpDispatchError) -> CreateCertificateAuthorityAuditReportError {
-        CreateCertificateAuthorityAuditReportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCertificateAuthorityAuditReportError {
-    fn from(err: io::Error) -> CreateCertificateAuthorityAuditReportError {
-        CreateCertificateAuthorityAuditReportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCertificateAuthorityAuditReportError {
@@ -768,13 +710,6 @@ impl Error for CreateCertificateAuthorityAuditReportError {
             CreateCertificateAuthorityAuditReportError::RequestFailed(ref cause) => cause,
             CreateCertificateAuthorityAuditReportError::RequestInProgress(ref cause) => cause,
             CreateCertificateAuthorityAuditReportError::ResourceNotFound(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::Validation(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::Credentials(ref err) => err.description(),
-            CreateCertificateAuthorityAuditReportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCertificateAuthorityAuditReportError::ParseError(ref cause) => cause,
-            CreateCertificateAuthorityAuditReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -789,20 +724,12 @@ pub enum DeleteCertificateAuthorityError {
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCertificateAuthorityError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCertificateAuthorityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteCertificateAuthorityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -815,51 +742,32 @@ impl DeleteCertificateAuthorityError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteCertificateAuthorityError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteCertificateAuthorityError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidArnException" => {
-                    return DeleteCertificateAuthorityError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteCertificateAuthorityError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStateException" => {
-                    return DeleteCertificateAuthorityError::InvalidState(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCertificateAuthorityError::InvalidState(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteCertificateAuthorityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCertificateAuthorityError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteCertificateAuthorityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCertificateAuthorityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCertificateAuthorityError {
-    fn from(err: serde_json::error::Error) -> DeleteCertificateAuthorityError {
-        DeleteCertificateAuthorityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCertificateAuthorityError {
-    fn from(err: CredentialsError) -> DeleteCertificateAuthorityError {
-        DeleteCertificateAuthorityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCertificateAuthorityError {
-    fn from(err: HttpDispatchError) -> DeleteCertificateAuthorityError {
-        DeleteCertificateAuthorityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCertificateAuthorityError {
-    fn from(err: io::Error) -> DeleteCertificateAuthorityError {
-        DeleteCertificateAuthorityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCertificateAuthorityError {
@@ -874,13 +782,6 @@ impl Error for DeleteCertificateAuthorityError {
             DeleteCertificateAuthorityError::InvalidArn(ref cause) => cause,
             DeleteCertificateAuthorityError::InvalidState(ref cause) => cause,
             DeleteCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            DeleteCertificateAuthorityError::Validation(ref cause) => cause,
-            DeleteCertificateAuthorityError::Credentials(ref err) => err.description(),
-            DeleteCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteCertificateAuthorityError::ParseError(ref cause) => cause,
-            DeleteCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -891,20 +792,12 @@ pub enum DescribeCertificateAuthorityError {
     InvalidArn(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCertificateAuthorityError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCertificateAuthorityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCertificateAuthorityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -917,43 +810,22 @@ impl DescribeCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return DescribeCertificateAuthorityError::InvalidArn(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeCertificateAuthorityError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeCertificateAuthorityError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeCertificateAuthorityError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeCertificateAuthorityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCertificateAuthorityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCertificateAuthorityError {
-    fn from(err: serde_json::error::Error) -> DescribeCertificateAuthorityError {
-        DescribeCertificateAuthorityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCertificateAuthorityError {
-    fn from(err: CredentialsError) -> DescribeCertificateAuthorityError {
-        DescribeCertificateAuthorityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCertificateAuthorityError {
-    fn from(err: HttpDispatchError) -> DescribeCertificateAuthorityError {
-        DescribeCertificateAuthorityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCertificateAuthorityError {
-    fn from(err: io::Error) -> DescribeCertificateAuthorityError {
-        DescribeCertificateAuthorityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCertificateAuthorityError {
@@ -966,13 +838,6 @@ impl Error for DescribeCertificateAuthorityError {
         match *self {
             DescribeCertificateAuthorityError::InvalidArn(ref cause) => cause,
             DescribeCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            DescribeCertificateAuthorityError::Validation(ref cause) => cause,
-            DescribeCertificateAuthorityError::Credentials(ref err) => err.description(),
-            DescribeCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCertificateAuthorityError::ParseError(ref cause) => cause,
-            DescribeCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -985,22 +850,12 @@ pub enum DescribeCertificateAuthorityAuditReportError {
     InvalidArn(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCertificateAuthorityAuditReportError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DescribeCertificateAuthorityAuditReportError {
+    ) -> RusotoError<DescribeCertificateAuthorityAuditReportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1013,50 +868,31 @@ impl DescribeCertificateAuthorityAuditReportError {
 
             match *error_type {
                 "InvalidArgsException" => {
-                    return DescribeCertificateAuthorityAuditReportError::InvalidArgs(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeCertificateAuthorityAuditReportError::InvalidArgs(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidArnException" => {
-                    return DescribeCertificateAuthorityAuditReportError::InvalidArn(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeCertificateAuthorityAuditReportError::InvalidArn(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeCertificateAuthorityAuditReportError::ResourceNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeCertificateAuthorityAuditReportError::ResourceNotFound(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeCertificateAuthorityAuditReportError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCertificateAuthorityAuditReportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCertificateAuthorityAuditReportError {
-    fn from(err: serde_json::error::Error) -> DescribeCertificateAuthorityAuditReportError {
-        DescribeCertificateAuthorityAuditReportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCertificateAuthorityAuditReportError {
-    fn from(err: CredentialsError) -> DescribeCertificateAuthorityAuditReportError {
-        DescribeCertificateAuthorityAuditReportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCertificateAuthorityAuditReportError {
-    fn from(err: HttpDispatchError) -> DescribeCertificateAuthorityAuditReportError {
-        DescribeCertificateAuthorityAuditReportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCertificateAuthorityAuditReportError {
-    fn from(err: io::Error) -> DescribeCertificateAuthorityAuditReportError {
-        DescribeCertificateAuthorityAuditReportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCertificateAuthorityAuditReportError {
@@ -1070,13 +906,6 @@ impl Error for DescribeCertificateAuthorityAuditReportError {
             DescribeCertificateAuthorityAuditReportError::InvalidArgs(ref cause) => cause,
             DescribeCertificateAuthorityAuditReportError::InvalidArn(ref cause) => cause,
             DescribeCertificateAuthorityAuditReportError::ResourceNotFound(ref cause) => cause,
-            DescribeCertificateAuthorityAuditReportError::Validation(ref cause) => cause,
-            DescribeCertificateAuthorityAuditReportError::Credentials(ref err) => err.description(),
-            DescribeCertificateAuthorityAuditReportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCertificateAuthorityAuditReportError::ParseError(ref cause) => cause,
-            DescribeCertificateAuthorityAuditReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1093,20 +922,10 @@ pub enum GetCertificateError {
     RequestInProgress(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1119,48 +938,35 @@ impl GetCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return GetCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidStateException" => {
-                    return GetCertificateError::InvalidState(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::InvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestFailedException" => {
-                    return GetCertificateError::RequestFailed(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::RequestFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestInProgressException" => {
-                    return GetCertificateError::RequestInProgress(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::RequestInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCertificateError {
-    fn from(err: serde_json::error::Error) -> GetCertificateError {
-        GetCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCertificateError {
-    fn from(err: CredentialsError) -> GetCertificateError {
-        GetCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCertificateError {
-    fn from(err: HttpDispatchError) -> GetCertificateError {
-        GetCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCertificateError {
-    fn from(err: io::Error) -> GetCertificateError {
-        GetCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCertificateError {
@@ -1176,11 +982,6 @@ impl Error for GetCertificateError {
             GetCertificateError::RequestFailed(ref cause) => cause,
             GetCertificateError::RequestInProgress(ref cause) => cause,
             GetCertificateError::ResourceNotFound(ref cause) => cause,
-            GetCertificateError::Validation(ref cause) => cause,
-            GetCertificateError::Credentials(ref err) => err.description(),
-            GetCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCertificateError::ParseError(ref cause) => cause,
-            GetCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1193,20 +994,12 @@ pub enum GetCertificateAuthorityCertificateError {
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCertificateAuthorityCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCertificateAuthorityCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCertificateAuthorityCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1219,50 +1012,31 @@ impl GetCertificateAuthorityCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return GetCertificateAuthorityCertificateError::InvalidArn(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidStateException" => {
-                    return GetCertificateAuthorityCertificateError::InvalidState(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceNotFoundException" => {
-                    return GetCertificateAuthorityCertificateError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetCertificateAuthorityCertificateError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetCertificateAuthorityCertificateError::InvalidArn(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidStateException" => {
+                    return RusotoError::Service(
+                        GetCertificateAuthorityCertificateError::InvalidState(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetCertificateAuthorityCertificateError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCertificateAuthorityCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCertificateAuthorityCertificateError {
-    fn from(err: serde_json::error::Error) -> GetCertificateAuthorityCertificateError {
-        GetCertificateAuthorityCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCertificateAuthorityCertificateError {
-    fn from(err: CredentialsError) -> GetCertificateAuthorityCertificateError {
-        GetCertificateAuthorityCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCertificateAuthorityCertificateError {
-    fn from(err: HttpDispatchError) -> GetCertificateAuthorityCertificateError {
-        GetCertificateAuthorityCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCertificateAuthorityCertificateError {
-    fn from(err: io::Error) -> GetCertificateAuthorityCertificateError {
-        GetCertificateAuthorityCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCertificateAuthorityCertificateError {
@@ -1276,13 +1050,6 @@ impl Error for GetCertificateAuthorityCertificateError {
             GetCertificateAuthorityCertificateError::InvalidArn(ref cause) => cause,
             GetCertificateAuthorityCertificateError::InvalidState(ref cause) => cause,
             GetCertificateAuthorityCertificateError::ResourceNotFound(ref cause) => cause,
-            GetCertificateAuthorityCertificateError::Validation(ref cause) => cause,
-            GetCertificateAuthorityCertificateError::Credentials(ref err) => err.description(),
-            GetCertificateAuthorityCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCertificateAuthorityCertificateError::ParseError(ref cause) => cause,
-            GetCertificateAuthorityCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1299,20 +1066,12 @@ pub enum GetCertificateAuthorityCsrError {
     RequestInProgress(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCertificateAuthorityCsrError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCertificateAuthorityCsrError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCertificateAuthorityCsrError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1325,56 +1084,35 @@ impl GetCertificateAuthorityCsrError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return GetCertificateAuthorityCsrError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetCertificateAuthorityCsrError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStateException" => {
-                    return GetCertificateAuthorityCsrError::InvalidState(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCertificateAuthorityCsrError::InvalidState(
+                        String::from(error_message),
                     ));
                 }
                 "RequestFailedException" => {
-                    return GetCertificateAuthorityCsrError::RequestFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCertificateAuthorityCsrError::RequestFailed(
+                        String::from(error_message),
                     ));
                 }
                 "RequestInProgressException" => {
-                    return GetCertificateAuthorityCsrError::RequestInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCertificateAuthorityCsrError::RequestInProgress(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCertificateAuthorityCsrError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCertificateAuthorityCsrError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetCertificateAuthorityCsrError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCertificateAuthorityCsrError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCertificateAuthorityCsrError {
-    fn from(err: serde_json::error::Error) -> GetCertificateAuthorityCsrError {
-        GetCertificateAuthorityCsrError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCertificateAuthorityCsrError {
-    fn from(err: CredentialsError) -> GetCertificateAuthorityCsrError {
-        GetCertificateAuthorityCsrError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCertificateAuthorityCsrError {
-    fn from(err: HttpDispatchError) -> GetCertificateAuthorityCsrError {
-        GetCertificateAuthorityCsrError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCertificateAuthorityCsrError {
-    fn from(err: io::Error) -> GetCertificateAuthorityCsrError {
-        GetCertificateAuthorityCsrError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCertificateAuthorityCsrError {
@@ -1390,13 +1128,6 @@ impl Error for GetCertificateAuthorityCsrError {
             GetCertificateAuthorityCsrError::RequestFailed(ref cause) => cause,
             GetCertificateAuthorityCsrError::RequestInProgress(ref cause) => cause,
             GetCertificateAuthorityCsrError::ResourceNotFound(ref cause) => cause,
-            GetCertificateAuthorityCsrError::Validation(ref cause) => cause,
-            GetCertificateAuthorityCsrError::Credentials(ref err) => err.description(),
-            GetCertificateAuthorityCsrError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCertificateAuthorityCsrError::ParseError(ref cause) => cause,
-            GetCertificateAuthorityCsrError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1419,20 +1150,12 @@ pub enum ImportCertificateAuthorityCertificateError {
     RequestInProgress(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportCertificateAuthorityCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportCertificateAuthorityCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ImportCertificateAuthorityCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1445,75 +1168,66 @@ impl ImportCertificateAuthorityCertificateError {
 
             match *error_type {
                 "CertificateMismatchException" => {
-                    return ImportCertificateAuthorityCertificateError::CertificateMismatch(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::CertificateMismatch(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ConcurrentModificationException" => {
-                    return ImportCertificateAuthorityCertificateError::ConcurrentModification(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::ConcurrentModification(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidArnException" => {
-                    return ImportCertificateAuthorityCertificateError::InvalidArn(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::InvalidArn(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidStateException" => {
-                    return ImportCertificateAuthorityCertificateError::InvalidState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::InvalidState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MalformedCertificateException" => {
-                    return ImportCertificateAuthorityCertificateError::MalformedCertificate(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::MalformedCertificate(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RequestFailedException" => {
-                    return ImportCertificateAuthorityCertificateError::RequestFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::RequestFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RequestInProgressException" => {
-                    return ImportCertificateAuthorityCertificateError::RequestInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::RequestInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ResourceNotFoundException" => {
-                    return ImportCertificateAuthorityCertificateError::ResourceNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ImportCertificateAuthorityCertificateError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return ImportCertificateAuthorityCertificateError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportCertificateAuthorityCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportCertificateAuthorityCertificateError {
-    fn from(err: serde_json::error::Error) -> ImportCertificateAuthorityCertificateError {
-        ImportCertificateAuthorityCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportCertificateAuthorityCertificateError {
-    fn from(err: CredentialsError) -> ImportCertificateAuthorityCertificateError {
-        ImportCertificateAuthorityCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportCertificateAuthorityCertificateError {
-    fn from(err: HttpDispatchError) -> ImportCertificateAuthorityCertificateError {
-        ImportCertificateAuthorityCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportCertificateAuthorityCertificateError {
-    fn from(err: io::Error) -> ImportCertificateAuthorityCertificateError {
-        ImportCertificateAuthorityCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportCertificateAuthorityCertificateError {
@@ -1532,13 +1246,6 @@ impl Error for ImportCertificateAuthorityCertificateError {
             ImportCertificateAuthorityCertificateError::RequestFailed(ref cause) => cause,
             ImportCertificateAuthorityCertificateError::RequestInProgress(ref cause) => cause,
             ImportCertificateAuthorityCertificateError::ResourceNotFound(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::Validation(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::Credentials(ref err) => err.description(),
-            ImportCertificateAuthorityCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ImportCertificateAuthorityCertificateError::ParseError(ref cause) => cause,
-            ImportCertificateAuthorityCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1557,20 +1264,10 @@ pub enum IssueCertificateError {
     MalformedCSR(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl IssueCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> IssueCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IssueCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1583,51 +1280,40 @@ impl IssueCertificateError {
 
             match *error_type {
                 "InvalidArgsException" => {
-                    return IssueCertificateError::InvalidArgs(String::from(error_message));
+                    return RusotoError::Service(IssueCertificateError::InvalidArgs(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return IssueCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(IssueCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidStateException" => {
-                    return IssueCertificateError::InvalidState(String::from(error_message));
+                    return RusotoError::Service(IssueCertificateError::InvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return IssueCertificateError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(IssueCertificateError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "MalformedCSRException" => {
-                    return IssueCertificateError::MalformedCSR(String::from(error_message));
+                    return RusotoError::Service(IssueCertificateError::MalformedCSR(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return IssueCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(IssueCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return IssueCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return IssueCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for IssueCertificateError {
-    fn from(err: serde_json::error::Error) -> IssueCertificateError {
-        IssueCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for IssueCertificateError {
-    fn from(err: CredentialsError) -> IssueCertificateError {
-        IssueCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for IssueCertificateError {
-    fn from(err: HttpDispatchError) -> IssueCertificateError {
-        IssueCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for IssueCertificateError {
-    fn from(err: io::Error) -> IssueCertificateError {
-        IssueCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for IssueCertificateError {
@@ -1644,11 +1330,6 @@ impl Error for IssueCertificateError {
             IssueCertificateError::LimitExceeded(ref cause) => cause,
             IssueCertificateError::MalformedCSR(ref cause) => cause,
             IssueCertificateError::ResourceNotFound(ref cause) => cause,
-            IssueCertificateError::Validation(ref cause) => cause,
-            IssueCertificateError::Credentials(ref err) => err.description(),
-            IssueCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            IssueCertificateError::ParseError(ref cause) => cause,
-            IssueCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1657,20 +1338,12 @@ impl Error for IssueCertificateError {
 pub enum ListCertificateAuthoritiesError {
     /// <p>The token specified in the <code>NextToken</code> argument is not valid. Use the token returned from your previous call to <a>ListCertificateAuthorities</a>.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListCertificateAuthoritiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListCertificateAuthoritiesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCertificateAuthoritiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1683,38 +1356,15 @@ impl ListCertificateAuthoritiesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListCertificateAuthoritiesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListCertificateAuthoritiesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListCertificateAuthoritiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListCertificateAuthoritiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListCertificateAuthoritiesError {
-    fn from(err: serde_json::error::Error) -> ListCertificateAuthoritiesError {
-        ListCertificateAuthoritiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListCertificateAuthoritiesError {
-    fn from(err: CredentialsError) -> ListCertificateAuthoritiesError {
-        ListCertificateAuthoritiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListCertificateAuthoritiesError {
-    fn from(err: HttpDispatchError) -> ListCertificateAuthoritiesError {
-        ListCertificateAuthoritiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListCertificateAuthoritiesError {
-    fn from(err: io::Error) -> ListCertificateAuthoritiesError {
-        ListCertificateAuthoritiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListCertificateAuthoritiesError {
@@ -1726,13 +1376,6 @@ impl Error for ListCertificateAuthoritiesError {
     fn description(&self) -> &str {
         match *self {
             ListCertificateAuthoritiesError::InvalidNextToken(ref cause) => cause,
-            ListCertificateAuthoritiesError::Validation(ref cause) => cause,
-            ListCertificateAuthoritiesError::Credentials(ref err) => err.description(),
-            ListCertificateAuthoritiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListCertificateAuthoritiesError::ParseError(ref cause) => cause,
-            ListCertificateAuthoritiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1743,20 +1386,10 @@ pub enum ListTagsError {
     InvalidArn(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1769,39 +1402,20 @@ impl ListTagsError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return ListTagsError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsError {
-    fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsError {
-    fn from(err: CredentialsError) -> ListTagsError {
-        ListTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsError {
-    fn from(err: HttpDispatchError) -> ListTagsError {
-        ListTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsError {
-    fn from(err: io::Error) -> ListTagsError {
-        ListTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsError {
@@ -1814,11 +1428,6 @@ impl Error for ListTagsError {
         match *self {
             ListTagsError::InvalidArn(ref cause) => cause,
             ListTagsError::ResourceNotFound(ref cause) => cause,
-            ListTagsError::Validation(ref cause) => cause,
-            ListTagsError::Credentials(ref err) => err.description(),
-            ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::ParseError(ref cause) => cause,
-            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1831,20 +1440,12 @@ pub enum RestoreCertificateAuthorityError {
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreCertificateAuthorityError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreCertificateAuthorityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RestoreCertificateAuthorityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1857,46 +1458,25 @@ impl RestoreCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return RestoreCertificateAuthorityError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(RestoreCertificateAuthorityError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStateException" => {
-                    return RestoreCertificateAuthorityError::InvalidState(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreCertificateAuthorityError::InvalidState(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return RestoreCertificateAuthorityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreCertificateAuthorityError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RestoreCertificateAuthorityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RestoreCertificateAuthorityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RestoreCertificateAuthorityError {
-    fn from(err: serde_json::error::Error) -> RestoreCertificateAuthorityError {
-        RestoreCertificateAuthorityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RestoreCertificateAuthorityError {
-    fn from(err: CredentialsError) -> RestoreCertificateAuthorityError {
-        RestoreCertificateAuthorityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreCertificateAuthorityError {
-    fn from(err: HttpDispatchError) -> RestoreCertificateAuthorityError {
-        RestoreCertificateAuthorityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreCertificateAuthorityError {
-    fn from(err: io::Error) -> RestoreCertificateAuthorityError {
-        RestoreCertificateAuthorityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RestoreCertificateAuthorityError {
@@ -1910,13 +1490,6 @@ impl Error for RestoreCertificateAuthorityError {
             RestoreCertificateAuthorityError::InvalidArn(ref cause) => cause,
             RestoreCertificateAuthorityError::InvalidState(ref cause) => cause,
             RestoreCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            RestoreCertificateAuthorityError::Validation(ref cause) => cause,
-            RestoreCertificateAuthorityError::Credentials(ref err) => err.description(),
-            RestoreCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreCertificateAuthorityError::ParseError(ref cause) => cause,
-            RestoreCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1939,20 +1512,10 @@ pub enum RevokeCertificateError {
     RequestInProgress(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> RevokeCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1965,61 +1528,50 @@ impl RevokeCertificateError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return RevokeCertificateError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(RevokeCertificateError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return RevokeCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(RevokeCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidStateException" => {
-                    return RevokeCertificateError::InvalidState(String::from(error_message));
+                    return RusotoError::Service(RevokeCertificateError::InvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return RevokeCertificateError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RevokeCertificateError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestAlreadyProcessedException" => {
-                    return RevokeCertificateError::RequestAlreadyProcessed(String::from(
-                        error_message,
+                    return RusotoError::Service(RevokeCertificateError::RequestAlreadyProcessed(
+                        String::from(error_message),
                     ));
                 }
                 "RequestFailedException" => {
-                    return RevokeCertificateError::RequestFailed(String::from(error_message));
+                    return RusotoError::Service(RevokeCertificateError::RequestFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestInProgressException" => {
-                    return RevokeCertificateError::RequestInProgress(String::from(error_message));
+                    return RusotoError::Service(RevokeCertificateError::RequestInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return RevokeCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(RevokeCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RevokeCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RevokeCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RevokeCertificateError {
-    fn from(err: serde_json::error::Error) -> RevokeCertificateError {
-        RevokeCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RevokeCertificateError {
-    fn from(err: CredentialsError) -> RevokeCertificateError {
-        RevokeCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RevokeCertificateError {
-    fn from(err: HttpDispatchError) -> RevokeCertificateError {
-        RevokeCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RevokeCertificateError {
-    fn from(err: io::Error) -> RevokeCertificateError {
-        RevokeCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RevokeCertificateError {
@@ -2038,13 +1590,6 @@ impl Error for RevokeCertificateError {
             RevokeCertificateError::RequestFailed(ref cause) => cause,
             RevokeCertificateError::RequestInProgress(ref cause) => cause,
             RevokeCertificateError::ResourceNotFound(ref cause) => cause,
-            RevokeCertificateError::Validation(ref cause) => cause,
-            RevokeCertificateError::Credentials(ref err) => err.description(),
-            RevokeCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RevokeCertificateError::ParseError(ref cause) => cause,
-            RevokeCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2061,20 +1606,10 @@ pub enum TagCertificateAuthorityError {
     ResourceNotFound(String),
     /// <p>You can associate up to 50 tags with a private CA. Exception information is contained in the exception message field.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagCertificateAuthorityError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagCertificateAuthorityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagCertificateAuthorityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2087,50 +1622,35 @@ impl TagCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return TagCertificateAuthorityError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(TagCertificateAuthorityError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStateException" => {
-                    return TagCertificateAuthorityError::InvalidState(String::from(error_message));
+                    return RusotoError::Service(TagCertificateAuthorityError::InvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTagException" => {
-                    return TagCertificateAuthorityError::InvalidTag(String::from(error_message));
+                    return RusotoError::Service(TagCertificateAuthorityError::InvalidTag(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return TagCertificateAuthorityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(TagCertificateAuthorityError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyTagsException" => {
-                    return TagCertificateAuthorityError::TooManyTags(String::from(error_message));
+                    return RusotoError::Service(TagCertificateAuthorityError::TooManyTags(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return TagCertificateAuthorityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagCertificateAuthorityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagCertificateAuthorityError {
-    fn from(err: serde_json::error::Error) -> TagCertificateAuthorityError {
-        TagCertificateAuthorityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagCertificateAuthorityError {
-    fn from(err: CredentialsError) -> TagCertificateAuthorityError {
-        TagCertificateAuthorityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagCertificateAuthorityError {
-    fn from(err: HttpDispatchError) -> TagCertificateAuthorityError {
-        TagCertificateAuthorityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagCertificateAuthorityError {
-    fn from(err: io::Error) -> TagCertificateAuthorityError {
-        TagCertificateAuthorityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagCertificateAuthorityError {
@@ -2146,13 +1666,6 @@ impl Error for TagCertificateAuthorityError {
             TagCertificateAuthorityError::InvalidTag(ref cause) => cause,
             TagCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
             TagCertificateAuthorityError::TooManyTags(ref cause) => cause,
-            TagCertificateAuthorityError::Validation(ref cause) => cause,
-            TagCertificateAuthorityError::Credentials(ref err) => err.description(),
-            TagCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            TagCertificateAuthorityError::ParseError(ref cause) => cause,
-            TagCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2167,20 +1680,10 @@ pub enum UntagCertificateAuthorityError {
     InvalidTag(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagCertificateAuthorityError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagCertificateAuthorityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagCertificateAuthorityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2193,47 +1696,30 @@ impl UntagCertificateAuthorityError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return UntagCertificateAuthorityError::InvalidArn(String::from(error_message));
-                }
-                "InvalidStateException" => {
-                    return UntagCertificateAuthorityError::InvalidState(String::from(error_message));
-                }
-                "InvalidTagException" => {
-                    return UntagCertificateAuthorityError::InvalidTag(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return UntagCertificateAuthorityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UntagCertificateAuthorityError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UntagCertificateAuthorityError::Validation(error_message.to_string());
+                "InvalidStateException" => {
+                    return RusotoError::Service(UntagCertificateAuthorityError::InvalidState(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidTagException" => {
+                    return RusotoError::Service(UntagCertificateAuthorityError::InvalidTag(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagCertificateAuthorityError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagCertificateAuthorityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagCertificateAuthorityError {
-    fn from(err: serde_json::error::Error) -> UntagCertificateAuthorityError {
-        UntagCertificateAuthorityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagCertificateAuthorityError {
-    fn from(err: CredentialsError) -> UntagCertificateAuthorityError {
-        UntagCertificateAuthorityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagCertificateAuthorityError {
-    fn from(err: HttpDispatchError) -> UntagCertificateAuthorityError {
-        UntagCertificateAuthorityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagCertificateAuthorityError {
-    fn from(err: io::Error) -> UntagCertificateAuthorityError {
-        UntagCertificateAuthorityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagCertificateAuthorityError {
@@ -2248,13 +1734,6 @@ impl Error for UntagCertificateAuthorityError {
             UntagCertificateAuthorityError::InvalidState(ref cause) => cause,
             UntagCertificateAuthorityError::InvalidTag(ref cause) => cause,
             UntagCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            UntagCertificateAuthorityError::Validation(ref cause) => cause,
-            UntagCertificateAuthorityError::Credentials(ref err) => err.description(),
-            UntagCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UntagCertificateAuthorityError::ParseError(ref cause) => cause,
-            UntagCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2273,20 +1752,12 @@ pub enum UpdateCertificateAuthorityError {
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCertificateAuthorityError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateCertificateAuthorityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateCertificateAuthorityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2299,59 +1770,42 @@ impl UpdateCertificateAuthorityError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateCertificateAuthorityError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateCertificateAuthorityError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidArgsException" => {
-                    return UpdateCertificateAuthorityError::InvalidArgs(String::from(error_message));
+                    return RusotoError::Service(UpdateCertificateAuthorityError::InvalidArgs(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return UpdateCertificateAuthorityError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpdateCertificateAuthorityError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPolicyException" => {
-                    return UpdateCertificateAuthorityError::InvalidPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCertificateAuthorityError::InvalidPolicy(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidStateException" => {
-                    return UpdateCertificateAuthorityError::InvalidState(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCertificateAuthorityError::InvalidState(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateCertificateAuthorityError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCertificateAuthorityError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateCertificateAuthorityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateCertificateAuthorityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateCertificateAuthorityError {
-    fn from(err: serde_json::error::Error) -> UpdateCertificateAuthorityError {
-        UpdateCertificateAuthorityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateCertificateAuthorityError {
-    fn from(err: CredentialsError) -> UpdateCertificateAuthorityError {
-        UpdateCertificateAuthorityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateCertificateAuthorityError {
-    fn from(err: HttpDispatchError) -> UpdateCertificateAuthorityError {
-        UpdateCertificateAuthorityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateCertificateAuthorityError {
-    fn from(err: io::Error) -> UpdateCertificateAuthorityError {
-        UpdateCertificateAuthorityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateCertificateAuthorityError {
@@ -2368,13 +1822,6 @@ impl Error for UpdateCertificateAuthorityError {
             UpdateCertificateAuthorityError::InvalidPolicy(ref cause) => cause,
             UpdateCertificateAuthorityError::InvalidState(ref cause) => cause,
             UpdateCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
-            UpdateCertificateAuthorityError::Validation(ref cause) => cause,
-            UpdateCertificateAuthorityError::Credentials(ref err) => err.description(),
-            UpdateCertificateAuthorityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateCertificateAuthorityError::ParseError(ref cause) => cause,
-            UpdateCertificateAuthorityError::Unknown(_) => "unknown error",
         }
     }
 }

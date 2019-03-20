@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1303,22 +1300,12 @@ pub enum AbortMultipartUploadError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AbortMultipartUploadError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AbortMultipartUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortMultipartUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1343,51 +1330,30 @@ impl AbortMultipartUploadError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AbortMultipartUploadError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(AbortMultipartUploadError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return AbortMultipartUploadError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(AbortMultipartUploadError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return AbortMultipartUploadError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return AbortMultipartUploadError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(AbortMultipartUploadError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AbortMultipartUploadError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(AbortMultipartUploadError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AbortMultipartUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AbortMultipartUploadError {
-    fn from(err: serde_json::error::Error) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AbortMultipartUploadError {
-    fn from(err: CredentialsError) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AbortMultipartUploadError {
-    fn from(err: HttpDispatchError) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AbortMultipartUploadError {
-    fn from(err: io::Error) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AbortMultipartUploadError {
@@ -1402,13 +1368,6 @@ impl Error for AbortMultipartUploadError {
             AbortMultipartUploadError::MissingParameterValue(ref cause) => cause,
             AbortMultipartUploadError::ResourceNotFound(ref cause) => cause,
             AbortMultipartUploadError::ServiceUnavailable(ref cause) => cause,
-            AbortMultipartUploadError::Validation(ref cause) => cause,
-            AbortMultipartUploadError::Credentials(ref err) => err.description(),
-            AbortMultipartUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AbortMultipartUploadError::ParseError(ref cause) => cause,
-            AbortMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1423,22 +1382,12 @@ pub enum AbortVaultLockError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AbortVaultLockError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AbortVaultLockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortVaultLockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1463,45 +1412,30 @@ impl AbortVaultLockError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AbortVaultLockError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(AbortVaultLockError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return AbortVaultLockError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(AbortVaultLockError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AbortVaultLockError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AbortVaultLockError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return AbortVaultLockError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(AbortVaultLockError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AbortVaultLockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AbortVaultLockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AbortVaultLockError {
-    fn from(err: serde_json::error::Error) -> AbortVaultLockError {
-        AbortVaultLockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AbortVaultLockError {
-    fn from(err: CredentialsError) -> AbortVaultLockError {
-        AbortVaultLockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AbortVaultLockError {
-    fn from(err: HttpDispatchError) -> AbortVaultLockError {
-        AbortVaultLockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AbortVaultLockError {
-    fn from(err: io::Error) -> AbortVaultLockError {
-        AbortVaultLockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AbortVaultLockError {
@@ -1516,11 +1450,6 @@ impl Error for AbortVaultLockError {
             AbortVaultLockError::MissingParameterValue(ref cause) => cause,
             AbortVaultLockError::ResourceNotFound(ref cause) => cause,
             AbortVaultLockError::ServiceUnavailable(ref cause) => cause,
-            AbortVaultLockError::Validation(ref cause) => cause,
-            AbortVaultLockError::Credentials(ref err) => err.description(),
-            AbortVaultLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AbortVaultLockError::ParseError(ref cause) => cause,
-            AbortVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1537,22 +1466,12 @@ pub enum AddTagsToVaultError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToVaultError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToVaultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToVaultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1577,48 +1496,35 @@ impl AddTagsToVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AddTagsToVaultError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(AddTagsToVaultError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AddTagsToVaultError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AddTagsToVaultError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingParameterValueException" => {
-                    return AddTagsToVaultError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(AddTagsToVaultError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AddTagsToVaultError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AddTagsToVaultError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return AddTagsToVaultError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(AddTagsToVaultError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AddTagsToVaultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddTagsToVaultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddTagsToVaultError {
-    fn from(err: serde_json::error::Error) -> AddTagsToVaultError {
-        AddTagsToVaultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsToVaultError {
-    fn from(err: CredentialsError) -> AddTagsToVaultError {
-        AddTagsToVaultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsToVaultError {
-    fn from(err: HttpDispatchError) -> AddTagsToVaultError {
-        AddTagsToVaultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsToVaultError {
-    fn from(err: io::Error) -> AddTagsToVaultError {
-        AddTagsToVaultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddTagsToVaultError {
@@ -1634,11 +1540,6 @@ impl Error for AddTagsToVaultError {
             AddTagsToVaultError::MissingParameterValue(ref cause) => cause,
             AddTagsToVaultError::ResourceNotFound(ref cause) => cause,
             AddTagsToVaultError::ServiceUnavailable(ref cause) => cause,
-            AddTagsToVaultError::Validation(ref cause) => cause,
-            AddTagsToVaultError::Credentials(ref err) => err.description(),
-            AddTagsToVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddTagsToVaultError::ParseError(ref cause) => cause,
-            AddTagsToVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1653,22 +1554,12 @@ pub enum CompleteMultipartUploadError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CompleteMultipartUploadError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CompleteMultipartUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteMultipartUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1693,53 +1584,34 @@ impl CompleteMultipartUploadError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return CompleteMultipartUploadError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CompleteMultipartUploadError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingParameterValueException" => {
-                    return CompleteMultipartUploadError::MissingParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CompleteMultipartUploadError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return CompleteMultipartUploadError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CompleteMultipartUploadError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return CompleteMultipartUploadError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CompleteMultipartUploadError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CompleteMultipartUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CompleteMultipartUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CompleteMultipartUploadError {
-    fn from(err: serde_json::error::Error) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CompleteMultipartUploadError {
-    fn from(err: CredentialsError) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CompleteMultipartUploadError {
-    fn from(err: HttpDispatchError) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CompleteMultipartUploadError {
-    fn from(err: io::Error) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CompleteMultipartUploadError {
@@ -1754,13 +1626,6 @@ impl Error for CompleteMultipartUploadError {
             CompleteMultipartUploadError::MissingParameterValue(ref cause) => cause,
             CompleteMultipartUploadError::ResourceNotFound(ref cause) => cause,
             CompleteMultipartUploadError::ServiceUnavailable(ref cause) => cause,
-            CompleteMultipartUploadError::Validation(ref cause) => cause,
-            CompleteMultipartUploadError::Credentials(ref err) => err.description(),
-            CompleteMultipartUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CompleteMultipartUploadError::ParseError(ref cause) => cause,
-            CompleteMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1775,22 +1640,12 @@ pub enum CompleteVaultLockError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CompleteVaultLockError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CompleteVaultLockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteVaultLockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1815,49 +1670,30 @@ impl CompleteVaultLockError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return CompleteVaultLockError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(CompleteVaultLockError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return CompleteVaultLockError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(CompleteVaultLockError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return CompleteVaultLockError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CompleteVaultLockError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CompleteVaultLockError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CompleteVaultLockError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CompleteVaultLockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CompleteVaultLockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CompleteVaultLockError {
-    fn from(err: serde_json::error::Error) -> CompleteVaultLockError {
-        CompleteVaultLockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CompleteVaultLockError {
-    fn from(err: CredentialsError) -> CompleteVaultLockError {
-        CompleteVaultLockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CompleteVaultLockError {
-    fn from(err: HttpDispatchError) -> CompleteVaultLockError {
-        CompleteVaultLockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CompleteVaultLockError {
-    fn from(err: io::Error) -> CompleteVaultLockError {
-        CompleteVaultLockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CompleteVaultLockError {
@@ -1872,13 +1708,6 @@ impl Error for CompleteVaultLockError {
             CompleteVaultLockError::MissingParameterValue(ref cause) => cause,
             CompleteVaultLockError::ResourceNotFound(ref cause) => cause,
             CompleteVaultLockError::ServiceUnavailable(ref cause) => cause,
-            CompleteVaultLockError::Validation(ref cause) => cause,
-            CompleteVaultLockError::Credentials(ref err) => err.description(),
-            CompleteVaultLockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CompleteVaultLockError::ParseError(ref cause) => cause,
-            CompleteVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1893,22 +1722,12 @@ pub enum CreateVaultError {
     MissingParameterValue(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVaultError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateVaultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVaultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1933,45 +1752,30 @@ impl CreateVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return CreateVaultError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(CreateVaultError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateVaultError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateVaultError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingParameterValueException" => {
-                    return CreateVaultError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(CreateVaultError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateVaultError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateVaultError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateVaultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateVaultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateVaultError {
-    fn from(err: serde_json::error::Error) -> CreateVaultError {
-        CreateVaultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateVaultError {
-    fn from(err: CredentialsError) -> CreateVaultError {
-        CreateVaultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateVaultError {
-    fn from(err: HttpDispatchError) -> CreateVaultError {
-        CreateVaultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateVaultError {
-    fn from(err: io::Error) -> CreateVaultError {
-        CreateVaultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateVaultError {
@@ -1986,11 +1790,6 @@ impl Error for CreateVaultError {
             CreateVaultError::LimitExceeded(ref cause) => cause,
             CreateVaultError::MissingParameterValue(ref cause) => cause,
             CreateVaultError::ServiceUnavailable(ref cause) => cause,
-            CreateVaultError::Validation(ref cause) => cause,
-            CreateVaultError::Credentials(ref err) => err.description(),
-            CreateVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateVaultError::ParseError(ref cause) => cause,
-            CreateVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2005,22 +1804,12 @@ pub enum DeleteArchiveError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteArchiveError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteArchiveError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2045,45 +1834,30 @@ impl DeleteArchiveError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteArchiveError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DeleteArchiveError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return DeleteArchiveError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(DeleteArchiveError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteArchiveError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteArchiveError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteArchiveError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteArchiveError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteArchiveError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteArchiveError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteArchiveError {
-    fn from(err: serde_json::error::Error) -> DeleteArchiveError {
-        DeleteArchiveError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteArchiveError {
-    fn from(err: CredentialsError) -> DeleteArchiveError {
-        DeleteArchiveError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteArchiveError {
-    fn from(err: HttpDispatchError) -> DeleteArchiveError {
-        DeleteArchiveError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteArchiveError {
-    fn from(err: io::Error) -> DeleteArchiveError {
-        DeleteArchiveError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteArchiveError {
@@ -2098,11 +1872,6 @@ impl Error for DeleteArchiveError {
             DeleteArchiveError::MissingParameterValue(ref cause) => cause,
             DeleteArchiveError::ResourceNotFound(ref cause) => cause,
             DeleteArchiveError::ServiceUnavailable(ref cause) => cause,
-            DeleteArchiveError::Validation(ref cause) => cause,
-            DeleteArchiveError::Credentials(ref err) => err.description(),
-            DeleteArchiveError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteArchiveError::ParseError(ref cause) => cause,
-            DeleteArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2117,22 +1886,12 @@ pub enum DeleteVaultError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVaultError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVaultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVaultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2157,45 +1916,30 @@ impl DeleteVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteVaultError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DeleteVaultError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return DeleteVaultError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(DeleteVaultError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteVaultError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteVaultError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteVaultError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteVaultError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteVaultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteVaultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteVaultError {
-    fn from(err: serde_json::error::Error) -> DeleteVaultError {
-        DeleteVaultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVaultError {
-    fn from(err: CredentialsError) -> DeleteVaultError {
-        DeleteVaultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVaultError {
-    fn from(err: HttpDispatchError) -> DeleteVaultError {
-        DeleteVaultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVaultError {
-    fn from(err: io::Error) -> DeleteVaultError {
-        DeleteVaultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteVaultError {
@@ -2210,11 +1954,6 @@ impl Error for DeleteVaultError {
             DeleteVaultError::MissingParameterValue(ref cause) => cause,
             DeleteVaultError::ResourceNotFound(ref cause) => cause,
             DeleteVaultError::ServiceUnavailable(ref cause) => cause,
-            DeleteVaultError::Validation(ref cause) => cause,
-            DeleteVaultError::Credentials(ref err) => err.description(),
-            DeleteVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteVaultError::ParseError(ref cause) => cause,
-            DeleteVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2229,22 +1968,12 @@ pub enum DeleteVaultAccessPolicyError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVaultAccessPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVaultAccessPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVaultAccessPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2269,53 +1998,34 @@ impl DeleteVaultAccessPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteVaultAccessPolicyError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteVaultAccessPolicyError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingParameterValueException" => {
-                    return DeleteVaultAccessPolicyError::MissingParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteVaultAccessPolicyError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteVaultAccessPolicyError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteVaultAccessPolicyError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteVaultAccessPolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteVaultAccessPolicyError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteVaultAccessPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteVaultAccessPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteVaultAccessPolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteVaultAccessPolicyError {
-        DeleteVaultAccessPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVaultAccessPolicyError {
-    fn from(err: CredentialsError) -> DeleteVaultAccessPolicyError {
-        DeleteVaultAccessPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVaultAccessPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteVaultAccessPolicyError {
-        DeleteVaultAccessPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVaultAccessPolicyError {
-    fn from(err: io::Error) -> DeleteVaultAccessPolicyError {
-        DeleteVaultAccessPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteVaultAccessPolicyError {
@@ -2330,13 +2040,6 @@ impl Error for DeleteVaultAccessPolicyError {
             DeleteVaultAccessPolicyError::MissingParameterValue(ref cause) => cause,
             DeleteVaultAccessPolicyError::ResourceNotFound(ref cause) => cause,
             DeleteVaultAccessPolicyError::ServiceUnavailable(ref cause) => cause,
-            DeleteVaultAccessPolicyError::Validation(ref cause) => cause,
-            DeleteVaultAccessPolicyError::Credentials(ref err) => err.description(),
-            DeleteVaultAccessPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteVaultAccessPolicyError::ParseError(ref cause) => cause,
-            DeleteVaultAccessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2351,22 +2054,12 @@ pub enum DeleteVaultNotificationsError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVaultNotificationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVaultNotificationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVaultNotificationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2391,53 +2084,34 @@ impl DeleteVaultNotificationsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteVaultNotificationsError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteVaultNotificationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingParameterValueException" => {
-                    return DeleteVaultNotificationsError::MissingParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteVaultNotificationsError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteVaultNotificationsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteVaultNotificationsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteVaultNotificationsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteVaultNotificationsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteVaultNotificationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteVaultNotificationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteVaultNotificationsError {
-    fn from(err: serde_json::error::Error) -> DeleteVaultNotificationsError {
-        DeleteVaultNotificationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVaultNotificationsError {
-    fn from(err: CredentialsError) -> DeleteVaultNotificationsError {
-        DeleteVaultNotificationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVaultNotificationsError {
-    fn from(err: HttpDispatchError) -> DeleteVaultNotificationsError {
-        DeleteVaultNotificationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVaultNotificationsError {
-    fn from(err: io::Error) -> DeleteVaultNotificationsError {
-        DeleteVaultNotificationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteVaultNotificationsError {
@@ -2452,13 +2126,6 @@ impl Error for DeleteVaultNotificationsError {
             DeleteVaultNotificationsError::MissingParameterValue(ref cause) => cause,
             DeleteVaultNotificationsError::ResourceNotFound(ref cause) => cause,
             DeleteVaultNotificationsError::ServiceUnavailable(ref cause) => cause,
-            DeleteVaultNotificationsError::Validation(ref cause) => cause,
-            DeleteVaultNotificationsError::Credentials(ref err) => err.description(),
-            DeleteVaultNotificationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteVaultNotificationsError::ParseError(ref cause) => cause,
-            DeleteVaultNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2473,22 +2140,12 @@ pub enum DescribeJobError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2513,45 +2170,30 @@ impl DescribeJobError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DescribeJobError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DescribeJobError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return DescribeJobError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(DescribeJobError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeJobError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeJobError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeJobError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeJobError {
-    fn from(err: serde_json::error::Error) -> DescribeJobError {
-        DescribeJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeJobError {
-    fn from(err: CredentialsError) -> DescribeJobError {
-        DescribeJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeJobError {
-    fn from(err: HttpDispatchError) -> DescribeJobError {
-        DescribeJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeJobError {
-    fn from(err: io::Error) -> DescribeJobError {
-        DescribeJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeJobError {
@@ -2566,11 +2208,6 @@ impl Error for DescribeJobError {
             DescribeJobError::MissingParameterValue(ref cause) => cause,
             DescribeJobError::ResourceNotFound(ref cause) => cause,
             DescribeJobError::ServiceUnavailable(ref cause) => cause,
-            DescribeJobError::Validation(ref cause) => cause,
-            DescribeJobError::Credentials(ref err) => err.description(),
-            DescribeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeJobError::ParseError(ref cause) => cause,
-            DescribeJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2585,22 +2222,12 @@ pub enum DescribeVaultError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVaultError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeVaultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVaultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2625,45 +2252,30 @@ impl DescribeVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DescribeVaultError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DescribeVaultError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return DescribeVaultError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(DescribeVaultError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeVaultError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeVaultError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeVaultError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeVaultError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeVaultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeVaultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeVaultError {
-    fn from(err: serde_json::error::Error) -> DescribeVaultError {
-        DescribeVaultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeVaultError {
-    fn from(err: CredentialsError) -> DescribeVaultError {
-        DescribeVaultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeVaultError {
-    fn from(err: HttpDispatchError) -> DescribeVaultError {
-        DescribeVaultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeVaultError {
-    fn from(err: io::Error) -> DescribeVaultError {
-        DescribeVaultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeVaultError {
@@ -2678,11 +2290,6 @@ impl Error for DescribeVaultError {
             DescribeVaultError::MissingParameterValue(ref cause) => cause,
             DescribeVaultError::ResourceNotFound(ref cause) => cause,
             DescribeVaultError::ServiceUnavailable(ref cause) => cause,
-            DescribeVaultError::Validation(ref cause) => cause,
-            DescribeVaultError::Credentials(ref err) => err.description(),
-            DescribeVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeVaultError::ParseError(ref cause) => cause,
-            DescribeVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2695,22 +2302,12 @@ pub enum GetDataRetrievalPolicyError {
     MissingParameterValue(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDataRetrievalPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDataRetrievalPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataRetrievalPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2735,48 +2332,25 @@ impl GetDataRetrievalPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetDataRetrievalPolicyError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDataRetrievalPolicyError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return GetDataRetrievalPolicyError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDataRetrievalPolicyError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDataRetrievalPolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDataRetrievalPolicyError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetDataRetrievalPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDataRetrievalPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDataRetrievalPolicyError {
-    fn from(err: serde_json::error::Error) -> GetDataRetrievalPolicyError {
-        GetDataRetrievalPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDataRetrievalPolicyError {
-    fn from(err: CredentialsError) -> GetDataRetrievalPolicyError {
-        GetDataRetrievalPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDataRetrievalPolicyError {
-    fn from(err: HttpDispatchError) -> GetDataRetrievalPolicyError {
-        GetDataRetrievalPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDataRetrievalPolicyError {
-    fn from(err: io::Error) -> GetDataRetrievalPolicyError {
-        GetDataRetrievalPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDataRetrievalPolicyError {
@@ -2790,13 +2364,6 @@ impl Error for GetDataRetrievalPolicyError {
             GetDataRetrievalPolicyError::InvalidParameterValue(ref cause) => cause,
             GetDataRetrievalPolicyError::MissingParameterValue(ref cause) => cause,
             GetDataRetrievalPolicyError::ServiceUnavailable(ref cause) => cause,
-            GetDataRetrievalPolicyError::Validation(ref cause) => cause,
-            GetDataRetrievalPolicyError::Credentials(ref err) => err.description(),
-            GetDataRetrievalPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDataRetrievalPolicyError::ParseError(ref cause) => cause,
-            GetDataRetrievalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2811,22 +2378,12 @@ pub enum GetJobOutputError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobOutputError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobOutputError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobOutputError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2851,45 +2408,30 @@ impl GetJobOutputError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetJobOutputError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetJobOutputError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return GetJobOutputError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetJobOutputError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetJobOutputError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetJobOutputError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetJobOutputError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetJobOutputError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetJobOutputError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobOutputError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobOutputError {
-    fn from(err: serde_json::error::Error) -> GetJobOutputError {
-        GetJobOutputError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobOutputError {
-    fn from(err: CredentialsError) -> GetJobOutputError {
-        GetJobOutputError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobOutputError {
-    fn from(err: HttpDispatchError) -> GetJobOutputError {
-        GetJobOutputError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobOutputError {
-    fn from(err: io::Error) -> GetJobOutputError {
-        GetJobOutputError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobOutputError {
@@ -2904,11 +2446,6 @@ impl Error for GetJobOutputError {
             GetJobOutputError::MissingParameterValue(ref cause) => cause,
             GetJobOutputError::ResourceNotFound(ref cause) => cause,
             GetJobOutputError::ServiceUnavailable(ref cause) => cause,
-            GetJobOutputError::Validation(ref cause) => cause,
-            GetJobOutputError::Credentials(ref err) => err.description(),
-            GetJobOutputError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobOutputError::ParseError(ref cause) => cause,
-            GetJobOutputError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2923,22 +2460,12 @@ pub enum GetVaultAccessPolicyError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetVaultAccessPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetVaultAccessPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVaultAccessPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2963,51 +2490,30 @@ impl GetVaultAccessPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetVaultAccessPolicyError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetVaultAccessPolicyError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return GetVaultAccessPolicyError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetVaultAccessPolicyError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetVaultAccessPolicyError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return GetVaultAccessPolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetVaultAccessPolicyError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetVaultAccessPolicyError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetVaultAccessPolicyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetVaultAccessPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetVaultAccessPolicyError {
-    fn from(err: serde_json::error::Error) -> GetVaultAccessPolicyError {
-        GetVaultAccessPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetVaultAccessPolicyError {
-    fn from(err: CredentialsError) -> GetVaultAccessPolicyError {
-        GetVaultAccessPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetVaultAccessPolicyError {
-    fn from(err: HttpDispatchError) -> GetVaultAccessPolicyError {
-        GetVaultAccessPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetVaultAccessPolicyError {
-    fn from(err: io::Error) -> GetVaultAccessPolicyError {
-        GetVaultAccessPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetVaultAccessPolicyError {
@@ -3022,13 +2528,6 @@ impl Error for GetVaultAccessPolicyError {
             GetVaultAccessPolicyError::MissingParameterValue(ref cause) => cause,
             GetVaultAccessPolicyError::ResourceNotFound(ref cause) => cause,
             GetVaultAccessPolicyError::ServiceUnavailable(ref cause) => cause,
-            GetVaultAccessPolicyError::Validation(ref cause) => cause,
-            GetVaultAccessPolicyError::Credentials(ref err) => err.description(),
-            GetVaultAccessPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetVaultAccessPolicyError::ParseError(ref cause) => cause,
-            GetVaultAccessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3043,22 +2542,12 @@ pub enum GetVaultLockError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetVaultLockError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetVaultLockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVaultLockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3083,45 +2572,30 @@ impl GetVaultLockError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetVaultLockError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetVaultLockError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return GetVaultLockError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetVaultLockError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetVaultLockError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetVaultLockError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetVaultLockError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetVaultLockError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetVaultLockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetVaultLockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetVaultLockError {
-    fn from(err: serde_json::error::Error) -> GetVaultLockError {
-        GetVaultLockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetVaultLockError {
-    fn from(err: CredentialsError) -> GetVaultLockError {
-        GetVaultLockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetVaultLockError {
-    fn from(err: HttpDispatchError) -> GetVaultLockError {
-        GetVaultLockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetVaultLockError {
-    fn from(err: io::Error) -> GetVaultLockError {
-        GetVaultLockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetVaultLockError {
@@ -3136,11 +2610,6 @@ impl Error for GetVaultLockError {
             GetVaultLockError::MissingParameterValue(ref cause) => cause,
             GetVaultLockError::ResourceNotFound(ref cause) => cause,
             GetVaultLockError::ServiceUnavailable(ref cause) => cause,
-            GetVaultLockError::Validation(ref cause) => cause,
-            GetVaultLockError::Credentials(ref err) => err.description(),
-            GetVaultLockError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetVaultLockError::ParseError(ref cause) => cause,
-            GetVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3155,22 +2624,12 @@ pub enum GetVaultNotificationsError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetVaultNotificationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetVaultNotificationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVaultNotificationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3195,51 +2654,30 @@ impl GetVaultNotificationsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetVaultNotificationsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetVaultNotificationsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return GetVaultNotificationsError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetVaultNotificationsError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetVaultNotificationsError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return GetVaultNotificationsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetVaultNotificationsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetVaultNotificationsError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetVaultNotificationsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetVaultNotificationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetVaultNotificationsError {
-    fn from(err: serde_json::error::Error) -> GetVaultNotificationsError {
-        GetVaultNotificationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetVaultNotificationsError {
-    fn from(err: CredentialsError) -> GetVaultNotificationsError {
-        GetVaultNotificationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetVaultNotificationsError {
-    fn from(err: HttpDispatchError) -> GetVaultNotificationsError {
-        GetVaultNotificationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetVaultNotificationsError {
-    fn from(err: io::Error) -> GetVaultNotificationsError {
-        GetVaultNotificationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetVaultNotificationsError {
@@ -3254,13 +2692,6 @@ impl Error for GetVaultNotificationsError {
             GetVaultNotificationsError::MissingParameterValue(ref cause) => cause,
             GetVaultNotificationsError::ResourceNotFound(ref cause) => cause,
             GetVaultNotificationsError::ServiceUnavailable(ref cause) => cause,
-            GetVaultNotificationsError::Validation(ref cause) => cause,
-            GetVaultNotificationsError::Credentials(ref err) => err.description(),
-            GetVaultNotificationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetVaultNotificationsError::ParseError(ref cause) => cause,
-            GetVaultNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3279,22 +2710,12 @@ pub enum InitiateJobError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InitiateJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3319,51 +2740,40 @@ impl InitiateJobError {
 
             match error_type {
                 "InsufficientCapacityException" => {
-                    return InitiateJobError::InsufficientCapacity(String::from(error_message));
+                    return RusotoError::Service(InitiateJobError::InsufficientCapacity(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return InitiateJobError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(InitiateJobError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return InitiateJobError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(InitiateJobError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "PolicyEnforcedException" => {
-                    return InitiateJobError::PolicyEnforced(String::from(error_message));
+                    return RusotoError::Service(InitiateJobError::PolicyEnforced(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(InitiateJobError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return InitiateJobError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(InitiateJobError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return InitiateJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitiateJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitiateJobError {
-    fn from(err: serde_json::error::Error) -> InitiateJobError {
-        InitiateJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitiateJobError {
-    fn from(err: CredentialsError) -> InitiateJobError {
-        InitiateJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitiateJobError {
-    fn from(err: HttpDispatchError) -> InitiateJobError {
-        InitiateJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitiateJobError {
-    fn from(err: io::Error) -> InitiateJobError {
-        InitiateJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitiateJobError {
@@ -3380,11 +2790,6 @@ impl Error for InitiateJobError {
             InitiateJobError::PolicyEnforced(ref cause) => cause,
             InitiateJobError::ResourceNotFound(ref cause) => cause,
             InitiateJobError::ServiceUnavailable(ref cause) => cause,
-            InitiateJobError::Validation(ref cause) => cause,
-            InitiateJobError::Credentials(ref err) => err.description(),
-            InitiateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            InitiateJobError::ParseError(ref cause) => cause,
-            InitiateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3399,22 +2804,12 @@ pub enum InitiateMultipartUploadError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateMultipartUploadError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InitiateMultipartUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateMultipartUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3439,53 +2834,34 @@ impl InitiateMultipartUploadError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return InitiateMultipartUploadError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InitiateMultipartUploadError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingParameterValueException" => {
-                    return InitiateMultipartUploadError::MissingParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InitiateMultipartUploadError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateMultipartUploadError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(InitiateMultipartUploadError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return InitiateMultipartUploadError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(InitiateMultipartUploadError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return InitiateMultipartUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitiateMultipartUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitiateMultipartUploadError {
-    fn from(err: serde_json::error::Error) -> InitiateMultipartUploadError {
-        InitiateMultipartUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitiateMultipartUploadError {
-    fn from(err: CredentialsError) -> InitiateMultipartUploadError {
-        InitiateMultipartUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitiateMultipartUploadError {
-    fn from(err: HttpDispatchError) -> InitiateMultipartUploadError {
-        InitiateMultipartUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitiateMultipartUploadError {
-    fn from(err: io::Error) -> InitiateMultipartUploadError {
-        InitiateMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitiateMultipartUploadError {
@@ -3500,13 +2876,6 @@ impl Error for InitiateMultipartUploadError {
             InitiateMultipartUploadError::MissingParameterValue(ref cause) => cause,
             InitiateMultipartUploadError::ResourceNotFound(ref cause) => cause,
             InitiateMultipartUploadError::ServiceUnavailable(ref cause) => cause,
-            InitiateMultipartUploadError::Validation(ref cause) => cause,
-            InitiateMultipartUploadError::Credentials(ref err) => err.description(),
-            InitiateMultipartUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InitiateMultipartUploadError::ParseError(ref cause) => cause,
-            InitiateMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3521,22 +2890,12 @@ pub enum InitiateVaultLockError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateVaultLockError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InitiateVaultLockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateVaultLockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3561,49 +2920,30 @@ impl InitiateVaultLockError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return InitiateVaultLockError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(InitiateVaultLockError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return InitiateVaultLockError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(InitiateVaultLockError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateVaultLockError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(InitiateVaultLockError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return InitiateVaultLockError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(InitiateVaultLockError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return InitiateVaultLockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitiateVaultLockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitiateVaultLockError {
-    fn from(err: serde_json::error::Error) -> InitiateVaultLockError {
-        InitiateVaultLockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitiateVaultLockError {
-    fn from(err: CredentialsError) -> InitiateVaultLockError {
-        InitiateVaultLockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitiateVaultLockError {
-    fn from(err: HttpDispatchError) -> InitiateVaultLockError {
-        InitiateVaultLockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitiateVaultLockError {
-    fn from(err: io::Error) -> InitiateVaultLockError {
-        InitiateVaultLockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitiateVaultLockError {
@@ -3618,13 +2958,6 @@ impl Error for InitiateVaultLockError {
             InitiateVaultLockError::MissingParameterValue(ref cause) => cause,
             InitiateVaultLockError::ResourceNotFound(ref cause) => cause,
             InitiateVaultLockError::ServiceUnavailable(ref cause) => cause,
-            InitiateVaultLockError::Validation(ref cause) => cause,
-            InitiateVaultLockError::Credentials(ref err) => err.description(),
-            InitiateVaultLockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InitiateVaultLockError::ParseError(ref cause) => cause,
-            InitiateVaultLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3639,22 +2972,12 @@ pub enum ListJobsError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3679,45 +3002,30 @@ impl ListJobsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListJobsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListJobsError::InvalidParameterValue(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingParameterValueException" => {
-                    return ListJobsError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListJobsError::MissingParameterValue(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListJobsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListJobsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListJobsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListJobsError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListJobsError {
-    fn from(err: serde_json::error::Error) -> ListJobsError {
-        ListJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListJobsError {
-    fn from(err: CredentialsError) -> ListJobsError {
-        ListJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListJobsError {
-    fn from(err: HttpDispatchError) -> ListJobsError {
-        ListJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListJobsError {
-    fn from(err: io::Error) -> ListJobsError {
-        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListJobsError {
@@ -3732,11 +3040,6 @@ impl Error for ListJobsError {
             ListJobsError::MissingParameterValue(ref cause) => cause,
             ListJobsError::ResourceNotFound(ref cause) => cause,
             ListJobsError::ServiceUnavailable(ref cause) => cause,
-            ListJobsError::Validation(ref cause) => cause,
-            ListJobsError::Credentials(ref err) => err.description(),
-            ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsError::ParseError(ref cause) => cause,
-            ListJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3751,22 +3054,12 @@ pub enum ListMultipartUploadsError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListMultipartUploadsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListMultipartUploadsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultipartUploadsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3791,51 +3084,30 @@ impl ListMultipartUploadsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListMultipartUploadsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ListMultipartUploadsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return ListMultipartUploadsError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ListMultipartUploadsError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListMultipartUploadsError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return ListMultipartUploadsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(ListMultipartUploadsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListMultipartUploadsError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListMultipartUploadsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListMultipartUploadsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListMultipartUploadsError {
-    fn from(err: serde_json::error::Error) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListMultipartUploadsError {
-    fn from(err: CredentialsError) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListMultipartUploadsError {
-    fn from(err: HttpDispatchError) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListMultipartUploadsError {
-    fn from(err: io::Error) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListMultipartUploadsError {
@@ -3850,13 +3122,6 @@ impl Error for ListMultipartUploadsError {
             ListMultipartUploadsError::MissingParameterValue(ref cause) => cause,
             ListMultipartUploadsError::ResourceNotFound(ref cause) => cause,
             ListMultipartUploadsError::ServiceUnavailable(ref cause) => cause,
-            ListMultipartUploadsError::Validation(ref cause) => cause,
-            ListMultipartUploadsError::Credentials(ref err) => err.description(),
-            ListMultipartUploadsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListMultipartUploadsError::ParseError(ref cause) => cause,
-            ListMultipartUploadsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3871,22 +3136,12 @@ pub enum ListPartsError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPartsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPartsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPartsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3911,45 +3166,30 @@ impl ListPartsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListPartsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListPartsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return ListPartsError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListPartsError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPartsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListPartsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListPartsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListPartsError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPartsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPartsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPartsError {
-    fn from(err: serde_json::error::Error) -> ListPartsError {
-        ListPartsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPartsError {
-    fn from(err: CredentialsError) -> ListPartsError {
-        ListPartsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPartsError {
-    fn from(err: HttpDispatchError) -> ListPartsError {
-        ListPartsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPartsError {
-    fn from(err: io::Error) -> ListPartsError {
-        ListPartsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPartsError {
@@ -3964,11 +3204,6 @@ impl Error for ListPartsError {
             ListPartsError::MissingParameterValue(ref cause) => cause,
             ListPartsError::ResourceNotFound(ref cause) => cause,
             ListPartsError::ServiceUnavailable(ref cause) => cause,
-            ListPartsError::Validation(ref cause) => cause,
-            ListPartsError::Credentials(ref err) => err.description(),
-            ListPartsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPartsError::ParseError(ref cause) => cause,
-            ListPartsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3981,22 +3216,12 @@ pub enum ListProvisionedCapacityError {
     MissingParameterValue(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListProvisionedCapacityError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListProvisionedCapacityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProvisionedCapacityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4021,48 +3246,29 @@ impl ListProvisionedCapacityError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListProvisionedCapacityError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListProvisionedCapacityError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingParameterValueException" => {
-                    return ListProvisionedCapacityError::MissingParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListProvisionedCapacityError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceUnavailableException" => {
-                    return ListProvisionedCapacityError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(ListProvisionedCapacityError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListProvisionedCapacityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListProvisionedCapacityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListProvisionedCapacityError {
-    fn from(err: serde_json::error::Error) -> ListProvisionedCapacityError {
-        ListProvisionedCapacityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListProvisionedCapacityError {
-    fn from(err: CredentialsError) -> ListProvisionedCapacityError {
-        ListProvisionedCapacityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListProvisionedCapacityError {
-    fn from(err: HttpDispatchError) -> ListProvisionedCapacityError {
-        ListProvisionedCapacityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListProvisionedCapacityError {
-    fn from(err: io::Error) -> ListProvisionedCapacityError {
-        ListProvisionedCapacityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListProvisionedCapacityError {
@@ -4076,13 +3282,6 @@ impl Error for ListProvisionedCapacityError {
             ListProvisionedCapacityError::InvalidParameterValue(ref cause) => cause,
             ListProvisionedCapacityError::MissingParameterValue(ref cause) => cause,
             ListProvisionedCapacityError::ServiceUnavailable(ref cause) => cause,
-            ListProvisionedCapacityError::Validation(ref cause) => cause,
-            ListProvisionedCapacityError::Credentials(ref err) => err.description(),
-            ListProvisionedCapacityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListProvisionedCapacityError::ParseError(ref cause) => cause,
-            ListProvisionedCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4097,22 +3296,12 @@ pub enum ListTagsForVaultError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForVaultError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForVaultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForVaultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4137,45 +3326,30 @@ impl ListTagsForVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListTagsForVaultError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListTagsForVaultError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return ListTagsForVaultError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListTagsForVaultError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForVaultError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsForVaultError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return ListTagsForVaultError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListTagsForVaultError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsForVaultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForVaultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForVaultError {
-    fn from(err: serde_json::error::Error) -> ListTagsForVaultError {
-        ListTagsForVaultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForVaultError {
-    fn from(err: CredentialsError) -> ListTagsForVaultError {
-        ListTagsForVaultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForVaultError {
-    fn from(err: HttpDispatchError) -> ListTagsForVaultError {
-        ListTagsForVaultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForVaultError {
-    fn from(err: io::Error) -> ListTagsForVaultError {
-        ListTagsForVaultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForVaultError {
@@ -4190,11 +3364,6 @@ impl Error for ListTagsForVaultError {
             ListTagsForVaultError::MissingParameterValue(ref cause) => cause,
             ListTagsForVaultError::ResourceNotFound(ref cause) => cause,
             ListTagsForVaultError::ServiceUnavailable(ref cause) => cause,
-            ListTagsForVaultError::Validation(ref cause) => cause,
-            ListTagsForVaultError::Credentials(ref err) => err.description(),
-            ListTagsForVaultError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsForVaultError::ParseError(ref cause) => cause,
-            ListTagsForVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4209,22 +3378,12 @@ pub enum ListVaultsError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVaultsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListVaultsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVaultsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4249,45 +3408,30 @@ impl ListVaultsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListVaultsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListVaultsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return ListVaultsError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListVaultsError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListVaultsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListVaultsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListVaultsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListVaultsError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListVaultsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListVaultsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListVaultsError {
-    fn from(err: serde_json::error::Error) -> ListVaultsError {
-        ListVaultsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListVaultsError {
-    fn from(err: CredentialsError) -> ListVaultsError {
-        ListVaultsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVaultsError {
-    fn from(err: HttpDispatchError) -> ListVaultsError {
-        ListVaultsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVaultsError {
-    fn from(err: io::Error) -> ListVaultsError {
-        ListVaultsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListVaultsError {
@@ -4302,11 +3446,6 @@ impl Error for ListVaultsError {
             ListVaultsError::MissingParameterValue(ref cause) => cause,
             ListVaultsError::ResourceNotFound(ref cause) => cause,
             ListVaultsError::ServiceUnavailable(ref cause) => cause,
-            ListVaultsError::Validation(ref cause) => cause,
-            ListVaultsError::Credentials(ref err) => err.description(),
-            ListVaultsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListVaultsError::ParseError(ref cause) => cause,
-            ListVaultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4321,22 +3460,14 @@ pub enum PurchaseProvisionedCapacityError {
     MissingParameterValue(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PurchaseProvisionedCapacityError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PurchaseProvisionedCapacityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PurchaseProvisionedCapacityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4361,53 +3492,36 @@ impl PurchaseProvisionedCapacityError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return PurchaseProvisionedCapacityError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PurchaseProvisionedCapacityError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return PurchaseProvisionedCapacityError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(PurchaseProvisionedCapacityError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return PurchaseProvisionedCapacityError::MissingParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PurchaseProvisionedCapacityError::MissingParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceUnavailableException" => {
-                    return PurchaseProvisionedCapacityError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PurchaseProvisionedCapacityError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return PurchaseProvisionedCapacityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PurchaseProvisionedCapacityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PurchaseProvisionedCapacityError {
-    fn from(err: serde_json::error::Error) -> PurchaseProvisionedCapacityError {
-        PurchaseProvisionedCapacityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PurchaseProvisionedCapacityError {
-    fn from(err: CredentialsError) -> PurchaseProvisionedCapacityError {
-        PurchaseProvisionedCapacityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PurchaseProvisionedCapacityError {
-    fn from(err: HttpDispatchError) -> PurchaseProvisionedCapacityError {
-        PurchaseProvisionedCapacityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PurchaseProvisionedCapacityError {
-    fn from(err: io::Error) -> PurchaseProvisionedCapacityError {
-        PurchaseProvisionedCapacityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PurchaseProvisionedCapacityError {
@@ -4422,13 +3536,6 @@ impl Error for PurchaseProvisionedCapacityError {
             PurchaseProvisionedCapacityError::LimitExceeded(ref cause) => cause,
             PurchaseProvisionedCapacityError::MissingParameterValue(ref cause) => cause,
             PurchaseProvisionedCapacityError::ServiceUnavailable(ref cause) => cause,
-            PurchaseProvisionedCapacityError::Validation(ref cause) => cause,
-            PurchaseProvisionedCapacityError::Credentials(ref err) => err.description(),
-            PurchaseProvisionedCapacityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PurchaseProvisionedCapacityError::ParseError(ref cause) => cause,
-            PurchaseProvisionedCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4443,22 +3550,12 @@ pub enum RemoveTagsFromVaultError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromVaultError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromVaultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromVaultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4483,49 +3580,30 @@ impl RemoveTagsFromVaultError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RemoveTagsFromVaultError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveTagsFromVaultError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return RemoveTagsFromVaultError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveTagsFromVaultError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return RemoveTagsFromVaultError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsFromVaultError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return RemoveTagsFromVaultError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsFromVaultError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RemoveTagsFromVaultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveTagsFromVaultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveTagsFromVaultError {
-    fn from(err: serde_json::error::Error) -> RemoveTagsFromVaultError {
-        RemoveTagsFromVaultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsFromVaultError {
-    fn from(err: CredentialsError) -> RemoveTagsFromVaultError {
-        RemoveTagsFromVaultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsFromVaultError {
-    fn from(err: HttpDispatchError) -> RemoveTagsFromVaultError {
-        RemoveTagsFromVaultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsFromVaultError {
-    fn from(err: io::Error) -> RemoveTagsFromVaultError {
-        RemoveTagsFromVaultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveTagsFromVaultError {
@@ -4540,13 +3618,6 @@ impl Error for RemoveTagsFromVaultError {
             RemoveTagsFromVaultError::MissingParameterValue(ref cause) => cause,
             RemoveTagsFromVaultError::ResourceNotFound(ref cause) => cause,
             RemoveTagsFromVaultError::ServiceUnavailable(ref cause) => cause,
-            RemoveTagsFromVaultError::Validation(ref cause) => cause,
-            RemoveTagsFromVaultError::Credentials(ref err) => err.description(),
-            RemoveTagsFromVaultError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveTagsFromVaultError::ParseError(ref cause) => cause,
-            RemoveTagsFromVaultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4559,22 +3630,12 @@ pub enum SetDataRetrievalPolicyError {
     MissingParameterValue(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetDataRetrievalPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> SetDataRetrievalPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetDataRetrievalPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4599,48 +3660,25 @@ impl SetDataRetrievalPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return SetDataRetrievalPolicyError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(SetDataRetrievalPolicyError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return SetDataRetrievalPolicyError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(SetDataRetrievalPolicyError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return SetDataRetrievalPolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(SetDataRetrievalPolicyError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return SetDataRetrievalPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetDataRetrievalPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetDataRetrievalPolicyError {
-    fn from(err: serde_json::error::Error) -> SetDataRetrievalPolicyError {
-        SetDataRetrievalPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetDataRetrievalPolicyError {
-    fn from(err: CredentialsError) -> SetDataRetrievalPolicyError {
-        SetDataRetrievalPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetDataRetrievalPolicyError {
-    fn from(err: HttpDispatchError) -> SetDataRetrievalPolicyError {
-        SetDataRetrievalPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetDataRetrievalPolicyError {
-    fn from(err: io::Error) -> SetDataRetrievalPolicyError {
-        SetDataRetrievalPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetDataRetrievalPolicyError {
@@ -4654,13 +3692,6 @@ impl Error for SetDataRetrievalPolicyError {
             SetDataRetrievalPolicyError::InvalidParameterValue(ref cause) => cause,
             SetDataRetrievalPolicyError::MissingParameterValue(ref cause) => cause,
             SetDataRetrievalPolicyError::ServiceUnavailable(ref cause) => cause,
-            SetDataRetrievalPolicyError::Validation(ref cause) => cause,
-            SetDataRetrievalPolicyError::Credentials(ref err) => err.description(),
-            SetDataRetrievalPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetDataRetrievalPolicyError::ParseError(ref cause) => cause,
-            SetDataRetrievalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4675,22 +3706,12 @@ pub enum SetVaultAccessPolicyError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetVaultAccessPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> SetVaultAccessPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetVaultAccessPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4715,51 +3736,30 @@ impl SetVaultAccessPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return SetVaultAccessPolicyError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(SetVaultAccessPolicyError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return SetVaultAccessPolicyError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(SetVaultAccessPolicyError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetVaultAccessPolicyError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return SetVaultAccessPolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(SetVaultAccessPolicyError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return SetVaultAccessPolicyError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(SetVaultAccessPolicyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetVaultAccessPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetVaultAccessPolicyError {
-    fn from(err: serde_json::error::Error) -> SetVaultAccessPolicyError {
-        SetVaultAccessPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetVaultAccessPolicyError {
-    fn from(err: CredentialsError) -> SetVaultAccessPolicyError {
-        SetVaultAccessPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetVaultAccessPolicyError {
-    fn from(err: HttpDispatchError) -> SetVaultAccessPolicyError {
-        SetVaultAccessPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetVaultAccessPolicyError {
-    fn from(err: io::Error) -> SetVaultAccessPolicyError {
-        SetVaultAccessPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetVaultAccessPolicyError {
@@ -4774,13 +3774,6 @@ impl Error for SetVaultAccessPolicyError {
             SetVaultAccessPolicyError::MissingParameterValue(ref cause) => cause,
             SetVaultAccessPolicyError::ResourceNotFound(ref cause) => cause,
             SetVaultAccessPolicyError::ServiceUnavailable(ref cause) => cause,
-            SetVaultAccessPolicyError::Validation(ref cause) => cause,
-            SetVaultAccessPolicyError::Credentials(ref err) => err.description(),
-            SetVaultAccessPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetVaultAccessPolicyError::ParseError(ref cause) => cause,
-            SetVaultAccessPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4795,22 +3788,12 @@ pub enum SetVaultNotificationsError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetVaultNotificationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> SetVaultNotificationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetVaultNotificationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4835,51 +3818,30 @@ impl SetVaultNotificationsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return SetVaultNotificationsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(SetVaultNotificationsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return SetVaultNotificationsError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(SetVaultNotificationsError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return SetVaultNotificationsError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return SetVaultNotificationsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(SetVaultNotificationsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return SetVaultNotificationsError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(SetVaultNotificationsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetVaultNotificationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetVaultNotificationsError {
-    fn from(err: serde_json::error::Error) -> SetVaultNotificationsError {
-        SetVaultNotificationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetVaultNotificationsError {
-    fn from(err: CredentialsError) -> SetVaultNotificationsError {
-        SetVaultNotificationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetVaultNotificationsError {
-    fn from(err: HttpDispatchError) -> SetVaultNotificationsError {
-        SetVaultNotificationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetVaultNotificationsError {
-    fn from(err: io::Error) -> SetVaultNotificationsError {
-        SetVaultNotificationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetVaultNotificationsError {
@@ -4894,13 +3856,6 @@ impl Error for SetVaultNotificationsError {
             SetVaultNotificationsError::MissingParameterValue(ref cause) => cause,
             SetVaultNotificationsError::ResourceNotFound(ref cause) => cause,
             SetVaultNotificationsError::ServiceUnavailable(ref cause) => cause,
-            SetVaultNotificationsError::Validation(ref cause) => cause,
-            SetVaultNotificationsError::Credentials(ref err) => err.description(),
-            SetVaultNotificationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetVaultNotificationsError::ParseError(ref cause) => cause,
-            SetVaultNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4917,22 +3872,12 @@ pub enum UploadArchiveError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UploadArchiveError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UploadArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadArchiveError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4957,48 +3902,35 @@ impl UploadArchiveError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UploadArchiveError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(UploadArchiveError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingParameterValueException" => {
-                    return UploadArchiveError::MissingParameterValue(String::from(error_message));
+                    return RusotoError::Service(UploadArchiveError::MissingParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestTimeoutException" => {
-                    return UploadArchiveError::RequestTimeout(String::from(error_message));
+                    return RusotoError::Service(UploadArchiveError::RequestTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UploadArchiveError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UploadArchiveError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return UploadArchiveError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UploadArchiveError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UploadArchiveError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UploadArchiveError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UploadArchiveError {
-    fn from(err: serde_json::error::Error) -> UploadArchiveError {
-        UploadArchiveError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UploadArchiveError {
-    fn from(err: CredentialsError) -> UploadArchiveError {
-        UploadArchiveError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadArchiveError {
-    fn from(err: HttpDispatchError) -> UploadArchiveError {
-        UploadArchiveError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadArchiveError {
-    fn from(err: io::Error) -> UploadArchiveError {
-        UploadArchiveError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UploadArchiveError {
@@ -5014,11 +3946,6 @@ impl Error for UploadArchiveError {
             UploadArchiveError::RequestTimeout(ref cause) => cause,
             UploadArchiveError::ResourceNotFound(ref cause) => cause,
             UploadArchiveError::ServiceUnavailable(ref cause) => cause,
-            UploadArchiveError::Validation(ref cause) => cause,
-            UploadArchiveError::Credentials(ref err) => err.description(),
-            UploadArchiveError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadArchiveError::ParseError(ref cause) => cause,
-            UploadArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5035,22 +3962,12 @@ pub enum UploadMultipartPartError {
     ResourceNotFound(String),
     /// <p>Returned if the service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UploadMultipartPartError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UploadMultipartPartError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadMultipartPartError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5075,52 +3992,35 @@ impl UploadMultipartPartError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UploadMultipartPartError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(UploadMultipartPartError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "MissingParameterValueException" => {
-                    return UploadMultipartPartError::MissingParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(UploadMultipartPartError::MissingParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "RequestTimeoutException" => {
-                    return UploadMultipartPartError::RequestTimeout(String::from(error_message));
+                    return RusotoError::Service(UploadMultipartPartError::RequestTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UploadMultipartPartError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UploadMultipartPartError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return UploadMultipartPartError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UploadMultipartPartError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UploadMultipartPartError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UploadMultipartPartError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UploadMultipartPartError {
-    fn from(err: serde_json::error::Error) -> UploadMultipartPartError {
-        UploadMultipartPartError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UploadMultipartPartError {
-    fn from(err: CredentialsError) -> UploadMultipartPartError {
-        UploadMultipartPartError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadMultipartPartError {
-    fn from(err: HttpDispatchError) -> UploadMultipartPartError {
-        UploadMultipartPartError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadMultipartPartError {
-    fn from(err: io::Error) -> UploadMultipartPartError {
-        UploadMultipartPartError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UploadMultipartPartError {
@@ -5136,13 +4036,6 @@ impl Error for UploadMultipartPartError {
             UploadMultipartPartError::RequestTimeout(ref cause) => cause,
             UploadMultipartPartError::ResourceNotFound(ref cause) => cause,
             UploadMultipartPartError::ServiceUnavailable(ref cause) => cause,
-            UploadMultipartPartError::Validation(ref cause) => cause,
-            UploadMultipartPartError::Credentials(ref err) => err.description(),
-            UploadMultipartPartError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UploadMultipartPartError::ParseError(ref cause) => cause,
-            UploadMultipartPartError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -930,20 +927,10 @@ pub enum CreateHttpNamespaceError {
     NamespaceAlreadyExists(String),
     /// <p>The resource can't be created because you've reached the limit on the number of resources.</p>
     ResourceLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHttpNamespaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHttpNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHttpNamespaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -956,49 +943,30 @@ impl CreateHttpNamespaceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return CreateHttpNamespaceError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(CreateHttpNamespaceError::DuplicateRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInput" => {
-                    return CreateHttpNamespaceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateHttpNamespaceError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NamespaceAlreadyExists" => {
-                    return CreateHttpNamespaceError::NamespaceAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateHttpNamespaceError::NamespaceAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceLimitExceeded" => {
-                    return CreateHttpNamespaceError::ResourceLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateHttpNamespaceError::ResourceLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateHttpNamespaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateHttpNamespaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateHttpNamespaceError {
-    fn from(err: serde_json::error::Error) -> CreateHttpNamespaceError {
-        CreateHttpNamespaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateHttpNamespaceError {
-    fn from(err: CredentialsError) -> CreateHttpNamespaceError {
-        CreateHttpNamespaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHttpNamespaceError {
-    fn from(err: HttpDispatchError) -> CreateHttpNamespaceError {
-        CreateHttpNamespaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHttpNamespaceError {
-    fn from(err: io::Error) -> CreateHttpNamespaceError {
-        CreateHttpNamespaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateHttpNamespaceError {
@@ -1013,13 +981,6 @@ impl Error for CreateHttpNamespaceError {
             CreateHttpNamespaceError::InvalidInput(ref cause) => cause,
             CreateHttpNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
             CreateHttpNamespaceError::ResourceLimitExceeded(ref cause) => cause,
-            CreateHttpNamespaceError::Validation(ref cause) => cause,
-            CreateHttpNamespaceError::Credentials(ref err) => err.description(),
-            CreateHttpNamespaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateHttpNamespaceError::ParseError(ref cause) => cause,
-            CreateHttpNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1034,20 +995,10 @@ pub enum CreatePrivateDnsNamespaceError {
     NamespaceAlreadyExists(String),
     /// <p>The resource can't be created because you've reached the limit on the number of resources.</p>
     ResourceLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePrivateDnsNamespaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePrivateDnsNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePrivateDnsNamespaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1060,51 +1011,34 @@ impl CreatePrivateDnsNamespaceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return CreatePrivateDnsNamespaceError::DuplicateRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePrivateDnsNamespaceError::DuplicateRequest(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInput" => {
-                    return CreatePrivateDnsNamespaceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreatePrivateDnsNamespaceError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NamespaceAlreadyExists" => {
-                    return CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceLimitExceeded" => {
-                    return CreatePrivateDnsNamespaceError::ResourceLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePrivateDnsNamespaceError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreatePrivateDnsNamespaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePrivateDnsNamespaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePrivateDnsNamespaceError {
-    fn from(err: serde_json::error::Error) -> CreatePrivateDnsNamespaceError {
-        CreatePrivateDnsNamespaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePrivateDnsNamespaceError {
-    fn from(err: CredentialsError) -> CreatePrivateDnsNamespaceError {
-        CreatePrivateDnsNamespaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePrivateDnsNamespaceError {
-    fn from(err: HttpDispatchError) -> CreatePrivateDnsNamespaceError {
-        CreatePrivateDnsNamespaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePrivateDnsNamespaceError {
-    fn from(err: io::Error) -> CreatePrivateDnsNamespaceError {
-        CreatePrivateDnsNamespaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePrivateDnsNamespaceError {
@@ -1119,13 +1053,6 @@ impl Error for CreatePrivateDnsNamespaceError {
             CreatePrivateDnsNamespaceError::InvalidInput(ref cause) => cause,
             CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
             CreatePrivateDnsNamespaceError::ResourceLimitExceeded(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::Validation(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::Credentials(ref err) => err.description(),
-            CreatePrivateDnsNamespaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreatePrivateDnsNamespaceError::ParseError(ref cause) => cause,
-            CreatePrivateDnsNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1140,20 +1067,10 @@ pub enum CreatePublicDnsNamespaceError {
     NamespaceAlreadyExists(String),
     /// <p>The resource can't be created because you've reached the limit on the number of resources.</p>
     ResourceLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePublicDnsNamespaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePublicDnsNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePublicDnsNamespaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1166,51 +1083,34 @@ impl CreatePublicDnsNamespaceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return CreatePublicDnsNamespaceError::DuplicateRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePublicDnsNamespaceError::DuplicateRequest(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInput" => {
-                    return CreatePublicDnsNamespaceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreatePublicDnsNamespaceError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "NamespaceAlreadyExists" => {
-                    return CreatePublicDnsNamespaceError::NamespaceAlreadyExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePublicDnsNamespaceError::NamespaceAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceLimitExceeded" => {
-                    return CreatePublicDnsNamespaceError::ResourceLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePublicDnsNamespaceError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreatePublicDnsNamespaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePublicDnsNamespaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePublicDnsNamespaceError {
-    fn from(err: serde_json::error::Error) -> CreatePublicDnsNamespaceError {
-        CreatePublicDnsNamespaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePublicDnsNamespaceError {
-    fn from(err: CredentialsError) -> CreatePublicDnsNamespaceError {
-        CreatePublicDnsNamespaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePublicDnsNamespaceError {
-    fn from(err: HttpDispatchError) -> CreatePublicDnsNamespaceError {
-        CreatePublicDnsNamespaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePublicDnsNamespaceError {
-    fn from(err: io::Error) -> CreatePublicDnsNamespaceError {
-        CreatePublicDnsNamespaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePublicDnsNamespaceError {
@@ -1225,13 +1125,6 @@ impl Error for CreatePublicDnsNamespaceError {
             CreatePublicDnsNamespaceError::InvalidInput(ref cause) => cause,
             CreatePublicDnsNamespaceError::NamespaceAlreadyExists(ref cause) => cause,
             CreatePublicDnsNamespaceError::ResourceLimitExceeded(ref cause) => cause,
-            CreatePublicDnsNamespaceError::Validation(ref cause) => cause,
-            CreatePublicDnsNamespaceError::Credentials(ref err) => err.description(),
-            CreatePublicDnsNamespaceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreatePublicDnsNamespaceError::ParseError(ref cause) => cause,
-            CreatePublicDnsNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1246,20 +1139,10 @@ pub enum CreateServiceError {
     ResourceLimitExceeded(String),
     /// <p>The service can't be created because a service with the same name already exists.</p>
     ServiceAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateServiceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateServiceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1272,45 +1155,30 @@ impl CreateServiceError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return CreateServiceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateServiceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NamespaceNotFound" => {
-                    return CreateServiceError::NamespaceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateServiceError::NamespaceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceLimitExceeded" => {
-                    return CreateServiceError::ResourceLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateServiceError::ResourceLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAlreadyExists" => {
-                    return CreateServiceError::ServiceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateServiceError::ServiceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateServiceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateServiceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateServiceError {
-    fn from(err: serde_json::error::Error) -> CreateServiceError {
-        CreateServiceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateServiceError {
-    fn from(err: CredentialsError) -> CreateServiceError {
-        CreateServiceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateServiceError {
-    fn from(err: HttpDispatchError) -> CreateServiceError {
-        CreateServiceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateServiceError {
-    fn from(err: io::Error) -> CreateServiceError {
-        CreateServiceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateServiceError {
@@ -1325,11 +1193,6 @@ impl Error for CreateServiceError {
             CreateServiceError::NamespaceNotFound(ref cause) => cause,
             CreateServiceError::ResourceLimitExceeded(ref cause) => cause,
             CreateServiceError::ServiceAlreadyExists(ref cause) => cause,
-            CreateServiceError::Validation(ref cause) => cause,
-            CreateServiceError::Credentials(ref err) => err.description(),
-            CreateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateServiceError::ParseError(ref cause) => cause,
-            CreateServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1344,20 +1207,10 @@ pub enum DeleteNamespaceError {
     NamespaceNotFound(String),
     /// <p>The specified resource can't be deleted because it contains other resources. For example, you can't delete a service that contains any instances.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNamespaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNamespaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1370,45 +1223,30 @@ impl DeleteNamespaceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return DeleteNamespaceError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteNamespaceError::DuplicateRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInput" => {
-                    return DeleteNamespaceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteNamespaceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NamespaceNotFound" => {
-                    return DeleteNamespaceError::NamespaceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteNamespaceError::NamespaceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUse" => {
-                    return DeleteNamespaceError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteNamespaceError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteNamespaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteNamespaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteNamespaceError {
-    fn from(err: serde_json::error::Error) -> DeleteNamespaceError {
-        DeleteNamespaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteNamespaceError {
-    fn from(err: CredentialsError) -> DeleteNamespaceError {
-        DeleteNamespaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteNamespaceError {
-    fn from(err: HttpDispatchError) -> DeleteNamespaceError {
-        DeleteNamespaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteNamespaceError {
-    fn from(err: io::Error) -> DeleteNamespaceError {
-        DeleteNamespaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteNamespaceError {
@@ -1423,11 +1261,6 @@ impl Error for DeleteNamespaceError {
             DeleteNamespaceError::InvalidInput(ref cause) => cause,
             DeleteNamespaceError::NamespaceNotFound(ref cause) => cause,
             DeleteNamespaceError::ResourceInUse(ref cause) => cause,
-            DeleteNamespaceError::Validation(ref cause) => cause,
-            DeleteNamespaceError::Credentials(ref err) => err.description(),
-            DeleteNamespaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteNamespaceError::ParseError(ref cause) => cause,
-            DeleteNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1440,20 +1273,10 @@ pub enum DeleteServiceError {
     ResourceInUse(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServiceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1466,42 +1289,25 @@ impl DeleteServiceError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return DeleteServiceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteServiceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUse" => {
-                    return DeleteServiceError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteServiceError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceNotFound" => {
-                    return DeleteServiceError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteServiceError::ServiceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteServiceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteServiceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteServiceError {
-    fn from(err: serde_json::error::Error) -> DeleteServiceError {
-        DeleteServiceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteServiceError {
-    fn from(err: CredentialsError) -> DeleteServiceError {
-        DeleteServiceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteServiceError {
-    fn from(err: HttpDispatchError) -> DeleteServiceError {
-        DeleteServiceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteServiceError {
-    fn from(err: io::Error) -> DeleteServiceError {
-        DeleteServiceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteServiceError {
@@ -1515,11 +1321,6 @@ impl Error for DeleteServiceError {
             DeleteServiceError::InvalidInput(ref cause) => cause,
             DeleteServiceError::ResourceInUse(ref cause) => cause,
             DeleteServiceError::ServiceNotFound(ref cause) => cause,
-            DeleteServiceError::Validation(ref cause) => cause,
-            DeleteServiceError::Credentials(ref err) => err.description(),
-            DeleteServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteServiceError::ParseError(ref cause) => cause,
-            DeleteServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1536,20 +1337,10 @@ pub enum DeregisterInstanceError {
     ResourceInUse(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1562,48 +1353,35 @@ impl DeregisterInstanceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return DeregisterInstanceError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(DeregisterInstanceError::DuplicateRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InstanceNotFound" => {
-                    return DeregisterInstanceError::InstanceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeregisterInstanceError::InstanceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInput" => {
-                    return DeregisterInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeregisterInstanceError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUse" => {
-                    return DeregisterInstanceError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeregisterInstanceError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceNotFound" => {
-                    return DeregisterInstanceError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeregisterInstanceError::ServiceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeregisterInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeregisterInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeregisterInstanceError {
-    fn from(err: serde_json::error::Error) -> DeregisterInstanceError {
-        DeregisterInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterInstanceError {
-    fn from(err: CredentialsError) -> DeregisterInstanceError {
-        DeregisterInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterInstanceError {
-    fn from(err: HttpDispatchError) -> DeregisterInstanceError {
-        DeregisterInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterInstanceError {
-    fn from(err: io::Error) -> DeregisterInstanceError {
-        DeregisterInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeregisterInstanceError {
@@ -1619,13 +1397,6 @@ impl Error for DeregisterInstanceError {
             DeregisterInstanceError::InvalidInput(ref cause) => cause,
             DeregisterInstanceError::ResourceInUse(ref cause) => cause,
             DeregisterInstanceError::ServiceNotFound(ref cause) => cause,
-            DeregisterInstanceError::Validation(ref cause) => cause,
-            DeregisterInstanceError::Credentials(ref err) => err.description(),
-            DeregisterInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterInstanceError::ParseError(ref cause) => cause,
-            DeregisterInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1638,20 +1409,10 @@ pub enum DiscoverInstancesError {
     NamespaceNotFound(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DiscoverInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DiscoverInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DiscoverInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1664,42 +1425,25 @@ impl DiscoverInstancesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return DiscoverInstancesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DiscoverInstancesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NamespaceNotFound" => {
-                    return DiscoverInstancesError::NamespaceNotFound(String::from(error_message));
+                    return RusotoError::Service(DiscoverInstancesError::NamespaceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceNotFound" => {
-                    return DiscoverInstancesError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(DiscoverInstancesError::ServiceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DiscoverInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DiscoverInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DiscoverInstancesError {
-    fn from(err: serde_json::error::Error) -> DiscoverInstancesError {
-        DiscoverInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DiscoverInstancesError {
-    fn from(err: CredentialsError) -> DiscoverInstancesError {
-        DiscoverInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DiscoverInstancesError {
-    fn from(err: HttpDispatchError) -> DiscoverInstancesError {
-        DiscoverInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DiscoverInstancesError {
-    fn from(err: io::Error) -> DiscoverInstancesError {
-        DiscoverInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DiscoverInstancesError {
@@ -1713,13 +1457,6 @@ impl Error for DiscoverInstancesError {
             DiscoverInstancesError::InvalidInput(ref cause) => cause,
             DiscoverInstancesError::NamespaceNotFound(ref cause) => cause,
             DiscoverInstancesError::ServiceNotFound(ref cause) => cause,
-            DiscoverInstancesError::Validation(ref cause) => cause,
-            DiscoverInstancesError::Credentials(ref err) => err.description(),
-            DiscoverInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DiscoverInstancesError::ParseError(ref cause) => cause,
-            DiscoverInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1732,20 +1469,10 @@ pub enum GetInstanceError {
     InvalidInput(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1758,42 +1485,25 @@ impl GetInstanceError {
 
             match *error_type {
                 "InstanceNotFound" => {
-                    return GetInstanceError::InstanceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::InstanceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInput" => {
-                    return GetInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceNotFound" => {
-                    return GetInstanceError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceError::ServiceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceError {
-    fn from(err: serde_json::error::Error) -> GetInstanceError {
-        GetInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceError {
-    fn from(err: CredentialsError) -> GetInstanceError {
-        GetInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceError {
-    fn from(err: HttpDispatchError) -> GetInstanceError {
-        GetInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceError {
-    fn from(err: io::Error) -> GetInstanceError {
-        GetInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceError {
@@ -1807,11 +1517,6 @@ impl Error for GetInstanceError {
             GetInstanceError::InstanceNotFound(ref cause) => cause,
             GetInstanceError::InvalidInput(ref cause) => cause,
             GetInstanceError::ServiceNotFound(ref cause) => cause,
-            GetInstanceError::Validation(ref cause) => cause,
-            GetInstanceError::Credentials(ref err) => err.description(),
-            GetInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetInstanceError::ParseError(ref cause) => cause,
-            GetInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1824,20 +1529,10 @@ pub enum GetInstancesHealthStatusError {
     InvalidInput(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstancesHealthStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstancesHealthStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstancesHealthStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1850,46 +1545,25 @@ impl GetInstancesHealthStatusError {
 
             match *error_type {
                 "InstanceNotFound" => {
-                    return GetInstancesHealthStatusError::InstanceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstancesHealthStatusError::InstanceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInput" => {
-                    return GetInstancesHealthStatusError::InvalidInput(String::from(error_message));
-                }
-                "ServiceNotFound" => {
-                    return GetInstancesHealthStatusError::ServiceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInstancesHealthStatusError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetInstancesHealthStatusError::Validation(error_message.to_string());
+                "ServiceNotFound" => {
+                    return RusotoError::Service(GetInstancesHealthStatusError::ServiceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstancesHealthStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstancesHealthStatusError {
-    fn from(err: serde_json::error::Error) -> GetInstancesHealthStatusError {
-        GetInstancesHealthStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstancesHealthStatusError {
-    fn from(err: CredentialsError) -> GetInstancesHealthStatusError {
-        GetInstancesHealthStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstancesHealthStatusError {
-    fn from(err: HttpDispatchError) -> GetInstancesHealthStatusError {
-        GetInstancesHealthStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstancesHealthStatusError {
-    fn from(err: io::Error) -> GetInstancesHealthStatusError {
-        GetInstancesHealthStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstancesHealthStatusError {
@@ -1903,13 +1577,6 @@ impl Error for GetInstancesHealthStatusError {
             GetInstancesHealthStatusError::InstanceNotFound(ref cause) => cause,
             GetInstancesHealthStatusError::InvalidInput(ref cause) => cause,
             GetInstancesHealthStatusError::ServiceNotFound(ref cause) => cause,
-            GetInstancesHealthStatusError::Validation(ref cause) => cause,
-            GetInstancesHealthStatusError::Credentials(ref err) => err.description(),
-            GetInstancesHealthStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstancesHealthStatusError::ParseError(ref cause) => cause,
-            GetInstancesHealthStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1920,20 +1587,10 @@ pub enum GetNamespaceError {
     InvalidInput(String),
     /// <p>No namespace exists with the specified ID.</p>
     NamespaceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetNamespaceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetNamespaceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNamespaceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1946,39 +1603,20 @@ impl GetNamespaceError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetNamespaceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetNamespaceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "NamespaceNotFound" => {
-                    return GetNamespaceError::NamespaceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetNamespaceError::NamespaceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetNamespaceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetNamespaceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetNamespaceError {
-    fn from(err: serde_json::error::Error) -> GetNamespaceError {
-        GetNamespaceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetNamespaceError {
-    fn from(err: CredentialsError) -> GetNamespaceError {
-        GetNamespaceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetNamespaceError {
-    fn from(err: HttpDispatchError) -> GetNamespaceError {
-        GetNamespaceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetNamespaceError {
-    fn from(err: io::Error) -> GetNamespaceError {
-        GetNamespaceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetNamespaceError {
@@ -1991,11 +1629,6 @@ impl Error for GetNamespaceError {
         match *self {
             GetNamespaceError::InvalidInput(ref cause) => cause,
             GetNamespaceError::NamespaceNotFound(ref cause) => cause,
-            GetNamespaceError::Validation(ref cause) => cause,
-            GetNamespaceError::Credentials(ref err) => err.description(),
-            GetNamespaceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetNamespaceError::ParseError(ref cause) => cause,
-            GetNamespaceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2006,20 +1639,10 @@ pub enum GetOperationError {
     InvalidInput(String),
     /// <p>No operation exists with the specified ID.</p>
     OperationNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOperationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOperationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2032,39 +1655,20 @@ impl GetOperationError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetOperationError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationNotFound" => {
-                    return GetOperationError::OperationNotFound(String::from(error_message));
+                    return RusotoError::Service(GetOperationError::OperationNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetOperationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOperationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOperationError {
-    fn from(err: serde_json::error::Error) -> GetOperationError {
-        GetOperationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOperationError {
-    fn from(err: CredentialsError) -> GetOperationError {
-        GetOperationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOperationError {
-    fn from(err: HttpDispatchError) -> GetOperationError {
-        GetOperationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOperationError {
-    fn from(err: io::Error) -> GetOperationError {
-        GetOperationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOperationError {
@@ -2077,11 +1681,6 @@ impl Error for GetOperationError {
         match *self {
             GetOperationError::InvalidInput(ref cause) => cause,
             GetOperationError::OperationNotFound(ref cause) => cause,
-            GetOperationError::Validation(ref cause) => cause,
-            GetOperationError::Credentials(ref err) => err.description(),
-            GetOperationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetOperationError::ParseError(ref cause) => cause,
-            GetOperationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2092,20 +1691,10 @@ pub enum GetServiceError {
     InvalidInput(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetServiceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServiceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2117,38 +1706,21 @@ impl GetServiceError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "InvalidInput" => return GetServiceError::InvalidInput(String::from(error_message)),
+                "InvalidInput" => {
+                    return RusotoError::Service(GetServiceError::InvalidInput(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceNotFound" => {
-                    return GetServiceError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetServiceError::ServiceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetServiceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetServiceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetServiceError {
-    fn from(err: serde_json::error::Error) -> GetServiceError {
-        GetServiceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetServiceError {
-    fn from(err: CredentialsError) -> GetServiceError {
-        GetServiceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetServiceError {
-    fn from(err: HttpDispatchError) -> GetServiceError {
-        GetServiceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetServiceError {
-    fn from(err: io::Error) -> GetServiceError {
-        GetServiceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetServiceError {
@@ -2161,11 +1733,6 @@ impl Error for GetServiceError {
         match *self {
             GetServiceError::InvalidInput(ref cause) => cause,
             GetServiceError::ServiceNotFound(ref cause) => cause,
-            GetServiceError::Validation(ref cause) => cause,
-            GetServiceError::Credentials(ref err) => err.description(),
-            GetServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetServiceError::ParseError(ref cause) => cause,
-            GetServiceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2176,20 +1743,10 @@ pub enum ListInstancesError {
     InvalidInput(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2202,39 +1759,20 @@ impl ListInstancesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListInstancesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListInstancesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceNotFound" => {
-                    return ListInstancesError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListInstancesError::ServiceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListInstancesError {
-    fn from(err: serde_json::error::Error) -> ListInstancesError {
-        ListInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListInstancesError {
-    fn from(err: CredentialsError) -> ListInstancesError {
-        ListInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListInstancesError {
-    fn from(err: HttpDispatchError) -> ListInstancesError {
-        ListInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListInstancesError {
-    fn from(err: io::Error) -> ListInstancesError {
-        ListInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListInstancesError {
@@ -2247,11 +1785,6 @@ impl Error for ListInstancesError {
         match *self {
             ListInstancesError::InvalidInput(ref cause) => cause,
             ListInstancesError::ServiceNotFound(ref cause) => cause,
-            ListInstancesError::Validation(ref cause) => cause,
-            ListInstancesError::Credentials(ref err) => err.description(),
-            ListInstancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListInstancesError::ParseError(ref cause) => cause,
-            ListInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2260,20 +1793,10 @@ impl Error for ListInstancesError {
 pub enum ListNamespacesError {
     /// <p>One or more specified values aren't valid. For example, a required value might be missing, a numeric value might be outside the allowed range, or a string value might exceed length constraints.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListNamespacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListNamespacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNamespacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2286,36 +1809,15 @@ impl ListNamespacesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListNamespacesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListNamespacesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListNamespacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListNamespacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListNamespacesError {
-    fn from(err: serde_json::error::Error) -> ListNamespacesError {
-        ListNamespacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListNamespacesError {
-    fn from(err: CredentialsError) -> ListNamespacesError {
-        ListNamespacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListNamespacesError {
-    fn from(err: HttpDispatchError) -> ListNamespacesError {
-        ListNamespacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListNamespacesError {
-    fn from(err: io::Error) -> ListNamespacesError {
-        ListNamespacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListNamespacesError {
@@ -2327,11 +1829,6 @@ impl Error for ListNamespacesError {
     fn description(&self) -> &str {
         match *self {
             ListNamespacesError::InvalidInput(ref cause) => cause,
-            ListNamespacesError::Validation(ref cause) => cause,
-            ListNamespacesError::Credentials(ref err) => err.description(),
-            ListNamespacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListNamespacesError::ParseError(ref cause) => cause,
-            ListNamespacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2340,20 +1837,10 @@ impl Error for ListNamespacesError {
 pub enum ListOperationsError {
     /// <p>One or more specified values aren't valid. For example, a required value might be missing, a numeric value might be outside the allowed range, or a string value might exceed length constraints.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOperationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOperationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOperationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2366,36 +1853,15 @@ impl ListOperationsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListOperationsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListOperationsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListOperationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOperationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOperationsError {
-    fn from(err: serde_json::error::Error) -> ListOperationsError {
-        ListOperationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOperationsError {
-    fn from(err: CredentialsError) -> ListOperationsError {
-        ListOperationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOperationsError {
-    fn from(err: HttpDispatchError) -> ListOperationsError {
-        ListOperationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOperationsError {
-    fn from(err: io::Error) -> ListOperationsError {
-        ListOperationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOperationsError {
@@ -2407,11 +1873,6 @@ impl Error for ListOperationsError {
     fn description(&self) -> &str {
         match *self {
             ListOperationsError::InvalidInput(ref cause) => cause,
-            ListOperationsError::Validation(ref cause) => cause,
-            ListOperationsError::Credentials(ref err) => err.description(),
-            ListOperationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListOperationsError::ParseError(ref cause) => cause,
-            ListOperationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2420,20 +1881,10 @@ impl Error for ListOperationsError {
 pub enum ListServicesError {
     /// <p>One or more specified values aren't valid. For example, a required value might be missing, a numeric value might be outside the allowed range, or a string value might exceed length constraints.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListServicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListServicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2446,36 +1897,15 @@ impl ListServicesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListServicesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListServicesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListServicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListServicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListServicesError {
-    fn from(err: serde_json::error::Error) -> ListServicesError {
-        ListServicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListServicesError {
-    fn from(err: CredentialsError) -> ListServicesError {
-        ListServicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListServicesError {
-    fn from(err: HttpDispatchError) -> ListServicesError {
-        ListServicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListServicesError {
-    fn from(err: io::Error) -> ListServicesError {
-        ListServicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListServicesError {
@@ -2487,11 +1917,6 @@ impl Error for ListServicesError {
     fn description(&self) -> &str {
         match *self {
             ListServicesError::InvalidInput(ref cause) => cause,
-            ListServicesError::Validation(ref cause) => cause,
-            ListServicesError::Credentials(ref err) => err.description(),
-            ListServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListServicesError::ParseError(ref cause) => cause,
-            ListServicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2508,20 +1933,10 @@ pub enum RegisterInstanceError {
     ResourceLimitExceeded(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2534,48 +1949,35 @@ impl RegisterInstanceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return RegisterInstanceError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(RegisterInstanceError::DuplicateRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInput" => {
-                    return RegisterInstanceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(RegisterInstanceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUse" => {
-                    return RegisterInstanceError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(RegisterInstanceError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceLimitExceeded" => {
-                    return RegisterInstanceError::ResourceLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RegisterInstanceError::ResourceLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceNotFound" => {
-                    return RegisterInstanceError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(RegisterInstanceError::ServiceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RegisterInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterInstanceError {
-    fn from(err: serde_json::error::Error) -> RegisterInstanceError {
-        RegisterInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterInstanceError {
-    fn from(err: CredentialsError) -> RegisterInstanceError {
-        RegisterInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterInstanceError {
-    fn from(err: HttpDispatchError) -> RegisterInstanceError {
-        RegisterInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterInstanceError {
-    fn from(err: io::Error) -> RegisterInstanceError {
-        RegisterInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterInstanceError {
@@ -2591,11 +1993,6 @@ impl Error for RegisterInstanceError {
             RegisterInstanceError::ResourceInUse(ref cause) => cause,
             RegisterInstanceError::ResourceLimitExceeded(ref cause) => cause,
             RegisterInstanceError::ServiceNotFound(ref cause) => cause,
-            RegisterInstanceError::Validation(ref cause) => cause,
-            RegisterInstanceError::Credentials(ref err) => err.description(),
-            RegisterInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterInstanceError::ParseError(ref cause) => cause,
-            RegisterInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2610,20 +2007,12 @@ pub enum UpdateInstanceCustomHealthStatusError {
     InvalidInput(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateInstanceCustomHealthStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateInstanceCustomHealthStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateInstanceCustomHealthStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2636,55 +2025,38 @@ impl UpdateInstanceCustomHealthStatusError {
 
             match *error_type {
                 "CustomHealthNotFound" => {
-                    return UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InstanceNotFound" => {
-                    return UpdateInstanceCustomHealthStatusError::InstanceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidInput" => {
-                    return UpdateInstanceCustomHealthStatusError::InvalidInput(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceNotFound" => {
-                    return UpdateInstanceCustomHealthStatusError::ServiceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return UpdateInstanceCustomHealthStatusError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        UpdateInstanceCustomHealthStatusError::InstanceNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidInput" => {
+                    return RusotoError::Service(
+                        UpdateInstanceCustomHealthStatusError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ServiceNotFound" => {
+                    return RusotoError::Service(
+                        UpdateInstanceCustomHealthStatusError::ServiceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateInstanceCustomHealthStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateInstanceCustomHealthStatusError {
-    fn from(err: serde_json::error::Error) -> UpdateInstanceCustomHealthStatusError {
-        UpdateInstanceCustomHealthStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateInstanceCustomHealthStatusError {
-    fn from(err: CredentialsError) -> UpdateInstanceCustomHealthStatusError {
-        UpdateInstanceCustomHealthStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateInstanceCustomHealthStatusError {
-    fn from(err: HttpDispatchError) -> UpdateInstanceCustomHealthStatusError {
-        UpdateInstanceCustomHealthStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateInstanceCustomHealthStatusError {
-    fn from(err: io::Error) -> UpdateInstanceCustomHealthStatusError {
-        UpdateInstanceCustomHealthStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateInstanceCustomHealthStatusError {
@@ -2699,13 +2071,6 @@ impl Error for UpdateInstanceCustomHealthStatusError {
             UpdateInstanceCustomHealthStatusError::InstanceNotFound(ref cause) => cause,
             UpdateInstanceCustomHealthStatusError::InvalidInput(ref cause) => cause,
             UpdateInstanceCustomHealthStatusError::ServiceNotFound(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::Validation(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::Credentials(ref err) => err.description(),
-            UpdateInstanceCustomHealthStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateInstanceCustomHealthStatusError::ParseError(ref cause) => cause,
-            UpdateInstanceCustomHealthStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2718,20 +2083,10 @@ pub enum UpdateServiceError {
     InvalidInput(String),
     /// <p>No service exists with the specified ID.</p>
     ServiceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServiceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServiceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2744,42 +2099,25 @@ impl UpdateServiceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return UpdateServiceError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateServiceError::DuplicateRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInput" => {
-                    return UpdateServiceError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateServiceError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceNotFound" => {
-                    return UpdateServiceError::ServiceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateServiceError::ServiceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateServiceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateServiceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateServiceError {
-    fn from(err: serde_json::error::Error) -> UpdateServiceError {
-        UpdateServiceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateServiceError {
-    fn from(err: CredentialsError) -> UpdateServiceError {
-        UpdateServiceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateServiceError {
-    fn from(err: HttpDispatchError) -> UpdateServiceError {
-        UpdateServiceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateServiceError {
-    fn from(err: io::Error) -> UpdateServiceError {
-        UpdateServiceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateServiceError {
@@ -2793,11 +2131,6 @@ impl Error for UpdateServiceError {
             UpdateServiceError::DuplicateRequest(ref cause) => cause,
             UpdateServiceError::InvalidInput(ref cause) => cause,
             UpdateServiceError::ServiceNotFound(ref cause) => cause,
-            UpdateServiceError::Validation(ref cause) => cause,
-            UpdateServiceError::Credentials(ref err) => err.description(),
-            UpdateServiceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateServiceError::ParseError(ref cause) => cause,
-            UpdateServiceError::Unknown(_) => "unknown error",
         }
     }
 }

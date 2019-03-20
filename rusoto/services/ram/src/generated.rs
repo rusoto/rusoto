@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -741,22 +738,14 @@ pub enum AcceptResourceShareInvitationError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptResourceShareInvitationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AcceptResourceShareInvitationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AcceptResourceShareInvitationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -780,40 +769,63 @@ impl AcceptResourceShareInvitationError {
                 .unwrap_or("");
 
             match error_type {
-                                "MalformedArnException" => return AcceptResourceShareInvitationError::MalformedArn(String::from(error_message)),
-"OperationNotPermittedException" => return AcceptResourceShareInvitationError::OperationNotPermitted(String::from(error_message)),
-"ResourceShareInvitationAlreadyAcceptedException" => return AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(String::from(error_message)),
-"ResourceShareInvitationAlreadyRejectedException" => return AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(String::from(error_message)),
-"ResourceShareInvitationArnNotFoundException" => return AcceptResourceShareInvitationError::ResourceShareInvitationArnNotFound(String::from(error_message)),
-"ResourceShareInvitationExpiredException" => return AcceptResourceShareInvitationError::ResourceShareInvitationExpired(String::from(error_message)),
-"ServerInternalException" => return AcceptResourceShareInvitationError::ServerInternal(String::from(error_message)),
-"ServiceUnavailableException" => return AcceptResourceShareInvitationError::ServiceUnavailable(String::from(error_message)),
-"ValidationException" => return AcceptResourceShareInvitationError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "MalformedArnException" => {
+                    return RusotoError::Service(AcceptResourceShareInvitationError::MalformedArn(
+                        String::from(error_message),
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        AcceptResourceShareInvitationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceShareInvitationAlreadyAcceptedException" => {
+                    return RusotoError::Service(
+                        AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceShareInvitationAlreadyRejectedException" => {
+                    return RusotoError::Service(
+                        AcceptResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceShareInvitationArnNotFoundException" => {
+                    return RusotoError::Service(
+                        AcceptResourceShareInvitationError::ResourceShareInvitationArnNotFound(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceShareInvitationExpiredException" => {
+                    return RusotoError::Service(
+                        AcceptResourceShareInvitationError::ResourceShareInvitationExpired(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(AcceptResourceShareInvitationError::ServerInternal(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        AcceptResourceShareInvitationError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return AcceptResourceShareInvitationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AcceptResourceShareInvitationError {
-    fn from(err: serde_json::error::Error) -> AcceptResourceShareInvitationError {
-        AcceptResourceShareInvitationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AcceptResourceShareInvitationError {
-    fn from(err: CredentialsError) -> AcceptResourceShareInvitationError {
-        AcceptResourceShareInvitationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AcceptResourceShareInvitationError {
-    fn from(err: HttpDispatchError) -> AcceptResourceShareInvitationError {
-        AcceptResourceShareInvitationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AcceptResourceShareInvitationError {
-    fn from(err: io::Error) -> AcceptResourceShareInvitationError {
-        AcceptResourceShareInvitationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AcceptResourceShareInvitationError {
@@ -838,13 +850,6 @@ impl Error for AcceptResourceShareInvitationError {
             AcceptResourceShareInvitationError::ResourceShareInvitationExpired(ref cause) => cause,
             AcceptResourceShareInvitationError::ServerInternal(ref cause) => cause,
             AcceptResourceShareInvitationError::ServiceUnavailable(ref cause) => cause,
-            AcceptResourceShareInvitationError::Validation(ref cause) => cause,
-            AcceptResourceShareInvitationError::Credentials(ref err) => err.description(),
-            AcceptResourceShareInvitationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AcceptResourceShareInvitationError::ParseError(ref cause) => cause,
-            AcceptResourceShareInvitationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -871,22 +876,12 @@ pub enum AssociateResourceShareError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateResourceShareError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateResourceShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateResourceShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -911,77 +906,66 @@ impl AssociateResourceShareError {
 
             match error_type {
                 "IdempotentParameterMismatchException" => {
-                    return AssociateResourceShareError::IdempotentParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateResourceShareError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidClientTokenException" => {
-                    return AssociateResourceShareError::InvalidClientToken(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateResourceShareError::InvalidClientToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AssociateResourceShareError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateResourceShareError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidStateTransitionException" => {
-                    return AssociateResourceShareError::InvalidStateTransition(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateResourceShareError::InvalidStateTransition(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MalformedArnException" => {
-                    return AssociateResourceShareError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(AssociateResourceShareError::MalformedArn(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return AssociateResourceShareError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateResourceShareError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceShareLimitExceededException" => {
-                    return AssociateResourceShareError::ResourceShareLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateResourceShareError::ResourceShareLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerInternalException" => {
-                    return AssociateResourceShareError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(AssociateResourceShareError::ServerInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return AssociateResourceShareError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateResourceShareError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceException" => {
-                    return AssociateResourceShareError::UnknownResource(String::from(error_message));
+                    return RusotoError::Service(AssociateResourceShareError::UnknownResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AssociateResourceShareError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateResourceShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateResourceShareError {
-    fn from(err: serde_json::error::Error) -> AssociateResourceShareError {
-        AssociateResourceShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateResourceShareError {
-    fn from(err: CredentialsError) -> AssociateResourceShareError {
-        AssociateResourceShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateResourceShareError {
-    fn from(err: HttpDispatchError) -> AssociateResourceShareError {
-        AssociateResourceShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateResourceShareError {
-    fn from(err: io::Error) -> AssociateResourceShareError {
-        AssociateResourceShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateResourceShareError {
@@ -1002,13 +986,6 @@ impl Error for AssociateResourceShareError {
             AssociateResourceShareError::ServerInternal(ref cause) => cause,
             AssociateResourceShareError::ServiceUnavailable(ref cause) => cause,
             AssociateResourceShareError::UnknownResource(ref cause) => cause,
-            AssociateResourceShareError::Validation(ref cause) => cause,
-            AssociateResourceShareError::Credentials(ref err) => err.description(),
-            AssociateResourceShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateResourceShareError::ParseError(ref cause) => cause,
-            AssociateResourceShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1035,22 +1012,12 @@ pub enum CreateResourceShareError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateResourceShareError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateResourceShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1075,71 +1042,64 @@ impl CreateResourceShareError {
 
             match error_type {
                 "IdempotentParameterMismatchException" => {
-                    return CreateResourceShareError::IdempotentParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateResourceShareError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidClientTokenException" => {
-                    return CreateResourceShareError::InvalidClientToken(String::from(error_message));
+                    return RusotoError::Service(CreateResourceShareError::InvalidClientToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateResourceShareError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateResourceShareError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStateTransitionException" => {
-                    return CreateResourceShareError::InvalidStateTransition(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateResourceShareError::InvalidStateTransition(
+                        String::from(error_message),
                     ));
                 }
                 "MalformedArnException" => {
-                    return CreateResourceShareError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(CreateResourceShareError::MalformedArn(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateResourceShareError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateResourceShareError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceShareLimitExceededException" => {
-                    return CreateResourceShareError::ResourceShareLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateResourceShareError::ResourceShareLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerInternalException" => {
-                    return CreateResourceShareError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(CreateResourceShareError::ServerInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateResourceShareError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateResourceShareError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnknownResourceException" => {
-                    return CreateResourceShareError::UnknownResource(String::from(error_message));
+                    return RusotoError::Service(CreateResourceShareError::UnknownResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateResourceShareError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateResourceShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateResourceShareError {
-    fn from(err: serde_json::error::Error) -> CreateResourceShareError {
-        CreateResourceShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateResourceShareError {
-    fn from(err: CredentialsError) -> CreateResourceShareError {
-        CreateResourceShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateResourceShareError {
-    fn from(err: HttpDispatchError) -> CreateResourceShareError {
-        CreateResourceShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateResourceShareError {
-    fn from(err: io::Error) -> CreateResourceShareError {
-        CreateResourceShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateResourceShareError {
@@ -1160,13 +1120,6 @@ impl Error for CreateResourceShareError {
             CreateResourceShareError::ServerInternal(ref cause) => cause,
             CreateResourceShareError::ServiceUnavailable(ref cause) => cause,
             CreateResourceShareError::UnknownResource(ref cause) => cause,
-            CreateResourceShareError::Validation(ref cause) => cause,
-            CreateResourceShareError::Credentials(ref err) => err.description(),
-            CreateResourceShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateResourceShareError::ParseError(ref cause) => cause,
-            CreateResourceShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1191,22 +1144,12 @@ pub enum DeleteResourceShareError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteResourceShareError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourceShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1231,66 +1174,57 @@ impl DeleteResourceShareError {
 
             match error_type {
                 "IdempotentParameterMismatchException" => {
-                    return DeleteResourceShareError::IdempotentParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteResourceShareError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidClientTokenException" => {
-                    return DeleteResourceShareError::InvalidClientToken(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceShareError::InvalidClientToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteResourceShareError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceShareError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStateTransitionException" => {
-                    return DeleteResourceShareError::InvalidStateTransition(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteResourceShareError::InvalidStateTransition(
+                        String::from(error_message),
                     ));
                 }
                 "MalformedArnException" => {
-                    return DeleteResourceShareError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceShareError::MalformedArn(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteResourceShareError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteResourceShareError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalException" => {
-                    return DeleteResourceShareError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceShareError::ServerInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteResourceShareError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceShareError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnknownResourceException" => {
-                    return DeleteResourceShareError::UnknownResource(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceShareError::UnknownResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteResourceShareError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteResourceShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteResourceShareError {
-    fn from(err: serde_json::error::Error) -> DeleteResourceShareError {
-        DeleteResourceShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteResourceShareError {
-    fn from(err: CredentialsError) -> DeleteResourceShareError {
-        DeleteResourceShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteResourceShareError {
-    fn from(err: HttpDispatchError) -> DeleteResourceShareError {
-        DeleteResourceShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteResourceShareError {
-    fn from(err: io::Error) -> DeleteResourceShareError {
-        DeleteResourceShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteResourceShareError {
@@ -1310,13 +1244,6 @@ impl Error for DeleteResourceShareError {
             DeleteResourceShareError::ServerInternal(ref cause) => cause,
             DeleteResourceShareError::ServiceUnavailable(ref cause) => cause,
             DeleteResourceShareError::UnknownResource(ref cause) => cause,
-            DeleteResourceShareError::Validation(ref cause) => cause,
-            DeleteResourceShareError::Credentials(ref err) => err.description(),
-            DeleteResourceShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteResourceShareError::ParseError(ref cause) => cause,
-            DeleteResourceShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1343,22 +1270,12 @@ pub enum DisassociateResourceShareError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateResourceShareError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateResourceShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateResourceShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1383,81 +1300,68 @@ impl DisassociateResourceShareError {
 
             match error_type {
                 "IdempotentParameterMismatchException" => {
-                    return DisassociateResourceShareError::IdempotentParameterMismatch(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DisassociateResourceShareError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidClientTokenException" => {
-                    return DisassociateResourceShareError::InvalidClientToken(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateResourceShareError::InvalidClientToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DisassociateResourceShareError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateResourceShareError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidStateTransitionException" => {
-                    return DisassociateResourceShareError::InvalidStateTransition(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateResourceShareError::InvalidStateTransition(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MalformedArnException" => {
-                    return DisassociateResourceShareError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(DisassociateResourceShareError::MalformedArn(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return DisassociateResourceShareError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateResourceShareError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceShareLimitExceededException" => {
-                    return DisassociateResourceShareError::ResourceShareLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateResourceShareError::ResourceShareLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerInternalException" => {
-                    return DisassociateResourceShareError::ServerInternal(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateResourceShareError::ServerInternal(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DisassociateResourceShareError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateResourceShareError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceException" => {
-                    return DisassociateResourceShareError::UnknownResource(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateResourceShareError::UnknownResource(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DisassociateResourceShareError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateResourceShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateResourceShareError {
-    fn from(err: serde_json::error::Error) -> DisassociateResourceShareError {
-        DisassociateResourceShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateResourceShareError {
-    fn from(err: CredentialsError) -> DisassociateResourceShareError {
-        DisassociateResourceShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateResourceShareError {
-    fn from(err: HttpDispatchError) -> DisassociateResourceShareError {
-        DisassociateResourceShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateResourceShareError {
-    fn from(err: io::Error) -> DisassociateResourceShareError {
-        DisassociateResourceShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateResourceShareError {
@@ -1478,13 +1382,6 @@ impl Error for DisassociateResourceShareError {
             DisassociateResourceShareError::ServerInternal(ref cause) => cause,
             DisassociateResourceShareError::ServiceUnavailable(ref cause) => cause,
             DisassociateResourceShareError::UnknownResource(ref cause) => cause,
-            DisassociateResourceShareError::Validation(ref cause) => cause,
-            DisassociateResourceShareError::Credentials(ref err) => err.description(),
-            DisassociateResourceShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateResourceShareError::ParseError(ref cause) => cause,
-            DisassociateResourceShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1497,22 +1394,14 @@ pub enum EnableSharingWithAwsOrganizationError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableSharingWithAwsOrganizationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> EnableSharingWithAwsOrganizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableSharingWithAwsOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1537,50 +1426,31 @@ impl EnableSharingWithAwsOrganizationError {
 
             match error_type {
                 "OperationNotPermittedException" => {
-                    return EnableSharingWithAwsOrganizationError::OperationNotPermitted(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        EnableSharingWithAwsOrganizationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ServerInternalException" => {
-                    return EnableSharingWithAwsOrganizationError::ServerInternal(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceUnavailableException" => {
-                    return EnableSharingWithAwsOrganizationError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return EnableSharingWithAwsOrganizationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        EnableSharingWithAwsOrganizationError::ServerInternal(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        EnableSharingWithAwsOrganizationError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableSharingWithAwsOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableSharingWithAwsOrganizationError {
-    fn from(err: serde_json::error::Error) -> EnableSharingWithAwsOrganizationError {
-        EnableSharingWithAwsOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableSharingWithAwsOrganizationError {
-    fn from(err: CredentialsError) -> EnableSharingWithAwsOrganizationError {
-        EnableSharingWithAwsOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableSharingWithAwsOrganizationError {
-    fn from(err: HttpDispatchError) -> EnableSharingWithAwsOrganizationError {
-        EnableSharingWithAwsOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableSharingWithAwsOrganizationError {
-    fn from(err: io::Error) -> EnableSharingWithAwsOrganizationError {
-        EnableSharingWithAwsOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableSharingWithAwsOrganizationError {
@@ -1594,13 +1464,6 @@ impl Error for EnableSharingWithAwsOrganizationError {
             EnableSharingWithAwsOrganizationError::OperationNotPermitted(ref cause) => cause,
             EnableSharingWithAwsOrganizationError::ServerInternal(ref cause) => cause,
             EnableSharingWithAwsOrganizationError::ServiceUnavailable(ref cause) => cause,
-            EnableSharingWithAwsOrganizationError::Validation(ref cause) => cause,
-            EnableSharingWithAwsOrganizationError::Credentials(ref err) => err.description(),
-            EnableSharingWithAwsOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableSharingWithAwsOrganizationError::ParseError(ref cause) => cause,
-            EnableSharingWithAwsOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1617,22 +1480,12 @@ pub enum GetResourcePoliciesError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourcePoliciesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourcePoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePoliciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1657,48 +1510,35 @@ impl GetResourcePoliciesError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return GetResourcePoliciesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(GetResourcePoliciesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetResourcePoliciesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetResourcePoliciesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MalformedArnException" => {
-                    return GetResourcePoliciesError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(GetResourcePoliciesError::MalformedArn(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerInternalException" => {
-                    return GetResourcePoliciesError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(GetResourcePoliciesError::ServerInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetResourcePoliciesError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetResourcePoliciesError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetResourcePoliciesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourcePoliciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourcePoliciesError {
-    fn from(err: serde_json::error::Error) -> GetResourcePoliciesError {
-        GetResourcePoliciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourcePoliciesError {
-    fn from(err: CredentialsError) -> GetResourcePoliciesError {
-        GetResourcePoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourcePoliciesError {
-    fn from(err: HttpDispatchError) -> GetResourcePoliciesError {
-        GetResourcePoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourcePoliciesError {
-    fn from(err: io::Error) -> GetResourcePoliciesError {
-        GetResourcePoliciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourcePoliciesError {
@@ -1714,13 +1554,6 @@ impl Error for GetResourcePoliciesError {
             GetResourcePoliciesError::MalformedArn(ref cause) => cause,
             GetResourcePoliciesError::ServerInternal(ref cause) => cause,
             GetResourcePoliciesError::ServiceUnavailable(ref cause) => cause,
-            GetResourcePoliciesError::Validation(ref cause) => cause,
-            GetResourcePoliciesError::Credentials(ref err) => err.description(),
-            GetResourcePoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetResourcePoliciesError::ParseError(ref cause) => cause,
-            GetResourcePoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1741,22 +1574,14 @@ pub enum GetResourceShareAssociationsError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceShareAssociationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourceShareAssociationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetResourceShareAssociationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1781,68 +1606,53 @@ impl GetResourceShareAssociationsError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return GetResourceShareAssociationsError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareAssociationsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return GetResourceShareAssociationsError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareAssociationsError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MalformedArnException" => {
-                    return GetResourceShareAssociationsError::MalformedArn(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceShareAssociationsError::MalformedArn(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return GetResourceShareAssociationsError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareAssociationsError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerInternalException" => {
-                    return GetResourceShareAssociationsError::ServerInternal(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceShareAssociationsError::ServerInternal(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetResourceShareAssociationsError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareAssociationsError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceException" => {
-                    return GetResourceShareAssociationsError::UnknownResource(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceShareAssociationsError::UnknownResource(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetResourceShareAssociationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourceShareAssociationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourceShareAssociationsError {
-    fn from(err: serde_json::error::Error) -> GetResourceShareAssociationsError {
-        GetResourceShareAssociationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourceShareAssociationsError {
-    fn from(err: CredentialsError) -> GetResourceShareAssociationsError {
-        GetResourceShareAssociationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourceShareAssociationsError {
-    fn from(err: HttpDispatchError) -> GetResourceShareAssociationsError {
-        GetResourceShareAssociationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourceShareAssociationsError {
-    fn from(err: io::Error) -> GetResourceShareAssociationsError {
-        GetResourceShareAssociationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourceShareAssociationsError {
@@ -1860,13 +1670,6 @@ impl Error for GetResourceShareAssociationsError {
             GetResourceShareAssociationsError::ServerInternal(ref cause) => cause,
             GetResourceShareAssociationsError::ServiceUnavailable(ref cause) => cause,
             GetResourceShareAssociationsError::UnknownResource(ref cause) => cause,
-            GetResourceShareAssociationsError::Validation(ref cause) => cause,
-            GetResourceShareAssociationsError::Credentials(ref err) => err.description(),
-            GetResourceShareAssociationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetResourceShareAssociationsError::ParseError(ref cause) => cause,
-            GetResourceShareAssociationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1887,22 +1690,14 @@ pub enum GetResourceShareInvitationsError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceShareInvitationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourceShareInvitationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetResourceShareInvitationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1927,68 +1722,51 @@ impl GetResourceShareInvitationsError {
 
             match error_type {
                 "InvalidMaxResultsException" => {
-                    return GetResourceShareInvitationsError::InvalidMaxResults(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareInvitationsError::InvalidMaxResults(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return GetResourceShareInvitationsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceShareInvitationsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return GetResourceShareInvitationsError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceShareInvitationsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "MalformedArnException" => {
-                    return GetResourceShareInvitationsError::MalformedArn(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceShareInvitationsError::MalformedArn(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceShareInvitationArnNotFoundException" => {
-                    return GetResourceShareInvitationsError::ResourceShareInvitationArnNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetResourceShareInvitationsError::ResourceShareInvitationArnNotFound(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServerInternalException" => {
-                    return GetResourceShareInvitationsError::ServerInternal(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceShareInvitationsError::ServerInternal(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetResourceShareInvitationsError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetResourceShareInvitationsError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetResourceShareInvitationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourceShareInvitationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourceShareInvitationsError {
-    fn from(err: serde_json::error::Error) -> GetResourceShareInvitationsError {
-        GetResourceShareInvitationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourceShareInvitationsError {
-    fn from(err: CredentialsError) -> GetResourceShareInvitationsError {
-        GetResourceShareInvitationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourceShareInvitationsError {
-    fn from(err: HttpDispatchError) -> GetResourceShareInvitationsError {
-        GetResourceShareInvitationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourceShareInvitationsError {
-    fn from(err: io::Error) -> GetResourceShareInvitationsError {
-        GetResourceShareInvitationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourceShareInvitationsError {
@@ -2008,13 +1786,6 @@ impl Error for GetResourceShareInvitationsError {
             }
             GetResourceShareInvitationsError::ServerInternal(ref cause) => cause,
             GetResourceShareInvitationsError::ServiceUnavailable(ref cause) => cause,
-            GetResourceShareInvitationsError::Validation(ref cause) => cause,
-            GetResourceShareInvitationsError::Credentials(ref err) => err.description(),
-            GetResourceShareInvitationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetResourceShareInvitationsError::ParseError(ref cause) => cause,
-            GetResourceShareInvitationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2033,22 +1804,12 @@ pub enum GetResourceSharesError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceSharesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourceSharesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceSharesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2073,51 +1834,40 @@ impl GetResourceSharesError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return GetResourceSharesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(GetResourceSharesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetResourceSharesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetResourceSharesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MalformedArnException" => {
-                    return GetResourceSharesError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(GetResourceSharesError::MalformedArn(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalException" => {
-                    return GetResourceSharesError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(GetResourceSharesError::ServerInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetResourceSharesError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetResourceSharesError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnknownResourceException" => {
-                    return GetResourceSharesError::UnknownResource(String::from(error_message));
+                    return RusotoError::Service(GetResourceSharesError::UnknownResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetResourceSharesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourceSharesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourceSharesError {
-    fn from(err: serde_json::error::Error) -> GetResourceSharesError {
-        GetResourceSharesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourceSharesError {
-    fn from(err: CredentialsError) -> GetResourceSharesError {
-        GetResourceSharesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourceSharesError {
-    fn from(err: HttpDispatchError) -> GetResourceSharesError {
-        GetResourceSharesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourceSharesError {
-    fn from(err: io::Error) -> GetResourceSharesError {
-        GetResourceSharesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourceSharesError {
@@ -2134,13 +1884,6 @@ impl Error for GetResourceSharesError {
             GetResourceSharesError::ServerInternal(ref cause) => cause,
             GetResourceSharesError::ServiceUnavailable(ref cause) => cause,
             GetResourceSharesError::UnknownResource(ref cause) => cause,
-            GetResourceSharesError::Validation(ref cause) => cause,
-            GetResourceSharesError::Credentials(ref err) => err.description(),
-            GetResourceSharesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetResourceSharesError::ParseError(ref cause) => cause,
-            GetResourceSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2159,22 +1902,12 @@ pub enum ListPrincipalsError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPrincipalsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPrincipalsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPrincipalsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2199,51 +1932,40 @@ impl ListPrincipalsError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return ListPrincipalsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListPrincipalsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListPrincipalsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListPrincipalsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MalformedArnException" => {
-                    return ListPrincipalsError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(ListPrincipalsError::MalformedArn(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalException" => {
-                    return ListPrincipalsError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(ListPrincipalsError::ServerInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListPrincipalsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListPrincipalsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnknownResourceException" => {
-                    return ListPrincipalsError::UnknownResource(String::from(error_message));
+                    return RusotoError::Service(ListPrincipalsError::UnknownResource(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPrincipalsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPrincipalsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPrincipalsError {
-    fn from(err: serde_json::error::Error) -> ListPrincipalsError {
-        ListPrincipalsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPrincipalsError {
-    fn from(err: CredentialsError) -> ListPrincipalsError {
-        ListPrincipalsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPrincipalsError {
-    fn from(err: HttpDispatchError) -> ListPrincipalsError {
-        ListPrincipalsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPrincipalsError {
-    fn from(err: io::Error) -> ListPrincipalsError {
-        ListPrincipalsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPrincipalsError {
@@ -2260,11 +1982,6 @@ impl Error for ListPrincipalsError {
             ListPrincipalsError::ServerInternal(ref cause) => cause,
             ListPrincipalsError::ServiceUnavailable(ref cause) => cause,
             ListPrincipalsError::UnknownResource(ref cause) => cause,
-            ListPrincipalsError::Validation(ref cause) => cause,
-            ListPrincipalsError::Credentials(ref err) => err.description(),
-            ListPrincipalsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPrincipalsError::ParseError(ref cause) => cause,
-            ListPrincipalsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2285,22 +2002,12 @@ pub enum ListResourcesError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourcesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2325,54 +2032,45 @@ impl ListResourcesError {
 
             match error_type {
                 "InvalidNextTokenException" => {
-                    return ListResourcesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListResourcesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceTypeException" => {
-                    return ListResourcesError::InvalidResourceType(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::InvalidResourceType(
+                        String::from(error_message),
+                    ));
                 }
                 "MalformedArnException" => {
-                    return ListResourcesError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::MalformedArn(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalException" => {
-                    return ListResourcesError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::ServerInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListResourcesError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnknownResourceException" => {
-                    return ListResourcesError::UnknownResource(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::UnknownResource(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListResourcesError {
-    fn from(err: serde_json::error::Error) -> ListResourcesError {
-        ListResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListResourcesError {
-    fn from(err: CredentialsError) -> ListResourcesError {
-        ListResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourcesError {
-    fn from(err: HttpDispatchError) -> ListResourcesError {
-        ListResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourcesError {
-    fn from(err: io::Error) -> ListResourcesError {
-        ListResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListResourcesError {
@@ -2390,11 +2088,6 @@ impl Error for ListResourcesError {
             ListResourcesError::ServerInternal(ref cause) => cause,
             ListResourcesError::ServiceUnavailable(ref cause) => cause,
             ListResourcesError::UnknownResource(ref cause) => cause,
-            ListResourcesError::Validation(ref cause) => cause,
-            ListResourcesError::Credentials(ref err) => err.description(),
-            ListResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListResourcesError::ParseError(ref cause) => cause,
-            ListResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2417,22 +2110,14 @@ pub enum RejectResourceShareInvitationError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RejectResourceShareInvitationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RejectResourceShareInvitationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RejectResourceShareInvitationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2456,40 +2141,63 @@ impl RejectResourceShareInvitationError {
                 .unwrap_or("");
 
             match error_type {
-                                "MalformedArnException" => return RejectResourceShareInvitationError::MalformedArn(String::from(error_message)),
-"OperationNotPermittedException" => return RejectResourceShareInvitationError::OperationNotPermitted(String::from(error_message)),
-"ResourceShareInvitationAlreadyAcceptedException" => return RejectResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(String::from(error_message)),
-"ResourceShareInvitationAlreadyRejectedException" => return RejectResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(String::from(error_message)),
-"ResourceShareInvitationArnNotFoundException" => return RejectResourceShareInvitationError::ResourceShareInvitationArnNotFound(String::from(error_message)),
-"ResourceShareInvitationExpiredException" => return RejectResourceShareInvitationError::ResourceShareInvitationExpired(String::from(error_message)),
-"ServerInternalException" => return RejectResourceShareInvitationError::ServerInternal(String::from(error_message)),
-"ServiceUnavailableException" => return RejectResourceShareInvitationError::ServiceUnavailable(String::from(error_message)),
-"ValidationException" => return RejectResourceShareInvitationError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "MalformedArnException" => {
+                    return RusotoError::Service(RejectResourceShareInvitationError::MalformedArn(
+                        String::from(error_message),
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return RusotoError::Service(
+                        RejectResourceShareInvitationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceShareInvitationAlreadyAcceptedException" => {
+                    return RusotoError::Service(
+                        RejectResourceShareInvitationError::ResourceShareInvitationAlreadyAccepted(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceShareInvitationAlreadyRejectedException" => {
+                    return RusotoError::Service(
+                        RejectResourceShareInvitationError::ResourceShareInvitationAlreadyRejected(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceShareInvitationArnNotFoundException" => {
+                    return RusotoError::Service(
+                        RejectResourceShareInvitationError::ResourceShareInvitationArnNotFound(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceShareInvitationExpiredException" => {
+                    return RusotoError::Service(
+                        RejectResourceShareInvitationError::ResourceShareInvitationExpired(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(RejectResourceShareInvitationError::ServerInternal(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        RejectResourceShareInvitationError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return RejectResourceShareInvitationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RejectResourceShareInvitationError {
-    fn from(err: serde_json::error::Error) -> RejectResourceShareInvitationError {
-        RejectResourceShareInvitationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RejectResourceShareInvitationError {
-    fn from(err: CredentialsError) -> RejectResourceShareInvitationError {
-        RejectResourceShareInvitationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RejectResourceShareInvitationError {
-    fn from(err: HttpDispatchError) -> RejectResourceShareInvitationError {
-        RejectResourceShareInvitationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RejectResourceShareInvitationError {
-    fn from(err: io::Error) -> RejectResourceShareInvitationError {
-        RejectResourceShareInvitationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RejectResourceShareInvitationError {
@@ -2514,13 +2222,6 @@ impl Error for RejectResourceShareInvitationError {
             RejectResourceShareInvitationError::ResourceShareInvitationExpired(ref cause) => cause,
             RejectResourceShareInvitationError::ServerInternal(ref cause) => cause,
             RejectResourceShareInvitationError::ServiceUnavailable(ref cause) => cause,
-            RejectResourceShareInvitationError::Validation(ref cause) => cause,
-            RejectResourceShareInvitationError::Credentials(ref err) => err.description(),
-            RejectResourceShareInvitationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RejectResourceShareInvitationError::ParseError(ref cause) => cause,
-            RejectResourceShareInvitationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2539,22 +2240,12 @@ pub enum TagResourceError {
     ServiceUnavailable(String),
     /// <p>The requested tags exceed the limit for your account.</p>
     TagLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2579,51 +2270,40 @@ impl TagResourceError {
 
             match error_type {
                 "InvalidParameterException" => {
-                    return TagResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MalformedArnException" => {
-                    return TagResourceError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::MalformedArn(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceArnNotFoundException" => {
-                    return TagResourceError::ResourceArnNotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ResourceArnNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerInternalException" => {
-                    return TagResourceError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ServerInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return TagResourceError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "TagLimitExceededException" => {
-                    return TagResourceError::TagLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::TagLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2640,11 +2320,6 @@ impl Error for TagResourceError {
             TagResourceError::ServerInternal(ref cause) => cause,
             TagResourceError::ServiceUnavailable(ref cause) => cause,
             TagResourceError::TagLimitExceeded(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2657,22 +2332,12 @@ pub enum UntagResourceError {
     ServerInternal(String),
     /// <p>The service is not available.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2697,42 +2362,25 @@ impl UntagResourceError {
 
             match error_type {
                 "InvalidParameterException" => {
-                    return UntagResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalException" => {
-                    return UntagResourceError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ServerInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return UntagResourceError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2746,11 +2394,6 @@ impl Error for UntagResourceError {
             UntagResourceError::InvalidParameter(ref cause) => cause,
             UntagResourceError::ServerInternal(ref cause) => cause,
             UntagResourceError::ServiceUnavailable(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2775,22 +2418,12 @@ pub enum UpdateResourceShareError {
     ServiceUnavailable(String),
     /// <p>A specified resource was not found.</p>
     UnknownResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateResourceShareError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateResourceShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2815,66 +2448,57 @@ impl UpdateResourceShareError {
 
             match error_type {
                 "IdempotentParameterMismatchException" => {
-                    return UpdateResourceShareError::IdempotentParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateResourceShareError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidClientTokenException" => {
-                    return UpdateResourceShareError::InvalidClientToken(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceShareError::InvalidClientToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateResourceShareError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceShareError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MalformedArnException" => {
-                    return UpdateResourceShareError::MalformedArn(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceShareError::MalformedArn(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return UpdateResourceShareError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateResourceShareError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return UpdateResourceShareError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateResourceShareError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalException" => {
-                    return UpdateResourceShareError::ServerInternal(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceShareError::ServerInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateResourceShareError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceShareError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnknownResourceException" => {
-                    return UpdateResourceShareError::UnknownResource(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceShareError::UnknownResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateResourceShareError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateResourceShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateResourceShareError {
-    fn from(err: serde_json::error::Error) -> UpdateResourceShareError {
-        UpdateResourceShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateResourceShareError {
-    fn from(err: CredentialsError) -> UpdateResourceShareError {
-        UpdateResourceShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateResourceShareError {
-    fn from(err: HttpDispatchError) -> UpdateResourceShareError {
-        UpdateResourceShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateResourceShareError {
-    fn from(err: io::Error) -> UpdateResourceShareError {
-        UpdateResourceShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateResourceShareError {
@@ -2894,13 +2518,6 @@ impl Error for UpdateResourceShareError {
             UpdateResourceShareError::ServerInternal(ref cause) => cause,
             UpdateResourceShareError::ServiceUnavailable(ref cause) => cause,
             UpdateResourceShareError::UnknownResource(ref cause) => cause,
-            UpdateResourceShareError::Validation(ref cause) => cause,
-            UpdateResourceShareError::Credentials(ref err) => err.description(),
-            UpdateResourceShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateResourceShareError::ParseError(ref cause) => cause,
-            UpdateResourceShareError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -258,20 +255,10 @@ pub enum DescribeDimensionKeysError {
     InvalidArgument(String),
     /// <p>The user is not authorized to perform this request.</p>
     NotAuthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDimensionKeysError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDimensionKeysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDimensionKeysError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -284,44 +271,25 @@ impl DescribeDimensionKeysError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DescribeDimensionKeysError::InternalServiceError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDimensionKeysError::InternalServiceError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeDimensionKeysError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DescribeDimensionKeysError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return DescribeDimensionKeysError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeDimensionKeysError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeDimensionKeysError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDimensionKeysError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDimensionKeysError {
-    fn from(err: serde_json::error::Error) -> DescribeDimensionKeysError {
-        DescribeDimensionKeysError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDimensionKeysError {
-    fn from(err: CredentialsError) -> DescribeDimensionKeysError {
-        DescribeDimensionKeysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDimensionKeysError {
-    fn from(err: HttpDispatchError) -> DescribeDimensionKeysError {
-        DescribeDimensionKeysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDimensionKeysError {
-    fn from(err: io::Error) -> DescribeDimensionKeysError {
-        DescribeDimensionKeysError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDimensionKeysError {
@@ -335,13 +303,6 @@ impl Error for DescribeDimensionKeysError {
             DescribeDimensionKeysError::InternalServiceError(ref cause) => cause,
             DescribeDimensionKeysError::InvalidArgument(ref cause) => cause,
             DescribeDimensionKeysError::NotAuthorized(ref cause) => cause,
-            DescribeDimensionKeysError::Validation(ref cause) => cause,
-            DescribeDimensionKeysError::Credentials(ref err) => err.description(),
-            DescribeDimensionKeysError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDimensionKeysError::ParseError(ref cause) => cause,
-            DescribeDimensionKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -354,20 +315,10 @@ pub enum GetResourceMetricsError {
     InvalidArgument(String),
     /// <p>The user is not authorized to perform this request.</p>
     NotAuthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceMetricsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourceMetricsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceMetricsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -380,44 +331,25 @@ impl GetResourceMetricsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return GetResourceMetricsError::InternalServiceError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceMetricsError::InternalServiceError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return GetResourceMetricsError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(GetResourceMetricsError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "NotAuthorizedException" => {
-                    return GetResourceMetricsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetResourceMetricsError::NotAuthorized(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetResourceMetricsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourceMetricsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourceMetricsError {
-    fn from(err: serde_json::error::Error) -> GetResourceMetricsError {
-        GetResourceMetricsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourceMetricsError {
-    fn from(err: CredentialsError) -> GetResourceMetricsError {
-        GetResourceMetricsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourceMetricsError {
-    fn from(err: HttpDispatchError) -> GetResourceMetricsError {
-        GetResourceMetricsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourceMetricsError {
-    fn from(err: io::Error) -> GetResourceMetricsError {
-        GetResourceMetricsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourceMetricsError {
@@ -431,13 +363,6 @@ impl Error for GetResourceMetricsError {
             GetResourceMetricsError::InternalServiceError(ref cause) => cause,
             GetResourceMetricsError::InvalidArgument(ref cause) => cause,
             GetResourceMetricsError::NotAuthorized(ref cause) => cause,
-            GetResourceMetricsError::Validation(ref cause) => cause,
-            GetResourceMetricsError::Credentials(ref err) => err.description(),
-            GetResourceMetricsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetResourceMetricsError::ParseError(ref cause) => cause,
-            GetResourceMetricsError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -2099,20 +2096,12 @@ pub struct StopConfigurationRecorderRequest {
 pub enum BatchGetAggregateResourceConfigError {
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetAggregateResourceConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetAggregateResourceConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchGetAggregateResourceConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2125,40 +2114,17 @@ impl BatchGetAggregateResourceConfigError {
 
             match *error_type {
                 "NoSuchConfigurationAggregatorException" => {
-                    return BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return BatchGetAggregateResourceConfigError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetAggregateResourceConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetAggregateResourceConfigError {
-    fn from(err: serde_json::error::Error) -> BatchGetAggregateResourceConfigError {
-        BatchGetAggregateResourceConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetAggregateResourceConfigError {
-    fn from(err: CredentialsError) -> BatchGetAggregateResourceConfigError {
-        BatchGetAggregateResourceConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetAggregateResourceConfigError {
-    fn from(err: HttpDispatchError) -> BatchGetAggregateResourceConfigError {
-        BatchGetAggregateResourceConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetAggregateResourceConfigError {
-    fn from(err: io::Error) -> BatchGetAggregateResourceConfigError {
-        BatchGetAggregateResourceConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetAggregateResourceConfigError {
@@ -2170,13 +2136,6 @@ impl Error for BatchGetAggregateResourceConfigError {
     fn description(&self) -> &str {
         match *self {
             BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
-            BatchGetAggregateResourceConfigError::Validation(ref cause) => cause,
-            BatchGetAggregateResourceConfigError::Credentials(ref err) => err.description(),
-            BatchGetAggregateResourceConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetAggregateResourceConfigError::ParseError(ref cause) => cause,
-            BatchGetAggregateResourceConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2185,20 +2144,10 @@ impl Error for BatchGetAggregateResourceConfigError {
 pub enum BatchGetResourceConfigError {
     /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetResourceConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetResourceConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetResourceConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2211,38 +2160,17 @@ impl BatchGetResourceConfigError {
 
             match *error_type {
                 "NoAvailableConfigurationRecorderException" => {
-                    return BatchGetResourceConfigError::NoAvailableConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        BatchGetResourceConfigError::NoAvailableConfigurationRecorder(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return BatchGetResourceConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetResourceConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetResourceConfigError {
-    fn from(err: serde_json::error::Error) -> BatchGetResourceConfigError {
-        BatchGetResourceConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetResourceConfigError {
-    fn from(err: CredentialsError) -> BatchGetResourceConfigError {
-        BatchGetResourceConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetResourceConfigError {
-    fn from(err: HttpDispatchError) -> BatchGetResourceConfigError {
-        BatchGetResourceConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetResourceConfigError {
-    fn from(err: io::Error) -> BatchGetResourceConfigError {
-        BatchGetResourceConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetResourceConfigError {
@@ -2254,13 +2182,6 @@ impl Error for BatchGetResourceConfigError {
     fn description(&self) -> &str {
         match *self {
             BatchGetResourceConfigError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            BatchGetResourceConfigError::Validation(ref cause) => cause,
-            BatchGetResourceConfigError::Credentials(ref err) => err.description(),
-            BatchGetResourceConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetResourceConfigError::ParseError(ref cause) => cause,
-            BatchGetResourceConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2269,20 +2190,12 @@ impl Error for BatchGetResourceConfigError {
 pub enum DeleteAggregationAuthorizationError {
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAggregationAuthorizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAggregationAuthorizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteAggregationAuthorizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2295,40 +2208,17 @@ impl DeleteAggregationAuthorizationError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DeleteAggregationAuthorizationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteAggregationAuthorizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteAggregationAuthorizationError {
-    fn from(err: serde_json::error::Error) -> DeleteAggregationAuthorizationError {
-        DeleteAggregationAuthorizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAggregationAuthorizationError {
-    fn from(err: CredentialsError) -> DeleteAggregationAuthorizationError {
-        DeleteAggregationAuthorizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAggregationAuthorizationError {
-    fn from(err: HttpDispatchError) -> DeleteAggregationAuthorizationError {
-        DeleteAggregationAuthorizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAggregationAuthorizationError {
-    fn from(err: io::Error) -> DeleteAggregationAuthorizationError {
-        DeleteAggregationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteAggregationAuthorizationError {
@@ -2340,13 +2230,6 @@ impl Error for DeleteAggregationAuthorizationError {
     fn description(&self) -> &str {
         match *self {
             DeleteAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
-            DeleteAggregationAuthorizationError::Validation(ref cause) => cause,
-            DeleteAggregationAuthorizationError::Credentials(ref err) => err.description(),
-            DeleteAggregationAuthorizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteAggregationAuthorizationError::ParseError(ref cause) => cause,
-            DeleteAggregationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2357,20 +2240,10 @@ pub enum DeleteConfigRuleError {
     NoSuchConfigRule(String),
     /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2383,39 +2256,20 @@ impl DeleteConfigRuleError {
 
             match *error_type {
                 "NoSuchConfigRuleException" => {
-                    return DeleteConfigRuleError::NoSuchConfigRule(String::from(error_message));
+                    return RusotoError::Service(DeleteConfigRuleError::NoSuchConfigRule(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteConfigRuleError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteConfigRuleError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteConfigRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteConfigRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteConfigRuleError {
-    fn from(err: serde_json::error::Error) -> DeleteConfigRuleError {
-        DeleteConfigRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConfigRuleError {
-    fn from(err: CredentialsError) -> DeleteConfigRuleError {
-        DeleteConfigRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConfigRuleError {
-    fn from(err: HttpDispatchError) -> DeleteConfigRuleError {
-        DeleteConfigRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConfigRuleError {
-    fn from(err: io::Error) -> DeleteConfigRuleError {
-        DeleteConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteConfigRuleError {
@@ -2428,11 +2282,6 @@ impl Error for DeleteConfigRuleError {
         match *self {
             DeleteConfigRuleError::NoSuchConfigRule(ref cause) => cause,
             DeleteConfigRuleError::ResourceInUse(ref cause) => cause,
-            DeleteConfigRuleError::Validation(ref cause) => cause,
-            DeleteConfigRuleError::Credentials(ref err) => err.description(),
-            DeleteConfigRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteConfigRuleError::ParseError(ref cause) => cause,
-            DeleteConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2441,20 +2290,12 @@ impl Error for DeleteConfigRuleError {
 pub enum DeleteConfigurationAggregatorError {
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationAggregatorError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationAggregatorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteConfigurationAggregatorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2467,38 +2308,17 @@ impl DeleteConfigurationAggregatorError {
 
             match *error_type {
                 "NoSuchConfigurationAggregatorException" => {
-                    return DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteConfigurationAggregatorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteConfigurationAggregatorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteConfigurationAggregatorError {
-    fn from(err: serde_json::error::Error) -> DeleteConfigurationAggregatorError {
-        DeleteConfigurationAggregatorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConfigurationAggregatorError {
-    fn from(err: CredentialsError) -> DeleteConfigurationAggregatorError {
-        DeleteConfigurationAggregatorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConfigurationAggregatorError {
-    fn from(err: HttpDispatchError) -> DeleteConfigurationAggregatorError {
-        DeleteConfigurationAggregatorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConfigurationAggregatorError {
-    fn from(err: io::Error) -> DeleteConfigurationAggregatorError {
-        DeleteConfigurationAggregatorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteConfigurationAggregatorError {
@@ -2510,13 +2330,6 @@ impl Error for DeleteConfigurationAggregatorError {
     fn description(&self) -> &str {
         match *self {
             DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(ref cause) => cause,
-            DeleteConfigurationAggregatorError::Validation(ref cause) => cause,
-            DeleteConfigurationAggregatorError::Credentials(ref err) => err.description(),
-            DeleteConfigurationAggregatorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteConfigurationAggregatorError::ParseError(ref cause) => cause,
-            DeleteConfigurationAggregatorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2525,20 +2338,12 @@ impl Error for DeleteConfigurationAggregatorError {
 pub enum DeleteConfigurationRecorderError {
     /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationRecorderError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationRecorderError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteConfigurationRecorderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2551,38 +2356,17 @@ impl DeleteConfigurationRecorderError {
 
             match *error_type {
                 "NoSuchConfigurationRecorderException" => {
-                    return DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteConfigurationRecorderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteConfigurationRecorderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteConfigurationRecorderError {
-    fn from(err: serde_json::error::Error) -> DeleteConfigurationRecorderError {
-        DeleteConfigurationRecorderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConfigurationRecorderError {
-    fn from(err: CredentialsError) -> DeleteConfigurationRecorderError {
-        DeleteConfigurationRecorderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConfigurationRecorderError {
-    fn from(err: HttpDispatchError) -> DeleteConfigurationRecorderError {
-        DeleteConfigurationRecorderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConfigurationRecorderError {
-    fn from(err: io::Error) -> DeleteConfigurationRecorderError {
-        DeleteConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteConfigurationRecorderError {
@@ -2594,13 +2378,6 @@ impl Error for DeleteConfigurationRecorderError {
     fn description(&self) -> &str {
         match *self {
             DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
-            DeleteConfigurationRecorderError::Validation(ref cause) => cause,
-            DeleteConfigurationRecorderError::Credentials(ref err) => err.description(),
-            DeleteConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteConfigurationRecorderError::ParseError(ref cause) => cause,
-            DeleteConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2611,20 +2388,10 @@ pub enum DeleteDeliveryChannelError {
     LastDeliveryChannelDeleteFailed(String),
     /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDeliveryChannelError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDeliveryChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeliveryChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2637,43 +2404,22 @@ impl DeleteDeliveryChannelError {
 
             match *error_type {
                 "LastDeliveryChannelDeleteFailedException" => {
-                    return DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoSuchDeliveryChannelException" => {
-                    return DeleteDeliveryChannelError::NoSuchDeliveryChannel(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDeliveryChannelError::NoSuchDeliveryChannel(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteDeliveryChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDeliveryChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDeliveryChannelError {
-    fn from(err: serde_json::error::Error) -> DeleteDeliveryChannelError {
-        DeleteDeliveryChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDeliveryChannelError {
-    fn from(err: CredentialsError) -> DeleteDeliveryChannelError {
-        DeleteDeliveryChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDeliveryChannelError {
-    fn from(err: HttpDispatchError) -> DeleteDeliveryChannelError {
-        DeleteDeliveryChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDeliveryChannelError {
-    fn from(err: io::Error) -> DeleteDeliveryChannelError {
-        DeleteDeliveryChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDeliveryChannelError {
@@ -2686,13 +2432,6 @@ impl Error for DeleteDeliveryChannelError {
         match *self {
             DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(ref cause) => cause,
             DeleteDeliveryChannelError::NoSuchDeliveryChannel(ref cause) => cause,
-            DeleteDeliveryChannelError::Validation(ref cause) => cause,
-            DeleteDeliveryChannelError::Credentials(ref err) => err.description(),
-            DeleteDeliveryChannelError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDeliveryChannelError::ParseError(ref cause) => cause,
-            DeleteDeliveryChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2703,20 +2442,10 @@ pub enum DeleteEvaluationResultsError {
     NoSuchConfigRule(String),
     /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEvaluationResultsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEvaluationResultsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEvaluationResultsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2729,41 +2458,20 @@ impl DeleteEvaluationResultsError {
 
             match *error_type {
                 "NoSuchConfigRuleException" => {
-                    return DeleteEvaluationResultsError::NoSuchConfigRule(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEvaluationResultsError::NoSuchConfigRule(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteEvaluationResultsError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteEvaluationResultsError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteEvaluationResultsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteEvaluationResultsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteEvaluationResultsError {
-    fn from(err: serde_json::error::Error) -> DeleteEvaluationResultsError {
-        DeleteEvaluationResultsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEvaluationResultsError {
-    fn from(err: CredentialsError) -> DeleteEvaluationResultsError {
-        DeleteEvaluationResultsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEvaluationResultsError {
-    fn from(err: HttpDispatchError) -> DeleteEvaluationResultsError {
-        DeleteEvaluationResultsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEvaluationResultsError {
-    fn from(err: io::Error) -> DeleteEvaluationResultsError {
-        DeleteEvaluationResultsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteEvaluationResultsError {
@@ -2776,13 +2484,6 @@ impl Error for DeleteEvaluationResultsError {
         match *self {
             DeleteEvaluationResultsError::NoSuchConfigRule(ref cause) => cause,
             DeleteEvaluationResultsError::ResourceInUse(ref cause) => cause,
-            DeleteEvaluationResultsError::Validation(ref cause) => cause,
-            DeleteEvaluationResultsError::Credentials(ref err) => err.description(),
-            DeleteEvaluationResultsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEvaluationResultsError::ParseError(ref cause) => cause,
-            DeleteEvaluationResultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2791,20 +2492,12 @@ impl Error for DeleteEvaluationResultsError {
 pub enum DeletePendingAggregationRequestError {
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePendingAggregationRequestError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePendingAggregationRequestError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeletePendingAggregationRequestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2817,40 +2510,17 @@ impl DeletePendingAggregationRequestError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return DeletePendingAggregationRequestError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeletePendingAggregationRequestError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DeletePendingAggregationRequestError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePendingAggregationRequestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePendingAggregationRequestError {
-    fn from(err: serde_json::error::Error) -> DeletePendingAggregationRequestError {
-        DeletePendingAggregationRequestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePendingAggregationRequestError {
-    fn from(err: CredentialsError) -> DeletePendingAggregationRequestError {
-        DeletePendingAggregationRequestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePendingAggregationRequestError {
-    fn from(err: HttpDispatchError) -> DeletePendingAggregationRequestError {
-        DeletePendingAggregationRequestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePendingAggregationRequestError {
-    fn from(err: io::Error) -> DeletePendingAggregationRequestError {
-        DeletePendingAggregationRequestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePendingAggregationRequestError {
@@ -2862,13 +2532,6 @@ impl Error for DeletePendingAggregationRequestError {
     fn description(&self) -> &str {
         match *self {
             DeletePendingAggregationRequestError::InvalidParameterValue(ref cause) => cause,
-            DeletePendingAggregationRequestError::Validation(ref cause) => cause,
-            DeletePendingAggregationRequestError::Credentials(ref err) => err.description(),
-            DeletePendingAggregationRequestError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeletePendingAggregationRequestError::ParseError(ref cause) => cause,
-            DeletePendingAggregationRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2879,20 +2542,12 @@ pub enum DeleteRetentionConfigurationError {
     InvalidParameterValue(String),
     /// <p>You have specified a retention configuration that does not exist.</p>
     NoSuchRetentionConfiguration(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRetentionConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRetentionConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteRetentionConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2905,43 +2560,24 @@ impl DeleteRetentionConfigurationError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
-                }
-                "NoSuchRetentionConfigurationException" => {
-                    return DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteRetentionConfigurationError::Validation(error_message.to_string());
+                "NoSuchRetentionConfigurationException" => {
+                    return RusotoError::Service(
+                        DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
+                            String::from(error_message),
+                        ),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRetentionConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRetentionConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeleteRetentionConfigurationError {
-        DeleteRetentionConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRetentionConfigurationError {
-    fn from(err: CredentialsError) -> DeleteRetentionConfigurationError {
-        DeleteRetentionConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRetentionConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteRetentionConfigurationError {
-        DeleteRetentionConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRetentionConfigurationError {
-    fn from(err: io::Error) -> DeleteRetentionConfigurationError {
-        DeleteRetentionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRetentionConfigurationError {
@@ -2954,13 +2590,6 @@ impl Error for DeleteRetentionConfigurationError {
         match *self {
             DeleteRetentionConfigurationError::InvalidParameterValue(ref cause) => cause,
             DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(ref cause) => cause,
-            DeleteRetentionConfigurationError::Validation(ref cause) => cause,
-            DeleteRetentionConfigurationError::Credentials(ref err) => err.description(),
-            DeleteRetentionConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRetentionConfigurationError::ParseError(ref cause) => cause,
-            DeleteRetentionConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2973,20 +2602,10 @@ pub enum DeliverConfigSnapshotError {
     NoRunningConfigurationRecorder(String),
     /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeliverConfigSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeliverConfigSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeliverConfigSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2999,48 +2618,29 @@ impl DeliverConfigSnapshotError {
 
             match *error_type {
                 "NoAvailableConfigurationRecorderException" => {
-                    return DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoRunningConfigurationRecorderException" => {
-                    return DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NoSuchDeliveryChannelException" => {
-                    return DeliverConfigSnapshotError::NoSuchDeliveryChannel(String::from(
-                        error_message,
+                    return RusotoError::Service(DeliverConfigSnapshotError::NoSuchDeliveryChannel(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeliverConfigSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeliverConfigSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeliverConfigSnapshotError {
-    fn from(err: serde_json::error::Error) -> DeliverConfigSnapshotError {
-        DeliverConfigSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeliverConfigSnapshotError {
-    fn from(err: CredentialsError) -> DeliverConfigSnapshotError {
-        DeliverConfigSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeliverConfigSnapshotError {
-    fn from(err: HttpDispatchError) -> DeliverConfigSnapshotError {
-        DeliverConfigSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeliverConfigSnapshotError {
-    fn from(err: io::Error) -> DeliverConfigSnapshotError {
-        DeliverConfigSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeliverConfigSnapshotError {
@@ -3054,13 +2654,6 @@ impl Error for DeliverConfigSnapshotError {
             DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(ref cause) => cause,
             DeliverConfigSnapshotError::NoRunningConfigurationRecorder(ref cause) => cause,
             DeliverConfigSnapshotError::NoSuchDeliveryChannel(ref cause) => cause,
-            DeliverConfigSnapshotError::Validation(ref cause) => cause,
-            DeliverConfigSnapshotError::Credentials(ref err) => err.description(),
-            DeliverConfigSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeliverConfigSnapshotError::ParseError(ref cause) => cause,
-            DeliverConfigSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3073,22 +2666,12 @@ pub enum DescribeAggregateComplianceByConfigRulesError {
     InvalidNextToken(String),
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAggregateComplianceByConfigRulesError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DescribeAggregateComplianceByConfigRulesError {
+    ) -> RusotoError<DescribeAggregateComplianceByConfigRulesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3100,35 +2683,30 @@ impl DescribeAggregateComplianceByConfigRulesError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "InvalidLimitException" => return DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => return DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => return DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => return DescribeAggregateComplianceByConfigRulesError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "NoSuchConfigurationAggregatorException" => return RusotoError::Service(
+                    DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    ),
+                ),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return DescribeAggregateComplianceByConfigRulesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAggregateComplianceByConfigRulesError {
-    fn from(err: serde_json::error::Error) -> DescribeAggregateComplianceByConfigRulesError {
-        DescribeAggregateComplianceByConfigRulesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAggregateComplianceByConfigRulesError {
-    fn from(err: CredentialsError) -> DescribeAggregateComplianceByConfigRulesError {
-        DescribeAggregateComplianceByConfigRulesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAggregateComplianceByConfigRulesError {
-    fn from(err: HttpDispatchError) -> DescribeAggregateComplianceByConfigRulesError {
-        DescribeAggregateComplianceByConfigRulesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAggregateComplianceByConfigRulesError {
-    fn from(err: io::Error) -> DescribeAggregateComplianceByConfigRulesError {
-        DescribeAggregateComplianceByConfigRulesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAggregateComplianceByConfigRulesError {
@@ -3144,15 +2722,6 @@ impl Error for DescribeAggregateComplianceByConfigRulesError {
             DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
                 ref cause,
             ) => cause,
-            DescribeAggregateComplianceByConfigRulesError::Validation(ref cause) => cause,
-            DescribeAggregateComplianceByConfigRulesError::Credentials(ref err) => {
-                err.description()
-            }
-            DescribeAggregateComplianceByConfigRulesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAggregateComplianceByConfigRulesError::ParseError(ref cause) => cause,
-            DescribeAggregateComplianceByConfigRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3165,20 +2734,12 @@ pub enum DescribeAggregationAuthorizationsError {
     InvalidNextToken(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAggregationAuthorizationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAggregationAuthorizationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAggregationAuthorizationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3191,50 +2752,31 @@ impl DescribeAggregationAuthorizationsError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeAggregationAuthorizationsError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeAggregationAuthorizationsError::InvalidParameterValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeAggregationAuthorizationsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeAggregationAuthorizationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAggregationAuthorizationsError {
-    fn from(err: serde_json::error::Error) -> DescribeAggregationAuthorizationsError {
-        DescribeAggregationAuthorizationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAggregationAuthorizationsError {
-    fn from(err: CredentialsError) -> DescribeAggregationAuthorizationsError {
-        DescribeAggregationAuthorizationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAggregationAuthorizationsError {
-    fn from(err: HttpDispatchError) -> DescribeAggregationAuthorizationsError {
-        DescribeAggregationAuthorizationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAggregationAuthorizationsError {
-    fn from(err: io::Error) -> DescribeAggregationAuthorizationsError {
-        DescribeAggregationAuthorizationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAggregationAuthorizationsError {
@@ -3248,13 +2790,6 @@ impl Error for DescribeAggregationAuthorizationsError {
             DescribeAggregationAuthorizationsError::InvalidLimit(ref cause) => cause,
             DescribeAggregationAuthorizationsError::InvalidNextToken(ref cause) => cause,
             DescribeAggregationAuthorizationsError::InvalidParameterValue(ref cause) => cause,
-            DescribeAggregationAuthorizationsError::Validation(ref cause) => cause,
-            DescribeAggregationAuthorizationsError::Credentials(ref err) => err.description(),
-            DescribeAggregationAuthorizationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAggregationAuthorizationsError::ParseError(ref cause) => cause,
-            DescribeAggregationAuthorizationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3267,20 +2802,12 @@ pub enum DescribeComplianceByConfigRuleError {
     InvalidParameterValue(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeComplianceByConfigRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeComplianceByConfigRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeComplianceByConfigRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3293,50 +2820,31 @@ impl DescribeComplianceByConfigRuleError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidParameterValueException" => {
-                    return DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
-                }
-                "NoSuchConfigRuleException" => {
-                    return DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeComplianceByConfigRuleError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "NoSuchConfigRuleException" => {
+                    return RusotoError::Service(
+                        DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeComplianceByConfigRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeComplianceByConfigRuleError {
-    fn from(err: serde_json::error::Error) -> DescribeComplianceByConfigRuleError {
-        DescribeComplianceByConfigRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeComplianceByConfigRuleError {
-    fn from(err: CredentialsError) -> DescribeComplianceByConfigRuleError {
-        DescribeComplianceByConfigRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeComplianceByConfigRuleError {
-    fn from(err: HttpDispatchError) -> DescribeComplianceByConfigRuleError {
-        DescribeComplianceByConfigRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeComplianceByConfigRuleError {
-    fn from(err: io::Error) -> DescribeComplianceByConfigRuleError {
-        DescribeComplianceByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeComplianceByConfigRuleError {
@@ -3350,13 +2858,6 @@ impl Error for DescribeComplianceByConfigRuleError {
             DescribeComplianceByConfigRuleError::InvalidNextToken(ref cause) => cause,
             DescribeComplianceByConfigRuleError::InvalidParameterValue(ref cause) => cause,
             DescribeComplianceByConfigRuleError::NoSuchConfigRule(ref cause) => cause,
-            DescribeComplianceByConfigRuleError::Validation(ref cause) => cause,
-            DescribeComplianceByConfigRuleError::Credentials(ref err) => err.description(),
-            DescribeComplianceByConfigRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeComplianceByConfigRuleError::ParseError(ref cause) => cause,
-            DescribeComplianceByConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3367,20 +2868,12 @@ pub enum DescribeComplianceByResourceError {
     InvalidNextToken(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeComplianceByResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeComplianceByResourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeComplianceByResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3393,43 +2886,24 @@ impl DescribeComplianceByResourceError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeComplianceByResourceError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeComplianceByResourceError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeComplianceByResourceError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeComplianceByResourceError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeComplianceByResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeComplianceByResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeComplianceByResourceError {
-    fn from(err: serde_json::error::Error) -> DescribeComplianceByResourceError {
-        DescribeComplianceByResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeComplianceByResourceError {
-    fn from(err: CredentialsError) -> DescribeComplianceByResourceError {
-        DescribeComplianceByResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeComplianceByResourceError {
-    fn from(err: HttpDispatchError) -> DescribeComplianceByResourceError {
-        DescribeComplianceByResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeComplianceByResourceError {
-    fn from(err: io::Error) -> DescribeComplianceByResourceError {
-        DescribeComplianceByResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeComplianceByResourceError {
@@ -3442,13 +2916,6 @@ impl Error for DescribeComplianceByResourceError {
         match *self {
             DescribeComplianceByResourceError::InvalidNextToken(ref cause) => cause,
             DescribeComplianceByResourceError::InvalidParameterValue(ref cause) => cause,
-            DescribeComplianceByResourceError::Validation(ref cause) => cause,
-            DescribeComplianceByResourceError::Credentials(ref err) => err.description(),
-            DescribeComplianceByResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeComplianceByResourceError::ParseError(ref cause) => cause,
-            DescribeComplianceByResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3461,20 +2928,12 @@ pub enum DescribeConfigRuleEvaluationStatusError {
     InvalidParameterValue(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigRuleEvaluationStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigRuleEvaluationStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConfigRuleEvaluationStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3487,50 +2946,31 @@ impl DescribeConfigRuleEvaluationStatusError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "NoSuchConfigRuleException" => {
-                    return DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeConfigRuleEvaluationStatusError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConfigRuleEvaluationStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConfigRuleEvaluationStatusError {
-    fn from(err: serde_json::error::Error) -> DescribeConfigRuleEvaluationStatusError {
-        DescribeConfigRuleEvaluationStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigRuleEvaluationStatusError {
-    fn from(err: CredentialsError) -> DescribeConfigRuleEvaluationStatusError {
-        DescribeConfigRuleEvaluationStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigRuleEvaluationStatusError {
-    fn from(err: HttpDispatchError) -> DescribeConfigRuleEvaluationStatusError {
-        DescribeConfigRuleEvaluationStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigRuleEvaluationStatusError {
-    fn from(err: io::Error) -> DescribeConfigRuleEvaluationStatusError {
-        DescribeConfigRuleEvaluationStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConfigRuleEvaluationStatusError {
@@ -3544,13 +2984,6 @@ impl Error for DescribeConfigRuleEvaluationStatusError {
             DescribeConfigRuleEvaluationStatusError::InvalidNextToken(ref cause) => cause,
             DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(ref cause) => cause,
             DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(ref cause) => cause,
-            DescribeConfigRuleEvaluationStatusError::Validation(ref cause) => cause,
-            DescribeConfigRuleEvaluationStatusError::Credentials(ref err) => err.description(),
-            DescribeConfigRuleEvaluationStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigRuleEvaluationStatusError::ParseError(ref cause) => cause,
-            DescribeConfigRuleEvaluationStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3561,20 +2994,10 @@ pub enum DescribeConfigRulesError {
     InvalidNextToken(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigRulesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigRulesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3587,39 +3010,20 @@ impl DescribeConfigRulesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeConfigRulesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(DescribeConfigRulesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "NoSuchConfigRuleException" => {
-                    return DescribeConfigRulesError::NoSuchConfigRule(String::from(error_message));
+                    return RusotoError::Service(DescribeConfigRulesError::NoSuchConfigRule(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeConfigRulesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConfigRulesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConfigRulesError {
-    fn from(err: serde_json::error::Error) -> DescribeConfigRulesError {
-        DescribeConfigRulesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigRulesError {
-    fn from(err: CredentialsError) -> DescribeConfigRulesError {
-        DescribeConfigRulesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigRulesError {
-    fn from(err: HttpDispatchError) -> DescribeConfigRulesError {
-        DescribeConfigRulesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigRulesError {
-    fn from(err: io::Error) -> DescribeConfigRulesError {
-        DescribeConfigRulesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConfigRulesError {
@@ -3632,13 +3036,6 @@ impl Error for DescribeConfigRulesError {
         match *self {
             DescribeConfigRulesError::InvalidNextToken(ref cause) => cause,
             DescribeConfigRulesError::NoSuchConfigRule(ref cause) => cause,
-            DescribeConfigRulesError::Validation(ref cause) => cause,
-            DescribeConfigRulesError::Credentials(ref err) => err.description(),
-            DescribeConfigRulesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigRulesError::ParseError(ref cause) => cause,
-            DescribeConfigRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3653,22 +3050,12 @@ pub enum DescribeConfigurationAggregatorSourcesStatusError {
     InvalidParameterValue(String),
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationAggregatorSourcesStatusError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DescribeConfigurationAggregatorSourcesStatusError {
+    ) -> RusotoError<DescribeConfigurationAggregatorSourcesStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3680,38 +3067,15 @@ impl DescribeConfigurationAggregatorSourcesStatusError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "InvalidLimitException" => return DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => return DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(String::from(error_message)),
-"InvalidParameterValueException" => return DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => return DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => return DescribeConfigurationAggregatorSourcesStatusError::Validation(error_message.to_string()),
+                                "InvalidLimitException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidLimit(String::from(error_message))),
+"InvalidNextTokenException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidNextToken(String::from(error_message))),
+"InvalidParameterValueException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::InvalidParameterValue(String::from(error_message))),
+"NoSuchConfigurationAggregatorException" => return RusotoError::Service(DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(String::from(error_message))),
+"ValidationException" => return RusotoError::Validation(error_message.to_string()),
 _ => {}
                             }
         }
-        return DescribeConfigurationAggregatorSourcesStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConfigurationAggregatorSourcesStatusError {
-    fn from(err: serde_json::error::Error) -> DescribeConfigurationAggregatorSourcesStatusError {
-        DescribeConfigurationAggregatorSourcesStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationAggregatorSourcesStatusError {
-    fn from(err: CredentialsError) -> DescribeConfigurationAggregatorSourcesStatusError {
-        DescribeConfigurationAggregatorSourcesStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationAggregatorSourcesStatusError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationAggregatorSourcesStatusError {
-        DescribeConfigurationAggregatorSourcesStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationAggregatorSourcesStatusError {
-    fn from(err: io::Error) -> DescribeConfigurationAggregatorSourcesStatusError {
-        DescribeConfigurationAggregatorSourcesStatusError::HttpDispatch(HttpDispatchError::from(
-            err,
-        ))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConfigurationAggregatorSourcesStatusError {
@@ -3730,15 +3094,6 @@ impl Error for DescribeConfigurationAggregatorSourcesStatusError {
             DescribeConfigurationAggregatorSourcesStatusError::NoSuchConfigurationAggregator(
                 ref cause,
             ) => cause,
-            DescribeConfigurationAggregatorSourcesStatusError::Validation(ref cause) => cause,
-            DescribeConfigurationAggregatorSourcesStatusError::Credentials(ref err) => {
-                err.description()
-            }
-            DescribeConfigurationAggregatorSourcesStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationAggregatorSourcesStatusError::ParseError(ref cause) => cause,
-            DescribeConfigurationAggregatorSourcesStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3753,20 +3108,12 @@ pub enum DescribeConfigurationAggregatorsError {
     InvalidParameterValue(String),
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationAggregatorsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationAggregatorsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConfigurationAggregatorsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3779,55 +3126,38 @@ impl DescribeConfigurationAggregatorsError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return DescribeConfigurationAggregatorsError::InvalidLimit(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeConfigurationAggregatorsError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeConfigurationAggregatorsError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeConfigurationAggregatorsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoSuchConfigurationAggregatorException" => {
-                    return DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeConfigurationAggregatorsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConfigurationAggregatorsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConfigurationAggregatorsError {
-    fn from(err: serde_json::error::Error) -> DescribeConfigurationAggregatorsError {
-        DescribeConfigurationAggregatorsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationAggregatorsError {
-    fn from(err: CredentialsError) -> DescribeConfigurationAggregatorsError {
-        DescribeConfigurationAggregatorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationAggregatorsError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationAggregatorsError {
-        DescribeConfigurationAggregatorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationAggregatorsError {
-    fn from(err: io::Error) -> DescribeConfigurationAggregatorsError {
-        DescribeConfigurationAggregatorsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConfigurationAggregatorsError {
@@ -3844,13 +3174,6 @@ impl Error for DescribeConfigurationAggregatorsError {
             DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(ref cause) => {
                 cause
             }
-            DescribeConfigurationAggregatorsError::Validation(ref cause) => cause,
-            DescribeConfigurationAggregatorsError::Credentials(ref err) => err.description(),
-            DescribeConfigurationAggregatorsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationAggregatorsError::ParseError(ref cause) => cause,
-            DescribeConfigurationAggregatorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3859,20 +3182,12 @@ impl Error for DescribeConfigurationAggregatorsError {
 pub enum DescribeConfigurationRecorderStatusError {
     /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationRecorderStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationRecorderStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConfigurationRecorderStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3885,40 +3200,17 @@ impl DescribeConfigurationRecorderStatusError {
 
             match *error_type {
                 "NoSuchConfigurationRecorderException" => {
-                    return DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeConfigurationRecorderStatusError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConfigurationRecorderStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConfigurationRecorderStatusError {
-    fn from(err: serde_json::error::Error) -> DescribeConfigurationRecorderStatusError {
-        DescribeConfigurationRecorderStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationRecorderStatusError {
-    fn from(err: CredentialsError) -> DescribeConfigurationRecorderStatusError {
-        DescribeConfigurationRecorderStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationRecorderStatusError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationRecorderStatusError {
-        DescribeConfigurationRecorderStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationRecorderStatusError {
-    fn from(err: io::Error) -> DescribeConfigurationRecorderStatusError {
-        DescribeConfigurationRecorderStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConfigurationRecorderStatusError {
@@ -3932,13 +3224,6 @@ impl Error for DescribeConfigurationRecorderStatusError {
             DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(ref cause) => {
                 cause
             }
-            DescribeConfigurationRecorderStatusError::Validation(ref cause) => cause,
-            DescribeConfigurationRecorderStatusError::Credentials(ref err) => err.description(),
-            DescribeConfigurationRecorderStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationRecorderStatusError::ParseError(ref cause) => cause,
-            DescribeConfigurationRecorderStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3947,20 +3232,12 @@ impl Error for DescribeConfigurationRecorderStatusError {
 pub enum DescribeConfigurationRecordersError {
     /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationRecordersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationRecordersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConfigurationRecordersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3973,40 +3250,17 @@ impl DescribeConfigurationRecordersError {
 
             match *error_type {
                 "NoSuchConfigurationRecorderException" => {
-                    return DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeConfigurationRecordersError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConfigurationRecordersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConfigurationRecordersError {
-    fn from(err: serde_json::error::Error) -> DescribeConfigurationRecordersError {
-        DescribeConfigurationRecordersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationRecordersError {
-    fn from(err: CredentialsError) -> DescribeConfigurationRecordersError {
-        DescribeConfigurationRecordersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationRecordersError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationRecordersError {
-        DescribeConfigurationRecordersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationRecordersError {
-    fn from(err: io::Error) -> DescribeConfigurationRecordersError {
-        DescribeConfigurationRecordersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConfigurationRecordersError {
@@ -4018,13 +3272,6 @@ impl Error for DescribeConfigurationRecordersError {
     fn description(&self) -> &str {
         match *self {
             DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(ref cause) => cause,
-            DescribeConfigurationRecordersError::Validation(ref cause) => cause,
-            DescribeConfigurationRecordersError::Credentials(ref err) => err.description(),
-            DescribeConfigurationRecordersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationRecordersError::ParseError(ref cause) => cause,
-            DescribeConfigurationRecordersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4033,20 +3280,12 @@ impl Error for DescribeConfigurationRecordersError {
 pub enum DescribeDeliveryChannelStatusError {
     /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDeliveryChannelStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDeliveryChannelStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDeliveryChannelStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4059,38 +3298,17 @@ impl DescribeDeliveryChannelStatusError {
 
             match *error_type {
                 "NoSuchDeliveryChannelException" => {
-                    return DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeDeliveryChannelStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDeliveryChannelStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDeliveryChannelStatusError {
-    fn from(err: serde_json::error::Error) -> DescribeDeliveryChannelStatusError {
-        DescribeDeliveryChannelStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDeliveryChannelStatusError {
-    fn from(err: CredentialsError) -> DescribeDeliveryChannelStatusError {
-        DescribeDeliveryChannelStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDeliveryChannelStatusError {
-    fn from(err: HttpDispatchError) -> DescribeDeliveryChannelStatusError {
-        DescribeDeliveryChannelStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDeliveryChannelStatusError {
-    fn from(err: io::Error) -> DescribeDeliveryChannelStatusError {
-        DescribeDeliveryChannelStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDeliveryChannelStatusError {
@@ -4102,13 +3320,6 @@ impl Error for DescribeDeliveryChannelStatusError {
     fn description(&self) -> &str {
         match *self {
             DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(ref cause) => cause,
-            DescribeDeliveryChannelStatusError::Validation(ref cause) => cause,
-            DescribeDeliveryChannelStatusError::Credentials(ref err) => err.description(),
-            DescribeDeliveryChannelStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDeliveryChannelStatusError::ParseError(ref cause) => cause,
-            DescribeDeliveryChannelStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4117,20 +3328,10 @@ impl Error for DescribeDeliveryChannelStatusError {
 pub enum DescribeDeliveryChannelsError {
     /// <p>You have specified a delivery channel that does not exist.</p>
     NoSuchDeliveryChannel(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDeliveryChannelsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDeliveryChannelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeliveryChannelsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4143,38 +3344,17 @@ impl DescribeDeliveryChannelsError {
 
             match *error_type {
                 "NoSuchDeliveryChannelException" => {
-                    return DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeDeliveryChannelsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDeliveryChannelsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDeliveryChannelsError {
-    fn from(err: serde_json::error::Error) -> DescribeDeliveryChannelsError {
-        DescribeDeliveryChannelsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDeliveryChannelsError {
-    fn from(err: CredentialsError) -> DescribeDeliveryChannelsError {
-        DescribeDeliveryChannelsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDeliveryChannelsError {
-    fn from(err: HttpDispatchError) -> DescribeDeliveryChannelsError {
-        DescribeDeliveryChannelsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDeliveryChannelsError {
-    fn from(err: io::Error) -> DescribeDeliveryChannelsError {
-        DescribeDeliveryChannelsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDeliveryChannelsError {
@@ -4186,13 +3366,6 @@ impl Error for DescribeDeliveryChannelsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDeliveryChannelsError::NoSuchDeliveryChannel(ref cause) => cause,
-            DescribeDeliveryChannelsError::Validation(ref cause) => cause,
-            DescribeDeliveryChannelsError::Credentials(ref err) => err.description(),
-            DescribeDeliveryChannelsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDeliveryChannelsError::ParseError(ref cause) => cause,
-            DescribeDeliveryChannelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4205,20 +3378,12 @@ pub enum DescribePendingAggregationRequestsError {
     InvalidNextToken(String),
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePendingAggregationRequestsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribePendingAggregationRequestsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribePendingAggregationRequestsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4231,50 +3396,31 @@ impl DescribePendingAggregationRequestsError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return DescribePendingAggregationRequestsError::InvalidLimit(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePendingAggregationRequestsError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribePendingAggregationRequestsError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribePendingAggregationRequestsError::InvalidParameterValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribePendingAggregationRequestsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribePendingAggregationRequestsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribePendingAggregationRequestsError {
-    fn from(err: serde_json::error::Error) -> DescribePendingAggregationRequestsError {
-        DescribePendingAggregationRequestsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribePendingAggregationRequestsError {
-    fn from(err: CredentialsError) -> DescribePendingAggregationRequestsError {
-        DescribePendingAggregationRequestsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribePendingAggregationRequestsError {
-    fn from(err: HttpDispatchError) -> DescribePendingAggregationRequestsError {
-        DescribePendingAggregationRequestsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribePendingAggregationRequestsError {
-    fn from(err: io::Error) -> DescribePendingAggregationRequestsError {
-        DescribePendingAggregationRequestsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribePendingAggregationRequestsError {
@@ -4288,13 +3434,6 @@ impl Error for DescribePendingAggregationRequestsError {
             DescribePendingAggregationRequestsError::InvalidLimit(ref cause) => cause,
             DescribePendingAggregationRequestsError::InvalidNextToken(ref cause) => cause,
             DescribePendingAggregationRequestsError::InvalidParameterValue(ref cause) => cause,
-            DescribePendingAggregationRequestsError::Validation(ref cause) => cause,
-            DescribePendingAggregationRequestsError::Credentials(ref err) => err.description(),
-            DescribePendingAggregationRequestsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribePendingAggregationRequestsError::ParseError(ref cause) => cause,
-            DescribePendingAggregationRequestsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4307,20 +3446,12 @@ pub enum DescribeRetentionConfigurationsError {
     InvalidParameterValue(String),
     /// <p>You have specified a retention configuration that does not exist.</p>
     NoSuchRetentionConfiguration(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRetentionConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeRetentionConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeRetentionConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4333,50 +3464,31 @@ impl DescribeRetentionConfigurationsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeRetentionConfigurationsError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeRetentionConfigurationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoSuchRetentionConfigurationException" => {
-                    return DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeRetentionConfigurationsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeRetentionConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeRetentionConfigurationsError {
-    fn from(err: serde_json::error::Error) -> DescribeRetentionConfigurationsError {
-        DescribeRetentionConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeRetentionConfigurationsError {
-    fn from(err: CredentialsError) -> DescribeRetentionConfigurationsError {
-        DescribeRetentionConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeRetentionConfigurationsError {
-    fn from(err: HttpDispatchError) -> DescribeRetentionConfigurationsError {
-        DescribeRetentionConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeRetentionConfigurationsError {
-    fn from(err: io::Error) -> DescribeRetentionConfigurationsError {
-        DescribeRetentionConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeRetentionConfigurationsError {
@@ -4390,13 +3502,6 @@ impl Error for DescribeRetentionConfigurationsError {
             DescribeRetentionConfigurationsError::InvalidNextToken(ref cause) => cause,
             DescribeRetentionConfigurationsError::InvalidParameterValue(ref cause) => cause,
             DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(ref cause) => cause,
-            DescribeRetentionConfigurationsError::Validation(ref cause) => cause,
-            DescribeRetentionConfigurationsError::Credentials(ref err) => err.description(),
-            DescribeRetentionConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeRetentionConfigurationsError::ParseError(ref cause) => cause,
-            DescribeRetentionConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4409,22 +3514,12 @@ pub enum GetAggregateComplianceDetailsByConfigRuleError {
     InvalidNextToken(String),
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAggregateComplianceDetailsByConfigRuleError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> GetAggregateComplianceDetailsByConfigRuleError {
+    ) -> RusotoError<GetAggregateComplianceDetailsByConfigRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4436,35 +3531,30 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "InvalidLimitException" => return GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => return GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => return GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => return GetAggregateComplianceDetailsByConfigRuleError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "NoSuchConfigurationAggregatorException" => return RusotoError::Service(
+                    GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    ),
+                ),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return GetAggregateComplianceDetailsByConfigRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAggregateComplianceDetailsByConfigRuleError {
-    fn from(err: serde_json::error::Error) -> GetAggregateComplianceDetailsByConfigRuleError {
-        GetAggregateComplianceDetailsByConfigRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAggregateComplianceDetailsByConfigRuleError {
-    fn from(err: CredentialsError) -> GetAggregateComplianceDetailsByConfigRuleError {
-        GetAggregateComplianceDetailsByConfigRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAggregateComplianceDetailsByConfigRuleError {
-    fn from(err: HttpDispatchError) -> GetAggregateComplianceDetailsByConfigRuleError {
-        GetAggregateComplianceDetailsByConfigRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAggregateComplianceDetailsByConfigRuleError {
-    fn from(err: io::Error) -> GetAggregateComplianceDetailsByConfigRuleError {
-        GetAggregateComplianceDetailsByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAggregateComplianceDetailsByConfigRuleError {
@@ -4480,15 +3570,6 @@ impl Error for GetAggregateComplianceDetailsByConfigRuleError {
             GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(
                 ref cause,
             ) => cause,
-            GetAggregateComplianceDetailsByConfigRuleError::Validation(ref cause) => cause,
-            GetAggregateComplianceDetailsByConfigRuleError::Credentials(ref err) => {
-                err.description()
-            }
-            GetAggregateComplianceDetailsByConfigRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAggregateComplianceDetailsByConfigRuleError::ParseError(ref cause) => cause,
-            GetAggregateComplianceDetailsByConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4501,22 +3582,12 @@ pub enum GetAggregateConfigRuleComplianceSummaryError {
     InvalidNextToken(String),
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAggregateConfigRuleComplianceSummaryError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> GetAggregateConfigRuleComplianceSummaryError {
+    ) -> RusotoError<GetAggregateConfigRuleComplianceSummaryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4528,35 +3599,32 @@ impl GetAggregateConfigRuleComplianceSummaryError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "InvalidLimitException" => return GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(error_message)),
-"InvalidNextTokenException" => return GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(String::from(error_message)),
-"NoSuchConfigurationAggregatorException" => return GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(String::from(error_message)),
-"ValidationException" => return GetAggregateConfigRuleComplianceSummaryError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "InvalidLimitException" => {
+                    return RusotoError::Service(
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "NoSuchConfigurationAggregatorException" => {
+                    return RusotoError::Service(
+                        GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return GetAggregateConfigRuleComplianceSummaryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAggregateConfigRuleComplianceSummaryError {
-    fn from(err: serde_json::error::Error) -> GetAggregateConfigRuleComplianceSummaryError {
-        GetAggregateConfigRuleComplianceSummaryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAggregateConfigRuleComplianceSummaryError {
-    fn from(err: CredentialsError) -> GetAggregateConfigRuleComplianceSummaryError {
-        GetAggregateConfigRuleComplianceSummaryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAggregateConfigRuleComplianceSummaryError {
-    fn from(err: HttpDispatchError) -> GetAggregateConfigRuleComplianceSummaryError {
-        GetAggregateConfigRuleComplianceSummaryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAggregateConfigRuleComplianceSummaryError {
-    fn from(err: io::Error) -> GetAggregateConfigRuleComplianceSummaryError {
-        GetAggregateConfigRuleComplianceSummaryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAggregateConfigRuleComplianceSummaryError {
@@ -4572,13 +3640,6 @@ impl Error for GetAggregateConfigRuleComplianceSummaryError {
             GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
                 ref cause,
             ) => cause,
-            GetAggregateConfigRuleComplianceSummaryError::Validation(ref cause) => cause,
-            GetAggregateConfigRuleComplianceSummaryError::Credentials(ref err) => err.description(),
-            GetAggregateConfigRuleComplianceSummaryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAggregateConfigRuleComplianceSummaryError::ParseError(ref cause) => cause,
-            GetAggregateConfigRuleComplianceSummaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4591,20 +3652,12 @@ pub enum GetAggregateDiscoveredResourceCountsError {
     InvalidNextToken(String),
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAggregateDiscoveredResourceCountsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAggregateDiscoveredResourceCountsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAggregateDiscoveredResourceCountsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4617,50 +3670,31 @@ impl GetAggregateDiscoveredResourceCountsError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return GetAggregateDiscoveredResourceCountsError::InvalidLimit(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetAggregateDiscoveredResourceCountsError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return GetAggregateDiscoveredResourceCountsError::InvalidNextToken(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetAggregateDiscoveredResourceCountsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoSuchConfigurationAggregatorException" => {
-                    return GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return GetAggregateDiscoveredResourceCountsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAggregateDiscoveredResourceCountsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAggregateDiscoveredResourceCountsError {
-    fn from(err: serde_json::error::Error) -> GetAggregateDiscoveredResourceCountsError {
-        GetAggregateDiscoveredResourceCountsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAggregateDiscoveredResourceCountsError {
-    fn from(err: CredentialsError) -> GetAggregateDiscoveredResourceCountsError {
-        GetAggregateDiscoveredResourceCountsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAggregateDiscoveredResourceCountsError {
-    fn from(err: HttpDispatchError) -> GetAggregateDiscoveredResourceCountsError {
-        GetAggregateDiscoveredResourceCountsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAggregateDiscoveredResourceCountsError {
-    fn from(err: io::Error) -> GetAggregateDiscoveredResourceCountsError {
-        GetAggregateDiscoveredResourceCountsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAggregateDiscoveredResourceCountsError {
@@ -4676,13 +3710,6 @@ impl Error for GetAggregateDiscoveredResourceCountsError {
             GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(ref cause) => {
                 cause
             }
-            GetAggregateDiscoveredResourceCountsError::Validation(ref cause) => cause,
-            GetAggregateDiscoveredResourceCountsError::Credentials(ref err) => err.description(),
-            GetAggregateDiscoveredResourceCountsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAggregateDiscoveredResourceCountsError::ParseError(ref cause) => cause,
-            GetAggregateDiscoveredResourceCountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4695,20 +3722,12 @@ pub enum GetAggregateResourceConfigError {
     OversizedConfigurationItem(String),
     /// <p>You have specified a resource that is either unknown or has not been discovered.</p>
     ResourceNotDiscovered(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAggregateResourceConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAggregateResourceConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAggregateResourceConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4721,48 +3740,31 @@ impl GetAggregateResourceConfigError {
 
             match *error_type {
                 "NoSuchConfigurationAggregatorException" => {
-                    return GetAggregateResourceConfigError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetAggregateResourceConfigError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "OversizedConfigurationItemException" => {
-                    return GetAggregateResourceConfigError::OversizedConfigurationItem(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetAggregateResourceConfigError::OversizedConfigurationItem(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ResourceNotDiscoveredException" => {
-                    return GetAggregateResourceConfigError::ResourceNotDiscovered(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetAggregateResourceConfigError::ResourceNotDiscovered(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetAggregateResourceConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAggregateResourceConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAggregateResourceConfigError {
-    fn from(err: serde_json::error::Error) -> GetAggregateResourceConfigError {
-        GetAggregateResourceConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAggregateResourceConfigError {
-    fn from(err: CredentialsError) -> GetAggregateResourceConfigError {
-        GetAggregateResourceConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAggregateResourceConfigError {
-    fn from(err: HttpDispatchError) -> GetAggregateResourceConfigError {
-        GetAggregateResourceConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAggregateResourceConfigError {
-    fn from(err: io::Error) -> GetAggregateResourceConfigError {
-        GetAggregateResourceConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAggregateResourceConfigError {
@@ -4776,13 +3778,6 @@ impl Error for GetAggregateResourceConfigError {
             GetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
             GetAggregateResourceConfigError::OversizedConfigurationItem(ref cause) => cause,
             GetAggregateResourceConfigError::ResourceNotDiscovered(ref cause) => cause,
-            GetAggregateResourceConfigError::Validation(ref cause) => cause,
-            GetAggregateResourceConfigError::Credentials(ref err) => err.description(),
-            GetAggregateResourceConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAggregateResourceConfigError::ParseError(ref cause) => cause,
-            GetAggregateResourceConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4795,20 +3790,12 @@ pub enum GetComplianceDetailsByConfigRuleError {
     InvalidParameterValue(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceDetailsByConfigRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceDetailsByConfigRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetComplianceDetailsByConfigRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4821,50 +3808,31 @@ impl GetComplianceDetailsByConfigRuleError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return GetComplianceDetailsByConfigRuleError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetComplianceDetailsByConfigRuleError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoSuchConfigRuleException" => {
-                    return GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetComplianceDetailsByConfigRuleError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetComplianceDetailsByConfigRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetComplianceDetailsByConfigRuleError {
-    fn from(err: serde_json::error::Error) -> GetComplianceDetailsByConfigRuleError {
-        GetComplianceDetailsByConfigRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetComplianceDetailsByConfigRuleError {
-    fn from(err: CredentialsError) -> GetComplianceDetailsByConfigRuleError {
-        GetComplianceDetailsByConfigRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetComplianceDetailsByConfigRuleError {
-    fn from(err: HttpDispatchError) -> GetComplianceDetailsByConfigRuleError {
-        GetComplianceDetailsByConfigRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetComplianceDetailsByConfigRuleError {
-    fn from(err: io::Error) -> GetComplianceDetailsByConfigRuleError {
-        GetComplianceDetailsByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetComplianceDetailsByConfigRuleError {
@@ -4878,13 +3846,6 @@ impl Error for GetComplianceDetailsByConfigRuleError {
             GetComplianceDetailsByConfigRuleError::InvalidNextToken(ref cause) => cause,
             GetComplianceDetailsByConfigRuleError::InvalidParameterValue(ref cause) => cause,
             GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(ref cause) => cause,
-            GetComplianceDetailsByConfigRuleError::Validation(ref cause) => cause,
-            GetComplianceDetailsByConfigRuleError::Credentials(ref err) => err.description(),
-            GetComplianceDetailsByConfigRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetComplianceDetailsByConfigRuleError::ParseError(ref cause) => cause,
-            GetComplianceDetailsByConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4893,20 +3854,12 @@ impl Error for GetComplianceDetailsByConfigRuleError {
 pub enum GetComplianceDetailsByResourceError {
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceDetailsByResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceDetailsByResourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetComplianceDetailsByResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4919,40 +3872,17 @@ impl GetComplianceDetailsByResourceError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetComplianceDetailsByResourceError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetComplianceDetailsByResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetComplianceDetailsByResourceError {
-    fn from(err: serde_json::error::Error) -> GetComplianceDetailsByResourceError {
-        GetComplianceDetailsByResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetComplianceDetailsByResourceError {
-    fn from(err: CredentialsError) -> GetComplianceDetailsByResourceError {
-        GetComplianceDetailsByResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetComplianceDetailsByResourceError {
-    fn from(err: HttpDispatchError) -> GetComplianceDetailsByResourceError {
-        GetComplianceDetailsByResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetComplianceDetailsByResourceError {
-    fn from(err: io::Error) -> GetComplianceDetailsByResourceError {
-        GetComplianceDetailsByResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetComplianceDetailsByResourceError {
@@ -4964,33 +3894,17 @@ impl Error for GetComplianceDetailsByResourceError {
     fn description(&self) -> &str {
         match *self {
             GetComplianceDetailsByResourceError::InvalidParameterValue(ref cause) => cause,
-            GetComplianceDetailsByResourceError::Validation(ref cause) => cause,
-            GetComplianceDetailsByResourceError::Credentials(ref err) => err.description(),
-            GetComplianceDetailsByResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetComplianceDetailsByResourceError::ParseError(ref cause) => cause,
-            GetComplianceDetailsByResourceError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetComplianceSummaryByConfigRule
 #[derive(Debug, PartialEq)]
-pub enum GetComplianceSummaryByConfigRuleError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetComplianceSummaryByConfigRuleError {}
 
 impl GetComplianceSummaryByConfigRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceSummaryByConfigRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetComplianceSummaryByConfigRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5002,36 +3916,11 @@ impl GetComplianceSummaryByConfigRuleError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return GetComplianceSummaryByConfigRuleError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetComplianceSummaryByConfigRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetComplianceSummaryByConfigRuleError {
-    fn from(err: serde_json::error::Error) -> GetComplianceSummaryByConfigRuleError {
-        GetComplianceSummaryByConfigRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetComplianceSummaryByConfigRuleError {
-    fn from(err: CredentialsError) -> GetComplianceSummaryByConfigRuleError {
-        GetComplianceSummaryByConfigRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetComplianceSummaryByConfigRuleError {
-    fn from(err: HttpDispatchError) -> GetComplianceSummaryByConfigRuleError {
-        GetComplianceSummaryByConfigRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetComplianceSummaryByConfigRuleError {
-    fn from(err: io::Error) -> GetComplianceSummaryByConfigRuleError {
-        GetComplianceSummaryByConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetComplianceSummaryByConfigRuleError {
@@ -5041,15 +3930,7 @@ impl fmt::Display for GetComplianceSummaryByConfigRuleError {
 }
 impl Error for GetComplianceSummaryByConfigRuleError {
     fn description(&self) -> &str {
-        match *self {
-            GetComplianceSummaryByConfigRuleError::Validation(ref cause) => cause,
-            GetComplianceSummaryByConfigRuleError::Credentials(ref err) => err.description(),
-            GetComplianceSummaryByConfigRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetComplianceSummaryByConfigRuleError::ParseError(ref cause) => cause,
-            GetComplianceSummaryByConfigRuleError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetComplianceSummaryByResourceType
@@ -5057,20 +3938,12 @@ impl Error for GetComplianceSummaryByConfigRuleError {
 pub enum GetComplianceSummaryByResourceTypeError {
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetComplianceSummaryByResourceTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetComplianceSummaryByResourceTypeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetComplianceSummaryByResourceTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5083,40 +3956,17 @@ impl GetComplianceSummaryByResourceTypeError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return GetComplianceSummaryByResourceTypeError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetComplianceSummaryByResourceTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetComplianceSummaryByResourceTypeError {
-    fn from(err: serde_json::error::Error) -> GetComplianceSummaryByResourceTypeError {
-        GetComplianceSummaryByResourceTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetComplianceSummaryByResourceTypeError {
-    fn from(err: CredentialsError) -> GetComplianceSummaryByResourceTypeError {
-        GetComplianceSummaryByResourceTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetComplianceSummaryByResourceTypeError {
-    fn from(err: HttpDispatchError) -> GetComplianceSummaryByResourceTypeError {
-        GetComplianceSummaryByResourceTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetComplianceSummaryByResourceTypeError {
-    fn from(err: io::Error) -> GetComplianceSummaryByResourceTypeError {
-        GetComplianceSummaryByResourceTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetComplianceSummaryByResourceTypeError {
@@ -5128,13 +3978,6 @@ impl Error for GetComplianceSummaryByResourceTypeError {
     fn description(&self) -> &str {
         match *self {
             GetComplianceSummaryByResourceTypeError::InvalidParameterValue(ref cause) => cause,
-            GetComplianceSummaryByResourceTypeError::Validation(ref cause) => cause,
-            GetComplianceSummaryByResourceTypeError::Credentials(ref err) => err.description(),
-            GetComplianceSummaryByResourceTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetComplianceSummaryByResourceTypeError::ParseError(ref cause) => cause,
-            GetComplianceSummaryByResourceTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5145,20 +3988,12 @@ pub enum GetDiscoveredResourceCountsError {
     InvalidLimit(String),
     /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDiscoveredResourceCountsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDiscoveredResourceCountsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetDiscoveredResourceCountsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5171,43 +4006,20 @@ impl GetDiscoveredResourceCountsError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return GetDiscoveredResourceCountsError::InvalidLimit(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDiscoveredResourceCountsError::InvalidLimit(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetDiscoveredResourceCountsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDiscoveredResourceCountsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetDiscoveredResourceCountsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDiscoveredResourceCountsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDiscoveredResourceCountsError {
-    fn from(err: serde_json::error::Error) -> GetDiscoveredResourceCountsError {
-        GetDiscoveredResourceCountsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDiscoveredResourceCountsError {
-    fn from(err: CredentialsError) -> GetDiscoveredResourceCountsError {
-        GetDiscoveredResourceCountsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDiscoveredResourceCountsError {
-    fn from(err: HttpDispatchError) -> GetDiscoveredResourceCountsError {
-        GetDiscoveredResourceCountsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDiscoveredResourceCountsError {
-    fn from(err: io::Error) -> GetDiscoveredResourceCountsError {
-        GetDiscoveredResourceCountsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDiscoveredResourceCountsError {
@@ -5220,13 +4032,6 @@ impl Error for GetDiscoveredResourceCountsError {
         match *self {
             GetDiscoveredResourceCountsError::InvalidLimit(ref cause) => cause,
             GetDiscoveredResourceCountsError::InvalidNextToken(ref cause) => cause,
-            GetDiscoveredResourceCountsError::Validation(ref cause) => cause,
-            GetDiscoveredResourceCountsError::Credentials(ref err) => err.description(),
-            GetDiscoveredResourceCountsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDiscoveredResourceCountsError::ParseError(ref cause) => cause,
-            GetDiscoveredResourceCountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5243,20 +4048,10 @@ pub enum GetResourceConfigHistoryError {
     NoAvailableConfigurationRecorder(String),
     /// <p>You have specified a resource that is either unknown or has not been discovered.</p>
     ResourceNotDiscovered(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourceConfigHistoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourceConfigHistoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourceConfigHistoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5269,56 +4064,39 @@ impl GetResourceConfigHistoryError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return GetResourceConfigHistoryError::InvalidLimit(String::from(error_message));
+                    return RusotoError::Service(GetResourceConfigHistoryError::InvalidLimit(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetResourceConfigHistoryError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceConfigHistoryError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidTimeRangeException" => {
-                    return GetResourceConfigHistoryError::InvalidTimeRange(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourceConfigHistoryError::InvalidTimeRange(
+                        String::from(error_message),
                     ));
                 }
                 "NoAvailableConfigurationRecorderException" => {
-                    return GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ResourceNotDiscoveredException" => {
-                    return GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetResourceConfigHistoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourceConfigHistoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourceConfigHistoryError {
-    fn from(err: serde_json::error::Error) -> GetResourceConfigHistoryError {
-        GetResourceConfigHistoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourceConfigHistoryError {
-    fn from(err: CredentialsError) -> GetResourceConfigHistoryError {
-        GetResourceConfigHistoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourceConfigHistoryError {
-    fn from(err: HttpDispatchError) -> GetResourceConfigHistoryError {
-        GetResourceConfigHistoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourceConfigHistoryError {
-    fn from(err: io::Error) -> GetResourceConfigHistoryError {
-        GetResourceConfigHistoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourceConfigHistoryError {
@@ -5334,13 +4112,6 @@ impl Error for GetResourceConfigHistoryError {
             GetResourceConfigHistoryError::InvalidTimeRange(ref cause) => cause,
             GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(ref cause) => cause,
             GetResourceConfigHistoryError::ResourceNotDiscovered(ref cause) => cause,
-            GetResourceConfigHistoryError::Validation(ref cause) => cause,
-            GetResourceConfigHistoryError::Credentials(ref err) => err.description(),
-            GetResourceConfigHistoryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetResourceConfigHistoryError::ParseError(ref cause) => cause,
-            GetResourceConfigHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5353,20 +4124,12 @@ pub enum ListAggregateDiscoveredResourcesError {
     InvalidNextToken(String),
     /// <p>You have specified a configuration aggregator that does not exist.</p>
     NoSuchConfigurationAggregator(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAggregateDiscoveredResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAggregateDiscoveredResourcesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListAggregateDiscoveredResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5379,50 +4142,31 @@ impl ListAggregateDiscoveredResourcesError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return ListAggregateDiscoveredResourcesError::InvalidLimit(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListAggregateDiscoveredResourcesError::InvalidLimit(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return ListAggregateDiscoveredResourcesError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListAggregateDiscoveredResourcesError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NoSuchConfigurationAggregatorException" => {
-                    return ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return ListAggregateDiscoveredResourcesError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAggregateDiscoveredResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAggregateDiscoveredResourcesError {
-    fn from(err: serde_json::error::Error) -> ListAggregateDiscoveredResourcesError {
-        ListAggregateDiscoveredResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAggregateDiscoveredResourcesError {
-    fn from(err: CredentialsError) -> ListAggregateDiscoveredResourcesError {
-        ListAggregateDiscoveredResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAggregateDiscoveredResourcesError {
-    fn from(err: HttpDispatchError) -> ListAggregateDiscoveredResourcesError {
-        ListAggregateDiscoveredResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAggregateDiscoveredResourcesError {
-    fn from(err: io::Error) -> ListAggregateDiscoveredResourcesError {
-        ListAggregateDiscoveredResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAggregateDiscoveredResourcesError {
@@ -5438,13 +4182,6 @@ impl Error for ListAggregateDiscoveredResourcesError {
             ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(ref cause) => {
                 cause
             }
-            ListAggregateDiscoveredResourcesError::Validation(ref cause) => cause,
-            ListAggregateDiscoveredResourcesError::Credentials(ref err) => err.description(),
-            ListAggregateDiscoveredResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAggregateDiscoveredResourcesError::ParseError(ref cause) => cause,
-            ListAggregateDiscoveredResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5457,20 +4194,10 @@ pub enum ListDiscoveredResourcesError {
     InvalidNextToken(String),
     /// <p>There are no configuration recorders available to provide the role needed to describe your resources. Create a configuration recorder.</p>
     NoAvailableConfigurationRecorder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDiscoveredResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDiscoveredResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDiscoveredResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5483,46 +4210,27 @@ impl ListDiscoveredResourcesError {
 
             match *error_type {
                 "InvalidLimitException" => {
-                    return ListDiscoveredResourcesError::InvalidLimit(String::from(error_message));
+                    return RusotoError::Service(ListDiscoveredResourcesError::InvalidLimit(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDiscoveredResourcesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDiscoveredResourcesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "NoAvailableConfigurationRecorderException" => {
-                    return ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return ListDiscoveredResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDiscoveredResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDiscoveredResourcesError {
-    fn from(err: serde_json::error::Error) -> ListDiscoveredResourcesError {
-        ListDiscoveredResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDiscoveredResourcesError {
-    fn from(err: CredentialsError) -> ListDiscoveredResourcesError {
-        ListDiscoveredResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDiscoveredResourcesError {
-    fn from(err: HttpDispatchError) -> ListDiscoveredResourcesError {
-        ListDiscoveredResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDiscoveredResourcesError {
-    fn from(err: io::Error) -> ListDiscoveredResourcesError {
-        ListDiscoveredResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDiscoveredResourcesError {
@@ -5536,13 +4244,6 @@ impl Error for ListDiscoveredResourcesError {
             ListDiscoveredResourcesError::InvalidLimit(ref cause) => cause,
             ListDiscoveredResourcesError::InvalidNextToken(ref cause) => cause,
             ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(ref cause) => cause,
-            ListDiscoveredResourcesError::Validation(ref cause) => cause,
-            ListDiscoveredResourcesError::Credentials(ref err) => err.description(),
-            ListDiscoveredResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDiscoveredResourcesError::ParseError(ref cause) => cause,
-            ListDiscoveredResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5551,20 +4252,12 @@ impl Error for ListDiscoveredResourcesError {
 pub enum PutAggregationAuthorizationError {
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutAggregationAuthorizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutAggregationAuthorizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutAggregationAuthorizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5577,38 +4270,17 @@ impl PutAggregationAuthorizationError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return PutAggregationAuthorizationError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutAggregationAuthorizationError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return PutAggregationAuthorizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutAggregationAuthorizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutAggregationAuthorizationError {
-    fn from(err: serde_json::error::Error) -> PutAggregationAuthorizationError {
-        PutAggregationAuthorizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutAggregationAuthorizationError {
-    fn from(err: CredentialsError) -> PutAggregationAuthorizationError {
-        PutAggregationAuthorizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutAggregationAuthorizationError {
-    fn from(err: HttpDispatchError) -> PutAggregationAuthorizationError {
-        PutAggregationAuthorizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutAggregationAuthorizationError {
-    fn from(err: io::Error) -> PutAggregationAuthorizationError {
-        PutAggregationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutAggregationAuthorizationError {
@@ -5620,13 +4292,6 @@ impl Error for PutAggregationAuthorizationError {
     fn description(&self) -> &str {
         match *self {
             PutAggregationAuthorizationError::InvalidParameterValue(ref cause) => cause,
-            PutAggregationAuthorizationError::Validation(ref cause) => cause,
-            PutAggregationAuthorizationError::Credentials(ref err) => err.description(),
-            PutAggregationAuthorizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutAggregationAuthorizationError::ParseError(ref cause) => cause,
-            PutAggregationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5643,20 +4308,10 @@ pub enum PutConfigRuleError {
     NoAvailableConfigurationRecorder(String),
     /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutConfigRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutConfigRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConfigRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5669,52 +4324,37 @@ impl PutConfigRuleError {
 
             match *error_type {
                 "InsufficientPermissionsException" => {
-                    return PutConfigRuleError::InsufficientPermissions(String::from(error_message));
+                    return RusotoError::Service(PutConfigRuleError::InsufficientPermissions(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return PutConfigRuleError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(PutConfigRuleError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "MaxNumberOfConfigRulesExceededException" => {
-                    return PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(PutConfigRuleError::MaxNumberOfConfigRulesExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NoAvailableConfigurationRecorderException" => {
-                    return PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceInUseException" => {
-                    return PutConfigRuleError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(PutConfigRuleError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutConfigRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutConfigRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutConfigRuleError {
-    fn from(err: serde_json::error::Error) -> PutConfigRuleError {
-        PutConfigRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutConfigRuleError {
-    fn from(err: CredentialsError) -> PutConfigRuleError {
-        PutConfigRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutConfigRuleError {
-    fn from(err: HttpDispatchError) -> PutConfigRuleError {
-        PutConfigRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutConfigRuleError {
-    fn from(err: io::Error) -> PutConfigRuleError {
-        PutConfigRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutConfigRuleError {
@@ -5730,11 +4370,6 @@ impl Error for PutConfigRuleError {
             PutConfigRuleError::MaxNumberOfConfigRulesExceeded(ref cause) => cause,
             PutConfigRuleError::NoAvailableConfigurationRecorder(ref cause) => cause,
             PutConfigRuleError::ResourceInUse(ref cause) => cause,
-            PutConfigRuleError::Validation(ref cause) => cause,
-            PutConfigRuleError::Credentials(ref err) => err.description(),
-            PutConfigRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutConfigRuleError::ParseError(ref cause) => cause,
-            PutConfigRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5753,20 +4388,12 @@ pub enum PutConfigurationAggregatorError {
     OrganizationAccessDenied(String),
     /// <p>The configuration aggregator cannot be created because organization does not have all features enabled.</p>
     OrganizationAllFeaturesNotEnabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutConfigurationAggregatorError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutConfigurationAggregatorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutConfigurationAggregatorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5779,61 +4406,48 @@ impl PutConfigurationAggregatorError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return PutConfigurationAggregatorError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutConfigurationAggregatorError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRoleException" => {
-                    return PutConfigurationAggregatorError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(PutConfigurationAggregatorError::InvalidRole(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return PutConfigurationAggregatorError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(PutConfigurationAggregatorError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NoAvailableOrganizationException" => {
-                    return PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
-                        error_message,
-                    ));
-                }
-                "OrganizationAccessDeniedException" => {
-                    return PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
-                        error_message,
-                    ));
-                }
-                "OrganizationAllFeaturesNotEnabledException" => {
-                    return PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return PutConfigurationAggregatorError::Validation(error_message.to_string());
+                "OrganizationAccessDeniedException" => {
+                    return RusotoError::Service(
+                        PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "OrganizationAllFeaturesNotEnabledException" => {
+                    return RusotoError::Service(
+                        PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutConfigurationAggregatorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutConfigurationAggregatorError {
-    fn from(err: serde_json::error::Error) -> PutConfigurationAggregatorError {
-        PutConfigurationAggregatorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutConfigurationAggregatorError {
-    fn from(err: CredentialsError) -> PutConfigurationAggregatorError {
-        PutConfigurationAggregatorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutConfigurationAggregatorError {
-    fn from(err: HttpDispatchError) -> PutConfigurationAggregatorError {
-        PutConfigurationAggregatorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutConfigurationAggregatorError {
-    fn from(err: io::Error) -> PutConfigurationAggregatorError {
-        PutConfigurationAggregatorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutConfigurationAggregatorError {
@@ -5850,13 +4464,6 @@ impl Error for PutConfigurationAggregatorError {
             PutConfigurationAggregatorError::NoAvailableOrganization(ref cause) => cause,
             PutConfigurationAggregatorError::OrganizationAccessDenied(ref cause) => cause,
             PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(ref cause) => cause,
-            PutConfigurationAggregatorError::Validation(ref cause) => cause,
-            PutConfigurationAggregatorError::Credentials(ref err) => err.description(),
-            PutConfigurationAggregatorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutConfigurationAggregatorError::ParseError(ref cause) => cause,
-            PutConfigurationAggregatorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5871,20 +4478,10 @@ pub enum PutConfigurationRecorderError {
     InvalidRole(String),
     /// <p>You have reached the limit of the number of recorders you can create.</p>
     MaxNumberOfConfigurationRecordersExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutConfigurationRecorderError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutConfigurationRecorderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutConfigurationRecorderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5897,51 +4494,36 @@ impl PutConfigurationRecorderError {
 
             match *error_type {
                 "InvalidConfigurationRecorderNameException" => {
-                    return PutConfigurationRecorderError::InvalidConfigurationRecorderName(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutConfigurationRecorderError::InvalidConfigurationRecorderName(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRecordingGroupException" => {
-                    return PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRoleException" => {
-                    return PutConfigurationRecorderError::InvalidRole(String::from(error_message));
-                }
-                "MaxNumberOfConfigurationRecordersExceededException" => {
-                    return PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return PutConfigurationRecorderError::Validation(error_message.to_string());
+                "InvalidRoleException" => {
+                    return RusotoError::Service(PutConfigurationRecorderError::InvalidRole(
+                        String::from(error_message),
+                    ));
                 }
+                "MaxNumberOfConfigurationRecordersExceededException" => {
+                    return RusotoError::Service(
+                        PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutConfigurationRecorderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutConfigurationRecorderError {
-    fn from(err: serde_json::error::Error) -> PutConfigurationRecorderError {
-        PutConfigurationRecorderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutConfigurationRecorderError {
-    fn from(err: CredentialsError) -> PutConfigurationRecorderError {
-        PutConfigurationRecorderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutConfigurationRecorderError {
-    fn from(err: HttpDispatchError) -> PutConfigurationRecorderError {
-        PutConfigurationRecorderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutConfigurationRecorderError {
-    fn from(err: io::Error) -> PutConfigurationRecorderError {
-        PutConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutConfigurationRecorderError {
@@ -5958,13 +4540,6 @@ impl Error for PutConfigurationRecorderError {
             PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(ref cause) => {
                 cause
             }
-            PutConfigurationRecorderError::Validation(ref cause) => cause,
-            PutConfigurationRecorderError::Credentials(ref err) => err.description(),
-            PutConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutConfigurationRecorderError::ParseError(ref cause) => cause,
-            PutConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5985,20 +4560,10 @@ pub enum PutDeliveryChannelError {
     NoAvailableConfigurationRecorder(String),
     /// <p>The specified Amazon S3 bucket does not exist.</p>
     NoSuchBucket(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutDeliveryChannelError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutDeliveryChannelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDeliveryChannelError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6011,62 +4576,53 @@ impl PutDeliveryChannelError {
 
             match *error_type {
                 "InsufficientDeliveryPolicyException" => {
-                    return PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeliveryChannelNameException" => {
-                    return PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidS3KeyPrefixException" => {
-                    return PutDeliveryChannelError::InvalidS3KeyPrefix(String::from(error_message));
+                    return RusotoError::Service(PutDeliveryChannelError::InvalidS3KeyPrefix(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidSNSTopicARNException" => {
-                    return PutDeliveryChannelError::InvalidSNSTopicARN(String::from(error_message));
+                    return RusotoError::Service(PutDeliveryChannelError::InvalidSNSTopicARN(
+                        String::from(error_message),
+                    ));
                 }
                 "MaxNumberOfDeliveryChannelsExceededException" => {
-                    return PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoAvailableConfigurationRecorderException" => {
-                    return PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NoSuchBucketException" => {
-                    return PutDeliveryChannelError::NoSuchBucket(String::from(error_message));
+                    return RusotoError::Service(PutDeliveryChannelError::NoSuchBucket(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutDeliveryChannelError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutDeliveryChannelError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutDeliveryChannelError {
-    fn from(err: serde_json::error::Error) -> PutDeliveryChannelError {
-        PutDeliveryChannelError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutDeliveryChannelError {
-    fn from(err: CredentialsError) -> PutDeliveryChannelError {
-        PutDeliveryChannelError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutDeliveryChannelError {
-    fn from(err: HttpDispatchError) -> PutDeliveryChannelError {
-        PutDeliveryChannelError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutDeliveryChannelError {
-    fn from(err: io::Error) -> PutDeliveryChannelError {
-        PutDeliveryChannelError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutDeliveryChannelError {
@@ -6084,13 +4640,6 @@ impl Error for PutDeliveryChannelError {
             PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(ref cause) => cause,
             PutDeliveryChannelError::NoAvailableConfigurationRecorder(ref cause) => cause,
             PutDeliveryChannelError::NoSuchBucket(ref cause) => cause,
-            PutDeliveryChannelError::Validation(ref cause) => cause,
-            PutDeliveryChannelError::Credentials(ref err) => err.description(),
-            PutDeliveryChannelError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutDeliveryChannelError::ParseError(ref cause) => cause,
-            PutDeliveryChannelError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6103,20 +4652,10 @@ pub enum PutEvaluationsError {
     InvalidResultToken(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutEvaluationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutEvaluationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEvaluationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6129,42 +4668,25 @@ impl PutEvaluationsError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return PutEvaluationsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(PutEvaluationsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidResultTokenException" => {
-                    return PutEvaluationsError::InvalidResultToken(String::from(error_message));
+                    return RusotoError::Service(PutEvaluationsError::InvalidResultToken(
+                        String::from(error_message),
+                    ));
                 }
                 "NoSuchConfigRuleException" => {
-                    return PutEvaluationsError::NoSuchConfigRule(String::from(error_message));
+                    return RusotoError::Service(PutEvaluationsError::NoSuchConfigRule(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutEvaluationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutEvaluationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutEvaluationsError {
-    fn from(err: serde_json::error::Error) -> PutEvaluationsError {
-        PutEvaluationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutEvaluationsError {
-    fn from(err: CredentialsError) -> PutEvaluationsError {
-        PutEvaluationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutEvaluationsError {
-    fn from(err: HttpDispatchError) -> PutEvaluationsError {
-        PutEvaluationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutEvaluationsError {
-    fn from(err: io::Error) -> PutEvaluationsError {
-        PutEvaluationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutEvaluationsError {
@@ -6178,11 +4700,6 @@ impl Error for PutEvaluationsError {
             PutEvaluationsError::InvalidParameterValue(ref cause) => cause,
             PutEvaluationsError::InvalidResultToken(ref cause) => cause,
             PutEvaluationsError::NoSuchConfigRule(ref cause) => cause,
-            PutEvaluationsError::Validation(ref cause) => cause,
-            PutEvaluationsError::Credentials(ref err) => err.description(),
-            PutEvaluationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutEvaluationsError::ParseError(ref cause) => cause,
-            PutEvaluationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6193,20 +4710,10 @@ pub enum PutRetentionConfigurationError {
     InvalidParameterValue(String),
     /// <p>Failed to add the retention configuration because a retention configuration with that name already exists.</p>
     MaxNumberOfRetentionConfigurationsExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutRetentionConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutRetentionConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6218,34 +4725,25 @@ impl PutRetentionConfigurationError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "InvalidParameterValueException" => return PutRetentionConfigurationError::InvalidParameterValue(String::from(error_message)),
-"MaxNumberOfRetentionConfigurationsExceededException" => return PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(String::from(error_message)),
-"ValidationException" => return PutRetentionConfigurationError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        PutRetentionConfigurationError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "MaxNumberOfRetentionConfigurationsExceededException" => {
+                    return RusotoError::Service(
+                        PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return PutRetentionConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutRetentionConfigurationError {
-    fn from(err: serde_json::error::Error) -> PutRetentionConfigurationError {
-        PutRetentionConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutRetentionConfigurationError {
-    fn from(err: CredentialsError) -> PutRetentionConfigurationError {
-        PutRetentionConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutRetentionConfigurationError {
-    fn from(err: HttpDispatchError) -> PutRetentionConfigurationError {
-        PutRetentionConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutRetentionConfigurationError {
-    fn from(err: io::Error) -> PutRetentionConfigurationError {
-        PutRetentionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutRetentionConfigurationError {
@@ -6260,13 +4758,6 @@ impl Error for PutRetentionConfigurationError {
             PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
                 ref cause,
             ) => cause,
-            PutRetentionConfigurationError::Validation(ref cause) => cause,
-            PutRetentionConfigurationError::Credentials(ref err) => err.description(),
-            PutRetentionConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutRetentionConfigurationError::ParseError(ref cause) => cause,
-            PutRetentionConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6281,20 +4772,12 @@ pub enum StartConfigRulesEvaluationError {
     NoSuchConfigRule(String),
     /// <p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartConfigRulesEvaluationError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartConfigRulesEvaluationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartConfigRulesEvaluationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6307,53 +4790,32 @@ impl StartConfigRulesEvaluationError {
 
             match *error_type {
                 "InvalidParameterValueException" => {
-                    return StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return StartConfigRulesEvaluationError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartConfigRulesEvaluationError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NoSuchConfigRuleException" => {
-                    return StartConfigRulesEvaluationError::NoSuchConfigRule(String::from(
-                        error_message,
+                    return RusotoError::Service(StartConfigRulesEvaluationError::NoSuchConfigRule(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return StartConfigRulesEvaluationError::ResourceInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(StartConfigRulesEvaluationError::ResourceInUse(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartConfigRulesEvaluationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartConfigRulesEvaluationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartConfigRulesEvaluationError {
-    fn from(err: serde_json::error::Error) -> StartConfigRulesEvaluationError {
-        StartConfigRulesEvaluationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartConfigRulesEvaluationError {
-    fn from(err: CredentialsError) -> StartConfigRulesEvaluationError {
-        StartConfigRulesEvaluationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartConfigRulesEvaluationError {
-    fn from(err: HttpDispatchError) -> StartConfigRulesEvaluationError {
-        StartConfigRulesEvaluationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartConfigRulesEvaluationError {
-    fn from(err: io::Error) -> StartConfigRulesEvaluationError {
-        StartConfigRulesEvaluationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartConfigRulesEvaluationError {
@@ -6368,13 +4830,6 @@ impl Error for StartConfigRulesEvaluationError {
             StartConfigRulesEvaluationError::LimitExceeded(ref cause) => cause,
             StartConfigRulesEvaluationError::NoSuchConfigRule(ref cause) => cause,
             StartConfigRulesEvaluationError::ResourceInUse(ref cause) => cause,
-            StartConfigRulesEvaluationError::Validation(ref cause) => cause,
-            StartConfigRulesEvaluationError::Credentials(ref err) => err.description(),
-            StartConfigRulesEvaluationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartConfigRulesEvaluationError::ParseError(ref cause) => cause,
-            StartConfigRulesEvaluationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6385,20 +4840,12 @@ pub enum StartConfigurationRecorderError {
     NoAvailableDeliveryChannel(String),
     /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartConfigurationRecorderError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartConfigurationRecorderError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartConfigurationRecorderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6411,43 +4858,24 @@ impl StartConfigurationRecorderError {
 
             match *error_type {
                 "NoAvailableDeliveryChannelException" => {
-                    return StartConfigurationRecorderError::NoAvailableDeliveryChannel(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StartConfigurationRecorderError::NoAvailableDeliveryChannel(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NoSuchConfigurationRecorderException" => {
-                    return StartConfigurationRecorderError::NoSuchConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StartConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return StartConfigurationRecorderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartConfigurationRecorderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartConfigurationRecorderError {
-    fn from(err: serde_json::error::Error) -> StartConfigurationRecorderError {
-        StartConfigurationRecorderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartConfigurationRecorderError {
-    fn from(err: CredentialsError) -> StartConfigurationRecorderError {
-        StartConfigurationRecorderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartConfigurationRecorderError {
-    fn from(err: HttpDispatchError) -> StartConfigurationRecorderError {
-        StartConfigurationRecorderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartConfigurationRecorderError {
-    fn from(err: io::Error) -> StartConfigurationRecorderError {
-        StartConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartConfigurationRecorderError {
@@ -6460,13 +4888,6 @@ impl Error for StartConfigurationRecorderError {
         match *self {
             StartConfigurationRecorderError::NoAvailableDeliveryChannel(ref cause) => cause,
             StartConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
-            StartConfigurationRecorderError::Validation(ref cause) => cause,
-            StartConfigurationRecorderError::Credentials(ref err) => err.description(),
-            StartConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartConfigurationRecorderError::ParseError(ref cause) => cause,
-            StartConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6475,20 +4896,10 @@ impl Error for StartConfigurationRecorderError {
 pub enum StopConfigurationRecorderError {
     /// <p>You have specified a configuration recorder that does not exist.</p>
     NoSuchConfigurationRecorder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopConfigurationRecorderError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopConfigurationRecorderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopConfigurationRecorderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6501,38 +4912,17 @@ impl StopConfigurationRecorderError {
 
             match *error_type {
                 "NoSuchConfigurationRecorderException" => {
-                    return StopConfigurationRecorderError::NoSuchConfigurationRecorder(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StopConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return StopConfigurationRecorderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopConfigurationRecorderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopConfigurationRecorderError {
-    fn from(err: serde_json::error::Error) -> StopConfigurationRecorderError {
-        StopConfigurationRecorderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopConfigurationRecorderError {
-    fn from(err: CredentialsError) -> StopConfigurationRecorderError {
-        StopConfigurationRecorderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopConfigurationRecorderError {
-    fn from(err: HttpDispatchError) -> StopConfigurationRecorderError {
-        StopConfigurationRecorderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopConfigurationRecorderError {
-    fn from(err: io::Error) -> StopConfigurationRecorderError {
-        StopConfigurationRecorderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopConfigurationRecorderError {
@@ -6544,13 +4934,6 @@ impl Error for StopConfigurationRecorderError {
     fn description(&self) -> &str {
         match *self {
             StopConfigurationRecorderError::NoSuchConfigurationRecorder(ref cause) => cause,
-            StopConfigurationRecorderError::Validation(ref cause) => cause,
-            StopConfigurationRecorderError::Credentials(ref err) => err.description(),
-            StopConfigurationRecorderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopConfigurationRecorderError::ParseError(ref cause) => cause,
-            StopConfigurationRecorderError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -383,20 +380,10 @@ pub enum DescribeStreamError {
     InternalServerError(String),
     /// <p>The operation tried to access a nonexistent stream.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStreamError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -409,39 +396,20 @@ impl DescribeStreamError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeStreamError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeStreamError {
-    fn from(err: serde_json::error::Error) -> DescribeStreamError {
-        DescribeStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeStreamError {
-    fn from(err: CredentialsError) -> DescribeStreamError {
-        DescribeStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeStreamError {
-    fn from(err: HttpDispatchError) -> DescribeStreamError {
-        DescribeStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeStreamError {
-    fn from(err: io::Error) -> DescribeStreamError {
-        DescribeStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeStreamError {
@@ -454,11 +422,6 @@ impl Error for DescribeStreamError {
         match *self {
             DescribeStreamError::InternalServerError(ref cause) => cause,
             DescribeStreamError::ResourceNotFound(ref cause) => cause,
-            DescribeStreamError::Validation(ref cause) => cause,
-            DescribeStreamError::Credentials(ref err) => err.description(),
-            DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeStreamError::ParseError(ref cause) => cause,
-            DescribeStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -475,20 +438,10 @@ pub enum GetRecordsError {
     ResourceNotFound(String),
     /// <p><p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <code>GetRecords</code> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul></p>
     TrimmedDataAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRecordsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRecordsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRecordsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -501,48 +454,35 @@ impl GetRecordsError {
 
             match *error_type {
                 "ExpiredIteratorException" => {
-                    return GetRecordsError::ExpiredIterator(String::from(error_message));
+                    return RusotoError::Service(GetRecordsError::ExpiredIterator(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return GetRecordsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetRecordsError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetRecordsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetRecordsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetRecordsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetRecordsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TrimmedDataAccessException" => {
-                    return GetRecordsError::TrimmedDataAccess(String::from(error_message));
+                    return RusotoError::Service(GetRecordsError::TrimmedDataAccess(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetRecordsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRecordsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRecordsError {
-    fn from(err: serde_json::error::Error) -> GetRecordsError {
-        GetRecordsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRecordsError {
-    fn from(err: CredentialsError) -> GetRecordsError {
-        GetRecordsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRecordsError {
-    fn from(err: HttpDispatchError) -> GetRecordsError {
-        GetRecordsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRecordsError {
-    fn from(err: io::Error) -> GetRecordsError {
-        GetRecordsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRecordsError {
@@ -558,11 +498,6 @@ impl Error for GetRecordsError {
             GetRecordsError::LimitExceeded(ref cause) => cause,
             GetRecordsError::ResourceNotFound(ref cause) => cause,
             GetRecordsError::TrimmedDataAccess(ref cause) => cause,
-            GetRecordsError::Validation(ref cause) => cause,
-            GetRecordsError::Credentials(ref err) => err.description(),
-            GetRecordsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRecordsError::ParseError(ref cause) => cause,
-            GetRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -575,20 +510,10 @@ pub enum GetShardIteratorError {
     ResourceNotFound(String),
     /// <p><p>The operation attempted to read past the oldest stream record in a shard.</p> <p>In DynamoDB Streams, there is a 24 hour limit on data retention. Stream records whose age exceeds this limit are subject to removal (trimming) from the stream. You might receive a TrimmedDataAccessException if:</p> <ul> <li><p>You request a shard iterator with a sequence number older than the trim point (24 hours).</p> </li> <li><p>You obtain a shard iterator, but before you use the iterator in a <code>GetRecords</code> request, a stream record in the shard exceeds the 24 hour period and is trimmed. This causes the iterator to access a record that no longer exists.</p> </li> </ul></p>
     TrimmedDataAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetShardIteratorError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetShardIteratorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetShardIteratorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -601,42 +526,25 @@ impl GetShardIteratorError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetShardIteratorError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetShardIteratorError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetShardIteratorError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetShardIteratorError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TrimmedDataAccessException" => {
-                    return GetShardIteratorError::TrimmedDataAccess(String::from(error_message));
+                    return RusotoError::Service(GetShardIteratorError::TrimmedDataAccess(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetShardIteratorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetShardIteratorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetShardIteratorError {
-    fn from(err: serde_json::error::Error) -> GetShardIteratorError {
-        GetShardIteratorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetShardIteratorError {
-    fn from(err: CredentialsError) -> GetShardIteratorError {
-        GetShardIteratorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetShardIteratorError {
-    fn from(err: HttpDispatchError) -> GetShardIteratorError {
-        GetShardIteratorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetShardIteratorError {
-    fn from(err: io::Error) -> GetShardIteratorError {
-        GetShardIteratorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetShardIteratorError {
@@ -650,11 +558,6 @@ impl Error for GetShardIteratorError {
             GetShardIteratorError::InternalServerError(ref cause) => cause,
             GetShardIteratorError::ResourceNotFound(ref cause) => cause,
             GetShardIteratorError::TrimmedDataAccess(ref cause) => cause,
-            GetShardIteratorError::Validation(ref cause) => cause,
-            GetShardIteratorError::Credentials(ref err) => err.description(),
-            GetShardIteratorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetShardIteratorError::ParseError(ref cause) => cause,
-            GetShardIteratorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -665,20 +568,10 @@ pub enum ListStreamsError {
     InternalServerError(String),
     /// <p>The operation tried to access a nonexistent stream.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListStreamsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -691,39 +584,20 @@ impl ListStreamsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListStreamsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListStreamsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListStreamsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListStreamsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListStreamsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListStreamsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListStreamsError {
-    fn from(err: serde_json::error::Error) -> ListStreamsError {
-        ListStreamsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListStreamsError {
-    fn from(err: CredentialsError) -> ListStreamsError {
-        ListStreamsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListStreamsError {
-    fn from(err: HttpDispatchError) -> ListStreamsError {
-        ListStreamsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListStreamsError {
-    fn from(err: io::Error) -> ListStreamsError {
-        ListStreamsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListStreamsError {
@@ -736,11 +610,6 @@ impl Error for ListStreamsError {
         match *self {
             ListStreamsError::InternalServerError(ref cause) => cause,
             ListStreamsError::ResourceNotFound(ref cause) => cause,
-            ListStreamsError::Validation(ref cause) => cause,
-            ListStreamsError::Credentials(ref err) => err.description(),
-            ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListStreamsError::ParseError(ref cause) => cause,
-            ListStreamsError::Unknown(_) => "unknown error",
         }
     }
 }

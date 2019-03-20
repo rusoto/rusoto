@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -880,20 +877,10 @@ pub enum CheckDomainAvailabilityError {
     InvalidInput(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CheckDomainAvailabilityError {
-    pub fn from_response(res: BufferedHttpResponse) -> CheckDomainAvailabilityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CheckDomainAvailabilityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -906,39 +893,20 @@ impl CheckDomainAvailabilityError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return CheckDomainAvailabilityError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CheckDomainAvailabilityError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return CheckDomainAvailabilityError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(CheckDomainAvailabilityError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CheckDomainAvailabilityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CheckDomainAvailabilityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CheckDomainAvailabilityError {
-    fn from(err: serde_json::error::Error) -> CheckDomainAvailabilityError {
-        CheckDomainAvailabilityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CheckDomainAvailabilityError {
-    fn from(err: CredentialsError) -> CheckDomainAvailabilityError {
-        CheckDomainAvailabilityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CheckDomainAvailabilityError {
-    fn from(err: HttpDispatchError) -> CheckDomainAvailabilityError {
-        CheckDomainAvailabilityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CheckDomainAvailabilityError {
-    fn from(err: io::Error) -> CheckDomainAvailabilityError {
-        CheckDomainAvailabilityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CheckDomainAvailabilityError {
@@ -951,13 +919,6 @@ impl Error for CheckDomainAvailabilityError {
         match *self {
             CheckDomainAvailabilityError::InvalidInput(ref cause) => cause,
             CheckDomainAvailabilityError::UnsupportedTLD(ref cause) => cause,
-            CheckDomainAvailabilityError::Validation(ref cause) => cause,
-            CheckDomainAvailabilityError::Credentials(ref err) => err.description(),
-            CheckDomainAvailabilityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CheckDomainAvailabilityError::ParseError(ref cause) => cause,
-            CheckDomainAvailabilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -968,20 +929,12 @@ pub enum CheckDomainTransferabilityError {
     InvalidInput(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CheckDomainTransferabilityError {
-    pub fn from_response(res: BufferedHttpResponse) -> CheckDomainTransferabilityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CheckDomainTransferabilityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -994,43 +947,20 @@ impl CheckDomainTransferabilityError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return CheckDomainTransferabilityError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(CheckDomainTransferabilityError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return CheckDomainTransferabilityError::UnsupportedTLD(String::from(
-                        error_message,
+                    return RusotoError::Service(CheckDomainTransferabilityError::UnsupportedTLD(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CheckDomainTransferabilityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CheckDomainTransferabilityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CheckDomainTransferabilityError {
-    fn from(err: serde_json::error::Error) -> CheckDomainTransferabilityError {
-        CheckDomainTransferabilityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CheckDomainTransferabilityError {
-    fn from(err: CredentialsError) -> CheckDomainTransferabilityError {
-        CheckDomainTransferabilityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CheckDomainTransferabilityError {
-    fn from(err: HttpDispatchError) -> CheckDomainTransferabilityError {
-        CheckDomainTransferabilityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CheckDomainTransferabilityError {
-    fn from(err: io::Error) -> CheckDomainTransferabilityError {
-        CheckDomainTransferabilityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CheckDomainTransferabilityError {
@@ -1043,13 +973,6 @@ impl Error for CheckDomainTransferabilityError {
         match *self {
             CheckDomainTransferabilityError::InvalidInput(ref cause) => cause,
             CheckDomainTransferabilityError::UnsupportedTLD(ref cause) => cause,
-            CheckDomainTransferabilityError::Validation(ref cause) => cause,
-            CheckDomainTransferabilityError::Credentials(ref err) => err.description(),
-            CheckDomainTransferabilityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CheckDomainTransferabilityError::ParseError(ref cause) => cause,
-            CheckDomainTransferabilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1062,20 +985,10 @@ pub enum DeleteTagsForDomainError {
     OperationLimitExceeded(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsForDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsForDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsForDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1088,44 +1001,25 @@ impl DeleteTagsForDomainError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return DeleteTagsForDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsForDomainError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationLimitExceeded" => {
-                    return DeleteTagsForDomainError::OperationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteTagsForDomainError::OperationLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return DeleteTagsForDomainError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsForDomainError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteTagsForDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTagsForDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTagsForDomainError {
-    fn from(err: serde_json::error::Error) -> DeleteTagsForDomainError {
-        DeleteTagsForDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTagsForDomainError {
-    fn from(err: CredentialsError) -> DeleteTagsForDomainError {
-        DeleteTagsForDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTagsForDomainError {
-    fn from(err: HttpDispatchError) -> DeleteTagsForDomainError {
-        DeleteTagsForDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTagsForDomainError {
-    fn from(err: io::Error) -> DeleteTagsForDomainError {
-        DeleteTagsForDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTagsForDomainError {
@@ -1139,13 +1033,6 @@ impl Error for DeleteTagsForDomainError {
             DeleteTagsForDomainError::InvalidInput(ref cause) => cause,
             DeleteTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
             DeleteTagsForDomainError::UnsupportedTLD(ref cause) => cause,
-            DeleteTagsForDomainError::Validation(ref cause) => cause,
-            DeleteTagsForDomainError::Credentials(ref err) => err.description(),
-            DeleteTagsForDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTagsForDomainError::ParseError(ref cause) => cause,
-            DeleteTagsForDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1156,20 +1043,10 @@ pub enum DisableDomainAutoRenewError {
     InvalidInput(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableDomainAutoRenewError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableDomainAutoRenewError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDomainAutoRenewError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1182,39 +1059,20 @@ impl DisableDomainAutoRenewError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return DisableDomainAutoRenewError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DisableDomainAutoRenewError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return DisableDomainAutoRenewError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(DisableDomainAutoRenewError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisableDomainAutoRenewError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableDomainAutoRenewError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableDomainAutoRenewError {
-    fn from(err: serde_json::error::Error) -> DisableDomainAutoRenewError {
-        DisableDomainAutoRenewError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableDomainAutoRenewError {
-    fn from(err: CredentialsError) -> DisableDomainAutoRenewError {
-        DisableDomainAutoRenewError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableDomainAutoRenewError {
-    fn from(err: HttpDispatchError) -> DisableDomainAutoRenewError {
-        DisableDomainAutoRenewError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableDomainAutoRenewError {
-    fn from(err: io::Error) -> DisableDomainAutoRenewError {
-        DisableDomainAutoRenewError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableDomainAutoRenewError {
@@ -1227,13 +1085,6 @@ impl Error for DisableDomainAutoRenewError {
         match *self {
             DisableDomainAutoRenewError::InvalidInput(ref cause) => cause,
             DisableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,
-            DisableDomainAutoRenewError::Validation(ref cause) => cause,
-            DisableDomainAutoRenewError::Credentials(ref err) => err.description(),
-            DisableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisableDomainAutoRenewError::ParseError(ref cause) => cause,
-            DisableDomainAutoRenewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1250,20 +1101,10 @@ pub enum DisableDomainTransferLockError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableDomainTransferLockError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableDomainTransferLockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDomainTransferLockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1276,56 +1117,37 @@ impl DisableDomainTransferLockError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return DisableDomainTransferLockError::DuplicateRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableDomainTransferLockError::DuplicateRequest(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInput" => {
-                    return DisableDomainTransferLockError::InvalidInput(String::from(error_message));
-                }
-                "OperationLimitExceeded" => {
-                    return DisableDomainTransferLockError::OperationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableDomainTransferLockError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
+                "OperationLimitExceeded" => {
+                    return RusotoError::Service(
+                        DisableDomainTransferLockError::OperationLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "TLDRulesViolation" => {
-                    return DisableDomainTransferLockError::TLDRulesViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableDomainTransferLockError::TLDRulesViolation(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return DisableDomainTransferLockError::UnsupportedTLD(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableDomainTransferLockError::UnsupportedTLD(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DisableDomainTransferLockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableDomainTransferLockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableDomainTransferLockError {
-    fn from(err: serde_json::error::Error) -> DisableDomainTransferLockError {
-        DisableDomainTransferLockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableDomainTransferLockError {
-    fn from(err: CredentialsError) -> DisableDomainTransferLockError {
-        DisableDomainTransferLockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableDomainTransferLockError {
-    fn from(err: HttpDispatchError) -> DisableDomainTransferLockError {
-        DisableDomainTransferLockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableDomainTransferLockError {
-    fn from(err: io::Error) -> DisableDomainTransferLockError {
-        DisableDomainTransferLockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableDomainTransferLockError {
@@ -1341,13 +1163,6 @@ impl Error for DisableDomainTransferLockError {
             DisableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,
             DisableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,
             DisableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,
-            DisableDomainTransferLockError::Validation(ref cause) => cause,
-            DisableDomainTransferLockError::Credentials(ref err) => err.description(),
-            DisableDomainTransferLockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisableDomainTransferLockError::ParseError(ref cause) => cause,
-            DisableDomainTransferLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1360,20 +1175,10 @@ pub enum EnableDomainAutoRenewError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableDomainAutoRenewError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableDomainAutoRenewError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDomainAutoRenewError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1386,44 +1191,25 @@ impl EnableDomainAutoRenewError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return EnableDomainAutoRenewError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(EnableDomainAutoRenewError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "TLDRulesViolation" => {
-                    return EnableDomainAutoRenewError::TLDRulesViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableDomainAutoRenewError::TLDRulesViolation(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return EnableDomainAutoRenewError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(EnableDomainAutoRenewError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EnableDomainAutoRenewError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableDomainAutoRenewError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableDomainAutoRenewError {
-    fn from(err: serde_json::error::Error) -> EnableDomainAutoRenewError {
-        EnableDomainAutoRenewError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableDomainAutoRenewError {
-    fn from(err: CredentialsError) -> EnableDomainAutoRenewError {
-        EnableDomainAutoRenewError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableDomainAutoRenewError {
-    fn from(err: HttpDispatchError) -> EnableDomainAutoRenewError {
-        EnableDomainAutoRenewError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableDomainAutoRenewError {
-    fn from(err: io::Error) -> EnableDomainAutoRenewError {
-        EnableDomainAutoRenewError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableDomainAutoRenewError {
@@ -1437,13 +1223,6 @@ impl Error for EnableDomainAutoRenewError {
             EnableDomainAutoRenewError::InvalidInput(ref cause) => cause,
             EnableDomainAutoRenewError::TLDRulesViolation(ref cause) => cause,
             EnableDomainAutoRenewError::UnsupportedTLD(ref cause) => cause,
-            EnableDomainAutoRenewError::Validation(ref cause) => cause,
-            EnableDomainAutoRenewError::Credentials(ref err) => err.description(),
-            EnableDomainAutoRenewError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableDomainAutoRenewError::ParseError(ref cause) => cause,
-            EnableDomainAutoRenewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1460,20 +1239,10 @@ pub enum EnableDomainTransferLockError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableDomainTransferLockError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableDomainTransferLockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDomainTransferLockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1486,56 +1255,37 @@ impl EnableDomainTransferLockError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return EnableDomainTransferLockError::DuplicateRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableDomainTransferLockError::DuplicateRequest(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInput" => {
-                    return EnableDomainTransferLockError::InvalidInput(String::from(error_message));
-                }
-                "OperationLimitExceeded" => {
-                    return EnableDomainTransferLockError::OperationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableDomainTransferLockError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
+                "OperationLimitExceeded" => {
+                    return RusotoError::Service(
+                        EnableDomainTransferLockError::OperationLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "TLDRulesViolation" => {
-                    return EnableDomainTransferLockError::TLDRulesViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableDomainTransferLockError::TLDRulesViolation(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return EnableDomainTransferLockError::UnsupportedTLD(String::from(
-                        error_message,
+                    return RusotoError::Service(EnableDomainTransferLockError::UnsupportedTLD(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return EnableDomainTransferLockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableDomainTransferLockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableDomainTransferLockError {
-    fn from(err: serde_json::error::Error) -> EnableDomainTransferLockError {
-        EnableDomainTransferLockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableDomainTransferLockError {
-    fn from(err: CredentialsError) -> EnableDomainTransferLockError {
-        EnableDomainTransferLockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableDomainTransferLockError {
-    fn from(err: HttpDispatchError) -> EnableDomainTransferLockError {
-        EnableDomainTransferLockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableDomainTransferLockError {
-    fn from(err: io::Error) -> EnableDomainTransferLockError {
-        EnableDomainTransferLockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableDomainTransferLockError {
@@ -1551,13 +1301,6 @@ impl Error for EnableDomainTransferLockError {
             EnableDomainTransferLockError::OperationLimitExceeded(ref cause) => cause,
             EnableDomainTransferLockError::TLDRulesViolation(ref cause) => cause,
             EnableDomainTransferLockError::UnsupportedTLD(ref cause) => cause,
-            EnableDomainTransferLockError::Validation(ref cause) => cause,
-            EnableDomainTransferLockError::Credentials(ref err) => err.description(),
-            EnableDomainTransferLockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableDomainTransferLockError::ParseError(ref cause) => cause,
-            EnableDomainTransferLockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1570,20 +1313,12 @@ pub enum GetContactReachabilityStatusError {
     OperationLimitExceeded(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetContactReachabilityStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetContactReachabilityStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetContactReachabilityStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1596,48 +1331,27 @@ impl GetContactReachabilityStatusError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetContactReachabilityStatusError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(GetContactReachabilityStatusError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "OperationLimitExceeded" => {
-                    return GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetContactReachabilityStatusError::OperationLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnsupportedTLD" => {
-                    return GetContactReachabilityStatusError::UnsupportedTLD(String::from(
-                        error_message,
+                    return RusotoError::Service(GetContactReachabilityStatusError::UnsupportedTLD(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetContactReachabilityStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetContactReachabilityStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetContactReachabilityStatusError {
-    fn from(err: serde_json::error::Error) -> GetContactReachabilityStatusError {
-        GetContactReachabilityStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetContactReachabilityStatusError {
-    fn from(err: CredentialsError) -> GetContactReachabilityStatusError {
-        GetContactReachabilityStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetContactReachabilityStatusError {
-    fn from(err: HttpDispatchError) -> GetContactReachabilityStatusError {
-        GetContactReachabilityStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetContactReachabilityStatusError {
-    fn from(err: io::Error) -> GetContactReachabilityStatusError {
-        GetContactReachabilityStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetContactReachabilityStatusError {
@@ -1651,13 +1365,6 @@ impl Error for GetContactReachabilityStatusError {
             GetContactReachabilityStatusError::InvalidInput(ref cause) => cause,
             GetContactReachabilityStatusError::OperationLimitExceeded(ref cause) => cause,
             GetContactReachabilityStatusError::UnsupportedTLD(ref cause) => cause,
-            GetContactReachabilityStatusError::Validation(ref cause) => cause,
-            GetContactReachabilityStatusError::Credentials(ref err) => err.description(),
-            GetContactReachabilityStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetContactReachabilityStatusError::ParseError(ref cause) => cause,
-            GetContactReachabilityStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1668,20 +1375,10 @@ pub enum GetDomainDetailError {
     InvalidInput(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDomainDetailError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDomainDetailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainDetailError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1694,39 +1391,20 @@ impl GetDomainDetailError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetDomainDetailError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDomainDetailError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedTLD" => {
-                    return GetDomainDetailError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(GetDomainDetailError::UnsupportedTLD(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDomainDetailError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDomainDetailError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDomainDetailError {
-    fn from(err: serde_json::error::Error) -> GetDomainDetailError {
-        GetDomainDetailError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDomainDetailError {
-    fn from(err: CredentialsError) -> GetDomainDetailError {
-        GetDomainDetailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDomainDetailError {
-    fn from(err: HttpDispatchError) -> GetDomainDetailError {
-        GetDomainDetailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDomainDetailError {
-    fn from(err: io::Error) -> GetDomainDetailError {
-        GetDomainDetailError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDomainDetailError {
@@ -1739,11 +1417,6 @@ impl Error for GetDomainDetailError {
         match *self {
             GetDomainDetailError::InvalidInput(ref cause) => cause,
             GetDomainDetailError::UnsupportedTLD(ref cause) => cause,
-            GetDomainDetailError::Validation(ref cause) => cause,
-            GetDomainDetailError::Credentials(ref err) => err.description(),
-            GetDomainDetailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDomainDetailError::ParseError(ref cause) => cause,
-            GetDomainDetailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1754,20 +1427,10 @@ pub enum GetDomainSuggestionsError {
     InvalidInput(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDomainSuggestionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDomainSuggestionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDomainSuggestionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1780,39 +1443,20 @@ impl GetDomainSuggestionsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetDomainSuggestionsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDomainSuggestionsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return GetDomainSuggestionsError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(GetDomainSuggestionsError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDomainSuggestionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDomainSuggestionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDomainSuggestionsError {
-    fn from(err: serde_json::error::Error) -> GetDomainSuggestionsError {
-        GetDomainSuggestionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDomainSuggestionsError {
-    fn from(err: CredentialsError) -> GetDomainSuggestionsError {
-        GetDomainSuggestionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDomainSuggestionsError {
-    fn from(err: HttpDispatchError) -> GetDomainSuggestionsError {
-        GetDomainSuggestionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDomainSuggestionsError {
-    fn from(err: io::Error) -> GetDomainSuggestionsError {
-        GetDomainSuggestionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDomainSuggestionsError {
@@ -1825,13 +1469,6 @@ impl Error for GetDomainSuggestionsError {
         match *self {
             GetDomainSuggestionsError::InvalidInput(ref cause) => cause,
             GetDomainSuggestionsError::UnsupportedTLD(ref cause) => cause,
-            GetDomainSuggestionsError::Validation(ref cause) => cause,
-            GetDomainSuggestionsError::Credentials(ref err) => err.description(),
-            GetDomainSuggestionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDomainSuggestionsError::ParseError(ref cause) => cause,
-            GetDomainSuggestionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1840,20 +1477,10 @@ impl Error for GetDomainSuggestionsError {
 pub enum GetOperationDetailError {
     /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOperationDetailError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOperationDetailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOperationDetailError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1866,36 +1493,15 @@ impl GetOperationDetailError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return GetOperationDetailError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetOperationDetailError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetOperationDetailError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOperationDetailError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOperationDetailError {
-    fn from(err: serde_json::error::Error) -> GetOperationDetailError {
-        GetOperationDetailError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOperationDetailError {
-    fn from(err: CredentialsError) -> GetOperationDetailError {
-        GetOperationDetailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOperationDetailError {
-    fn from(err: HttpDispatchError) -> GetOperationDetailError {
-        GetOperationDetailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOperationDetailError {
-    fn from(err: io::Error) -> GetOperationDetailError {
-        GetOperationDetailError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOperationDetailError {
@@ -1907,13 +1513,6 @@ impl Error for GetOperationDetailError {
     fn description(&self) -> &str {
         match *self {
             GetOperationDetailError::InvalidInput(ref cause) => cause,
-            GetOperationDetailError::Validation(ref cause) => cause,
-            GetOperationDetailError::Credentials(ref err) => err.description(),
-            GetOperationDetailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetOperationDetailError::ParseError(ref cause) => cause,
-            GetOperationDetailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1922,20 +1521,10 @@ impl Error for GetOperationDetailError {
 pub enum ListDomainsError {
     /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1948,36 +1537,15 @@ impl ListDomainsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListDomainsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListDomainsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListDomainsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDomainsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDomainsError {
-    fn from(err: serde_json::error::Error) -> ListDomainsError {
-        ListDomainsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDomainsError {
-    fn from(err: CredentialsError) -> ListDomainsError {
-        ListDomainsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDomainsError {
-    fn from(err: HttpDispatchError) -> ListDomainsError {
-        ListDomainsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDomainsError {
-    fn from(err: io::Error) -> ListDomainsError {
-        ListDomainsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDomainsError {
@@ -1989,11 +1557,6 @@ impl Error for ListDomainsError {
     fn description(&self) -> &str {
         match *self {
             ListDomainsError::InvalidInput(ref cause) => cause,
-            ListDomainsError::Validation(ref cause) => cause,
-            ListDomainsError::Credentials(ref err) => err.description(),
-            ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainsError::ParseError(ref cause) => cause,
-            ListDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2002,20 +1565,10 @@ impl Error for ListDomainsError {
 pub enum ListOperationsError {
     /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOperationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOperationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOperationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2028,36 +1581,15 @@ impl ListOperationsError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListOperationsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListOperationsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListOperationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOperationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOperationsError {
-    fn from(err: serde_json::error::Error) -> ListOperationsError {
-        ListOperationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOperationsError {
-    fn from(err: CredentialsError) -> ListOperationsError {
-        ListOperationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOperationsError {
-    fn from(err: HttpDispatchError) -> ListOperationsError {
-        ListOperationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOperationsError {
-    fn from(err: io::Error) -> ListOperationsError {
-        ListOperationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOperationsError {
@@ -2069,11 +1601,6 @@ impl Error for ListOperationsError {
     fn description(&self) -> &str {
         match *self {
             ListOperationsError::InvalidInput(ref cause) => cause,
-            ListOperationsError::Validation(ref cause) => cause,
-            ListOperationsError::Credentials(ref err) => err.description(),
-            ListOperationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListOperationsError::ParseError(ref cause) => cause,
-            ListOperationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2086,20 +1613,10 @@ pub enum ListTagsForDomainError {
     OperationLimitExceeded(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2112,44 +1629,25 @@ impl ListTagsForDomainError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ListTagsForDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListTagsForDomainError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationLimitExceeded" => {
-                    return ListTagsForDomainError::OperationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTagsForDomainError::OperationLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return ListTagsForDomainError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(ListTagsForDomainError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsForDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForDomainError {
-    fn from(err: serde_json::error::Error) -> ListTagsForDomainError {
-        ListTagsForDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForDomainError {
-    fn from(err: CredentialsError) -> ListTagsForDomainError {
-        ListTagsForDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForDomainError {
-    fn from(err: HttpDispatchError) -> ListTagsForDomainError {
-        ListTagsForDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForDomainError {
-    fn from(err: io::Error) -> ListTagsForDomainError {
-        ListTagsForDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForDomainError {
@@ -2163,13 +1661,6 @@ impl Error for ListTagsForDomainError {
             ListTagsForDomainError::InvalidInput(ref cause) => cause,
             ListTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
             ListTagsForDomainError::UnsupportedTLD(ref cause) => cause,
-            ListTagsForDomainError::Validation(ref cause) => cause,
-            ListTagsForDomainError::Credentials(ref err) => err.description(),
-            ListTagsForDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForDomainError::ParseError(ref cause) => cause,
-            ListTagsForDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2188,20 +1679,10 @@ pub enum RegisterDomainError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2214,51 +1695,40 @@ impl RegisterDomainError {
 
             match *error_type {
                 "DomainLimitExceeded" => {
-                    return RegisterDomainError::DomainLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RegisterDomainError::DomainLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicateRequest" => {
-                    return RegisterDomainError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(RegisterDomainError::DuplicateRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInput" => {
-                    return RegisterDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(RegisterDomainError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationLimitExceeded" => {
-                    return RegisterDomainError::OperationLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RegisterDomainError::OperationLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "TLDRulesViolation" => {
-                    return RegisterDomainError::TLDRulesViolation(String::from(error_message));
+                    return RusotoError::Service(RegisterDomainError::TLDRulesViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return RegisterDomainError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(RegisterDomainError::UnsupportedTLD(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RegisterDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterDomainError {
-    fn from(err: serde_json::error::Error) -> RegisterDomainError {
-        RegisterDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterDomainError {
-    fn from(err: CredentialsError) -> RegisterDomainError {
-        RegisterDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterDomainError {
-    fn from(err: HttpDispatchError) -> RegisterDomainError {
-        RegisterDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterDomainError {
-    fn from(err: io::Error) -> RegisterDomainError {
-        RegisterDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterDomainError {
@@ -2275,11 +1745,6 @@ impl Error for RegisterDomainError {
             RegisterDomainError::OperationLimitExceeded(ref cause) => cause,
             RegisterDomainError::TLDRulesViolation(ref cause) => cause,
             RegisterDomainError::UnsupportedTLD(ref cause) => cause,
-            RegisterDomainError::Validation(ref cause) => cause,
-            RegisterDomainError::Credentials(ref err) => err.description(),
-            RegisterDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterDomainError::ParseError(ref cause) => cause,
-            RegisterDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2296,20 +1761,10 @@ pub enum RenewDomainError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RenewDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> RenewDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenewDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2322,48 +1777,35 @@ impl RenewDomainError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return RenewDomainError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(RenewDomainError::DuplicateRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInput" => {
-                    return RenewDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(RenewDomainError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationLimitExceeded" => {
-                    return RenewDomainError::OperationLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RenewDomainError::OperationLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "TLDRulesViolation" => {
-                    return RenewDomainError::TLDRulesViolation(String::from(error_message));
+                    return RusotoError::Service(RenewDomainError::TLDRulesViolation(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedTLD" => {
-                    return RenewDomainError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(RenewDomainError::UnsupportedTLD(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RenewDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RenewDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RenewDomainError {
-    fn from(err: serde_json::error::Error) -> RenewDomainError {
-        RenewDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RenewDomainError {
-    fn from(err: CredentialsError) -> RenewDomainError {
-        RenewDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RenewDomainError {
-    fn from(err: HttpDispatchError) -> RenewDomainError {
-        RenewDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RenewDomainError {
-    fn from(err: io::Error) -> RenewDomainError {
-        RenewDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RenewDomainError {
@@ -2379,11 +1821,6 @@ impl Error for RenewDomainError {
             RenewDomainError::OperationLimitExceeded(ref cause) => cause,
             RenewDomainError::TLDRulesViolation(ref cause) => cause,
             RenewDomainError::UnsupportedTLD(ref cause) => cause,
-            RenewDomainError::Validation(ref cause) => cause,
-            RenewDomainError::Credentials(ref err) => err.description(),
-            RenewDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RenewDomainError::ParseError(ref cause) => cause,
-            RenewDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2396,20 +1833,12 @@ pub enum ResendContactReachabilityEmailError {
     OperationLimitExceeded(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResendContactReachabilityEmailError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResendContactReachabilityEmailError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ResendContactReachabilityEmailError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2422,50 +1851,29 @@ impl ResendContactReachabilityEmailError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ResendContactReachabilityEmailError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendContactReachabilityEmailError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "OperationLimitExceeded" => {
-                    return ResendContactReachabilityEmailError::OperationLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ResendContactReachabilityEmailError::OperationLimitExceeded(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnsupportedTLD" => {
-                    return ResendContactReachabilityEmailError::UnsupportedTLD(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return ResendContactReachabilityEmailError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        ResendContactReachabilityEmailError::UnsupportedTLD(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResendContactReachabilityEmailError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResendContactReachabilityEmailError {
-    fn from(err: serde_json::error::Error) -> ResendContactReachabilityEmailError {
-        ResendContactReachabilityEmailError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResendContactReachabilityEmailError {
-    fn from(err: CredentialsError) -> ResendContactReachabilityEmailError {
-        ResendContactReachabilityEmailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResendContactReachabilityEmailError {
-    fn from(err: HttpDispatchError) -> ResendContactReachabilityEmailError {
-        ResendContactReachabilityEmailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResendContactReachabilityEmailError {
-    fn from(err: io::Error) -> ResendContactReachabilityEmailError {
-        ResendContactReachabilityEmailError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResendContactReachabilityEmailError {
@@ -2479,13 +1887,6 @@ impl Error for ResendContactReachabilityEmailError {
             ResendContactReachabilityEmailError::InvalidInput(ref cause) => cause,
             ResendContactReachabilityEmailError::OperationLimitExceeded(ref cause) => cause,
             ResendContactReachabilityEmailError::UnsupportedTLD(ref cause) => cause,
-            ResendContactReachabilityEmailError::Validation(ref cause) => cause,
-            ResendContactReachabilityEmailError::Credentials(ref err) => err.description(),
-            ResendContactReachabilityEmailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ResendContactReachabilityEmailError::ParseError(ref cause) => cause,
-            ResendContactReachabilityEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2496,20 +1897,10 @@ pub enum RetrieveDomainAuthCodeError {
     InvalidInput(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RetrieveDomainAuthCodeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RetrieveDomainAuthCodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveDomainAuthCodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2522,39 +1913,20 @@ impl RetrieveDomainAuthCodeError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return RetrieveDomainAuthCodeError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(RetrieveDomainAuthCodeError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return RetrieveDomainAuthCodeError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(RetrieveDomainAuthCodeError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RetrieveDomainAuthCodeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RetrieveDomainAuthCodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RetrieveDomainAuthCodeError {
-    fn from(err: serde_json::error::Error) -> RetrieveDomainAuthCodeError {
-        RetrieveDomainAuthCodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RetrieveDomainAuthCodeError {
-    fn from(err: CredentialsError) -> RetrieveDomainAuthCodeError {
-        RetrieveDomainAuthCodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RetrieveDomainAuthCodeError {
-    fn from(err: HttpDispatchError) -> RetrieveDomainAuthCodeError {
-        RetrieveDomainAuthCodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RetrieveDomainAuthCodeError {
-    fn from(err: io::Error) -> RetrieveDomainAuthCodeError {
-        RetrieveDomainAuthCodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RetrieveDomainAuthCodeError {
@@ -2567,13 +1939,6 @@ impl Error for RetrieveDomainAuthCodeError {
         match *self {
             RetrieveDomainAuthCodeError::InvalidInput(ref cause) => cause,
             RetrieveDomainAuthCodeError::UnsupportedTLD(ref cause) => cause,
-            RetrieveDomainAuthCodeError::Validation(ref cause) => cause,
-            RetrieveDomainAuthCodeError::Credentials(ref err) => err.description(),
-            RetrieveDomainAuthCodeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RetrieveDomainAuthCodeError::ParseError(ref cause) => cause,
-            RetrieveDomainAuthCodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2592,20 +1957,10 @@ pub enum TransferDomainError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TransferDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> TransferDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransferDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2618,51 +1973,40 @@ impl TransferDomainError {
 
             match *error_type {
                 "DomainLimitExceeded" => {
-                    return TransferDomainError::DomainLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TransferDomainError::DomainLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicateRequest" => {
-                    return TransferDomainError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(TransferDomainError::DuplicateRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInput" => {
-                    return TransferDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(TransferDomainError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationLimitExceeded" => {
-                    return TransferDomainError::OperationLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TransferDomainError::OperationLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "TLDRulesViolation" => {
-                    return TransferDomainError::TLDRulesViolation(String::from(error_message));
+                    return RusotoError::Service(TransferDomainError::TLDRulesViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return TransferDomainError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(TransferDomainError::UnsupportedTLD(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TransferDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TransferDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TransferDomainError {
-    fn from(err: serde_json::error::Error) -> TransferDomainError {
-        TransferDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TransferDomainError {
-    fn from(err: CredentialsError) -> TransferDomainError {
-        TransferDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TransferDomainError {
-    fn from(err: HttpDispatchError) -> TransferDomainError {
-        TransferDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TransferDomainError {
-    fn from(err: io::Error) -> TransferDomainError {
-        TransferDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TransferDomainError {
@@ -2679,11 +2023,6 @@ impl Error for TransferDomainError {
             TransferDomainError::OperationLimitExceeded(ref cause) => cause,
             TransferDomainError::TLDRulesViolation(ref cause) => cause,
             TransferDomainError::UnsupportedTLD(ref cause) => cause,
-            TransferDomainError::Validation(ref cause) => cause,
-            TransferDomainError::Credentials(ref err) => err.description(),
-            TransferDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TransferDomainError::ParseError(ref cause) => cause,
-            TransferDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2700,20 +2039,10 @@ pub enum UpdateDomainContactError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDomainContactError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDomainContactError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainContactError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2726,50 +2055,35 @@ impl UpdateDomainContactError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return UpdateDomainContactError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainContactError::DuplicateRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInput" => {
-                    return UpdateDomainContactError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainContactError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationLimitExceeded" => {
-                    return UpdateDomainContactError::OperationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainContactError::OperationLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "TLDRulesViolation" => {
-                    return UpdateDomainContactError::TLDRulesViolation(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainContactError::TLDRulesViolation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedTLD" => {
-                    return UpdateDomainContactError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainContactError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDomainContactError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDomainContactError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDomainContactError {
-    fn from(err: serde_json::error::Error) -> UpdateDomainContactError {
-        UpdateDomainContactError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDomainContactError {
-    fn from(err: CredentialsError) -> UpdateDomainContactError {
-        UpdateDomainContactError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDomainContactError {
-    fn from(err: HttpDispatchError) -> UpdateDomainContactError {
-        UpdateDomainContactError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDomainContactError {
-    fn from(err: io::Error) -> UpdateDomainContactError {
-        UpdateDomainContactError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDomainContactError {
@@ -2785,13 +2099,6 @@ impl Error for UpdateDomainContactError {
             UpdateDomainContactError::OperationLimitExceeded(ref cause) => cause,
             UpdateDomainContactError::TLDRulesViolation(ref cause) => cause,
             UpdateDomainContactError::UnsupportedTLD(ref cause) => cause,
-            UpdateDomainContactError::Validation(ref cause) => cause,
-            UpdateDomainContactError::Credentials(ref err) => err.description(),
-            UpdateDomainContactError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDomainContactError::ParseError(ref cause) => cause,
-            UpdateDomainContactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2808,20 +2115,12 @@ pub enum UpdateDomainContactPrivacyError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDomainContactPrivacyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDomainContactPrivacyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateDomainContactPrivacyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2834,58 +2133,37 @@ impl UpdateDomainContactPrivacyError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return UpdateDomainContactPrivacyError::DuplicateRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainContactPrivacyError::DuplicateRequest(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInput" => {
-                    return UpdateDomainContactPrivacyError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainContactPrivacyError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "OperationLimitExceeded" => {
-                    return UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDomainContactPrivacyError::OperationLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TLDRulesViolation" => {
-                    return UpdateDomainContactPrivacyError::TLDRulesViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainContactPrivacyError::TLDRulesViolation(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return UpdateDomainContactPrivacyError::UnsupportedTLD(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainContactPrivacyError::UnsupportedTLD(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateDomainContactPrivacyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDomainContactPrivacyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDomainContactPrivacyError {
-    fn from(err: serde_json::error::Error) -> UpdateDomainContactPrivacyError {
-        UpdateDomainContactPrivacyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDomainContactPrivacyError {
-    fn from(err: CredentialsError) -> UpdateDomainContactPrivacyError {
-        UpdateDomainContactPrivacyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDomainContactPrivacyError {
-    fn from(err: HttpDispatchError) -> UpdateDomainContactPrivacyError {
-        UpdateDomainContactPrivacyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDomainContactPrivacyError {
-    fn from(err: io::Error) -> UpdateDomainContactPrivacyError {
-        UpdateDomainContactPrivacyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDomainContactPrivacyError {
@@ -2901,13 +2179,6 @@ impl Error for UpdateDomainContactPrivacyError {
             UpdateDomainContactPrivacyError::OperationLimitExceeded(ref cause) => cause,
             UpdateDomainContactPrivacyError::TLDRulesViolation(ref cause) => cause,
             UpdateDomainContactPrivacyError::UnsupportedTLD(ref cause) => cause,
-            UpdateDomainContactPrivacyError::Validation(ref cause) => cause,
-            UpdateDomainContactPrivacyError::Credentials(ref err) => err.description(),
-            UpdateDomainContactPrivacyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDomainContactPrivacyError::ParseError(ref cause) => cause,
-            UpdateDomainContactPrivacyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2924,20 +2195,10 @@ pub enum UpdateDomainNameserversError {
     TLDRulesViolation(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDomainNameserversError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDomainNameserversError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainNameserversError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2950,54 +2211,37 @@ impl UpdateDomainNameserversError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return UpdateDomainNameserversError::DuplicateRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainNameserversError::DuplicateRequest(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInput" => {
-                    return UpdateDomainNameserversError::InvalidInput(String::from(error_message));
-                }
-                "OperationLimitExceeded" => {
-                    return UpdateDomainNameserversError::OperationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainNameserversError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
+                "OperationLimitExceeded" => {
+                    return RusotoError::Service(
+                        UpdateDomainNameserversError::OperationLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "TLDRulesViolation" => {
-                    return UpdateDomainNameserversError::TLDRulesViolation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDomainNameserversError::TLDRulesViolation(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return UpdateDomainNameserversError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(UpdateDomainNameserversError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDomainNameserversError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDomainNameserversError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDomainNameserversError {
-    fn from(err: serde_json::error::Error) -> UpdateDomainNameserversError {
-        UpdateDomainNameserversError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDomainNameserversError {
-    fn from(err: CredentialsError) -> UpdateDomainNameserversError {
-        UpdateDomainNameserversError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDomainNameserversError {
-    fn from(err: HttpDispatchError) -> UpdateDomainNameserversError {
-        UpdateDomainNameserversError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDomainNameserversError {
-    fn from(err: io::Error) -> UpdateDomainNameserversError {
-        UpdateDomainNameserversError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDomainNameserversError {
@@ -3013,13 +2257,6 @@ impl Error for UpdateDomainNameserversError {
             UpdateDomainNameserversError::OperationLimitExceeded(ref cause) => cause,
             UpdateDomainNameserversError::TLDRulesViolation(ref cause) => cause,
             UpdateDomainNameserversError::UnsupportedTLD(ref cause) => cause,
-            UpdateDomainNameserversError::Validation(ref cause) => cause,
-            UpdateDomainNameserversError::Credentials(ref err) => err.description(),
-            UpdateDomainNameserversError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDomainNameserversError::ParseError(ref cause) => cause,
-            UpdateDomainNameserversError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3032,20 +2269,10 @@ pub enum UpdateTagsForDomainError {
     OperationLimitExceeded(String),
     /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTagsForDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTagsForDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTagsForDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3058,44 +2285,25 @@ impl UpdateTagsForDomainError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return UpdateTagsForDomainError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateTagsForDomainError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationLimitExceeded" => {
-                    return UpdateTagsForDomainError::OperationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateTagsForDomainError::OperationLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedTLD" => {
-                    return UpdateTagsForDomainError::UnsupportedTLD(String::from(error_message));
+                    return RusotoError::Service(UpdateTagsForDomainError::UnsupportedTLD(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateTagsForDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateTagsForDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateTagsForDomainError {
-    fn from(err: serde_json::error::Error) -> UpdateTagsForDomainError {
-        UpdateTagsForDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTagsForDomainError {
-    fn from(err: CredentialsError) -> UpdateTagsForDomainError {
-        UpdateTagsForDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTagsForDomainError {
-    fn from(err: HttpDispatchError) -> UpdateTagsForDomainError {
-        UpdateTagsForDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTagsForDomainError {
-    fn from(err: io::Error) -> UpdateTagsForDomainError {
-        UpdateTagsForDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateTagsForDomainError {
@@ -3109,13 +2317,6 @@ impl Error for UpdateTagsForDomainError {
             UpdateTagsForDomainError::InvalidInput(ref cause) => cause,
             UpdateTagsForDomainError::OperationLimitExceeded(ref cause) => cause,
             UpdateTagsForDomainError::UnsupportedTLD(ref cause) => cause,
-            UpdateTagsForDomainError::Validation(ref cause) => cause,
-            UpdateTagsForDomainError::Credentials(ref err) => err.description(),
-            UpdateTagsForDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateTagsForDomainError::ParseError(ref cause) => cause,
-            UpdateTagsForDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3124,20 +2325,10 @@ impl Error for UpdateTagsForDomainError {
 pub enum ViewBillingError {
     /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ViewBillingError {
-    pub fn from_response(res: BufferedHttpResponse) -> ViewBillingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ViewBillingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3150,36 +2341,15 @@ impl ViewBillingError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return ViewBillingError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ViewBillingError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ViewBillingError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ViewBillingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ViewBillingError {
-    fn from(err: serde_json::error::Error) -> ViewBillingError {
-        ViewBillingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ViewBillingError {
-    fn from(err: CredentialsError) -> ViewBillingError {
-        ViewBillingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ViewBillingError {
-    fn from(err: HttpDispatchError) -> ViewBillingError {
-        ViewBillingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ViewBillingError {
-    fn from(err: io::Error) -> ViewBillingError {
-        ViewBillingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ViewBillingError {
@@ -3191,11 +2361,6 @@ impl Error for ViewBillingError {
     fn description(&self) -> &str {
         match *self {
             ViewBillingError::InvalidInput(ref cause) => cause,
-            ViewBillingError::Validation(ref cause) => cause,
-            ViewBillingError::Credentials(ref err) => err.description(),
-            ViewBillingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ViewBillingError::ParseError(ref cause) => cause,
-            ViewBillingError::Unknown(_) => "unknown error",
         }
     }
 }

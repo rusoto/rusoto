@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -182,20 +179,10 @@ pub enum BatchMeterUsageError {
     Throttling(String),
     /// <p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
     TimestampOutOfBounds(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchMeterUsageError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchMeterUsageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchMeterUsageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -208,56 +195,45 @@ impl BatchMeterUsageError {
 
             match *error_type {
                 "DisabledApiException" => {
-                    return BatchMeterUsageError::DisabledApi(String::from(error_message));
+                    return RusotoError::Service(BatchMeterUsageError::DisabledApi(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceErrorException" => {
-                    return BatchMeterUsageError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(BatchMeterUsageError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidCustomerIdentifierException" => {
-                    return BatchMeterUsageError::InvalidCustomerIdentifier(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchMeterUsageError::InvalidCustomerIdentifier(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidProductCodeException" => {
-                    return BatchMeterUsageError::InvalidProductCode(String::from(error_message));
+                    return RusotoError::Service(BatchMeterUsageError::InvalidProductCode(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidUsageDimensionException" => {
-                    return BatchMeterUsageError::InvalidUsageDimension(String::from(error_message));
+                    return RusotoError::Service(BatchMeterUsageError::InvalidUsageDimension(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return BatchMeterUsageError::Throttling(String::from(error_message));
+                    return RusotoError::Service(BatchMeterUsageError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
                 "TimestampOutOfBoundsException" => {
-                    return BatchMeterUsageError::TimestampOutOfBounds(String::from(error_message));
+                    return RusotoError::Service(BatchMeterUsageError::TimestampOutOfBounds(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchMeterUsageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchMeterUsageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchMeterUsageError {
-    fn from(err: serde_json::error::Error) -> BatchMeterUsageError {
-        BatchMeterUsageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchMeterUsageError {
-    fn from(err: CredentialsError) -> BatchMeterUsageError {
-        BatchMeterUsageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchMeterUsageError {
-    fn from(err: HttpDispatchError) -> BatchMeterUsageError {
-        BatchMeterUsageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchMeterUsageError {
-    fn from(err: io::Error) -> BatchMeterUsageError {
-        BatchMeterUsageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchMeterUsageError {
@@ -275,11 +251,6 @@ impl Error for BatchMeterUsageError {
             BatchMeterUsageError::InvalidUsageDimension(ref cause) => cause,
             BatchMeterUsageError::Throttling(ref cause) => cause,
             BatchMeterUsageError::TimestampOutOfBounds(ref cause) => cause,
-            BatchMeterUsageError::Validation(ref cause) => cause,
-            BatchMeterUsageError::Credentials(ref err) => err.description(),
-            BatchMeterUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchMeterUsageError::ParseError(ref cause) => cause,
-            BatchMeterUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -300,20 +271,10 @@ pub enum MeterUsageError {
     Throttling(String),
     /// <p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
     TimestampOutOfBounds(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl MeterUsageError {
-    pub fn from_response(res: BufferedHttpResponse) -> MeterUsageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<MeterUsageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -326,54 +287,45 @@ impl MeterUsageError {
 
             match *error_type {
                 "DuplicateRequestException" => {
-                    return MeterUsageError::DuplicateRequest(String::from(error_message));
+                    return RusotoError::Service(MeterUsageError::DuplicateRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceErrorException" => {
-                    return MeterUsageError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(MeterUsageError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidEndpointRegionException" => {
-                    return MeterUsageError::InvalidEndpointRegion(String::from(error_message));
+                    return RusotoError::Service(MeterUsageError::InvalidEndpointRegion(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidProductCodeException" => {
-                    return MeterUsageError::InvalidProductCode(String::from(error_message));
+                    return RusotoError::Service(MeterUsageError::InvalidProductCode(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidUsageDimensionException" => {
-                    return MeterUsageError::InvalidUsageDimension(String::from(error_message));
+                    return RusotoError::Service(MeterUsageError::InvalidUsageDimension(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return MeterUsageError::Throttling(String::from(error_message));
+                    return RusotoError::Service(MeterUsageError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
                 "TimestampOutOfBoundsException" => {
-                    return MeterUsageError::TimestampOutOfBounds(String::from(error_message));
+                    return RusotoError::Service(MeterUsageError::TimestampOutOfBounds(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return MeterUsageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return MeterUsageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for MeterUsageError {
-    fn from(err: serde_json::error::Error) -> MeterUsageError {
-        MeterUsageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for MeterUsageError {
-    fn from(err: CredentialsError) -> MeterUsageError {
-        MeterUsageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for MeterUsageError {
-    fn from(err: HttpDispatchError) -> MeterUsageError {
-        MeterUsageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for MeterUsageError {
-    fn from(err: io::Error) -> MeterUsageError {
-        MeterUsageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for MeterUsageError {
@@ -391,11 +343,6 @@ impl Error for MeterUsageError {
             MeterUsageError::InvalidUsageDimension(ref cause) => cause,
             MeterUsageError::Throttling(ref cause) => cause,
             MeterUsageError::TimestampOutOfBounds(ref cause) => cause,
-            MeterUsageError::Validation(ref cause) => cause,
-            MeterUsageError::Credentials(ref err) => err.description(),
-            MeterUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            MeterUsageError::ParseError(ref cause) => cause,
-            MeterUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -418,20 +365,10 @@ pub enum RegisterUsageError {
     PlatformNotSupported(String),
     /// <p>The calls to the API are throttled.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterUsageError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterUsageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterUsageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -444,57 +381,50 @@ impl RegisterUsageError {
 
             match *error_type {
                 "CustomerNotEntitledException" => {
-                    return RegisterUsageError::CustomerNotEntitled(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::CustomerNotEntitled(
+                        String::from(error_message),
+                    ));
                 }
                 "DisabledApiException" => {
-                    return RegisterUsageError::DisabledApi(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::DisabledApi(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceErrorException" => {
-                    return RegisterUsageError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidProductCodeException" => {
-                    return RegisterUsageError::InvalidProductCode(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::InvalidProductCode(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPublicKeyVersionException" => {
-                    return RegisterUsageError::InvalidPublicKeyVersion(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::InvalidPublicKeyVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRegionException" => {
-                    return RegisterUsageError::InvalidRegion(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::InvalidRegion(String::from(
+                        error_message,
+                    )));
                 }
                 "PlatformNotSupportedException" => {
-                    return RegisterUsageError::PlatformNotSupported(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::PlatformNotSupported(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return RegisterUsageError::Throttling(String::from(error_message));
+                    return RusotoError::Service(RegisterUsageError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RegisterUsageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterUsageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterUsageError {
-    fn from(err: serde_json::error::Error) -> RegisterUsageError {
-        RegisterUsageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterUsageError {
-    fn from(err: CredentialsError) -> RegisterUsageError {
-        RegisterUsageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterUsageError {
-    fn from(err: HttpDispatchError) -> RegisterUsageError {
-        RegisterUsageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterUsageError {
-    fn from(err: io::Error) -> RegisterUsageError {
-        RegisterUsageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterUsageError {
@@ -513,11 +443,6 @@ impl Error for RegisterUsageError {
             RegisterUsageError::InvalidRegion(ref cause) => cause,
             RegisterUsageError::PlatformNotSupported(ref cause) => cause,
             RegisterUsageError::Throttling(ref cause) => cause,
-            RegisterUsageError::Validation(ref cause) => cause,
-            RegisterUsageError::Credentials(ref err) => err.description(),
-            RegisterUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterUsageError::ParseError(ref cause) => cause,
-            RegisterUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -534,20 +459,10 @@ pub enum ResolveCustomerError {
     InvalidToken(String),
     /// <p>The calls to the API are throttled.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResolveCustomerError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResolveCustomerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveCustomerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -560,48 +475,35 @@ impl ResolveCustomerError {
 
             match *error_type {
                 "DisabledApiException" => {
-                    return ResolveCustomerError::DisabledApi(String::from(error_message));
+                    return RusotoError::Service(ResolveCustomerError::DisabledApi(String::from(
+                        error_message,
+                    )));
                 }
                 "ExpiredTokenException" => {
-                    return ResolveCustomerError::ExpiredToken(String::from(error_message));
+                    return RusotoError::Service(ResolveCustomerError::ExpiredToken(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceErrorException" => {
-                    return ResolveCustomerError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(ResolveCustomerError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTokenException" => {
-                    return ResolveCustomerError::InvalidToken(String::from(error_message));
+                    return RusotoError::Service(ResolveCustomerError::InvalidToken(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottlingException" => {
-                    return ResolveCustomerError::Throttling(String::from(error_message));
+                    return RusotoError::Service(ResolveCustomerError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ResolveCustomerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResolveCustomerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResolveCustomerError {
-    fn from(err: serde_json::error::Error) -> ResolveCustomerError {
-        ResolveCustomerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResolveCustomerError {
-    fn from(err: CredentialsError) -> ResolveCustomerError {
-        ResolveCustomerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResolveCustomerError {
-    fn from(err: HttpDispatchError) -> ResolveCustomerError {
-        ResolveCustomerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResolveCustomerError {
-    fn from(err: io::Error) -> ResolveCustomerError {
-        ResolveCustomerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResolveCustomerError {
@@ -617,11 +519,6 @@ impl Error for ResolveCustomerError {
             ResolveCustomerError::InternalServiceError(ref cause) => cause,
             ResolveCustomerError::InvalidToken(ref cause) => cause,
             ResolveCustomerError::Throttling(ref cause) => cause,
-            ResolveCustomerError::Validation(ref cause) => cause,
-            ResolveCustomerError::Credentials(ref err) => err.description(),
-            ResolveCustomerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResolveCustomerError::ParseError(ref cause) => cause,
-            ResolveCustomerError::Unknown(_) => "unknown error",
         }
     }
 }

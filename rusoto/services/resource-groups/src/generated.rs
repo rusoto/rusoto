@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -430,22 +427,12 @@ pub enum CreateGroupError {
     MethodNotAllowed(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -470,48 +457,35 @@ impl CreateGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateGroupError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return CreateGroupError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateGroupError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return CreateGroupError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreateGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateGroupError {
-    fn from(err: serde_json::error::Error) -> CreateGroupError {
-        CreateGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateGroupError {
-    fn from(err: CredentialsError) -> CreateGroupError {
-        CreateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGroupError {
-    fn from(err: HttpDispatchError) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGroupError {
-    fn from(err: io::Error) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -527,11 +501,6 @@ impl Error for CreateGroupError {
             CreateGroupError::InternalServerError(ref cause) => cause,
             CreateGroupError::MethodNotAllowed(ref cause) => cause,
             CreateGroupError::TooManyRequests(ref cause) => cause,
-            CreateGroupError::Validation(ref cause) => cause,
-            CreateGroupError::Credentials(ref err) => err.description(),
-            CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGroupError::ParseError(ref cause) => cause,
-            CreateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -550,22 +519,12 @@ pub enum DeleteGroupError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -590,51 +549,40 @@ impl DeleteGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteGroupError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return DeleteGroupError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteGroupError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return DeleteGroupError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteGroupError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteGroupError {
-        DeleteGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGroupError {
-    fn from(err: CredentialsError) -> DeleteGroupError {
-        DeleteGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGroupError {
-    fn from(err: HttpDispatchError) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGroupError {
-    fn from(err: io::Error) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -651,11 +599,6 @@ impl Error for DeleteGroupError {
             DeleteGroupError::MethodNotAllowed(ref cause) => cause,
             DeleteGroupError::NotFound(ref cause) => cause,
             DeleteGroupError::TooManyRequests(ref cause) => cause,
-            DeleteGroupError::Validation(ref cause) => cause,
-            DeleteGroupError::Credentials(ref err) => err.description(),
-            DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGroupError::ParseError(ref cause) => cause,
-            DeleteGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -674,22 +617,12 @@ pub enum GetGroupError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -714,49 +647,40 @@ impl GetGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGroupError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return GetGroupError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetGroupError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "MethodNotAllowedException" => {
-                    return GetGroupError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetGroupError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetGroupError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return GetGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetGroupError {
-    fn from(err: serde_json::error::Error) -> GetGroupError {
-        GetGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetGroupError {
-    fn from(err: CredentialsError) -> GetGroupError {
-        GetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGroupError {
-    fn from(err: HttpDispatchError) -> GetGroupError {
-        GetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGroupError {
-    fn from(err: io::Error) -> GetGroupError {
-        GetGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetGroupError {
@@ -773,11 +697,6 @@ impl Error for GetGroupError {
             GetGroupError::MethodNotAllowed(ref cause) => cause,
             GetGroupError::NotFound(ref cause) => cause,
             GetGroupError::TooManyRequests(ref cause) => cause,
-            GetGroupError::Validation(ref cause) => cause,
-            GetGroupError::Credentials(ref err) => err.description(),
-            GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupError::ParseError(ref cause) => cause,
-            GetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -796,22 +715,12 @@ pub enum GetGroupQueryError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupQueryError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetGroupQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -836,51 +745,40 @@ impl GetGroupQueryError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetGroupQueryError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetGroupQueryError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return GetGroupQueryError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(GetGroupQueryError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetGroupQueryError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetGroupQueryError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return GetGroupQueryError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(GetGroupQueryError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetGroupQueryError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetGroupQueryError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetGroupQueryError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetGroupQueryError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetGroupQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetGroupQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetGroupQueryError {
-    fn from(err: serde_json::error::Error) -> GetGroupQueryError {
-        GetGroupQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetGroupQueryError {
-    fn from(err: CredentialsError) -> GetGroupQueryError {
-        GetGroupQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGroupQueryError {
-    fn from(err: HttpDispatchError) -> GetGroupQueryError {
-        GetGroupQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGroupQueryError {
-    fn from(err: io::Error) -> GetGroupQueryError {
-        GetGroupQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetGroupQueryError {
@@ -897,11 +795,6 @@ impl Error for GetGroupQueryError {
             GetGroupQueryError::MethodNotAllowed(ref cause) => cause,
             GetGroupQueryError::NotFound(ref cause) => cause,
             GetGroupQueryError::TooManyRequests(ref cause) => cause,
-            GetGroupQueryError::Validation(ref cause) => cause,
-            GetGroupQueryError::Credentials(ref err) => err.description(),
-            GetGroupQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupQueryError::ParseError(ref cause) => cause,
-            GetGroupQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -920,22 +813,12 @@ pub enum GetTagsError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTagsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -960,45 +843,38 @@ impl GetTagsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetTagsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ForbiddenException" => return GetTagsError::Forbidden(String::from(error_message)),
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetTagsError::Forbidden(String::from(
+                        error_message,
+                    )));
+                }
                 "InternalServerErrorException" => {
-                    return GetTagsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "MethodNotAllowedException" => {
-                    return GetTagsError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetTagsError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetTagsError::NotFound(String::from(error_message)));
+                }
                 "TooManyRequestsException" => {
-                    return GetTagsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetTagsError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTagsError {
-    fn from(err: serde_json::error::Error) -> GetTagsError {
-        GetTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTagsError {
-    fn from(err: CredentialsError) -> GetTagsError {
-        GetTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTagsError {
-    fn from(err: HttpDispatchError) -> GetTagsError {
-        GetTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTagsError {
-    fn from(err: io::Error) -> GetTagsError {
-        GetTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTagsError {
@@ -1015,11 +891,6 @@ impl Error for GetTagsError {
             GetTagsError::MethodNotAllowed(ref cause) => cause,
             GetTagsError::NotFound(ref cause) => cause,
             GetTagsError::TooManyRequests(ref cause) => cause,
-            GetTagsError::Validation(ref cause) => cause,
-            GetTagsError::Credentials(ref err) => err.description(),
-            GetTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTagsError::ParseError(ref cause) => cause,
-            GetTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1040,22 +911,12 @@ pub enum ListGroupResourcesError {
     TooManyRequests(String),
     /// <p>The request has not been applied because it lacks valid authentication credentials for the target resource.</p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupResourcesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1080,54 +941,45 @@ impl ListGroupResourcesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListGroupResourcesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListGroupResourcesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return ListGroupResourcesError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListGroupResourcesError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListGroupResourcesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListGroupResourcesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return ListGroupResourcesError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(ListGroupResourcesError::MethodNotAllowed(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListGroupResourcesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListGroupResourcesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListGroupResourcesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListGroupResourcesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return ListGroupResourcesError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(ListGroupResourcesError::Unauthorized(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListGroupResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGroupResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGroupResourcesError {
-    fn from(err: serde_json::error::Error) -> ListGroupResourcesError {
-        ListGroupResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupResourcesError {
-    fn from(err: CredentialsError) -> ListGroupResourcesError {
-        ListGroupResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupResourcesError {
-    fn from(err: HttpDispatchError) -> ListGroupResourcesError {
-        ListGroupResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupResourcesError {
-    fn from(err: io::Error) -> ListGroupResourcesError {
-        ListGroupResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGroupResourcesError {
@@ -1145,13 +997,6 @@ impl Error for ListGroupResourcesError {
             ListGroupResourcesError::NotFound(ref cause) => cause,
             ListGroupResourcesError::TooManyRequests(ref cause) => cause,
             ListGroupResourcesError::Unauthorized(ref cause) => cause,
-            ListGroupResourcesError::Validation(ref cause) => cause,
-            ListGroupResourcesError::Credentials(ref err) => err.description(),
-            ListGroupResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListGroupResourcesError::ParseError(ref cause) => cause,
-            ListGroupResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1168,22 +1013,12 @@ pub enum ListGroupsError {
     MethodNotAllowed(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1208,48 +1043,35 @@ impl ListGroupsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListGroupsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return ListGroupsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListGroupsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "MethodNotAllowedException" => {
-                    return ListGroupsError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListGroupsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGroupsError {
-    fn from(err: serde_json::error::Error) -> ListGroupsError {
-        ListGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupsError {
-    fn from(err: CredentialsError) -> ListGroupsError {
-        ListGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupsError {
-    fn from(err: HttpDispatchError) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupsError {
-    fn from(err: io::Error) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -1265,11 +1087,6 @@ impl Error for ListGroupsError {
             ListGroupsError::InternalServerError(ref cause) => cause,
             ListGroupsError::MethodNotAllowed(ref cause) => cause,
             ListGroupsError::TooManyRequests(ref cause) => cause,
-            ListGroupsError::Validation(ref cause) => cause,
-            ListGroupsError::Credentials(ref err) => err.description(),
-            ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGroupsError::ParseError(ref cause) => cause,
-            ListGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1288,22 +1105,12 @@ pub enum SearchResourcesError {
     TooManyRequests(String),
     /// <p>The request has not been applied because it lacks valid authentication credentials for the target resource.</p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SearchResourcesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> SearchResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1328,51 +1135,40 @@ impl SearchResourcesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return SearchResourcesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(SearchResourcesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return SearchResourcesError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(SearchResourcesError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return SearchResourcesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(SearchResourcesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return SearchResourcesError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(SearchResourcesError::MethodNotAllowed(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return SearchResourcesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(SearchResourcesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return SearchResourcesError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(SearchResourcesError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return SearchResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SearchResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SearchResourcesError {
-    fn from(err: serde_json::error::Error) -> SearchResourcesError {
-        SearchResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SearchResourcesError {
-    fn from(err: CredentialsError) -> SearchResourcesError {
-        SearchResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SearchResourcesError {
-    fn from(err: HttpDispatchError) -> SearchResourcesError {
-        SearchResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SearchResourcesError {
-    fn from(err: io::Error) -> SearchResourcesError {
-        SearchResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SearchResourcesError {
@@ -1389,11 +1185,6 @@ impl Error for SearchResourcesError {
             SearchResourcesError::MethodNotAllowed(ref cause) => cause,
             SearchResourcesError::TooManyRequests(ref cause) => cause,
             SearchResourcesError::Unauthorized(ref cause) => cause,
-            SearchResourcesError::Validation(ref cause) => cause,
-            SearchResourcesError::Credentials(ref err) => err.description(),
-            SearchResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchResourcesError::ParseError(ref cause) => cause,
-            SearchResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1412,22 +1203,12 @@ pub enum TagError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TagError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1451,44 +1232,35 @@ impl TagError {
                 .unwrap_or("");
 
             match error_type {
-                "BadRequestException" => return TagError::BadRequest(String::from(error_message)),
-                "ForbiddenException" => return TagError::Forbidden(String::from(error_message)),
+                "BadRequestException" => {
+                    return RusotoError::Service(TagError::BadRequest(String::from(error_message)));
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(TagError::Forbidden(String::from(error_message)));
+                }
                 "InternalServerErrorException" => {
-                    return TagError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(TagError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "MethodNotAllowedException" => {
-                    return TagError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(TagError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return TagError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(TagError::NotFound(String::from(error_message)));
+                }
                 "TooManyRequestsException" => {
-                    return TagError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(TagError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return TagError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagError {
-    fn from(err: serde_json::error::Error) -> TagError {
-        TagError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagError {
-    fn from(err: CredentialsError) -> TagError {
-        TagError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagError {
-    fn from(err: HttpDispatchError) -> TagError {
-        TagError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagError {
-    fn from(err: io::Error) -> TagError {
-        TagError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagError {
@@ -1505,11 +1277,6 @@ impl Error for TagError {
             TagError::MethodNotAllowed(ref cause) => cause,
             TagError::NotFound(ref cause) => cause,
             TagError::TooManyRequests(ref cause) => cause,
-            TagError::Validation(ref cause) => cause,
-            TagError::Credentials(ref err) => err.description(),
-            TagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagError::ParseError(ref cause) => cause,
-            TagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1528,22 +1295,12 @@ pub enum UntagError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UntagError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1567,44 +1324,35 @@ impl UntagError {
                 .unwrap_or("");
 
             match error_type {
-                "BadRequestException" => return UntagError::BadRequest(String::from(error_message)),
-                "ForbiddenException" => return UntagError::Forbidden(String::from(error_message)),
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagError::BadRequest(String::from(error_message)));
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UntagError::Forbidden(String::from(error_message)));
+                }
                 "InternalServerErrorException" => {
-                    return UntagError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UntagError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "MethodNotAllowedException" => {
-                    return UntagError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(UntagError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return UntagError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagError::NotFound(String::from(error_message)));
+                }
                 "TooManyRequestsException" => {
-                    return UntagError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UntagError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return UntagError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagError {
-    fn from(err: serde_json::error::Error) -> UntagError {
-        UntagError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagError {
-    fn from(err: CredentialsError) -> UntagError {
-        UntagError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagError {
-    fn from(err: HttpDispatchError) -> UntagError {
-        UntagError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagError {
-    fn from(err: io::Error) -> UntagError {
-        UntagError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagError {
@@ -1621,11 +1369,6 @@ impl Error for UntagError {
             UntagError::MethodNotAllowed(ref cause) => cause,
             UntagError::NotFound(ref cause) => cause,
             UntagError::TooManyRequests(ref cause) => cause,
-            UntagError::Validation(ref cause) => cause,
-            UntagError::Credentials(ref err) => err.description(),
-            UntagError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagError::ParseError(ref cause) => cause,
-            UntagError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1644,22 +1387,12 @@ pub enum UpdateGroupError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1684,51 +1417,40 @@ impl UpdateGroupError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateGroupError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return UpdateGroupError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateGroupError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return UpdateGroupError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::MethodNotAllowed(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateGroupError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateGroupError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateGroupError {
-        UpdateGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGroupError {
-    fn from(err: CredentialsError) -> UpdateGroupError {
-        UpdateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGroupError {
-    fn from(err: HttpDispatchError) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGroupError {
-    fn from(err: io::Error) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGroupError {
@@ -1745,11 +1467,6 @@ impl Error for UpdateGroupError {
             UpdateGroupError::MethodNotAllowed(ref cause) => cause,
             UpdateGroupError::NotFound(ref cause) => cause,
             UpdateGroupError::TooManyRequests(ref cause) => cause,
-            UpdateGroupError::Validation(ref cause) => cause,
-            UpdateGroupError::Credentials(ref err) => err.description(),
-            UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateGroupError::ParseError(ref cause) => cause,
-            UpdateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1768,22 +1485,12 @@ pub enum UpdateGroupQueryError {
     NotFound(String),
     /// <p>The caller has exceeded throttling limits.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupQueryError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1808,51 +1515,40 @@ impl UpdateGroupQueryError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateGroupQueryError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupQueryError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return UpdateGroupQueryError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupQueryError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateGroupQueryError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupQueryError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MethodNotAllowedException" => {
-                    return UpdateGroupQueryError::MethodNotAllowed(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupQueryError::MethodNotAllowed(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateGroupQueryError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupQueryError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateGroupQueryError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupQueryError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateGroupQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGroupQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGroupQueryError {
-    fn from(err: serde_json::error::Error) -> UpdateGroupQueryError {
-        UpdateGroupQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGroupQueryError {
-    fn from(err: CredentialsError) -> UpdateGroupQueryError {
-        UpdateGroupQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGroupQueryError {
-    fn from(err: HttpDispatchError) -> UpdateGroupQueryError {
-        UpdateGroupQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGroupQueryError {
-    fn from(err: io::Error) -> UpdateGroupQueryError {
-        UpdateGroupQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGroupQueryError {
@@ -1869,11 +1565,6 @@ impl Error for UpdateGroupQueryError {
             UpdateGroupQueryError::MethodNotAllowed(ref cause) => cause,
             UpdateGroupQueryError::NotFound(ref cause) => cause,
             UpdateGroupQueryError::TooManyRequests(ref cause) => cause,
-            UpdateGroupQueryError::Validation(ref cause) => cause,
-            UpdateGroupQueryError::Credentials(ref err) => err.description(),
-            UpdateGroupQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateGroupQueryError::ParseError(ref cause) => cause,
-            UpdateGroupQueryError::Unknown(_) => "unknown error",
         }
     }
 }

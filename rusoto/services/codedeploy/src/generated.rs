@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -2212,20 +2209,12 @@ pub enum AddTagsToOnPremisesInstancesError {
     TagLimitExceeded(String),
     /// <p>A tag was not specified.</p>
     TagRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToOnPremisesInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToOnPremisesInstancesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AddTagsToOnPremisesInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2238,68 +2227,55 @@ impl AddTagsToOnPremisesInstancesError {
 
             match *error_type {
                 "InstanceLimitExceededException" => {
-                    return AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddTagsToOnPremisesInstancesError::InstanceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InstanceNameRequiredException" => {
-                    return AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddTagsToOnPremisesInstancesError::InstanceNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InstanceNotRegisteredException" => {
-                    return AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddTagsToOnPremisesInstancesError::InstanceNotRegistered(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInstanceNameException" => {
-                    return AddTagsToOnPremisesInstancesError::InvalidInstanceName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddTagsToOnPremisesInstancesError::InvalidInstanceName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidTagException" => {
-                    return AddTagsToOnPremisesInstancesError::InvalidTag(String::from(
-                        error_message,
+                    return RusotoError::Service(AddTagsToOnPremisesInstancesError::InvalidTag(
+                        String::from(error_message),
                     ));
                 }
                 "TagLimitExceededException" => {
-                    return AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddTagsToOnPremisesInstancesError::TagLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TagRequiredException" => {
-                    return AddTagsToOnPremisesInstancesError::TagRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(AddTagsToOnPremisesInstancesError::TagRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddTagsToOnPremisesInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddTagsToOnPremisesInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddTagsToOnPremisesInstancesError {
-    fn from(err: serde_json::error::Error) -> AddTagsToOnPremisesInstancesError {
-        AddTagsToOnPremisesInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsToOnPremisesInstancesError {
-    fn from(err: CredentialsError) -> AddTagsToOnPremisesInstancesError {
-        AddTagsToOnPremisesInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsToOnPremisesInstancesError {
-    fn from(err: HttpDispatchError) -> AddTagsToOnPremisesInstancesError {
-        AddTagsToOnPremisesInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsToOnPremisesInstancesError {
-    fn from(err: io::Error) -> AddTagsToOnPremisesInstancesError {
-        AddTagsToOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddTagsToOnPremisesInstancesError {
@@ -2317,13 +2293,6 @@ impl Error for AddTagsToOnPremisesInstancesError {
             AddTagsToOnPremisesInstancesError::InvalidTag(ref cause) => cause,
             AddTagsToOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
             AddTagsToOnPremisesInstancesError::TagRequired(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::Validation(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::Credentials(ref err) => err.description(),
-            AddTagsToOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddTagsToOnPremisesInstancesError::ParseError(ref cause) => cause,
-            AddTagsToOnPremisesInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2342,20 +2311,12 @@ pub enum BatchGetApplicationRevisionsError {
     InvalidRevision(String),
     /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetApplicationRevisionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetApplicationRevisionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchGetApplicationRevisionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2368,63 +2329,50 @@ impl BatchGetApplicationRevisionsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationRevisionsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ApplicationNameRequiredException" => {
-                    return BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationRevisionsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "BatchLimitExceededException" => {
-                    return BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationRevisionsError::BatchLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidApplicationNameException" => {
-                    return BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationRevisionsError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRevisionException" => {
-                    return BatchGetApplicationRevisionsError::InvalidRevision(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetApplicationRevisionsError::InvalidRevision(
+                        String::from(error_message),
                     ));
                 }
                 "RevisionRequiredException" => {
-                    return BatchGetApplicationRevisionsError::RevisionRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetApplicationRevisionsError::RevisionRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return BatchGetApplicationRevisionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetApplicationRevisionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetApplicationRevisionsError {
-    fn from(err: serde_json::error::Error) -> BatchGetApplicationRevisionsError {
-        BatchGetApplicationRevisionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetApplicationRevisionsError {
-    fn from(err: CredentialsError) -> BatchGetApplicationRevisionsError {
-        BatchGetApplicationRevisionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetApplicationRevisionsError {
-    fn from(err: HttpDispatchError) -> BatchGetApplicationRevisionsError {
-        BatchGetApplicationRevisionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetApplicationRevisionsError {
-    fn from(err: io::Error) -> BatchGetApplicationRevisionsError {
-        BatchGetApplicationRevisionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetApplicationRevisionsError {
@@ -2441,13 +2389,6 @@ impl Error for BatchGetApplicationRevisionsError {
             BatchGetApplicationRevisionsError::InvalidApplicationName(ref cause) => cause,
             BatchGetApplicationRevisionsError::InvalidRevision(ref cause) => cause,
             BatchGetApplicationRevisionsError::RevisionRequired(ref cause) => cause,
-            BatchGetApplicationRevisionsError::Validation(ref cause) => cause,
-            BatchGetApplicationRevisionsError::Credentials(ref err) => err.description(),
-            BatchGetApplicationRevisionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetApplicationRevisionsError::ParseError(ref cause) => cause,
-            BatchGetApplicationRevisionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2462,20 +2403,10 @@ pub enum BatchGetApplicationsError {
     BatchLimitExceeded(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetApplicationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetApplicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetApplicationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2488,53 +2419,30 @@ impl BatchGetApplicationsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return BatchGetApplicationsError::ApplicationDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetApplicationsError::ApplicationDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return BatchGetApplicationsError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetApplicationsError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "BatchLimitExceededException" => {
-                    return BatchGetApplicationsError::BatchLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetApplicationsError::BatchLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return BatchGetApplicationsError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetApplicationsError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchGetApplicationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetApplicationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetApplicationsError {
-    fn from(err: serde_json::error::Error) -> BatchGetApplicationsError {
-        BatchGetApplicationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetApplicationsError {
-    fn from(err: CredentialsError) -> BatchGetApplicationsError {
-        BatchGetApplicationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetApplicationsError {
-    fn from(err: HttpDispatchError) -> BatchGetApplicationsError {
-        BatchGetApplicationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetApplicationsError {
-    fn from(err: io::Error) -> BatchGetApplicationsError {
-        BatchGetApplicationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetApplicationsError {
@@ -2549,13 +2457,6 @@ impl Error for BatchGetApplicationsError {
             BatchGetApplicationsError::ApplicationNameRequired(ref cause) => cause,
             BatchGetApplicationsError::BatchLimitExceeded(ref cause) => cause,
             BatchGetApplicationsError::InvalidApplicationName(ref cause) => cause,
-            BatchGetApplicationsError::Validation(ref cause) => cause,
-            BatchGetApplicationsError::Credentials(ref err) => err.description(),
-            BatchGetApplicationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetApplicationsError::ParseError(ref cause) => cause,
-            BatchGetApplicationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2576,20 +2477,10 @@ pub enum BatchGetDeploymentGroupsError {
     InvalidApplicationName(String),
     /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetDeploymentGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetDeploymentGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2602,68 +2493,57 @@ impl BatchGetDeploymentGroupsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentGroupsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ApplicationNameRequiredException" => {
-                    return BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentGroupsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "BatchLimitExceededException" => {
-                    return BatchGetDeploymentGroupsError::BatchLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetDeploymentGroupsError::BatchLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentConfigDoesNotExistException" => {
-                    return BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidApplicationNameException" => {
-                    return BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentGroupsError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentGroupNameException" => {
-                    return BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return BatchGetDeploymentGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetDeploymentGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetDeploymentGroupsError {
-    fn from(err: serde_json::error::Error) -> BatchGetDeploymentGroupsError {
-        BatchGetDeploymentGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetDeploymentGroupsError {
-    fn from(err: CredentialsError) -> BatchGetDeploymentGroupsError {
-        BatchGetDeploymentGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetDeploymentGroupsError {
-    fn from(err: HttpDispatchError) -> BatchGetDeploymentGroupsError {
-        BatchGetDeploymentGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetDeploymentGroupsError {
-    fn from(err: io::Error) -> BatchGetDeploymentGroupsError {
-        BatchGetDeploymentGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetDeploymentGroupsError {
@@ -2681,13 +2561,6 @@ impl Error for BatchGetDeploymentGroupsError {
             BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(ref cause) => cause,
             BatchGetDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,
             BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(ref cause) => cause,
-            BatchGetDeploymentGroupsError::Validation(ref cause) => cause,
-            BatchGetDeploymentGroupsError::Credentials(ref err) => err.description(),
-            BatchGetDeploymentGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetDeploymentGroupsError::ParseError(ref cause) => cause,
-            BatchGetDeploymentGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2708,20 +2581,12 @@ pub enum BatchGetDeploymentInstancesError {
     InvalidDeploymentId(String),
     /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetDeploymentInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetDeploymentInstancesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchGetDeploymentInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2734,68 +2599,59 @@ impl BatchGetDeploymentInstancesError {
 
             match *error_type {
                 "BatchLimitExceededException" => {
-                    return BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentInstancesError::BatchLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentDoesNotExistException" => {
-                    return BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentInstancesError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentIdRequiredException" => {
-                    return BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentInstancesError::DeploymentIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InstanceIdRequiredException" => {
-                    return BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidComputePlatformException" => {
-                    return BatchGetDeploymentInstancesError::InvalidComputePlatform(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentInstancesError::InvalidComputePlatform(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentIdException" => {
-                    return BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentInstancesError::InvalidDeploymentId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInstanceNameException" => {
-                    return BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentInstancesError::InvalidInstanceName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return BatchGetDeploymentInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetDeploymentInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetDeploymentInstancesError {
-    fn from(err: serde_json::error::Error) -> BatchGetDeploymentInstancesError {
-        BatchGetDeploymentInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetDeploymentInstancesError {
-    fn from(err: CredentialsError) -> BatchGetDeploymentInstancesError {
-        BatchGetDeploymentInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetDeploymentInstancesError {
-    fn from(err: HttpDispatchError) -> BatchGetDeploymentInstancesError {
-        BatchGetDeploymentInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetDeploymentInstancesError {
-    fn from(err: io::Error) -> BatchGetDeploymentInstancesError {
-        BatchGetDeploymentInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetDeploymentInstancesError {
@@ -2813,13 +2669,6 @@ impl Error for BatchGetDeploymentInstancesError {
             BatchGetDeploymentInstancesError::InvalidComputePlatform(ref cause) => cause,
             BatchGetDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
             BatchGetDeploymentInstancesError::InvalidInstanceName(ref cause) => cause,
-            BatchGetDeploymentInstancesError::Validation(ref cause) => cause,
-            BatchGetDeploymentInstancesError::Credentials(ref err) => err.description(),
-            BatchGetDeploymentInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetDeploymentInstancesError::ParseError(ref cause) => cause,
-            BatchGetDeploymentInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2840,20 +2689,10 @@ pub enum BatchGetDeploymentTargetsError {
     InvalidDeploymentId(String),
     /// <p> The target ID provided was not valid. </p>
     InvalidDeploymentTargetId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetDeploymentTargetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetDeploymentTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentTargetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2866,68 +2705,59 @@ impl BatchGetDeploymentTargetsError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return BatchGetDeploymentTargetsError::DeploymentDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentIdRequiredException" => {
-                    return BatchGetDeploymentTargetsError::DeploymentIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::DeploymentIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentTargetDoesNotExistException" => {
-                    return BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "DeploymentTargetIdRequiredException" => {
-                    return BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentTargetListSizeExceededException" => {
-                    return BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidDeploymentIdException" => {
-                    return BatchGetDeploymentTargetsError::InvalidDeploymentId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::InvalidDeploymentId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentTargetIdException" => {
-                    return BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return BatchGetDeploymentTargetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetDeploymentTargetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetDeploymentTargetsError {
-    fn from(err: serde_json::error::Error) -> BatchGetDeploymentTargetsError {
-        BatchGetDeploymentTargetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetDeploymentTargetsError {
-    fn from(err: CredentialsError) -> BatchGetDeploymentTargetsError {
-        BatchGetDeploymentTargetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetDeploymentTargetsError {
-    fn from(err: HttpDispatchError) -> BatchGetDeploymentTargetsError {
-        BatchGetDeploymentTargetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetDeploymentTargetsError {
-    fn from(err: io::Error) -> BatchGetDeploymentTargetsError {
-        BatchGetDeploymentTargetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetDeploymentTargetsError {
@@ -2945,13 +2775,6 @@ impl Error for BatchGetDeploymentTargetsError {
             BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(ref cause) => cause,
             BatchGetDeploymentTargetsError::InvalidDeploymentId(ref cause) => cause,
             BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(ref cause) => cause,
-            BatchGetDeploymentTargetsError::Validation(ref cause) => cause,
-            BatchGetDeploymentTargetsError::Credentials(ref err) => err.description(),
-            BatchGetDeploymentTargetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetDeploymentTargetsError::ParseError(ref cause) => cause,
-            BatchGetDeploymentTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2964,20 +2787,10 @@ pub enum BatchGetDeploymentsError {
     DeploymentIdRequired(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetDeploymentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetDeploymentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDeploymentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2990,46 +2803,25 @@ impl BatchGetDeploymentsError {
 
             match *error_type {
                 "BatchLimitExceededException" => {
-                    return BatchGetDeploymentsError::BatchLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(BatchGetDeploymentsError::BatchLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "DeploymentIdRequiredException" => {
-                    return BatchGetDeploymentsError::DeploymentIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetDeploymentsError::DeploymentIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentIdException" => {
-                    return BatchGetDeploymentsError::InvalidDeploymentId(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetDeploymentsError::InvalidDeploymentId(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchGetDeploymentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetDeploymentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetDeploymentsError {
-    fn from(err: serde_json::error::Error) -> BatchGetDeploymentsError {
-        BatchGetDeploymentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetDeploymentsError {
-    fn from(err: CredentialsError) -> BatchGetDeploymentsError {
-        BatchGetDeploymentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetDeploymentsError {
-    fn from(err: HttpDispatchError) -> BatchGetDeploymentsError {
-        BatchGetDeploymentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetDeploymentsError {
-    fn from(err: io::Error) -> BatchGetDeploymentsError {
-        BatchGetDeploymentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetDeploymentsError {
@@ -3043,13 +2835,6 @@ impl Error for BatchGetDeploymentsError {
             BatchGetDeploymentsError::BatchLimitExceeded(ref cause) => cause,
             BatchGetDeploymentsError::DeploymentIdRequired(ref cause) => cause,
             BatchGetDeploymentsError::InvalidDeploymentId(ref cause) => cause,
-            BatchGetDeploymentsError::Validation(ref cause) => cause,
-            BatchGetDeploymentsError::Credentials(ref err) => err.description(),
-            BatchGetDeploymentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetDeploymentsError::ParseError(ref cause) => cause,
-            BatchGetDeploymentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3062,20 +2847,12 @@ pub enum BatchGetOnPremisesInstancesError {
     InstanceNameRequired(String),
     /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetOnPremisesInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetOnPremisesInstancesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchGetOnPremisesInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3088,48 +2865,31 @@ impl BatchGetOnPremisesInstancesError {
 
             match *error_type {
                 "BatchLimitExceededException" => {
-                    return BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetOnPremisesInstancesError::BatchLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InstanceNameRequiredException" => {
-                    return BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetOnPremisesInstancesError::InstanceNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInstanceNameException" => {
-                    return BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetOnPremisesInstancesError::InvalidInstanceName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return BatchGetOnPremisesInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetOnPremisesInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetOnPremisesInstancesError {
-    fn from(err: serde_json::error::Error) -> BatchGetOnPremisesInstancesError {
-        BatchGetOnPremisesInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetOnPremisesInstancesError {
-    fn from(err: CredentialsError) -> BatchGetOnPremisesInstancesError {
-        BatchGetOnPremisesInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetOnPremisesInstancesError {
-    fn from(err: HttpDispatchError) -> BatchGetOnPremisesInstancesError {
-        BatchGetOnPremisesInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetOnPremisesInstancesError {
-    fn from(err: io::Error) -> BatchGetOnPremisesInstancesError {
-        BatchGetOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetOnPremisesInstancesError {
@@ -3143,13 +2903,6 @@ impl Error for BatchGetOnPremisesInstancesError {
             BatchGetOnPremisesInstancesError::BatchLimitExceeded(ref cause) => cause,
             BatchGetOnPremisesInstancesError::InstanceNameRequired(ref cause) => cause,
             BatchGetOnPremisesInstancesError::InvalidInstanceName(ref cause) => cause,
-            BatchGetOnPremisesInstancesError::Validation(ref cause) => cause,
-            BatchGetOnPremisesInstancesError::Credentials(ref err) => err.description(),
-            BatchGetOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetOnPremisesInstancesError::ParseError(ref cause) => cause,
-            BatchGetOnPremisesInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3172,20 +2925,10 @@ pub enum ContinueDeploymentError {
     InvalidDeploymentWaitType(String),
     /// <p>A call was submitted that is not supported for the specified deployment type.</p>
     UnsupportedActionForDeploymentType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ContinueDeploymentError {
-    pub fn from_response(res: BufferedHttpResponse) -> ContinueDeploymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ContinueDeploymentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3198,71 +2941,56 @@ impl ContinueDeploymentError {
 
             match *error_type {
                 "DeploymentAlreadyCompletedException" => {
-                    return ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ContinueDeploymentError::DeploymentAlreadyCompleted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentDoesNotExistException" => {
-                    return ContinueDeploymentError::DeploymentDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(ContinueDeploymentError::DeploymentDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentIdRequiredException" => {
-                    return ContinueDeploymentError::DeploymentIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(ContinueDeploymentError::DeploymentIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentIsNotInReadyStateException" => {
-                    return ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ContinueDeploymentError::DeploymentIsNotInReadyState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentIdException" => {
-                    return ContinueDeploymentError::InvalidDeploymentId(String::from(error_message));
+                    return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentId(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidDeploymentStatusException" => {
-                    return ContinueDeploymentError::InvalidDeploymentStatus(String::from(
-                        error_message,
+                    return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentStatus(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentWaitTypeException" => {
-                    return ContinueDeploymentError::InvalidDeploymentWaitType(String::from(
-                        error_message,
+                    return RusotoError::Service(ContinueDeploymentError::InvalidDeploymentWaitType(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedActionForDeploymentTypeException" => {
-                    return ContinueDeploymentError::UnsupportedActionForDeploymentType(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ContinueDeploymentError::UnsupportedActionForDeploymentType(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return ContinueDeploymentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ContinueDeploymentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ContinueDeploymentError {
-    fn from(err: serde_json::error::Error) -> ContinueDeploymentError {
-        ContinueDeploymentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ContinueDeploymentError {
-    fn from(err: CredentialsError) -> ContinueDeploymentError {
-        ContinueDeploymentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ContinueDeploymentError {
-    fn from(err: HttpDispatchError) -> ContinueDeploymentError {
-        ContinueDeploymentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ContinueDeploymentError {
-    fn from(err: io::Error) -> ContinueDeploymentError {
-        ContinueDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ContinueDeploymentError {
@@ -3281,13 +3009,6 @@ impl Error for ContinueDeploymentError {
             ContinueDeploymentError::InvalidDeploymentStatus(ref cause) => cause,
             ContinueDeploymentError::InvalidDeploymentWaitType(ref cause) => cause,
             ContinueDeploymentError::UnsupportedActionForDeploymentType(ref cause) => cause,
-            ContinueDeploymentError::Validation(ref cause) => cause,
-            ContinueDeploymentError::Credentials(ref err) => err.description(),
-            ContinueDeploymentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ContinueDeploymentError::ParseError(ref cause) => cause,
-            ContinueDeploymentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3304,20 +3025,10 @@ pub enum CreateApplicationError {
     InvalidApplicationName(String),
     /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
     InvalidComputePlatform(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3330,58 +3041,35 @@ impl CreateApplicationError {
 
             match *error_type {
                 "ApplicationAlreadyExistsException" => {
-                    return CreateApplicationError::ApplicationAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationError::ApplicationAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationLimitExceededException" => {
-                    return CreateApplicationError::ApplicationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationError::ApplicationLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return CreateApplicationError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return CreateApplicationError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidComputePlatformException" => {
-                    return CreateApplicationError::InvalidComputePlatform(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationError::InvalidComputePlatform(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateApplicationError {
-    fn from(err: serde_json::error::Error) -> CreateApplicationError {
-        CreateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateApplicationError {
-    fn from(err: CredentialsError) -> CreateApplicationError {
-        CreateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateApplicationError {
-    fn from(err: HttpDispatchError) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateApplicationError {
-    fn from(err: io::Error) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -3397,13 +3085,6 @@ impl Error for CreateApplicationError {
             CreateApplicationError::ApplicationNameRequired(ref cause) => cause,
             CreateApplicationError::InvalidApplicationName(ref cause) => cause,
             CreateApplicationError::InvalidComputePlatform(ref cause) => cause,
-            CreateApplicationError::Validation(ref cause) => cause,
-            CreateApplicationError::Credentials(ref err) => err.description(),
-            CreateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateApplicationError::ParseError(ref cause) => cause,
-            CreateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3456,20 +3137,10 @@ pub enum CreateDeploymentError {
     RevisionRequired(String),
     /// <p>An API function was called too frequently.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDeploymentError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDeploymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3482,136 +3153,131 @@ impl CreateDeploymentError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return CreateDeploymentError::ApplicationDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::ApplicationDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return CreateDeploymentError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentConfigDoesNotExistException" => {
-                    return CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupDoesNotExistException" => {
-                    return CreateDeploymentError::DeploymentGroupDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::DeploymentGroupDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return CreateDeploymentError::DeploymentGroupNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::DeploymentGroupNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentLimitExceededException" => {
-                    return CreateDeploymentError::DeploymentLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::DeploymentLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "DescriptionTooLongException" => {
-                    return CreateDeploymentError::DescriptionTooLong(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentError::DescriptionTooLong(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidApplicationNameException" => {
-                    return CreateDeploymentError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidAutoRollbackConfigException" => {
-                    return CreateDeploymentError::InvalidAutoRollbackConfig(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidAutoRollbackConfig(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidAutoScalingGroupException" => {
-                    return CreateDeploymentError::InvalidAutoScalingGroup(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidAutoScalingGroup(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentConfigNameException" => {
-                    return CreateDeploymentError::InvalidDeploymentConfigName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidDeploymentConfigName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentGroupNameException" => {
-                    return CreateDeploymentError::InvalidDeploymentGroupName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidDeploymentGroupName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidFileExistsBehaviorException" => {
-                    return CreateDeploymentError::InvalidFileExistsBehavior(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidFileExistsBehavior(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGitHubAccountTokenException" => {
-                    return CreateDeploymentError::InvalidGitHubAccountToken(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidGitHubAccountToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidIgnoreApplicationStopFailuresValueException" => {
-                    return CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidLoadBalancerInfoException" => {
-                    return CreateDeploymentError::InvalidLoadBalancerInfo(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidLoadBalancerInfo(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRevisionException" => {
-                    return CreateDeploymentError::InvalidRevision(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentError::InvalidRevision(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRoleException" => {
-                    return CreateDeploymentError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentError::InvalidRole(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTargetInstancesException" => {
-                    return CreateDeploymentError::InvalidTargetInstances(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentError::InvalidTargetInstances(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidUpdateOutdatedInstancesOnlyValueException" => {
-                    return CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RevisionDoesNotExistException" => {
-                    return CreateDeploymentError::RevisionDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentError::RevisionDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RevisionRequiredException" => {
-                    return CreateDeploymentError::RevisionRequired(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentError::RevisionRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return CreateDeploymentError::Throttling(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateDeploymentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDeploymentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDeploymentError {
-    fn from(err: serde_json::error::Error) -> CreateDeploymentError {
-        CreateDeploymentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDeploymentError {
-    fn from(err: CredentialsError) -> CreateDeploymentError {
-        CreateDeploymentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDeploymentError {
-    fn from(err: HttpDispatchError) -> CreateDeploymentError {
-        CreateDeploymentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDeploymentError {
-    fn from(err: io::Error) -> CreateDeploymentError {
-        CreateDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDeploymentError {
@@ -3645,11 +3311,6 @@ impl Error for CreateDeploymentError {
             CreateDeploymentError::RevisionDoesNotExist(ref cause) => cause,
             CreateDeploymentError::RevisionRequired(ref cause) => cause,
             CreateDeploymentError::Throttling(ref cause) => cause,
-            CreateDeploymentError::Validation(ref cause) => cause,
-            CreateDeploymentError::Credentials(ref err) => err.description(),
-            CreateDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDeploymentError::ParseError(ref cause) => cause,
-            CreateDeploymentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3670,20 +3331,10 @@ pub enum CreateDeploymentConfigError {
     InvalidMinimumHealthyHostValue(String),
     /// <p> The configuration that specifies how traffic is routed during a deployment is invalid.</p>
     InvalidTrafficRoutingConfiguration(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDeploymentConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDeploymentConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3696,68 +3347,59 @@ impl CreateDeploymentConfigError {
 
             match *error_type {
                 "DeploymentConfigAlreadyExistsException" => {
-                    return CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentConfigError::DeploymentConfigAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentConfigLimitExceededException" => {
-                    return CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentConfigError::DeploymentConfigLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentConfigNameRequiredException" => {
-                    return CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentConfigError::DeploymentConfigNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidComputePlatformException" => {
-                    return CreateDeploymentConfigError::InvalidComputePlatform(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentConfigError::InvalidComputePlatform(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentConfigNameException" => {
-                    return CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidMinimumHealthyHostValueException" => {
-                    return CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidTrafficRoutingConfigurationException" => {
-                    return CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return CreateDeploymentConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDeploymentConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDeploymentConfigError {
-    fn from(err: serde_json::error::Error) -> CreateDeploymentConfigError {
-        CreateDeploymentConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDeploymentConfigError {
-    fn from(err: CredentialsError) -> CreateDeploymentConfigError {
-        CreateDeploymentConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDeploymentConfigError {
-    fn from(err: HttpDispatchError) -> CreateDeploymentConfigError {
-        CreateDeploymentConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDeploymentConfigError {
-    fn from(err: io::Error) -> CreateDeploymentConfigError {
-        CreateDeploymentConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDeploymentConfigError {
@@ -3775,13 +3417,6 @@ impl Error for CreateDeploymentConfigError {
             CreateDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(ref cause) => cause,
             CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(ref cause) => cause,
-            CreateDeploymentConfigError::Validation(ref cause) => cause,
-            CreateDeploymentConfigError::Credentials(ref err) => err.description(),
-            CreateDeploymentConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDeploymentConfigError::ParseError(ref cause) => cause,
-            CreateDeploymentConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3850,20 +3485,10 @@ pub enum CreateDeploymentGroupError {
     Throttling(String),
     /// <p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDeploymentGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDeploymentGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3876,176 +3501,201 @@ impl CreateDeploymentGroupError {
 
             match *error_type {
                 "AlarmsLimitExceededException" => {
-                    return CreateDeploymentGroupError::AlarmsLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::AlarmsLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationDoesNotExistException" => {
-                    return CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ApplicationNameRequiredException" => {
-                    return CreateDeploymentGroupError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentConfigDoesNotExistException" => {
-                    return CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupAlreadyExistsException" => {
-                    return CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupLimitExceededException" => {
-                    return CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::DeploymentGroupLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ECSServiceMappingLimitExceededException" => {
-                    return CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidAlarmConfigException" => {
-                    return CreateDeploymentGroupError::InvalidAlarmConfig(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidAlarmConfig(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return CreateDeploymentGroupError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidAutoRollbackConfigException" => {
-                    return CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidAutoScalingGroupException" => {
-                    return CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
-                    return CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidDeploymentConfigNameException" => {
-                    return CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentGroupNameException" => {
-                    return CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentStyleException" => {
-                    return CreateDeploymentGroupError::InvalidDeploymentStyle(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidDeploymentStyle(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidEC2TagCombinationException" => {
-                    return CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidEC2TagCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidEC2TagException" => {
-                    return CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidEC2Tag(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidECSServiceException" => {
-                    return CreateDeploymentGroupError::InvalidECSService(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidECSService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return CreateDeploymentGroupError::InvalidInput(String::from(error_message));
-                }
-                "InvalidLoadBalancerInfoException" => {
-                    return CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidLoadBalancerInfoException" => {
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidOnPremisesTagCombinationException" => {
-                    return CreateDeploymentGroupError::InvalidOnPremisesTagCombination(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidRoleException" => {
-                    return CreateDeploymentGroupError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidRole(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTagException" => {
-                    return CreateDeploymentGroupError::InvalidTag(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidTag(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTargetGroupPairException" => {
-                    return CreateDeploymentGroupError::InvalidTargetGroupPair(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidTargetGroupPair(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidTriggerConfigException" => {
-                    return CreateDeploymentGroupError::InvalidTriggerConfig(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidTriggerConfig(
+                        String::from(error_message),
                     ));
                 }
                 "LifecycleHookLimitExceededException" => {
-                    return CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RoleRequiredException" => {
-                    return CreateDeploymentGroupError::RoleRequired(String::from(error_message));
+                    return RusotoError::Service(CreateDeploymentGroupError::RoleRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "TagSetListLimitExceededException" => {
-                    return CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ThrottlingException" => {
-                    return CreateDeploymentGroupError::Throttling(String::from(error_message));
-                }
-                "TriggerTargetsLimitExceededException" => {
-                    return CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDeploymentGroupError::Throttling(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateDeploymentGroupError::Validation(error_message.to_string());
+                "TriggerTargetsLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDeploymentGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDeploymentGroupError {
-    fn from(err: serde_json::error::Error) -> CreateDeploymentGroupError {
-        CreateDeploymentGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDeploymentGroupError {
-    fn from(err: CredentialsError) -> CreateDeploymentGroupError {
-        CreateDeploymentGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDeploymentGroupError {
-    fn from(err: HttpDispatchError) -> CreateDeploymentGroupError {
-        CreateDeploymentGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDeploymentGroupError {
-    fn from(err: io::Error) -> CreateDeploymentGroupError {
-        CreateDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDeploymentGroupError {
@@ -4087,13 +3737,6 @@ impl Error for CreateDeploymentGroupError {
             CreateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::Throttling(ref cause) => cause,
             CreateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
-            CreateDeploymentGroupError::Validation(ref cause) => cause,
-            CreateDeploymentGroupError::Credentials(ref err) => err.description(),
-            CreateDeploymentGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDeploymentGroupError::ParseError(ref cause) => cause,
-            CreateDeploymentGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4104,20 +3747,10 @@ pub enum DeleteApplicationError {
     ApplicationNameRequired(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4130,43 +3763,20 @@ impl DeleteApplicationError {
 
             match *error_type {
                 "ApplicationNameRequiredException" => {
-                    return DeleteApplicationError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteApplicationError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return DeleteApplicationError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteApplicationError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationError {
-        DeleteApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationError {
-    fn from(err: CredentialsError) -> DeleteApplicationError {
-        DeleteApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationError {
-    fn from(err: io::Error) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -4179,13 +3789,6 @@ impl Error for DeleteApplicationError {
         match *self {
             DeleteApplicationError::ApplicationNameRequired(ref cause) => cause,
             DeleteApplicationError::InvalidApplicationName(ref cause) => cause,
-            DeleteApplicationError::Validation(ref cause) => cause,
-            DeleteApplicationError::Credentials(ref err) => err.description(),
-            DeleteApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationError::ParseError(ref cause) => cause,
-            DeleteApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4200,20 +3803,10 @@ pub enum DeleteDeploymentConfigError {
     InvalidDeploymentConfigName(String),
     /// <p>An invalid operation was detected.</p>
     InvalidOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDeploymentConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDeploymentConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4226,53 +3819,34 @@ impl DeleteDeploymentConfigError {
 
             match *error_type {
                 "DeploymentConfigInUseException" => {
-                    return DeleteDeploymentConfigError::DeploymentConfigInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDeploymentConfigError::DeploymentConfigInUse(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentConfigNameRequiredException" => {
-                    return DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteDeploymentConfigError::DeploymentConfigNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentConfigNameException" => {
-                    return DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteDeploymentConfigError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidOperationException" => {
-                    return DeleteDeploymentConfigError::InvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDeploymentConfigError::InvalidOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteDeploymentConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDeploymentConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDeploymentConfigError {
-    fn from(err: serde_json::error::Error) -> DeleteDeploymentConfigError {
-        DeleteDeploymentConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDeploymentConfigError {
-    fn from(err: CredentialsError) -> DeleteDeploymentConfigError {
-        DeleteDeploymentConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDeploymentConfigError {
-    fn from(err: HttpDispatchError) -> DeleteDeploymentConfigError {
-        DeleteDeploymentConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDeploymentConfigError {
-    fn from(err: io::Error) -> DeleteDeploymentConfigError {
-        DeleteDeploymentConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDeploymentConfigError {
@@ -4287,13 +3861,6 @@ impl Error for DeleteDeploymentConfigError {
             DeleteDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
             DeleteDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
             DeleteDeploymentConfigError::InvalidOperation(ref cause) => cause,
-            DeleteDeploymentConfigError::Validation(ref cause) => cause,
-            DeleteDeploymentConfigError::Credentials(ref err) => err.description(),
-            DeleteDeploymentConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDeploymentConfigError::ParseError(ref cause) => cause,
-            DeleteDeploymentConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4310,20 +3877,10 @@ pub enum DeleteDeploymentGroupError {
     InvalidDeploymentGroupName(String),
     /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Amazon EC2 Auto Scaling.</p>
     InvalidRole(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDeploymentGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDeploymentGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeploymentGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4336,56 +3893,41 @@ impl DeleteDeploymentGroupError {
 
             match *error_type {
                 "ApplicationNameRequiredException" => {
-                    return DeleteDeploymentGroupError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteDeploymentGroupError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidApplicationNameException" => {
-                    return DeleteDeploymentGroupError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDeploymentGroupError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentGroupNameException" => {
-                    return DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRoleException" => {
-                    return DeleteDeploymentGroupError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(DeleteDeploymentGroupError::InvalidRole(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDeploymentGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDeploymentGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDeploymentGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteDeploymentGroupError {
-        DeleteDeploymentGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDeploymentGroupError {
-    fn from(err: CredentialsError) -> DeleteDeploymentGroupError {
-        DeleteDeploymentGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDeploymentGroupError {
-    fn from(err: HttpDispatchError) -> DeleteDeploymentGroupError {
-        DeleteDeploymentGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDeploymentGroupError {
-    fn from(err: io::Error) -> DeleteDeploymentGroupError {
-        DeleteDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDeploymentGroupError {
@@ -4401,13 +3943,6 @@ impl Error for DeleteDeploymentGroupError {
             DeleteDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
             DeleteDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
             DeleteDeploymentGroupError::InvalidRole(ref cause) => cause,
-            DeleteDeploymentGroupError::Validation(ref cause) => cause,
-            DeleteDeploymentGroupError::Credentials(ref err) => err.description(),
-            DeleteDeploymentGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDeploymentGroupError::ParseError(ref cause) => cause,
-            DeleteDeploymentGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4424,20 +3959,10 @@ pub enum DeleteGitHubAccountTokenError {
     OperationNotSupported(String),
     /// <p>The specified resource could not be validated.</p>
     ResourceValidation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGitHubAccountTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGitHubAccountTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGitHubAccountTokenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4450,58 +3975,43 @@ impl DeleteGitHubAccountTokenError {
 
             match *error_type {
                 "GitHubAccountTokenDoesNotExistException" => {
-                    return DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenDoesNotExist(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "GitHubAccountTokenNameRequiredException" => {
-                    return DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteGitHubAccountTokenError::GitHubAccountTokenNameRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidGitHubAccountTokenNameException" => {
-                    return DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "OperationNotSupportedException" => {
-                    return DeleteGitHubAccountTokenError::OperationNotSupported(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteGitHubAccountTokenError::OperationNotSupported(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceValidationException" => {
-                    return DeleteGitHubAccountTokenError::ResourceValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteGitHubAccountTokenError::ResourceValidation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteGitHubAccountTokenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteGitHubAccountTokenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteGitHubAccountTokenError {
-    fn from(err: serde_json::error::Error) -> DeleteGitHubAccountTokenError {
-        DeleteGitHubAccountTokenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGitHubAccountTokenError {
-    fn from(err: CredentialsError) -> DeleteGitHubAccountTokenError {
-        DeleteGitHubAccountTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGitHubAccountTokenError {
-    fn from(err: HttpDispatchError) -> DeleteGitHubAccountTokenError {
-        DeleteGitHubAccountTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGitHubAccountTokenError {
-    fn from(err: io::Error) -> DeleteGitHubAccountTokenError {
-        DeleteGitHubAccountTokenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteGitHubAccountTokenError {
@@ -4517,13 +4027,6 @@ impl Error for DeleteGitHubAccountTokenError {
             DeleteGitHubAccountTokenError::InvalidGitHubAccountTokenName(ref cause) => cause,
             DeleteGitHubAccountTokenError::OperationNotSupported(ref cause) => cause,
             DeleteGitHubAccountTokenError::ResourceValidation(ref cause) => cause,
-            DeleteGitHubAccountTokenError::Validation(ref cause) => cause,
-            DeleteGitHubAccountTokenError::Credentials(ref err) => err.description(),
-            DeleteGitHubAccountTokenError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteGitHubAccountTokenError::ParseError(ref cause) => cause,
-            DeleteGitHubAccountTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4534,20 +4037,12 @@ pub enum DeregisterOnPremisesInstanceError {
     InstanceNameRequired(String),
     /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterOnPremisesInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterOnPremisesInstanceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeregisterOnPremisesInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4560,43 +4055,24 @@ impl DeregisterOnPremisesInstanceError {
 
             match *error_type {
                 "InstanceNameRequiredException" => {
-                    return DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeregisterOnPremisesInstanceError::InstanceNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInstanceNameException" => {
-                    return DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeregisterOnPremisesInstanceError::InvalidInstanceName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DeregisterOnPremisesInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeregisterOnPremisesInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeregisterOnPremisesInstanceError {
-    fn from(err: serde_json::error::Error) -> DeregisterOnPremisesInstanceError {
-        DeregisterOnPremisesInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterOnPremisesInstanceError {
-    fn from(err: CredentialsError) -> DeregisterOnPremisesInstanceError {
-        DeregisterOnPremisesInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterOnPremisesInstanceError {
-    fn from(err: HttpDispatchError) -> DeregisterOnPremisesInstanceError {
-        DeregisterOnPremisesInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterOnPremisesInstanceError {
-    fn from(err: io::Error) -> DeregisterOnPremisesInstanceError {
-        DeregisterOnPremisesInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeregisterOnPremisesInstanceError {
@@ -4609,13 +4085,6 @@ impl Error for DeregisterOnPremisesInstanceError {
         match *self {
             DeregisterOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
             DeregisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
-            DeregisterOnPremisesInstanceError::Validation(ref cause) => cause,
-            DeregisterOnPremisesInstanceError::Credentials(ref err) => err.description(),
-            DeregisterOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterOnPremisesInstanceError::ParseError(ref cause) => cause,
-            DeregisterOnPremisesInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4628,20 +4097,10 @@ pub enum GetApplicationError {
     ApplicationNameRequired(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4654,42 +4113,25 @@ impl GetApplicationError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return GetApplicationError::ApplicationDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::ApplicationDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return GetApplicationError::ApplicationNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::ApplicationNameRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidApplicationNameException" => {
-                    return GetApplicationError::InvalidApplicationName(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::InvalidApplicationName(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetApplicationError {
-    fn from(err: serde_json::error::Error) -> GetApplicationError {
-        GetApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetApplicationError {
-    fn from(err: CredentialsError) -> GetApplicationError {
-        GetApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetApplicationError {
-    fn from(err: HttpDispatchError) -> GetApplicationError {
-        GetApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetApplicationError {
-    fn from(err: io::Error) -> GetApplicationError {
-        GetApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetApplicationError {
@@ -4703,11 +4145,6 @@ impl Error for GetApplicationError {
             GetApplicationError::ApplicationDoesNotExist(ref cause) => cause,
             GetApplicationError::ApplicationNameRequired(ref cause) => cause,
             GetApplicationError::InvalidApplicationName(ref cause) => cause,
-            GetApplicationError::Validation(ref cause) => cause,
-            GetApplicationError::Credentials(ref err) => err.description(),
-            GetApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetApplicationError::ParseError(ref cause) => cause,
-            GetApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4726,20 +4163,10 @@ pub enum GetApplicationRevisionError {
     RevisionDoesNotExist(String),
     /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetApplicationRevisionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetApplicationRevisionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationRevisionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4752,61 +4179,46 @@ impl GetApplicationRevisionError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return GetApplicationRevisionError::ApplicationDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetApplicationRevisionError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ApplicationNameRequiredException" => {
-                    return GetApplicationRevisionError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetApplicationRevisionError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidApplicationNameException" => {
-                    return GetApplicationRevisionError::InvalidApplicationName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetApplicationRevisionError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRevisionException" => {
-                    return GetApplicationRevisionError::InvalidRevision(String::from(error_message));
+                    return RusotoError::Service(GetApplicationRevisionError::InvalidRevision(
+                        String::from(error_message),
+                    ));
                 }
                 "RevisionDoesNotExistException" => {
-                    return GetApplicationRevisionError::RevisionDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetApplicationRevisionError::RevisionDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RevisionRequiredException" => {
-                    return GetApplicationRevisionError::RevisionRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetApplicationRevisionError::RevisionRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetApplicationRevisionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetApplicationRevisionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetApplicationRevisionError {
-    fn from(err: serde_json::error::Error) -> GetApplicationRevisionError {
-        GetApplicationRevisionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetApplicationRevisionError {
-    fn from(err: CredentialsError) -> GetApplicationRevisionError {
-        GetApplicationRevisionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetApplicationRevisionError {
-    fn from(err: HttpDispatchError) -> GetApplicationRevisionError {
-        GetApplicationRevisionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetApplicationRevisionError {
-    fn from(err: io::Error) -> GetApplicationRevisionError {
-        GetApplicationRevisionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetApplicationRevisionError {
@@ -4823,13 +4235,6 @@ impl Error for GetApplicationRevisionError {
             GetApplicationRevisionError::InvalidRevision(ref cause) => cause,
             GetApplicationRevisionError::RevisionDoesNotExist(ref cause) => cause,
             GetApplicationRevisionError::RevisionRequired(ref cause) => cause,
-            GetApplicationRevisionError::Validation(ref cause) => cause,
-            GetApplicationRevisionError::Credentials(ref err) => err.description(),
-            GetApplicationRevisionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetApplicationRevisionError::ParseError(ref cause) => cause,
-            GetApplicationRevisionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4842,20 +4247,10 @@ pub enum GetDeploymentError {
     DeploymentIdRequired(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeploymentError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeploymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4868,42 +4263,25 @@ impl GetDeploymentError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return GetDeploymentError::DeploymentDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetDeploymentError::DeploymentDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "DeploymentIdRequiredException" => {
-                    return GetDeploymentError::DeploymentIdRequired(String::from(error_message));
+                    return RusotoError::Service(GetDeploymentError::DeploymentIdRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidDeploymentIdException" => {
-                    return GetDeploymentError::InvalidDeploymentId(String::from(error_message));
+                    return RusotoError::Service(GetDeploymentError::InvalidDeploymentId(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDeploymentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeploymentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeploymentError {
-    fn from(err: serde_json::error::Error) -> GetDeploymentError {
-        GetDeploymentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeploymentError {
-    fn from(err: CredentialsError) -> GetDeploymentError {
-        GetDeploymentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeploymentError {
-    fn from(err: HttpDispatchError) -> GetDeploymentError {
-        GetDeploymentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeploymentError {
-    fn from(err: io::Error) -> GetDeploymentError {
-        GetDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeploymentError {
@@ -4917,11 +4295,6 @@ impl Error for GetDeploymentError {
             GetDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
             GetDeploymentError::DeploymentIdRequired(ref cause) => cause,
             GetDeploymentError::InvalidDeploymentId(ref cause) => cause,
-            GetDeploymentError::Validation(ref cause) => cause,
-            GetDeploymentError::Credentials(ref err) => err.description(),
-            GetDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDeploymentError::ParseError(ref cause) => cause,
-            GetDeploymentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4936,20 +4309,10 @@ pub enum GetDeploymentConfigError {
     InvalidComputePlatform(String),
     /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeploymentConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeploymentConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4962,53 +4325,36 @@ impl GetDeploymentConfigError {
 
             match *error_type {
                 "DeploymentConfigDoesNotExistException" => {
-                    return GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentConfigError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentConfigNameRequiredException" => {
-                    return GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidComputePlatformException" => {
-                    return GetDeploymentConfigError::InvalidComputePlatform(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentConfigError::InvalidComputePlatform(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentConfigNameException" => {
-                    return GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentConfigError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetDeploymentConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeploymentConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeploymentConfigError {
-    fn from(err: serde_json::error::Error) -> GetDeploymentConfigError {
-        GetDeploymentConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeploymentConfigError {
-    fn from(err: CredentialsError) -> GetDeploymentConfigError {
-        GetDeploymentConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeploymentConfigError {
-    fn from(err: HttpDispatchError) -> GetDeploymentConfigError {
-        GetDeploymentConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeploymentConfigError {
-    fn from(err: io::Error) -> GetDeploymentConfigError {
-        GetDeploymentConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeploymentConfigError {
@@ -5023,13 +4369,6 @@ impl Error for GetDeploymentConfigError {
             GetDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
             GetDeploymentConfigError::InvalidComputePlatform(ref cause) => cause,
             GetDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
-            GetDeploymentConfigError::Validation(ref cause) => cause,
-            GetDeploymentConfigError::Credentials(ref err) => err.description(),
-            GetDeploymentConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDeploymentConfigError::ParseError(ref cause) => cause,
-            GetDeploymentConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5050,20 +4389,10 @@ pub enum GetDeploymentGroupError {
     InvalidApplicationName(String),
     /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeploymentGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeploymentGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5076,68 +4405,53 @@ impl GetDeploymentGroupError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return GetDeploymentGroupError::ApplicationDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentGroupError::ApplicationDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return GetDeploymentGroupError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentGroupError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentConfigDoesNotExistException" => {
-                    return GetDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupDoesNotExistException" => {
-                    return GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidApplicationNameException" => {
-                    return GetDeploymentGroupError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentGroupError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentGroupNameException" => {
-                    return GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetDeploymentGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeploymentGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeploymentGroupError {
-    fn from(err: serde_json::error::Error) -> GetDeploymentGroupError {
-        GetDeploymentGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeploymentGroupError {
-    fn from(err: CredentialsError) -> GetDeploymentGroupError {
-        GetDeploymentGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeploymentGroupError {
-    fn from(err: HttpDispatchError) -> GetDeploymentGroupError {
-        GetDeploymentGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeploymentGroupError {
-    fn from(err: io::Error) -> GetDeploymentGroupError {
-        GetDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeploymentGroupError {
@@ -5155,13 +4469,6 @@ impl Error for GetDeploymentGroupError {
             GetDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
             GetDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
             GetDeploymentGroupError::InvalidDeploymentGroupName(ref cause) => cause,
-            GetDeploymentGroupError::Validation(ref cause) => cause,
-            GetDeploymentGroupError::Credentials(ref err) => err.description(),
-            GetDeploymentGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDeploymentGroupError::ParseError(ref cause) => cause,
-            GetDeploymentGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5182,20 +4489,10 @@ pub enum GetDeploymentInstanceError {
     InvalidDeploymentId(String),
     /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeploymentInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeploymentInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5208,68 +4505,45 @@ impl GetDeploymentInstanceError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return GetDeploymentInstanceError::DeploymentDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentInstanceError::DeploymentDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentIdRequiredException" => {
-                    return GetDeploymentInstanceError::DeploymentIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentInstanceError::DeploymentIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InstanceDoesNotExistException" => {
-                    return GetDeploymentInstanceError::InstanceDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentInstanceError::InstanceDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "InstanceIdRequiredException" => {
-                    return GetDeploymentInstanceError::InstanceIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentInstanceError::InstanceIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidComputePlatformException" => {
-                    return GetDeploymentInstanceError::InvalidComputePlatform(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentInstanceError::InvalidComputePlatform(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentIdException" => {
-                    return GetDeploymentInstanceError::InvalidDeploymentId(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentInstanceError::InvalidDeploymentId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInstanceNameException" => {
-                    return GetDeploymentInstanceError::InvalidInstanceName(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentInstanceError::InvalidInstanceName(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetDeploymentInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeploymentInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeploymentInstanceError {
-    fn from(err: serde_json::error::Error) -> GetDeploymentInstanceError {
-        GetDeploymentInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeploymentInstanceError {
-    fn from(err: CredentialsError) -> GetDeploymentInstanceError {
-        GetDeploymentInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeploymentInstanceError {
-    fn from(err: HttpDispatchError) -> GetDeploymentInstanceError {
-        GetDeploymentInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeploymentInstanceError {
-    fn from(err: io::Error) -> GetDeploymentInstanceError {
-        GetDeploymentInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeploymentInstanceError {
@@ -5287,13 +4561,6 @@ impl Error for GetDeploymentInstanceError {
             GetDeploymentInstanceError::InvalidComputePlatform(ref cause) => cause,
             GetDeploymentInstanceError::InvalidDeploymentId(ref cause) => cause,
             GetDeploymentInstanceError::InvalidInstanceName(ref cause) => cause,
-            GetDeploymentInstanceError::Validation(ref cause) => cause,
-            GetDeploymentInstanceError::Credentials(ref err) => err.description(),
-            GetDeploymentInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDeploymentInstanceError::ParseError(ref cause) => cause,
-            GetDeploymentInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5314,20 +4581,10 @@ pub enum GetDeploymentTargetError {
     InvalidDeploymentTargetId(String),
     /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeploymentTargetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeploymentTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeploymentTargetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5340,68 +4597,51 @@ impl GetDeploymentTargetError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return GetDeploymentTargetError::DeploymentDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentTargetError::DeploymentDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentIdRequiredException" => {
-                    return GetDeploymentTargetError::DeploymentIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentTargetError::DeploymentIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentTargetDoesNotExistException" => {
-                    return GetDeploymentTargetError::DeploymentTargetDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentTargetError::DeploymentTargetDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentTargetIdRequiredException" => {
-                    return GetDeploymentTargetError::DeploymentTargetIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentTargetError::DeploymentTargetIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentIdException" => {
-                    return GetDeploymentTargetError::InvalidDeploymentId(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentTargetError::InvalidDeploymentId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentTargetIdException" => {
-                    return GetDeploymentTargetError::InvalidDeploymentTargetId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDeploymentTargetError::InvalidDeploymentTargetId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInstanceNameException" => {
-                    return GetDeploymentTargetError::InvalidInstanceName(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDeploymentTargetError::InvalidInstanceName(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetDeploymentTargetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeploymentTargetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeploymentTargetError {
-    fn from(err: serde_json::error::Error) -> GetDeploymentTargetError {
-        GetDeploymentTargetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeploymentTargetError {
-    fn from(err: CredentialsError) -> GetDeploymentTargetError {
-        GetDeploymentTargetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeploymentTargetError {
-    fn from(err: HttpDispatchError) -> GetDeploymentTargetError {
-        GetDeploymentTargetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeploymentTargetError {
-    fn from(err: io::Error) -> GetDeploymentTargetError {
-        GetDeploymentTargetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeploymentTargetError {
@@ -5419,13 +4659,6 @@ impl Error for GetDeploymentTargetError {
             GetDeploymentTargetError::InvalidDeploymentId(ref cause) => cause,
             GetDeploymentTargetError::InvalidDeploymentTargetId(ref cause) => cause,
             GetDeploymentTargetError::InvalidInstanceName(ref cause) => cause,
-            GetDeploymentTargetError::Validation(ref cause) => cause,
-            GetDeploymentTargetError::Credentials(ref err) => err.description(),
-            GetDeploymentTargetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDeploymentTargetError::ParseError(ref cause) => cause,
-            GetDeploymentTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5438,20 +4671,10 @@ pub enum GetOnPremisesInstanceError {
     InstanceNotRegistered(String),
     /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOnPremisesInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOnPremisesInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOnPremisesInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5464,48 +4687,25 @@ impl GetOnPremisesInstanceError {
 
             match *error_type {
                 "InstanceNameRequiredException" => {
-                    return GetOnPremisesInstanceError::InstanceNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetOnPremisesInstanceError::InstanceNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InstanceNotRegisteredException" => {
-                    return GetOnPremisesInstanceError::InstanceNotRegistered(String::from(
-                        error_message,
+                    return RusotoError::Service(GetOnPremisesInstanceError::InstanceNotRegistered(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInstanceNameException" => {
-                    return GetOnPremisesInstanceError::InvalidInstanceName(String::from(
-                        error_message,
+                    return RusotoError::Service(GetOnPremisesInstanceError::InvalidInstanceName(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetOnPremisesInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOnPremisesInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOnPremisesInstanceError {
-    fn from(err: serde_json::error::Error) -> GetOnPremisesInstanceError {
-        GetOnPremisesInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOnPremisesInstanceError {
-    fn from(err: CredentialsError) -> GetOnPremisesInstanceError {
-        GetOnPremisesInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOnPremisesInstanceError {
-    fn from(err: HttpDispatchError) -> GetOnPremisesInstanceError {
-        GetOnPremisesInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOnPremisesInstanceError {
-    fn from(err: io::Error) -> GetOnPremisesInstanceError {
-        GetOnPremisesInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOnPremisesInstanceError {
@@ -5519,13 +4719,6 @@ impl Error for GetOnPremisesInstanceError {
             GetOnPremisesInstanceError::InstanceNameRequired(ref cause) => cause,
             GetOnPremisesInstanceError::InstanceNotRegistered(ref cause) => cause,
             GetOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
-            GetOnPremisesInstanceError::Validation(ref cause) => cause,
-            GetOnPremisesInstanceError::Credentials(ref err) => err.description(),
-            GetOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetOnPremisesInstanceError::ParseError(ref cause) => cause,
-            GetOnPremisesInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5552,20 +4745,10 @@ pub enum ListApplicationRevisionsError {
     InvalidSortBy(String),
     /// <p>The sort order was specified in an invalid format.</p>
     InvalidSortOrder(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListApplicationRevisionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListApplicationRevisionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationRevisionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5578,81 +4761,74 @@ impl ListApplicationRevisionsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationRevisionsError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ApplicationNameRequiredException" => {
-                    return ListApplicationRevisionsError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationRevisionsError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "BucketNameFilterRequiredException" => {
-                    return ListApplicationRevisionsError::BucketNameFilterRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationRevisionsError::BucketNameFilterRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidApplicationNameException" => {
-                    return ListApplicationRevisionsError::InvalidApplicationName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationRevisionsError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidBucketNameFilterException" => {
-                    return ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationRevisionsError::InvalidBucketNameFilter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeployedStateFilterException" => {
-                    return ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationRevisionsError::InvalidDeployedStateFilter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidKeyPrefixFilterException" => {
-                    return ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationRevisionsError::InvalidKeyPrefixFilter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return ListApplicationRevisionsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListApplicationRevisionsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSortByException" => {
-                    return ListApplicationRevisionsError::InvalidSortBy(String::from(error_message));
-                }
-                "InvalidSortOrderException" => {
-                    return ListApplicationRevisionsError::InvalidSortOrder(String::from(
-                        error_message,
+                    return RusotoError::Service(ListApplicationRevisionsError::InvalidSortBy(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListApplicationRevisionsError::Validation(error_message.to_string());
+                "InvalidSortOrderException" => {
+                    return RusotoError::Service(ListApplicationRevisionsError::InvalidSortOrder(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListApplicationRevisionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListApplicationRevisionsError {
-    fn from(err: serde_json::error::Error) -> ListApplicationRevisionsError {
-        ListApplicationRevisionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListApplicationRevisionsError {
-    fn from(err: CredentialsError) -> ListApplicationRevisionsError {
-        ListApplicationRevisionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListApplicationRevisionsError {
-    fn from(err: HttpDispatchError) -> ListApplicationRevisionsError {
-        ListApplicationRevisionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListApplicationRevisionsError {
-    fn from(err: io::Error) -> ListApplicationRevisionsError {
-        ListApplicationRevisionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListApplicationRevisionsError {
@@ -5673,13 +4849,6 @@ impl Error for ListApplicationRevisionsError {
             ListApplicationRevisionsError::InvalidNextToken(ref cause) => cause,
             ListApplicationRevisionsError::InvalidSortBy(ref cause) => cause,
             ListApplicationRevisionsError::InvalidSortOrder(ref cause) => cause,
-            ListApplicationRevisionsError::Validation(ref cause) => cause,
-            ListApplicationRevisionsError::Credentials(ref err) => err.description(),
-            ListApplicationRevisionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListApplicationRevisionsError::ParseError(ref cause) => cause,
-            ListApplicationRevisionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5688,20 +4857,10 @@ impl Error for ListApplicationRevisionsError {
 pub enum ListApplicationsError {
     /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListApplicationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListApplicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5714,36 +4873,15 @@ impl ListApplicationsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListApplicationsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListApplicationsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListApplicationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListApplicationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListApplicationsError {
-    fn from(err: serde_json::error::Error) -> ListApplicationsError {
-        ListApplicationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListApplicationsError {
-    fn from(err: CredentialsError) -> ListApplicationsError {
-        ListApplicationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListApplicationsError {
-    fn from(err: HttpDispatchError) -> ListApplicationsError {
-        ListApplicationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListApplicationsError {
-    fn from(err: io::Error) -> ListApplicationsError {
-        ListApplicationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -5755,11 +4893,6 @@ impl Error for ListApplicationsError {
     fn description(&self) -> &str {
         match *self {
             ListApplicationsError::InvalidNextToken(ref cause) => cause,
-            ListApplicationsError::Validation(ref cause) => cause,
-            ListApplicationsError::Credentials(ref err) => err.description(),
-            ListApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListApplicationsError::ParseError(ref cause) => cause,
-            ListApplicationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5768,20 +4901,10 @@ impl Error for ListApplicationsError {
 pub enum ListDeploymentConfigsError {
     /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeploymentConfigsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeploymentConfigsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentConfigsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5794,36 +4917,15 @@ impl ListDeploymentConfigsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListDeploymentConfigsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListDeploymentConfigsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDeploymentConfigsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDeploymentConfigsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDeploymentConfigsError {
-    fn from(err: serde_json::error::Error) -> ListDeploymentConfigsError {
-        ListDeploymentConfigsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDeploymentConfigsError {
-    fn from(err: CredentialsError) -> ListDeploymentConfigsError {
-        ListDeploymentConfigsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeploymentConfigsError {
-    fn from(err: HttpDispatchError) -> ListDeploymentConfigsError {
-        ListDeploymentConfigsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeploymentConfigsError {
-    fn from(err: io::Error) -> ListDeploymentConfigsError {
-        ListDeploymentConfigsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDeploymentConfigsError {
@@ -5835,13 +4937,6 @@ impl Error for ListDeploymentConfigsError {
     fn description(&self) -> &str {
         match *self {
             ListDeploymentConfigsError::InvalidNextToken(ref cause) => cause,
-            ListDeploymentConfigsError::Validation(ref cause) => cause,
-            ListDeploymentConfigsError::Credentials(ref err) => err.description(),
-            ListDeploymentConfigsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDeploymentConfigsError::ParseError(ref cause) => cause,
-            ListDeploymentConfigsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5856,20 +4951,10 @@ pub enum ListDeploymentGroupsError {
     InvalidApplicationName(String),
     /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeploymentGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeploymentGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5882,51 +4967,30 @@ impl ListDeploymentGroupsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return ListDeploymentGroupsError::ApplicationDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentGroupsError::ApplicationDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return ListDeploymentGroupsError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentGroupsError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return ListDeploymentGroupsError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentGroupsError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDeploymentGroupsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListDeploymentGroupsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDeploymentGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDeploymentGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDeploymentGroupsError {
-    fn from(err: serde_json::error::Error) -> ListDeploymentGroupsError {
-        ListDeploymentGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDeploymentGroupsError {
-    fn from(err: CredentialsError) -> ListDeploymentGroupsError {
-        ListDeploymentGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeploymentGroupsError {
-    fn from(err: HttpDispatchError) -> ListDeploymentGroupsError {
-        ListDeploymentGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeploymentGroupsError {
-    fn from(err: io::Error) -> ListDeploymentGroupsError {
-        ListDeploymentGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDeploymentGroupsError {
@@ -5941,13 +5005,6 @@ impl Error for ListDeploymentGroupsError {
             ListDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,
             ListDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,
             ListDeploymentGroupsError::InvalidNextToken(ref cause) => cause,
-            ListDeploymentGroupsError::Validation(ref cause) => cause,
-            ListDeploymentGroupsError::Credentials(ref err) => err.description(),
-            ListDeploymentGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDeploymentGroupsError::ParseError(ref cause) => cause,
-            ListDeploymentGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5974,20 +5031,10 @@ pub enum ListDeploymentInstancesError {
     InvalidNextToken(String),
     /// <p> The target filter name is invalid. </p>
     InvalidTargetFilterName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeploymentInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeploymentInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6000,83 +5047,70 @@ impl ListDeploymentInstancesError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentInstancesError::DeploymentDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentIdRequiredException" => {
-                    return ListDeploymentInstancesError::DeploymentIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentInstancesError::DeploymentIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentNotStartedException" => {
-                    return ListDeploymentInstancesError::DeploymentNotStarted(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentInstancesError::DeploymentNotStarted(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidComputePlatformException" => {
-                    return ListDeploymentInstancesError::InvalidComputePlatform(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentInstancesError::InvalidComputePlatform(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentIdException" => {
-                    return ListDeploymentInstancesError::InvalidDeploymentId(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentInstancesError::InvalidDeploymentId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentInstanceTypeException" => {
-                    return ListDeploymentInstancesError::InvalidDeploymentInstanceType(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListDeploymentInstancesError::InvalidDeploymentInstanceType(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidInstanceStatusException" => {
-                    return ListDeploymentInstancesError::InvalidInstanceStatus(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentInstancesError::InvalidInstanceStatus(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInstanceTypeException" => {
-                    return ListDeploymentInstancesError::InvalidInstanceType(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentInstancesError::InvalidInstanceType(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDeploymentInstancesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentInstancesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidTargetFilterNameException" => {
-                    return ListDeploymentInstancesError::InvalidTargetFilterName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentInstancesError::InvalidTargetFilterName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ListDeploymentInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDeploymentInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDeploymentInstancesError {
-    fn from(err: serde_json::error::Error) -> ListDeploymentInstancesError {
-        ListDeploymentInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDeploymentInstancesError {
-    fn from(err: CredentialsError) -> ListDeploymentInstancesError {
-        ListDeploymentInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeploymentInstancesError {
-    fn from(err: HttpDispatchError) -> ListDeploymentInstancesError {
-        ListDeploymentInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeploymentInstancesError {
-    fn from(err: io::Error) -> ListDeploymentInstancesError {
-        ListDeploymentInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDeploymentInstancesError {
@@ -6097,13 +5131,6 @@ impl Error for ListDeploymentInstancesError {
             ListDeploymentInstancesError::InvalidInstanceType(ref cause) => cause,
             ListDeploymentInstancesError::InvalidNextToken(ref cause) => cause,
             ListDeploymentInstancesError::InvalidTargetFilterName(ref cause) => cause,
-            ListDeploymentInstancesError::Validation(ref cause) => cause,
-            ListDeploymentInstancesError::Credentials(ref err) => err.description(),
-            ListDeploymentInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDeploymentInstancesError::ParseError(ref cause) => cause,
-            ListDeploymentInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6126,20 +5153,10 @@ pub enum ListDeploymentTargetsError {
     InvalidInstanceType(String),
     /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeploymentTargetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeploymentTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentTargetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6152,71 +5169,52 @@ impl ListDeploymentTargetsError {
 
             match *error_type {
                 "DeploymentDoesNotExistException" => {
-                    return ListDeploymentTargetsError::DeploymentDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentTargetsError::DeploymentDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentIdRequiredException" => {
-                    return ListDeploymentTargetsError::DeploymentIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentTargetsError::DeploymentIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentNotStartedException" => {
-                    return ListDeploymentTargetsError::DeploymentNotStarted(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentTargetsError::DeploymentNotStarted(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentIdException" => {
-                    return ListDeploymentTargetsError::InvalidDeploymentId(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentTargetsError::InvalidDeploymentId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentInstanceTypeException" => {
-                    return ListDeploymentTargetsError::InvalidDeploymentInstanceType(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListDeploymentTargetsError::InvalidDeploymentInstanceType(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidInstanceStatusException" => {
-                    return ListDeploymentTargetsError::InvalidInstanceStatus(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentTargetsError::InvalidInstanceStatus(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInstanceTypeException" => {
-                    return ListDeploymentTargetsError::InvalidInstanceType(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentTargetsError::InvalidInstanceType(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDeploymentTargetsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListDeploymentTargetsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDeploymentTargetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDeploymentTargetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDeploymentTargetsError {
-    fn from(err: serde_json::error::Error) -> ListDeploymentTargetsError {
-        ListDeploymentTargetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDeploymentTargetsError {
-    fn from(err: CredentialsError) -> ListDeploymentTargetsError {
-        ListDeploymentTargetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeploymentTargetsError {
-    fn from(err: HttpDispatchError) -> ListDeploymentTargetsError {
-        ListDeploymentTargetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeploymentTargetsError {
-    fn from(err: io::Error) -> ListDeploymentTargetsError {
-        ListDeploymentTargetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDeploymentTargetsError {
@@ -6235,13 +5233,6 @@ impl Error for ListDeploymentTargetsError {
             ListDeploymentTargetsError::InvalidInstanceStatus(ref cause) => cause,
             ListDeploymentTargetsError::InvalidInstanceType(ref cause) => cause,
             ListDeploymentTargetsError::InvalidNextToken(ref cause) => cause,
-            ListDeploymentTargetsError::Validation(ref cause) => cause,
-            ListDeploymentTargetsError::Credentials(ref err) => err.description(),
-            ListDeploymentTargetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDeploymentTargetsError::ParseError(ref cause) => cause,
-            ListDeploymentTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6266,20 +5257,10 @@ pub enum ListDeploymentsError {
     InvalidNextToken(String),
     /// <p>The specified time range was specified in an invalid format.</p>
     InvalidTimeRange(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeploymentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeploymentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeploymentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6292,72 +5273,55 @@ impl ListDeploymentsError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return ListDeploymentsError::ApplicationDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentsError::ApplicationDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return ListDeploymentsError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentsError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentGroupDoesNotExistException" => {
-                    return ListDeploymentsError::DeploymentGroupDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentsError::DeploymentGroupDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return ListDeploymentsError::DeploymentGroupNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentsError::DeploymentGroupNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return ListDeploymentsError::InvalidApplicationName(String::from(error_message));
+                    return RusotoError::Service(ListDeploymentsError::InvalidApplicationName(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidDeploymentGroupNameException" => {
-                    return ListDeploymentsError::InvalidDeploymentGroupName(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentsError::InvalidDeploymentGroupName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDeploymentStatusException" => {
-                    return ListDeploymentsError::InvalidDeploymentStatus(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDeploymentsError::InvalidDeploymentStatus(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDeploymentsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListDeploymentsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTimeRangeException" => {
-                    return ListDeploymentsError::InvalidTimeRange(String::from(error_message));
+                    return RusotoError::Service(ListDeploymentsError::InvalidTimeRange(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDeploymentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDeploymentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDeploymentsError {
-    fn from(err: serde_json::error::Error) -> ListDeploymentsError {
-        ListDeploymentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDeploymentsError {
-    fn from(err: CredentialsError) -> ListDeploymentsError {
-        ListDeploymentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeploymentsError {
-    fn from(err: HttpDispatchError) -> ListDeploymentsError {
-        ListDeploymentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeploymentsError {
-    fn from(err: io::Error) -> ListDeploymentsError {
-        ListDeploymentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDeploymentsError {
@@ -6377,11 +5341,6 @@ impl Error for ListDeploymentsError {
             ListDeploymentsError::InvalidDeploymentStatus(ref cause) => cause,
             ListDeploymentsError::InvalidNextToken(ref cause) => cause,
             ListDeploymentsError::InvalidTimeRange(ref cause) => cause,
-            ListDeploymentsError::Validation(ref cause) => cause,
-            ListDeploymentsError::Credentials(ref err) => err.description(),
-            ListDeploymentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDeploymentsError::ParseError(ref cause) => cause,
-            ListDeploymentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6394,20 +5353,12 @@ pub enum ListGitHubAccountTokenNamesError {
     OperationNotSupported(String),
     /// <p>The specified resource could not be validated.</p>
     ResourceValidation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGitHubAccountTokenNamesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGitHubAccountTokenNamesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListGitHubAccountTokenNamesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6420,48 +5371,29 @@ impl ListGitHubAccountTokenNamesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListGitHubAccountTokenNamesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotSupportedException" => {
-                    return ListGitHubAccountTokenNamesError::OperationNotSupported(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListGitHubAccountTokenNamesError::OperationNotSupported(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceValidationException" => {
-                    return ListGitHubAccountTokenNamesError::ResourceValidation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListGitHubAccountTokenNamesError::ResourceValidation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ListGitHubAccountTokenNamesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGitHubAccountTokenNamesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGitHubAccountTokenNamesError {
-    fn from(err: serde_json::error::Error) -> ListGitHubAccountTokenNamesError {
-        ListGitHubAccountTokenNamesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGitHubAccountTokenNamesError {
-    fn from(err: CredentialsError) -> ListGitHubAccountTokenNamesError {
-        ListGitHubAccountTokenNamesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGitHubAccountTokenNamesError {
-    fn from(err: HttpDispatchError) -> ListGitHubAccountTokenNamesError {
-        ListGitHubAccountTokenNamesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGitHubAccountTokenNamesError {
-    fn from(err: io::Error) -> ListGitHubAccountTokenNamesError {
-        ListGitHubAccountTokenNamesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGitHubAccountTokenNamesError {
@@ -6475,13 +5407,6 @@ impl Error for ListGitHubAccountTokenNamesError {
             ListGitHubAccountTokenNamesError::InvalidNextToken(ref cause) => cause,
             ListGitHubAccountTokenNamesError::OperationNotSupported(ref cause) => cause,
             ListGitHubAccountTokenNamesError::ResourceValidation(ref cause) => cause,
-            ListGitHubAccountTokenNamesError::Validation(ref cause) => cause,
-            ListGitHubAccountTokenNamesError::Credentials(ref err) => err.description(),
-            ListGitHubAccountTokenNamesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListGitHubAccountTokenNamesError::ParseError(ref cause) => cause,
-            ListGitHubAccountTokenNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6494,20 +5419,10 @@ pub enum ListOnPremisesInstancesError {
     InvalidRegistrationStatus(String),
     /// <p>The tag filter was specified in an invalid format.</p>
     InvalidTagFilter(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOnPremisesInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOnPremisesInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOnPremisesInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6520,48 +5435,27 @@ impl ListOnPremisesInstancesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListOnPremisesInstancesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOnPremisesInstancesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRegistrationStatusException" => {
-                    return ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListOnPremisesInstancesError::InvalidRegistrationStatus(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidTagFilterException" => {
-                    return ListOnPremisesInstancesError::InvalidTagFilter(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOnPremisesInstancesError::InvalidTagFilter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListOnPremisesInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOnPremisesInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOnPremisesInstancesError {
-    fn from(err: serde_json::error::Error) -> ListOnPremisesInstancesError {
-        ListOnPremisesInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOnPremisesInstancesError {
-    fn from(err: CredentialsError) -> ListOnPremisesInstancesError {
-        ListOnPremisesInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOnPremisesInstancesError {
-    fn from(err: HttpDispatchError) -> ListOnPremisesInstancesError {
-        ListOnPremisesInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOnPremisesInstancesError {
-    fn from(err: io::Error) -> ListOnPremisesInstancesError {
-        ListOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOnPremisesInstancesError {
@@ -6575,13 +5469,6 @@ impl Error for ListOnPremisesInstancesError {
             ListOnPremisesInstancesError::InvalidNextToken(ref cause) => cause,
             ListOnPremisesInstancesError::InvalidRegistrationStatus(ref cause) => cause,
             ListOnPremisesInstancesError::InvalidTagFilter(ref cause) => cause,
-            ListOnPremisesInstancesError::Validation(ref cause) => cause,
-            ListOnPremisesInstancesError::Credentials(ref err) => err.description(),
-            ListOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOnPremisesInstancesError::ParseError(ref cause) => cause,
-            ListOnPremisesInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6602,20 +5489,12 @@ pub enum PutLifecycleEventHookExecutionStatusError {
     LifecycleEventAlreadyCompleted(String),
     /// <p>A call was submitted that is not supported for the specified deployment type.</p>
     UnsupportedActionForDeploymentType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutLifecycleEventHookExecutionStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutLifecycleEventHookExecutionStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutLifecycleEventHookExecutionStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6627,39 +5506,18 @@ impl PutLifecycleEventHookExecutionStatusError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "DeploymentDoesNotExistException" => return PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(String::from(error_message)),
-"DeploymentIdRequiredException" => return PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(String::from(error_message)),
-"InvalidDeploymentIdException" => return PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(String::from(error_message)),
-"InvalidLifecycleEventHookExecutionIdException" => return PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(String::from(error_message)),
-"InvalidLifecycleEventHookExecutionStatusException" => return PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(String::from(error_message)),
-"LifecycleEventAlreadyCompletedException" => return PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(String::from(error_message)),
-"UnsupportedActionForDeploymentTypeException" => return PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(String::from(error_message)),
-"ValidationException" => return PutLifecycleEventHookExecutionStatusError::Validation(error_message.to_string()),
+                                "DeploymentDoesNotExistException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(String::from(error_message))),
+"DeploymentIdRequiredException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(String::from(error_message))),
+"InvalidDeploymentIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(String::from(error_message))),
+"InvalidLifecycleEventHookExecutionIdException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(String::from(error_message))),
+"InvalidLifecycleEventHookExecutionStatusException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(String::from(error_message))),
+"LifecycleEventAlreadyCompletedException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(String::from(error_message))),
+"UnsupportedActionForDeploymentTypeException" => return RusotoError::Service(PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(String::from(error_message))),
+"ValidationException" => return RusotoError::Validation(error_message.to_string()),
 _ => {}
                             }
         }
-        return PutLifecycleEventHookExecutionStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutLifecycleEventHookExecutionStatusError {
-    fn from(err: serde_json::error::Error) -> PutLifecycleEventHookExecutionStatusError {
-        PutLifecycleEventHookExecutionStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutLifecycleEventHookExecutionStatusError {
-    fn from(err: CredentialsError) -> PutLifecycleEventHookExecutionStatusError {
-        PutLifecycleEventHookExecutionStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutLifecycleEventHookExecutionStatusError {
-    fn from(err: HttpDispatchError) -> PutLifecycleEventHookExecutionStatusError {
-        PutLifecycleEventHookExecutionStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutLifecycleEventHookExecutionStatusError {
-    fn from(err: io::Error) -> PutLifecycleEventHookExecutionStatusError {
-        PutLifecycleEventHookExecutionStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutLifecycleEventHookExecutionStatusError {
@@ -6685,13 +5543,6 @@ impl Error for PutLifecycleEventHookExecutionStatusError {
             PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(
                 ref cause,
             ) => cause,
-            PutLifecycleEventHookExecutionStatusError::Validation(ref cause) => cause,
-            PutLifecycleEventHookExecutionStatusError::Credentials(ref err) => err.description(),
-            PutLifecycleEventHookExecutionStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutLifecycleEventHookExecutionStatusError::ParseError(ref cause) => cause,
-            PutLifecycleEventHookExecutionStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6710,20 +5561,12 @@ pub enum RegisterApplicationRevisionError {
     InvalidRevision(String),
     /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterApplicationRevisionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterApplicationRevisionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RegisterApplicationRevisionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6736,63 +5579,48 @@ impl RegisterApplicationRevisionError {
 
             match *error_type {
                 "ApplicationDoesNotExistException" => {
-                    return RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterApplicationRevisionError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ApplicationNameRequiredException" => {
-                    return RegisterApplicationRevisionError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterApplicationRevisionError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DescriptionTooLongException" => {
-                    return RegisterApplicationRevisionError::DescriptionTooLong(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterApplicationRevisionError::DescriptionTooLong(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidApplicationNameException" => {
-                    return RegisterApplicationRevisionError::InvalidApplicationName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterApplicationRevisionError::InvalidApplicationName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRevisionException" => {
-                    return RegisterApplicationRevisionError::InvalidRevision(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterApplicationRevisionError::InvalidRevision(
+                        String::from(error_message),
                     ));
                 }
                 "RevisionRequiredException" => {
-                    return RegisterApplicationRevisionError::RevisionRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterApplicationRevisionError::RevisionRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RegisterApplicationRevisionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterApplicationRevisionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterApplicationRevisionError {
-    fn from(err: serde_json::error::Error) -> RegisterApplicationRevisionError {
-        RegisterApplicationRevisionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterApplicationRevisionError {
-    fn from(err: CredentialsError) -> RegisterApplicationRevisionError {
-        RegisterApplicationRevisionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterApplicationRevisionError {
-    fn from(err: HttpDispatchError) -> RegisterApplicationRevisionError {
-        RegisterApplicationRevisionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterApplicationRevisionError {
-    fn from(err: io::Error) -> RegisterApplicationRevisionError {
-        RegisterApplicationRevisionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterApplicationRevisionError {
@@ -6809,13 +5637,6 @@ impl Error for RegisterApplicationRevisionError {
             RegisterApplicationRevisionError::InvalidApplicationName(ref cause) => cause,
             RegisterApplicationRevisionError::InvalidRevision(ref cause) => cause,
             RegisterApplicationRevisionError::RevisionRequired(ref cause) => cause,
-            RegisterApplicationRevisionError::Validation(ref cause) => cause,
-            RegisterApplicationRevisionError::Credentials(ref err) => err.description(),
-            RegisterApplicationRevisionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterApplicationRevisionError::ParseError(ref cause) => cause,
-            RegisterApplicationRevisionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6842,20 +5663,12 @@ pub enum RegisterOnPremisesInstanceError {
     InvalidInstanceName(String),
     /// <p>Both an IAM user ARN and an IAM session ARN were included in the request. Use only one ARN type.</p>
     MultipleIamArnsProvided(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterOnPremisesInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterOnPremisesInstanceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RegisterOnPremisesInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6868,83 +5681,76 @@ impl RegisterOnPremisesInstanceError {
 
             match *error_type {
                 "IamArnRequiredException" => {
-                    return RegisterOnPremisesInstanceError::IamArnRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterOnPremisesInstanceError::IamArnRequired(
+                        String::from(error_message),
                     ));
                 }
                 "IamSessionArnAlreadyRegisteredException" => {
-                    return RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::IamSessionArnAlreadyRegistered(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "IamUserArnAlreadyRegisteredException" => {
-                    return RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::IamUserArnAlreadyRegistered(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "IamUserArnRequiredException" => {
-                    return RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::IamUserArnRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InstanceNameAlreadyRegisteredException" => {
-                    return RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::InstanceNameAlreadyRegistered(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InstanceNameRequiredException" => {
-                    return RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::InstanceNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidIamSessionArnException" => {
-                    return RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::InvalidIamSessionArn(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidIamUserArnException" => {
-                    return RegisterOnPremisesInstanceError::InvalidIamUserArn(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterOnPremisesInstanceError::InvalidIamUserArn(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInstanceNameException" => {
-                    return RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::InvalidInstanceName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MultipleIamArnsProvidedException" => {
-                    return RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterOnPremisesInstanceError::MultipleIamArnsProvided(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RegisterOnPremisesInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterOnPremisesInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterOnPremisesInstanceError {
-    fn from(err: serde_json::error::Error) -> RegisterOnPremisesInstanceError {
-        RegisterOnPremisesInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterOnPremisesInstanceError {
-    fn from(err: CredentialsError) -> RegisterOnPremisesInstanceError {
-        RegisterOnPremisesInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterOnPremisesInstanceError {
-    fn from(err: HttpDispatchError) -> RegisterOnPremisesInstanceError {
-        RegisterOnPremisesInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterOnPremisesInstanceError {
-    fn from(err: io::Error) -> RegisterOnPremisesInstanceError {
-        RegisterOnPremisesInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterOnPremisesInstanceError {
@@ -6965,13 +5771,6 @@ impl Error for RegisterOnPremisesInstanceError {
             RegisterOnPremisesInstanceError::InvalidIamUserArn(ref cause) => cause,
             RegisterOnPremisesInstanceError::InvalidInstanceName(ref cause) => cause,
             RegisterOnPremisesInstanceError::MultipleIamArnsProvided(ref cause) => cause,
-            RegisterOnPremisesInstanceError::Validation(ref cause) => cause,
-            RegisterOnPremisesInstanceError::Credentials(ref err) => err.description(),
-            RegisterOnPremisesInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterOnPremisesInstanceError::ParseError(ref cause) => cause,
-            RegisterOnPremisesInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6992,20 +5791,12 @@ pub enum RemoveTagsFromOnPremisesInstancesError {
     TagLimitExceeded(String),
     /// <p>A tag was not specified.</p>
     TagRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromOnPremisesInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromOnPremisesInstancesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveTagsFromOnPremisesInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7018,70 +5809,57 @@ impl RemoveTagsFromOnPremisesInstancesError {
 
             match *error_type {
                 "InstanceLimitExceededException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RemoveTagsFromOnPremisesInstancesError::InstanceLimitExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InstanceNameRequiredException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RemoveTagsFromOnPremisesInstancesError::InstanceNameRequired(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InstanceNotRegisteredException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RemoveTagsFromOnPremisesInstancesError::InstanceNotRegistered(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidInstanceNameException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RemoveTagsFromOnPremisesInstancesError::InvalidInstanceName(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidTagException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::InvalidTag(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveTagsFromOnPremisesInstancesError::InvalidTag(
+                        String::from(error_message),
                     ));
                 }
                 "TagLimitExceededException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(
-                        error_message,
-                    ));
-                }
-                "TagRequiredException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return RemoveTagsFromOnPremisesInstancesError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "TagRequiredException" => {
+                    return RusotoError::Service(
+                        RemoveTagsFromOnPremisesInstancesError::TagRequired(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveTagsFromOnPremisesInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveTagsFromOnPremisesInstancesError {
-    fn from(err: serde_json::error::Error) -> RemoveTagsFromOnPremisesInstancesError {
-        RemoveTagsFromOnPremisesInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsFromOnPremisesInstancesError {
-    fn from(err: CredentialsError) -> RemoveTagsFromOnPremisesInstancesError {
-        RemoveTagsFromOnPremisesInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsFromOnPremisesInstancesError {
-    fn from(err: HttpDispatchError) -> RemoveTagsFromOnPremisesInstancesError {
-        RemoveTagsFromOnPremisesInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsFromOnPremisesInstancesError {
-    fn from(err: io::Error) -> RemoveTagsFromOnPremisesInstancesError {
-        RemoveTagsFromOnPremisesInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveTagsFromOnPremisesInstancesError {
@@ -7099,13 +5877,6 @@ impl Error for RemoveTagsFromOnPremisesInstancesError {
             RemoveTagsFromOnPremisesInstancesError::InvalidTag(ref cause) => cause,
             RemoveTagsFromOnPremisesInstancesError::TagLimitExceeded(ref cause) => cause,
             RemoveTagsFromOnPremisesInstancesError::TagRequired(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::Validation(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::Credentials(ref err) => err.description(),
-            RemoveTagsFromOnPremisesInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveTagsFromOnPremisesInstancesError::ParseError(ref cause) => cause,
-            RemoveTagsFromOnPremisesInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7124,20 +5895,12 @@ pub enum SkipWaitTimeForInstanceTerminationError {
     InvalidDeploymentId(String),
     /// <p>A call was submitted that is not supported for the specified deployment type.</p>
     UnsupportedActionForDeploymentType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SkipWaitTimeForInstanceTerminationError {
-    pub fn from_response(res: BufferedHttpResponse) -> SkipWaitTimeForInstanceTerminationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SkipWaitTimeForInstanceTerminationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7149,38 +5912,53 @@ impl SkipWaitTimeForInstanceTerminationError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "DeploymentAlreadyCompletedException" => return SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(String::from(error_message)),
-"DeploymentDoesNotExistException" => return SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(String::from(error_message)),
-"DeploymentIdRequiredException" => return SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(String::from(error_message)),
-"DeploymentNotStartedException" => return SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(String::from(error_message)),
-"InvalidDeploymentIdException" => return SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(error_message)),
-"UnsupportedActionForDeploymentTypeException" => return SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(String::from(error_message)),
-"ValidationException" => return SkipWaitTimeForInstanceTerminationError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "DeploymentAlreadyCompletedException" => {
+                    return RusotoError::Service(
+                        SkipWaitTimeForInstanceTerminationError::DeploymentAlreadyCompleted(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "DeploymentDoesNotExistException" => {
+                    return RusotoError::Service(
+                        SkipWaitTimeForInstanceTerminationError::DeploymentDoesNotExist(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "DeploymentIdRequiredException" => {
+                    return RusotoError::Service(
+                        SkipWaitTimeForInstanceTerminationError::DeploymentIdRequired(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "DeploymentNotStartedException" => {
+                    return RusotoError::Service(
+                        SkipWaitTimeForInstanceTerminationError::DeploymentNotStarted(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "InvalidDeploymentIdException" => {
+                    return RusotoError::Service(
+                        SkipWaitTimeForInstanceTerminationError::InvalidDeploymentId(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "UnsupportedActionForDeploymentTypeException" => {
+                    return RusotoError::Service(
+                        SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return SkipWaitTimeForInstanceTerminationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SkipWaitTimeForInstanceTerminationError {
-    fn from(err: serde_json::error::Error) -> SkipWaitTimeForInstanceTerminationError {
-        SkipWaitTimeForInstanceTerminationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SkipWaitTimeForInstanceTerminationError {
-    fn from(err: CredentialsError) -> SkipWaitTimeForInstanceTerminationError {
-        SkipWaitTimeForInstanceTerminationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SkipWaitTimeForInstanceTerminationError {
-    fn from(err: HttpDispatchError) -> SkipWaitTimeForInstanceTerminationError {
-        SkipWaitTimeForInstanceTerminationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SkipWaitTimeForInstanceTerminationError {
-    fn from(err: io::Error) -> SkipWaitTimeForInstanceTerminationError {
-        SkipWaitTimeForInstanceTerminationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SkipWaitTimeForInstanceTerminationError {
@@ -7199,13 +5977,6 @@ impl Error for SkipWaitTimeForInstanceTerminationError {
             SkipWaitTimeForInstanceTerminationError::UnsupportedActionForDeploymentType(
                 ref cause,
             ) => cause,
-            SkipWaitTimeForInstanceTerminationError::Validation(ref cause) => cause,
-            SkipWaitTimeForInstanceTerminationError::Credentials(ref err) => err.description(),
-            SkipWaitTimeForInstanceTerminationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SkipWaitTimeForInstanceTerminationError::ParseError(ref cause) => cause,
-            SkipWaitTimeForInstanceTerminationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7222,20 +5993,10 @@ pub enum StopDeploymentError {
     DeploymentIdRequired(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopDeploymentError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopDeploymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDeploymentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7248,52 +6009,35 @@ impl StopDeploymentError {
 
             match *error_type {
                 "DeploymentAlreadyCompletedException" => {
-                    return StopDeploymentError::DeploymentAlreadyCompleted(String::from(
-                        error_message,
+                    return RusotoError::Service(StopDeploymentError::DeploymentAlreadyCompleted(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentDoesNotExistException" => {
-                    return StopDeploymentError::DeploymentDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(StopDeploymentError::DeploymentDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "DeploymentGroupDoesNotExistException" => {
-                    return StopDeploymentError::DeploymentGroupDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(StopDeploymentError::DeploymentGroupDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "DeploymentIdRequiredException" => {
-                    return StopDeploymentError::DeploymentIdRequired(String::from(error_message));
+                    return RusotoError::Service(StopDeploymentError::DeploymentIdRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidDeploymentIdException" => {
-                    return StopDeploymentError::InvalidDeploymentId(String::from(error_message));
+                    return RusotoError::Service(StopDeploymentError::InvalidDeploymentId(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopDeploymentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopDeploymentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopDeploymentError {
-    fn from(err: serde_json::error::Error) -> StopDeploymentError {
-        StopDeploymentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopDeploymentError {
-    fn from(err: CredentialsError) -> StopDeploymentError {
-        StopDeploymentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopDeploymentError {
-    fn from(err: HttpDispatchError) -> StopDeploymentError {
-        StopDeploymentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopDeploymentError {
-    fn from(err: io::Error) -> StopDeploymentError {
-        StopDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopDeploymentError {
@@ -7309,11 +6053,6 @@ impl Error for StopDeploymentError {
             StopDeploymentError::DeploymentGroupDoesNotExist(ref cause) => cause,
             StopDeploymentError::DeploymentIdRequired(ref cause) => cause,
             StopDeploymentError::InvalidDeploymentId(ref cause) => cause,
-            StopDeploymentError::Validation(ref cause) => cause,
-            StopDeploymentError::Credentials(ref err) => err.description(),
-            StopDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopDeploymentError::ParseError(ref cause) => cause,
-            StopDeploymentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7328,20 +6067,10 @@ pub enum UpdateApplicationError {
     ApplicationNameRequired(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7354,53 +6083,30 @@ impl UpdateApplicationError {
 
             match *error_type {
                 "ApplicationAlreadyExistsException" => {
-                    return UpdateApplicationError::ApplicationAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateApplicationError::ApplicationAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationDoesNotExistException" => {
-                    return UpdateApplicationError::ApplicationDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateApplicationError::ApplicationDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationNameRequiredException" => {
-                    return UpdateApplicationError::ApplicationNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateApplicationError::ApplicationNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return UpdateApplicationError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateApplicationError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateApplicationError {
-    fn from(err: serde_json::error::Error) -> UpdateApplicationError {
-        UpdateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateApplicationError {
-    fn from(err: CredentialsError) -> UpdateApplicationError {
-        UpdateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateApplicationError {
-    fn from(err: HttpDispatchError) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateApplicationError {
-    fn from(err: io::Error) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -7415,13 +6121,6 @@ impl Error for UpdateApplicationError {
             UpdateApplicationError::ApplicationDoesNotExist(ref cause) => cause,
             UpdateApplicationError::ApplicationNameRequired(ref cause) => cause,
             UpdateApplicationError::InvalidApplicationName(ref cause) => cause,
-            UpdateApplicationError::Validation(ref cause) => cause,
-            UpdateApplicationError::Credentials(ref err) => err.description(),
-            UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateApplicationError::ParseError(ref cause) => cause,
-            UpdateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7488,20 +6187,10 @@ pub enum UpdateDeploymentGroupError {
     Throttling(String),
     /// <p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDeploymentGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDeploymentGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeploymentGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7514,173 +6203,196 @@ impl UpdateDeploymentGroupError {
 
             match *error_type {
                 "AlarmsLimitExceededException" => {
-                    return UpdateDeploymentGroupError::AlarmsLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::AlarmsLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ApplicationDoesNotExistException" => {
-                    return UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::ApplicationDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ApplicationNameRequiredException" => {
-                    return UpdateDeploymentGroupError::ApplicationNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::ApplicationNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentConfigDoesNotExistException" => {
-                    return UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupAlreadyExistsException" => {
-                    return UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupDoesNotExistException" => {
-                    return UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DeploymentGroupNameRequiredException" => {
-                    return UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::DeploymentGroupNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ECSServiceMappingLimitExceededException" => {
-                    return UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidAlarmConfigException" => {
-                    return UpdateDeploymentGroupError::InvalidAlarmConfig(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidAlarmConfig(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApplicationNameException" => {
-                    return UpdateDeploymentGroupError::InvalidApplicationName(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidApplicationName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidAutoRollbackConfigException" => {
-                    return UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidAutoRollbackConfig(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidAutoScalingGroupException" => {
-                    return UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidAutoScalingGroup(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidBlueGreenDeploymentConfigurationException" => {
-                    return UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidBlueGreenDeploymentConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidDeploymentConfigNameException" => {
-                    return UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidDeploymentConfigName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentGroupNameException" => {
-                    return UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidDeploymentGroupName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidDeploymentStyleException" => {
-                    return UpdateDeploymentGroupError::InvalidDeploymentStyle(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidDeploymentStyle(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidEC2TagCombinationException" => {
-                    return UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidEC2TagCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidEC2TagException" => {
-                    return UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message));
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidEC2Tag(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidECSServiceException" => {
-                    return UpdateDeploymentGroupError::InvalidECSService(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidECSService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return UpdateDeploymentGroupError::InvalidInput(String::from(error_message));
-                }
-                "InvalidLoadBalancerInfoException" => {
-                    return UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidLoadBalancerInfoException" => {
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidOnPremisesTagCombinationException" => {
-                    return UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidRoleException" => {
-                    return UpdateDeploymentGroupError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidRole(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTagException" => {
-                    return UpdateDeploymentGroupError::InvalidTag(String::from(error_message));
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidTag(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTargetGroupPairException" => {
-                    return UpdateDeploymentGroupError::InvalidTargetGroupPair(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidTargetGroupPair(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidTriggerConfigException" => {
-                    return UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::InvalidTriggerConfig(
+                        String::from(error_message),
                     ));
                 }
                 "LifecycleHookLimitExceededException" => {
-                    return UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::LifecycleHookLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TagSetListLimitExceededException" => {
-                    return UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ThrottlingException" => {
-                    return UpdateDeploymentGroupError::Throttling(String::from(error_message));
-                }
-                "TriggerTargetsLimitExceededException" => {
-                    return UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDeploymentGroupError::Throttling(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateDeploymentGroupError::Validation(error_message.to_string());
+                "TriggerTargetsLimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDeploymentGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDeploymentGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateDeploymentGroupError {
-        UpdateDeploymentGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDeploymentGroupError {
-    fn from(err: CredentialsError) -> UpdateDeploymentGroupError {
-        UpdateDeploymentGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDeploymentGroupError {
-    fn from(err: HttpDispatchError) -> UpdateDeploymentGroupError {
-        UpdateDeploymentGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDeploymentGroupError {
-    fn from(err: io::Error) -> UpdateDeploymentGroupError {
-        UpdateDeploymentGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDeploymentGroupError {
@@ -7721,13 +6433,6 @@ impl Error for UpdateDeploymentGroupError {
             UpdateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
             UpdateDeploymentGroupError::Throttling(ref cause) => cause,
             UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
-            UpdateDeploymentGroupError::Validation(ref cause) => cause,
-            UpdateDeploymentGroupError::Credentials(ref err) => err.description(),
-            UpdateDeploymentGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDeploymentGroupError::ParseError(ref cause) => cause,
-            UpdateDeploymentGroupError::Unknown(_) => "unknown error",
         }
     }
 }

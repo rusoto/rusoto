@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_fms;
 
-use rusoto_core::Region;
-use rusoto_fms::{Fms, FmsClient, ListPoliciesError, ListPoliciesRequest};
+use rusoto_core::{Region, RusotoError};
+use rusoto_fms::{Fms, FmsClient, ListPoliciesRequest};
 
 use std::str;
 
@@ -16,7 +16,7 @@ fn should_list_policies() {
     // If our account doesn't have access, assume everything is fine:
     match client.list_policies(request).sync() {
         Err(e) => match e {
-            ListPoliciesError::Unknown(ref e) => assert!(
+            RusotoError::Unknown(ref e) => assert!(
                 str::from_utf8(&e.body)
                     .unwrap()
                     .contains("is not currently delegated by AWS FM"),

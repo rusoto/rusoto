@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -2826,20 +2823,12 @@ pub enum CountClosedWorkflowExecutionsError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CountClosedWorkflowExecutionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> CountClosedWorkflowExecutionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CountClosedWorkflowExecutionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2852,43 +2841,24 @@ impl CountClosedWorkflowExecutionsError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return CountClosedWorkflowExecutionsError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CountClosedWorkflowExecutionsError::OperationNotPermittedFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return CountClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CountClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CountClosedWorkflowExecutionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CountClosedWorkflowExecutionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CountClosedWorkflowExecutionsError {
-    fn from(err: serde_json::error::Error) -> CountClosedWorkflowExecutionsError {
-        CountClosedWorkflowExecutionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CountClosedWorkflowExecutionsError {
-    fn from(err: CredentialsError) -> CountClosedWorkflowExecutionsError {
-        CountClosedWorkflowExecutionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CountClosedWorkflowExecutionsError {
-    fn from(err: HttpDispatchError) -> CountClosedWorkflowExecutionsError {
-        CountClosedWorkflowExecutionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CountClosedWorkflowExecutionsError {
-    fn from(err: io::Error) -> CountClosedWorkflowExecutionsError {
-        CountClosedWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CountClosedWorkflowExecutionsError {
@@ -2901,13 +2871,6 @@ impl Error for CountClosedWorkflowExecutionsError {
         match *self {
             CountClosedWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
             CountClosedWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
-            CountClosedWorkflowExecutionsError::Validation(ref cause) => cause,
-            CountClosedWorkflowExecutionsError::Credentials(ref err) => err.description(),
-            CountClosedWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CountClosedWorkflowExecutionsError::ParseError(ref cause) => cause,
-            CountClosedWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2918,20 +2881,12 @@ pub enum CountOpenWorkflowExecutionsError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CountOpenWorkflowExecutionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> CountOpenWorkflowExecutionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CountOpenWorkflowExecutionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2944,43 +2899,24 @@ impl CountOpenWorkflowExecutionsError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return CountOpenWorkflowExecutionsError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CountOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return CountOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CountOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CountOpenWorkflowExecutionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CountOpenWorkflowExecutionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CountOpenWorkflowExecutionsError {
-    fn from(err: serde_json::error::Error) -> CountOpenWorkflowExecutionsError {
-        CountOpenWorkflowExecutionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CountOpenWorkflowExecutionsError {
-    fn from(err: CredentialsError) -> CountOpenWorkflowExecutionsError {
-        CountOpenWorkflowExecutionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CountOpenWorkflowExecutionsError {
-    fn from(err: HttpDispatchError) -> CountOpenWorkflowExecutionsError {
-        CountOpenWorkflowExecutionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CountOpenWorkflowExecutionsError {
-    fn from(err: io::Error) -> CountOpenWorkflowExecutionsError {
-        CountOpenWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CountOpenWorkflowExecutionsError {
@@ -2993,13 +2929,6 @@ impl Error for CountOpenWorkflowExecutionsError {
         match *self {
             CountOpenWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
             CountOpenWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
-            CountOpenWorkflowExecutionsError::Validation(ref cause) => cause,
-            CountOpenWorkflowExecutionsError::Credentials(ref err) => err.description(),
-            CountOpenWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CountOpenWorkflowExecutionsError::ParseError(ref cause) => cause,
-            CountOpenWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3010,20 +2939,10 @@ pub enum CountPendingActivityTasksError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CountPendingActivityTasksError {
-    pub fn from_response(res: BufferedHttpResponse) -> CountPendingActivityTasksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CountPendingActivityTasksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3036,43 +2955,24 @@ impl CountPendingActivityTasksError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return CountPendingActivityTasksError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CountPendingActivityTasksError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return CountPendingActivityTasksError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CountPendingActivityTasksError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CountPendingActivityTasksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CountPendingActivityTasksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CountPendingActivityTasksError {
-    fn from(err: serde_json::error::Error) -> CountPendingActivityTasksError {
-        CountPendingActivityTasksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CountPendingActivityTasksError {
-    fn from(err: CredentialsError) -> CountPendingActivityTasksError {
-        CountPendingActivityTasksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CountPendingActivityTasksError {
-    fn from(err: HttpDispatchError) -> CountPendingActivityTasksError {
-        CountPendingActivityTasksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CountPendingActivityTasksError {
-    fn from(err: io::Error) -> CountPendingActivityTasksError {
-        CountPendingActivityTasksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CountPendingActivityTasksError {
@@ -3085,13 +2985,6 @@ impl Error for CountPendingActivityTasksError {
         match *self {
             CountPendingActivityTasksError::OperationNotPermittedFault(ref cause) => cause,
             CountPendingActivityTasksError::UnknownResourceFault(ref cause) => cause,
-            CountPendingActivityTasksError::Validation(ref cause) => cause,
-            CountPendingActivityTasksError::Credentials(ref err) => err.description(),
-            CountPendingActivityTasksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CountPendingActivityTasksError::ParseError(ref cause) => cause,
-            CountPendingActivityTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3102,20 +2995,10 @@ pub enum CountPendingDecisionTasksError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CountPendingDecisionTasksError {
-    pub fn from_response(res: BufferedHttpResponse) -> CountPendingDecisionTasksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CountPendingDecisionTasksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3128,43 +3011,24 @@ impl CountPendingDecisionTasksError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return CountPendingDecisionTasksError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CountPendingDecisionTasksError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return CountPendingDecisionTasksError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CountPendingDecisionTasksError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CountPendingDecisionTasksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CountPendingDecisionTasksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CountPendingDecisionTasksError {
-    fn from(err: serde_json::error::Error) -> CountPendingDecisionTasksError {
-        CountPendingDecisionTasksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CountPendingDecisionTasksError {
-    fn from(err: CredentialsError) -> CountPendingDecisionTasksError {
-        CountPendingDecisionTasksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CountPendingDecisionTasksError {
-    fn from(err: HttpDispatchError) -> CountPendingDecisionTasksError {
-        CountPendingDecisionTasksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CountPendingDecisionTasksError {
-    fn from(err: io::Error) -> CountPendingDecisionTasksError {
-        CountPendingDecisionTasksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CountPendingDecisionTasksError {
@@ -3177,13 +3041,6 @@ impl Error for CountPendingDecisionTasksError {
         match *self {
             CountPendingDecisionTasksError::OperationNotPermittedFault(ref cause) => cause,
             CountPendingDecisionTasksError::UnknownResourceFault(ref cause) => cause,
-            CountPendingDecisionTasksError::Validation(ref cause) => cause,
-            CountPendingDecisionTasksError::Credentials(ref err) => err.description(),
-            CountPendingDecisionTasksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CountPendingDecisionTasksError::ParseError(ref cause) => cause,
-            CountPendingDecisionTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3196,20 +3053,10 @@ pub enum DeprecateActivityTypeError {
     TypeDeprecatedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeprecateActivityTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeprecateActivityTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateActivityTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3222,48 +3069,27 @@ impl DeprecateActivityTypeError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return DeprecateActivityTypeError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeprecateActivityTypeError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TypeDeprecatedFault" => {
-                    return DeprecateActivityTypeError::TypeDeprecatedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeprecateActivityTypeError::TypeDeprecatedFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return DeprecateActivityTypeError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeprecateActivityTypeError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeprecateActivityTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeprecateActivityTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeprecateActivityTypeError {
-    fn from(err: serde_json::error::Error) -> DeprecateActivityTypeError {
-        DeprecateActivityTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeprecateActivityTypeError {
-    fn from(err: CredentialsError) -> DeprecateActivityTypeError {
-        DeprecateActivityTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeprecateActivityTypeError {
-    fn from(err: HttpDispatchError) -> DeprecateActivityTypeError {
-        DeprecateActivityTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeprecateActivityTypeError {
-    fn from(err: io::Error) -> DeprecateActivityTypeError {
-        DeprecateActivityTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeprecateActivityTypeError {
@@ -3277,13 +3103,6 @@ impl Error for DeprecateActivityTypeError {
             DeprecateActivityTypeError::OperationNotPermittedFault(ref cause) => cause,
             DeprecateActivityTypeError::TypeDeprecatedFault(ref cause) => cause,
             DeprecateActivityTypeError::UnknownResourceFault(ref cause) => cause,
-            DeprecateActivityTypeError::Validation(ref cause) => cause,
-            DeprecateActivityTypeError::Credentials(ref err) => err.description(),
-            DeprecateActivityTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeprecateActivityTypeError::ParseError(ref cause) => cause,
-            DeprecateActivityTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3296,20 +3115,10 @@ pub enum DeprecateDomainError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeprecateDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeprecateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3322,44 +3131,25 @@ impl DeprecateDomainError {
 
             match *error_type {
                 "DomainDeprecatedFault" => {
-                    return DeprecateDomainError::DomainDeprecatedFault(String::from(error_message));
+                    return RusotoError::Service(DeprecateDomainError::DomainDeprecatedFault(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedFault" => {
-                    return DeprecateDomainError::OperationNotPermittedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeprecateDomainError::OperationNotPermittedFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return DeprecateDomainError::UnknownResourceFault(String::from(error_message));
+                    return RusotoError::Service(DeprecateDomainError::UnknownResourceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeprecateDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeprecateDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeprecateDomainError {
-    fn from(err: serde_json::error::Error) -> DeprecateDomainError {
-        DeprecateDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeprecateDomainError {
-    fn from(err: CredentialsError) -> DeprecateDomainError {
-        DeprecateDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeprecateDomainError {
-    fn from(err: HttpDispatchError) -> DeprecateDomainError {
-        DeprecateDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeprecateDomainError {
-    fn from(err: io::Error) -> DeprecateDomainError {
-        DeprecateDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeprecateDomainError {
@@ -3373,11 +3163,6 @@ impl Error for DeprecateDomainError {
             DeprecateDomainError::DomainDeprecatedFault(ref cause) => cause,
             DeprecateDomainError::OperationNotPermittedFault(ref cause) => cause,
             DeprecateDomainError::UnknownResourceFault(ref cause) => cause,
-            DeprecateDomainError::Validation(ref cause) => cause,
-            DeprecateDomainError::Credentials(ref err) => err.description(),
-            DeprecateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeprecateDomainError::ParseError(ref cause) => cause,
-            DeprecateDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3390,20 +3175,10 @@ pub enum DeprecateWorkflowTypeError {
     TypeDeprecatedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeprecateWorkflowTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeprecateWorkflowTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeprecateWorkflowTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3416,48 +3191,27 @@ impl DeprecateWorkflowTypeError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return DeprecateWorkflowTypeError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeprecateWorkflowTypeError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TypeDeprecatedFault" => {
-                    return DeprecateWorkflowTypeError::TypeDeprecatedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeprecateWorkflowTypeError::TypeDeprecatedFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return DeprecateWorkflowTypeError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeprecateWorkflowTypeError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeprecateWorkflowTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeprecateWorkflowTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeprecateWorkflowTypeError {
-    fn from(err: serde_json::error::Error) -> DeprecateWorkflowTypeError {
-        DeprecateWorkflowTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeprecateWorkflowTypeError {
-    fn from(err: CredentialsError) -> DeprecateWorkflowTypeError {
-        DeprecateWorkflowTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeprecateWorkflowTypeError {
-    fn from(err: HttpDispatchError) -> DeprecateWorkflowTypeError {
-        DeprecateWorkflowTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeprecateWorkflowTypeError {
-    fn from(err: io::Error) -> DeprecateWorkflowTypeError {
-        DeprecateWorkflowTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeprecateWorkflowTypeError {
@@ -3471,13 +3225,6 @@ impl Error for DeprecateWorkflowTypeError {
             DeprecateWorkflowTypeError::OperationNotPermittedFault(ref cause) => cause,
             DeprecateWorkflowTypeError::TypeDeprecatedFault(ref cause) => cause,
             DeprecateWorkflowTypeError::UnknownResourceFault(ref cause) => cause,
-            DeprecateWorkflowTypeError::Validation(ref cause) => cause,
-            DeprecateWorkflowTypeError::Credentials(ref err) => err.description(),
-            DeprecateWorkflowTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeprecateWorkflowTypeError::ParseError(ref cause) => cause,
-            DeprecateWorkflowTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3488,20 +3235,10 @@ pub enum DescribeActivityTypeError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeActivityTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeActivityTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivityTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3514,43 +3251,22 @@ impl DescribeActivityTypeError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return DescribeActivityTypeError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeActivityTypeError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return DescribeActivityTypeError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeActivityTypeError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeActivityTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeActivityTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeActivityTypeError {
-    fn from(err: serde_json::error::Error) -> DescribeActivityTypeError {
-        DescribeActivityTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeActivityTypeError {
-    fn from(err: CredentialsError) -> DescribeActivityTypeError {
-        DescribeActivityTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeActivityTypeError {
-    fn from(err: HttpDispatchError) -> DescribeActivityTypeError {
-        DescribeActivityTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeActivityTypeError {
-    fn from(err: io::Error) -> DescribeActivityTypeError {
-        DescribeActivityTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeActivityTypeError {
@@ -3563,13 +3279,6 @@ impl Error for DescribeActivityTypeError {
         match *self {
             DescribeActivityTypeError::OperationNotPermittedFault(ref cause) => cause,
             DescribeActivityTypeError::UnknownResourceFault(ref cause) => cause,
-            DescribeActivityTypeError::Validation(ref cause) => cause,
-            DescribeActivityTypeError::Credentials(ref err) => err.description(),
-            DescribeActivityTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeActivityTypeError::ParseError(ref cause) => cause,
-            DescribeActivityTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3580,20 +3289,10 @@ pub enum DescribeDomainError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3606,41 +3305,20 @@ impl DescribeDomainError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return DescribeDomainError::OperationNotPermittedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDomainError::OperationNotPermittedFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return DescribeDomainError::UnknownResourceFault(String::from(error_message));
+                    return RusotoError::Service(DescribeDomainError::UnknownResourceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDomainError {
-    fn from(err: serde_json::error::Error) -> DescribeDomainError {
-        DescribeDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDomainError {
-    fn from(err: CredentialsError) -> DescribeDomainError {
-        DescribeDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDomainError {
-    fn from(err: HttpDispatchError) -> DescribeDomainError {
-        DescribeDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDomainError {
-    fn from(err: io::Error) -> DescribeDomainError {
-        DescribeDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDomainError {
@@ -3653,11 +3331,6 @@ impl Error for DescribeDomainError {
         match *self {
             DescribeDomainError::OperationNotPermittedFault(ref cause) => cause,
             DescribeDomainError::UnknownResourceFault(ref cause) => cause,
-            DescribeDomainError::Validation(ref cause) => cause,
-            DescribeDomainError::Credentials(ref err) => err.description(),
-            DescribeDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeDomainError::ParseError(ref cause) => cause,
-            DescribeDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3668,20 +3341,10 @@ pub enum DescribeWorkflowExecutionError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkflowExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkflowExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkflowExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3694,43 +3357,24 @@ impl DescribeWorkflowExecutionError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return DescribeWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeWorkflowExecutionError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return DescribeWorkflowExecutionError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeWorkflowExecutionError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeWorkflowExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeWorkflowExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeWorkflowExecutionError {
-    fn from(err: serde_json::error::Error) -> DescribeWorkflowExecutionError {
-        DescribeWorkflowExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeWorkflowExecutionError {
-    fn from(err: CredentialsError) -> DescribeWorkflowExecutionError {
-        DescribeWorkflowExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeWorkflowExecutionError {
-    fn from(err: HttpDispatchError) -> DescribeWorkflowExecutionError {
-        DescribeWorkflowExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeWorkflowExecutionError {
-    fn from(err: io::Error) -> DescribeWorkflowExecutionError {
-        DescribeWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeWorkflowExecutionError {
@@ -3743,13 +3387,6 @@ impl Error for DescribeWorkflowExecutionError {
         match *self {
             DescribeWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
             DescribeWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
-            DescribeWorkflowExecutionError::Validation(ref cause) => cause,
-            DescribeWorkflowExecutionError::Credentials(ref err) => err.description(),
-            DescribeWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeWorkflowExecutionError::ParseError(ref cause) => cause,
-            DescribeWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3760,20 +3397,10 @@ pub enum DescribeWorkflowTypeError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkflowTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkflowTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkflowTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3786,43 +3413,22 @@ impl DescribeWorkflowTypeError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return DescribeWorkflowTypeError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeWorkflowTypeError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return DescribeWorkflowTypeError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeWorkflowTypeError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeWorkflowTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeWorkflowTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeWorkflowTypeError {
-    fn from(err: serde_json::error::Error) -> DescribeWorkflowTypeError {
-        DescribeWorkflowTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeWorkflowTypeError {
-    fn from(err: CredentialsError) -> DescribeWorkflowTypeError {
-        DescribeWorkflowTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeWorkflowTypeError {
-    fn from(err: HttpDispatchError) -> DescribeWorkflowTypeError {
-        DescribeWorkflowTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeWorkflowTypeError {
-    fn from(err: io::Error) -> DescribeWorkflowTypeError {
-        DescribeWorkflowTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeWorkflowTypeError {
@@ -3835,13 +3441,6 @@ impl Error for DescribeWorkflowTypeError {
         match *self {
             DescribeWorkflowTypeError::OperationNotPermittedFault(ref cause) => cause,
             DescribeWorkflowTypeError::UnknownResourceFault(ref cause) => cause,
-            DescribeWorkflowTypeError::Validation(ref cause) => cause,
-            DescribeWorkflowTypeError::Credentials(ref err) => err.description(),
-            DescribeWorkflowTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeWorkflowTypeError::ParseError(ref cause) => cause,
-            DescribeWorkflowTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3852,20 +3451,12 @@ pub enum GetWorkflowExecutionHistoryError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetWorkflowExecutionHistoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetWorkflowExecutionHistoryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetWorkflowExecutionHistoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3878,43 +3469,24 @@ impl GetWorkflowExecutionHistoryError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return GetWorkflowExecutionHistoryError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetWorkflowExecutionHistoryError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return GetWorkflowExecutionHistoryError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetWorkflowExecutionHistoryError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetWorkflowExecutionHistoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetWorkflowExecutionHistoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetWorkflowExecutionHistoryError {
-    fn from(err: serde_json::error::Error) -> GetWorkflowExecutionHistoryError {
-        GetWorkflowExecutionHistoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetWorkflowExecutionHistoryError {
-    fn from(err: CredentialsError) -> GetWorkflowExecutionHistoryError {
-        GetWorkflowExecutionHistoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetWorkflowExecutionHistoryError {
-    fn from(err: HttpDispatchError) -> GetWorkflowExecutionHistoryError {
-        GetWorkflowExecutionHistoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetWorkflowExecutionHistoryError {
-    fn from(err: io::Error) -> GetWorkflowExecutionHistoryError {
-        GetWorkflowExecutionHistoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetWorkflowExecutionHistoryError {
@@ -3927,13 +3499,6 @@ impl Error for GetWorkflowExecutionHistoryError {
         match *self {
             GetWorkflowExecutionHistoryError::OperationNotPermittedFault(ref cause) => cause,
             GetWorkflowExecutionHistoryError::UnknownResourceFault(ref cause) => cause,
-            GetWorkflowExecutionHistoryError::Validation(ref cause) => cause,
-            GetWorkflowExecutionHistoryError::Credentials(ref err) => err.description(),
-            GetWorkflowExecutionHistoryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetWorkflowExecutionHistoryError::ParseError(ref cause) => cause,
-            GetWorkflowExecutionHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3944,20 +3509,10 @@ pub enum ListActivityTypesError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListActivityTypesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListActivityTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActivityTypesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3970,41 +3525,20 @@ impl ListActivityTypesError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return ListActivityTypesError::OperationNotPermittedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(ListActivityTypesError::OperationNotPermittedFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return ListActivityTypesError::UnknownResourceFault(String::from(error_message));
+                    return RusotoError::Service(ListActivityTypesError::UnknownResourceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListActivityTypesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListActivityTypesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListActivityTypesError {
-    fn from(err: serde_json::error::Error) -> ListActivityTypesError {
-        ListActivityTypesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListActivityTypesError {
-    fn from(err: CredentialsError) -> ListActivityTypesError {
-        ListActivityTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListActivityTypesError {
-    fn from(err: HttpDispatchError) -> ListActivityTypesError {
-        ListActivityTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListActivityTypesError {
-    fn from(err: io::Error) -> ListActivityTypesError {
-        ListActivityTypesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListActivityTypesError {
@@ -4017,13 +3551,6 @@ impl Error for ListActivityTypesError {
         match *self {
             ListActivityTypesError::OperationNotPermittedFault(ref cause) => cause,
             ListActivityTypesError::UnknownResourceFault(ref cause) => cause,
-            ListActivityTypesError::Validation(ref cause) => cause,
-            ListActivityTypesError::Credentials(ref err) => err.description(),
-            ListActivityTypesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListActivityTypesError::ParseError(ref cause) => cause,
-            ListActivityTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4034,20 +3561,12 @@ pub enum ListClosedWorkflowExecutionsError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListClosedWorkflowExecutionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListClosedWorkflowExecutionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListClosedWorkflowExecutionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4060,43 +3579,24 @@ impl ListClosedWorkflowExecutionsError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return ListClosedWorkflowExecutionsError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListClosedWorkflowExecutionsError::OperationNotPermittedFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListClosedWorkflowExecutionsError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ListClosedWorkflowExecutionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListClosedWorkflowExecutionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListClosedWorkflowExecutionsError {
-    fn from(err: serde_json::error::Error) -> ListClosedWorkflowExecutionsError {
-        ListClosedWorkflowExecutionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListClosedWorkflowExecutionsError {
-    fn from(err: CredentialsError) -> ListClosedWorkflowExecutionsError {
-        ListClosedWorkflowExecutionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListClosedWorkflowExecutionsError {
-    fn from(err: HttpDispatchError) -> ListClosedWorkflowExecutionsError {
-        ListClosedWorkflowExecutionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListClosedWorkflowExecutionsError {
-    fn from(err: io::Error) -> ListClosedWorkflowExecutionsError {
-        ListClosedWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListClosedWorkflowExecutionsError {
@@ -4109,13 +3609,6 @@ impl Error for ListClosedWorkflowExecutionsError {
         match *self {
             ListClosedWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
             ListClosedWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
-            ListClosedWorkflowExecutionsError::Validation(ref cause) => cause,
-            ListClosedWorkflowExecutionsError::Credentials(ref err) => err.description(),
-            ListClosedWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListClosedWorkflowExecutionsError::ParseError(ref cause) => cause,
-            ListClosedWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4124,20 +3617,10 @@ impl Error for ListClosedWorkflowExecutionsError {
 pub enum ListDomainsError {
     /// <p>Returned when the caller doesn't have sufficient permissions to invoke the action.</p>
     OperationNotPermittedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4150,36 +3633,15 @@ impl ListDomainsError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return ListDomainsError::OperationNotPermittedFault(String::from(error_message));
+                    return RusotoError::Service(ListDomainsError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDomainsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDomainsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDomainsError {
-    fn from(err: serde_json::error::Error) -> ListDomainsError {
-        ListDomainsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDomainsError {
-    fn from(err: CredentialsError) -> ListDomainsError {
-        ListDomainsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDomainsError {
-    fn from(err: HttpDispatchError) -> ListDomainsError {
-        ListDomainsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDomainsError {
-    fn from(err: io::Error) -> ListDomainsError {
-        ListDomainsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDomainsError {
@@ -4191,11 +3653,6 @@ impl Error for ListDomainsError {
     fn description(&self) -> &str {
         match *self {
             ListDomainsError::OperationNotPermittedFault(ref cause) => cause,
-            ListDomainsError::Validation(ref cause) => cause,
-            ListDomainsError::Credentials(ref err) => err.description(),
-            ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainsError::ParseError(ref cause) => cause,
-            ListDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4206,20 +3663,12 @@ pub enum ListOpenWorkflowExecutionsError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOpenWorkflowExecutionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOpenWorkflowExecutionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListOpenWorkflowExecutionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4232,43 +3681,24 @@ impl ListOpenWorkflowExecutionsError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return ListOpenWorkflowExecutionsError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ListOpenWorkflowExecutionsError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return ListOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListOpenWorkflowExecutionsError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ListOpenWorkflowExecutionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOpenWorkflowExecutionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOpenWorkflowExecutionsError {
-    fn from(err: serde_json::error::Error) -> ListOpenWorkflowExecutionsError {
-        ListOpenWorkflowExecutionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOpenWorkflowExecutionsError {
-    fn from(err: CredentialsError) -> ListOpenWorkflowExecutionsError {
-        ListOpenWorkflowExecutionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOpenWorkflowExecutionsError {
-    fn from(err: HttpDispatchError) -> ListOpenWorkflowExecutionsError {
-        ListOpenWorkflowExecutionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOpenWorkflowExecutionsError {
-    fn from(err: io::Error) -> ListOpenWorkflowExecutionsError {
-        ListOpenWorkflowExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOpenWorkflowExecutionsError {
@@ -4281,13 +3711,6 @@ impl Error for ListOpenWorkflowExecutionsError {
         match *self {
             ListOpenWorkflowExecutionsError::OperationNotPermittedFault(ref cause) => cause,
             ListOpenWorkflowExecutionsError::UnknownResourceFault(ref cause) => cause,
-            ListOpenWorkflowExecutionsError::Validation(ref cause) => cause,
-            ListOpenWorkflowExecutionsError::Credentials(ref err) => err.description(),
-            ListOpenWorkflowExecutionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOpenWorkflowExecutionsError::ParseError(ref cause) => cause,
-            ListOpenWorkflowExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4298,20 +3721,10 @@ pub enum ListWorkflowTypesError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListWorkflowTypesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListWorkflowTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkflowTypesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4324,41 +3737,20 @@ impl ListWorkflowTypesError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return ListWorkflowTypesError::OperationNotPermittedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(ListWorkflowTypesError::OperationNotPermittedFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return ListWorkflowTypesError::UnknownResourceFault(String::from(error_message));
+                    return RusotoError::Service(ListWorkflowTypesError::UnknownResourceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListWorkflowTypesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListWorkflowTypesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListWorkflowTypesError {
-    fn from(err: serde_json::error::Error) -> ListWorkflowTypesError {
-        ListWorkflowTypesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListWorkflowTypesError {
-    fn from(err: CredentialsError) -> ListWorkflowTypesError {
-        ListWorkflowTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListWorkflowTypesError {
-    fn from(err: HttpDispatchError) -> ListWorkflowTypesError {
-        ListWorkflowTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListWorkflowTypesError {
-    fn from(err: io::Error) -> ListWorkflowTypesError {
-        ListWorkflowTypesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListWorkflowTypesError {
@@ -4371,13 +3763,6 @@ impl Error for ListWorkflowTypesError {
         match *self {
             ListWorkflowTypesError::OperationNotPermittedFault(ref cause) => cause,
             ListWorkflowTypesError::UnknownResourceFault(ref cause) => cause,
-            ListWorkflowTypesError::Validation(ref cause) => cause,
-            ListWorkflowTypesError::Credentials(ref err) => err.description(),
-            ListWorkflowTypesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListWorkflowTypesError::ParseError(ref cause) => cause,
-            ListWorkflowTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4390,20 +3775,10 @@ pub enum PollForActivityTaskError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PollForActivityTaskError {
-    pub fn from_response(res: BufferedHttpResponse) -> PollForActivityTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForActivityTaskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4416,46 +3791,27 @@ impl PollForActivityTaskError {
 
             match *error_type {
                 "LimitExceededFault" => {
-                    return PollForActivityTaskError::LimitExceededFault(String::from(error_message));
+                    return RusotoError::Service(PollForActivityTaskError::LimitExceededFault(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedFault" => {
-                    return PollForActivityTaskError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PollForActivityTaskError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return PollForActivityTaskError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(PollForActivityTaskError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PollForActivityTaskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PollForActivityTaskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PollForActivityTaskError {
-    fn from(err: serde_json::error::Error) -> PollForActivityTaskError {
-        PollForActivityTaskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PollForActivityTaskError {
-    fn from(err: CredentialsError) -> PollForActivityTaskError {
-        PollForActivityTaskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PollForActivityTaskError {
-    fn from(err: HttpDispatchError) -> PollForActivityTaskError {
-        PollForActivityTaskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PollForActivityTaskError {
-    fn from(err: io::Error) -> PollForActivityTaskError {
-        PollForActivityTaskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PollForActivityTaskError {
@@ -4469,13 +3825,6 @@ impl Error for PollForActivityTaskError {
             PollForActivityTaskError::LimitExceededFault(ref cause) => cause,
             PollForActivityTaskError::OperationNotPermittedFault(ref cause) => cause,
             PollForActivityTaskError::UnknownResourceFault(ref cause) => cause,
-            PollForActivityTaskError::Validation(ref cause) => cause,
-            PollForActivityTaskError::Credentials(ref err) => err.description(),
-            PollForActivityTaskError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PollForActivityTaskError::ParseError(ref cause) => cause,
-            PollForActivityTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4488,20 +3837,10 @@ pub enum PollForDecisionTaskError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PollForDecisionTaskError {
-    pub fn from_response(res: BufferedHttpResponse) -> PollForDecisionTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForDecisionTaskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4514,46 +3853,27 @@ impl PollForDecisionTaskError {
 
             match *error_type {
                 "LimitExceededFault" => {
-                    return PollForDecisionTaskError::LimitExceededFault(String::from(error_message));
+                    return RusotoError::Service(PollForDecisionTaskError::LimitExceededFault(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedFault" => {
-                    return PollForDecisionTaskError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PollForDecisionTaskError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return PollForDecisionTaskError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(PollForDecisionTaskError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PollForDecisionTaskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PollForDecisionTaskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PollForDecisionTaskError {
-    fn from(err: serde_json::error::Error) -> PollForDecisionTaskError {
-        PollForDecisionTaskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PollForDecisionTaskError {
-    fn from(err: CredentialsError) -> PollForDecisionTaskError {
-        PollForDecisionTaskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PollForDecisionTaskError {
-    fn from(err: HttpDispatchError) -> PollForDecisionTaskError {
-        PollForDecisionTaskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PollForDecisionTaskError {
-    fn from(err: io::Error) -> PollForDecisionTaskError {
-        PollForDecisionTaskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PollForDecisionTaskError {
@@ -4567,13 +3887,6 @@ impl Error for PollForDecisionTaskError {
             PollForDecisionTaskError::LimitExceededFault(ref cause) => cause,
             PollForDecisionTaskError::OperationNotPermittedFault(ref cause) => cause,
             PollForDecisionTaskError::UnknownResourceFault(ref cause) => cause,
-            PollForDecisionTaskError::Validation(ref cause) => cause,
-            PollForDecisionTaskError::Credentials(ref err) => err.description(),
-            PollForDecisionTaskError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PollForDecisionTaskError::ParseError(ref cause) => cause,
-            PollForDecisionTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4584,20 +3897,12 @@ pub enum RecordActivityTaskHeartbeatError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RecordActivityTaskHeartbeatError {
-    pub fn from_response(res: BufferedHttpResponse) -> RecordActivityTaskHeartbeatError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RecordActivityTaskHeartbeatError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4610,43 +3915,24 @@ impl RecordActivityTaskHeartbeatError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RecordActivityTaskHeartbeatError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RecordActivityTaskHeartbeatError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return RecordActivityTaskHeartbeatError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RecordActivityTaskHeartbeatError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RecordActivityTaskHeartbeatError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RecordActivityTaskHeartbeatError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RecordActivityTaskHeartbeatError {
-    fn from(err: serde_json::error::Error) -> RecordActivityTaskHeartbeatError {
-        RecordActivityTaskHeartbeatError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RecordActivityTaskHeartbeatError {
-    fn from(err: CredentialsError) -> RecordActivityTaskHeartbeatError {
-        RecordActivityTaskHeartbeatError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RecordActivityTaskHeartbeatError {
-    fn from(err: HttpDispatchError) -> RecordActivityTaskHeartbeatError {
-        RecordActivityTaskHeartbeatError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RecordActivityTaskHeartbeatError {
-    fn from(err: io::Error) -> RecordActivityTaskHeartbeatError {
-        RecordActivityTaskHeartbeatError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RecordActivityTaskHeartbeatError {
@@ -4659,13 +3945,6 @@ impl Error for RecordActivityTaskHeartbeatError {
         match *self {
             RecordActivityTaskHeartbeatError::OperationNotPermittedFault(ref cause) => cause,
             RecordActivityTaskHeartbeatError::UnknownResourceFault(ref cause) => cause,
-            RecordActivityTaskHeartbeatError::Validation(ref cause) => cause,
-            RecordActivityTaskHeartbeatError::Credentials(ref err) => err.description(),
-            RecordActivityTaskHeartbeatError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RecordActivityTaskHeartbeatError::ParseError(ref cause) => cause,
-            RecordActivityTaskHeartbeatError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4680,20 +3959,10 @@ pub enum RegisterActivityTypeError {
     TypeAlreadyExistsFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterActivityTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterActivityTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterActivityTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4706,53 +3975,32 @@ impl RegisterActivityTypeError {
 
             match *error_type {
                 "LimitExceededFault" => {
-                    return RegisterActivityTypeError::LimitExceededFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterActivityTypeError::LimitExceededFault(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedFault" => {
-                    return RegisterActivityTypeError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterActivityTypeError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TypeAlreadyExistsFault" => {
-                    return RegisterActivityTypeError::TypeAlreadyExistsFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterActivityTypeError::TypeAlreadyExistsFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return RegisterActivityTypeError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterActivityTypeError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RegisterActivityTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterActivityTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterActivityTypeError {
-    fn from(err: serde_json::error::Error) -> RegisterActivityTypeError {
-        RegisterActivityTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterActivityTypeError {
-    fn from(err: CredentialsError) -> RegisterActivityTypeError {
-        RegisterActivityTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterActivityTypeError {
-    fn from(err: HttpDispatchError) -> RegisterActivityTypeError {
-        RegisterActivityTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterActivityTypeError {
-    fn from(err: io::Error) -> RegisterActivityTypeError {
-        RegisterActivityTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterActivityTypeError {
@@ -4767,13 +4015,6 @@ impl Error for RegisterActivityTypeError {
             RegisterActivityTypeError::OperationNotPermittedFault(ref cause) => cause,
             RegisterActivityTypeError::TypeAlreadyExistsFault(ref cause) => cause,
             RegisterActivityTypeError::UnknownResourceFault(ref cause) => cause,
-            RegisterActivityTypeError::Validation(ref cause) => cause,
-            RegisterActivityTypeError::Credentials(ref err) => err.description(),
-            RegisterActivityTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterActivityTypeError::ParseError(ref cause) => cause,
-            RegisterActivityTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4786,20 +4027,10 @@ pub enum RegisterDomainError {
     LimitExceededFault(String),
     /// <p>Returned when the caller doesn't have sufficient permissions to invoke the action.</p>
     OperationNotPermittedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4812,46 +4043,25 @@ impl RegisterDomainError {
 
             match *error_type {
                 "DomainAlreadyExistsFault" => {
-                    return RegisterDomainError::DomainAlreadyExistsFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterDomainError::DomainAlreadyExistsFault(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededFault" => {
-                    return RegisterDomainError::LimitExceededFault(String::from(error_message));
-                }
-                "OperationNotPermittedFault" => {
-                    return RegisterDomainError::OperationNotPermittedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterDomainError::LimitExceededFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RegisterDomainError::Validation(error_message.to_string());
+                "OperationNotPermittedFault" => {
+                    return RusotoError::Service(RegisterDomainError::OperationNotPermittedFault(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterDomainError {
-    fn from(err: serde_json::error::Error) -> RegisterDomainError {
-        RegisterDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterDomainError {
-    fn from(err: CredentialsError) -> RegisterDomainError {
-        RegisterDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterDomainError {
-    fn from(err: HttpDispatchError) -> RegisterDomainError {
-        RegisterDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterDomainError {
-    fn from(err: io::Error) -> RegisterDomainError {
-        RegisterDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterDomainError {
@@ -4865,11 +4075,6 @@ impl Error for RegisterDomainError {
             RegisterDomainError::DomainAlreadyExistsFault(ref cause) => cause,
             RegisterDomainError::LimitExceededFault(ref cause) => cause,
             RegisterDomainError::OperationNotPermittedFault(ref cause) => cause,
-            RegisterDomainError::Validation(ref cause) => cause,
-            RegisterDomainError::Credentials(ref err) => err.description(),
-            RegisterDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterDomainError::ParseError(ref cause) => cause,
-            RegisterDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4884,20 +4089,10 @@ pub enum RegisterWorkflowTypeError {
     TypeAlreadyExistsFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterWorkflowTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterWorkflowTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterWorkflowTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4910,53 +4105,32 @@ impl RegisterWorkflowTypeError {
 
             match *error_type {
                 "LimitExceededFault" => {
-                    return RegisterWorkflowTypeError::LimitExceededFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterWorkflowTypeError::LimitExceededFault(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedFault" => {
-                    return RegisterWorkflowTypeError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterWorkflowTypeError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TypeAlreadyExistsFault" => {
-                    return RegisterWorkflowTypeError::TypeAlreadyExistsFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterWorkflowTypeError::TypeAlreadyExistsFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return RegisterWorkflowTypeError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterWorkflowTypeError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RegisterWorkflowTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterWorkflowTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterWorkflowTypeError {
-    fn from(err: serde_json::error::Error) -> RegisterWorkflowTypeError {
-        RegisterWorkflowTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterWorkflowTypeError {
-    fn from(err: CredentialsError) -> RegisterWorkflowTypeError {
-        RegisterWorkflowTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterWorkflowTypeError {
-    fn from(err: HttpDispatchError) -> RegisterWorkflowTypeError {
-        RegisterWorkflowTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterWorkflowTypeError {
-    fn from(err: io::Error) -> RegisterWorkflowTypeError {
-        RegisterWorkflowTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterWorkflowTypeError {
@@ -4971,13 +4145,6 @@ impl Error for RegisterWorkflowTypeError {
             RegisterWorkflowTypeError::OperationNotPermittedFault(ref cause) => cause,
             RegisterWorkflowTypeError::TypeAlreadyExistsFault(ref cause) => cause,
             RegisterWorkflowTypeError::UnknownResourceFault(ref cause) => cause,
-            RegisterWorkflowTypeError::Validation(ref cause) => cause,
-            RegisterWorkflowTypeError::Credentials(ref err) => err.description(),
-            RegisterWorkflowTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterWorkflowTypeError::ParseError(ref cause) => cause,
-            RegisterWorkflowTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4988,20 +4155,12 @@ pub enum RequestCancelWorkflowExecutionError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RequestCancelWorkflowExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RequestCancelWorkflowExecutionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RequestCancelWorkflowExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5014,45 +4173,24 @@ impl RequestCancelWorkflowExecutionError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RequestCancelWorkflowExecutionError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RequestCancelWorkflowExecutionError::OperationNotPermittedFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return RequestCancelWorkflowExecutionError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return RequestCancelWorkflowExecutionError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        RequestCancelWorkflowExecutionError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RequestCancelWorkflowExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RequestCancelWorkflowExecutionError {
-    fn from(err: serde_json::error::Error) -> RequestCancelWorkflowExecutionError {
-        RequestCancelWorkflowExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RequestCancelWorkflowExecutionError {
-    fn from(err: CredentialsError) -> RequestCancelWorkflowExecutionError {
-        RequestCancelWorkflowExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RequestCancelWorkflowExecutionError {
-    fn from(err: HttpDispatchError) -> RequestCancelWorkflowExecutionError {
-        RequestCancelWorkflowExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RequestCancelWorkflowExecutionError {
-    fn from(err: io::Error) -> RequestCancelWorkflowExecutionError {
-        RequestCancelWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RequestCancelWorkflowExecutionError {
@@ -5065,13 +4203,6 @@ impl Error for RequestCancelWorkflowExecutionError {
         match *self {
             RequestCancelWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
             RequestCancelWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
-            RequestCancelWorkflowExecutionError::Validation(ref cause) => cause,
-            RequestCancelWorkflowExecutionError::Credentials(ref err) => err.description(),
-            RequestCancelWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RequestCancelWorkflowExecutionError::ParseError(ref cause) => cause,
-            RequestCancelWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5082,20 +4213,12 @@ pub enum RespondActivityTaskCanceledError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RespondActivityTaskCanceledError {
-    pub fn from_response(res: BufferedHttpResponse) -> RespondActivityTaskCanceledError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RespondActivityTaskCanceledError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5108,43 +4231,24 @@ impl RespondActivityTaskCanceledError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RespondActivityTaskCanceledError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RespondActivityTaskCanceledError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return RespondActivityTaskCanceledError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RespondActivityTaskCanceledError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RespondActivityTaskCanceledError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RespondActivityTaskCanceledError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RespondActivityTaskCanceledError {
-    fn from(err: serde_json::error::Error) -> RespondActivityTaskCanceledError {
-        RespondActivityTaskCanceledError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RespondActivityTaskCanceledError {
-    fn from(err: CredentialsError) -> RespondActivityTaskCanceledError {
-        RespondActivityTaskCanceledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RespondActivityTaskCanceledError {
-    fn from(err: HttpDispatchError) -> RespondActivityTaskCanceledError {
-        RespondActivityTaskCanceledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RespondActivityTaskCanceledError {
-    fn from(err: io::Error) -> RespondActivityTaskCanceledError {
-        RespondActivityTaskCanceledError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RespondActivityTaskCanceledError {
@@ -5157,13 +4261,6 @@ impl Error for RespondActivityTaskCanceledError {
         match *self {
             RespondActivityTaskCanceledError::OperationNotPermittedFault(ref cause) => cause,
             RespondActivityTaskCanceledError::UnknownResourceFault(ref cause) => cause,
-            RespondActivityTaskCanceledError::Validation(ref cause) => cause,
-            RespondActivityTaskCanceledError::Credentials(ref err) => err.description(),
-            RespondActivityTaskCanceledError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RespondActivityTaskCanceledError::ParseError(ref cause) => cause,
-            RespondActivityTaskCanceledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5174,20 +4271,12 @@ pub enum RespondActivityTaskCompletedError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RespondActivityTaskCompletedError {
-    pub fn from_response(res: BufferedHttpResponse) -> RespondActivityTaskCompletedError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RespondActivityTaskCompletedError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5200,43 +4289,24 @@ impl RespondActivityTaskCompletedError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RespondActivityTaskCompletedError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RespondActivityTaskCompletedError::OperationNotPermittedFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RespondActivityTaskCompletedError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RespondActivityTaskCompletedError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RespondActivityTaskCompletedError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RespondActivityTaskCompletedError {
-    fn from(err: serde_json::error::Error) -> RespondActivityTaskCompletedError {
-        RespondActivityTaskCompletedError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RespondActivityTaskCompletedError {
-    fn from(err: CredentialsError) -> RespondActivityTaskCompletedError {
-        RespondActivityTaskCompletedError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RespondActivityTaskCompletedError {
-    fn from(err: HttpDispatchError) -> RespondActivityTaskCompletedError {
-        RespondActivityTaskCompletedError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RespondActivityTaskCompletedError {
-    fn from(err: io::Error) -> RespondActivityTaskCompletedError {
-        RespondActivityTaskCompletedError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RespondActivityTaskCompletedError {
@@ -5249,13 +4319,6 @@ impl Error for RespondActivityTaskCompletedError {
         match *self {
             RespondActivityTaskCompletedError::OperationNotPermittedFault(ref cause) => cause,
             RespondActivityTaskCompletedError::UnknownResourceFault(ref cause) => cause,
-            RespondActivityTaskCompletedError::Validation(ref cause) => cause,
-            RespondActivityTaskCompletedError::Credentials(ref err) => err.description(),
-            RespondActivityTaskCompletedError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RespondActivityTaskCompletedError::ParseError(ref cause) => cause,
-            RespondActivityTaskCompletedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5266,20 +4329,10 @@ pub enum RespondActivityTaskFailedError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RespondActivityTaskFailedError {
-    pub fn from_response(res: BufferedHttpResponse) -> RespondActivityTaskFailedError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RespondActivityTaskFailedError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5292,43 +4345,24 @@ impl RespondActivityTaskFailedError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RespondActivityTaskFailedError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RespondActivityTaskFailedError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return RespondActivityTaskFailedError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RespondActivityTaskFailedError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RespondActivityTaskFailedError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RespondActivityTaskFailedError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RespondActivityTaskFailedError {
-    fn from(err: serde_json::error::Error) -> RespondActivityTaskFailedError {
-        RespondActivityTaskFailedError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RespondActivityTaskFailedError {
-    fn from(err: CredentialsError) -> RespondActivityTaskFailedError {
-        RespondActivityTaskFailedError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RespondActivityTaskFailedError {
-    fn from(err: HttpDispatchError) -> RespondActivityTaskFailedError {
-        RespondActivityTaskFailedError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RespondActivityTaskFailedError {
-    fn from(err: io::Error) -> RespondActivityTaskFailedError {
-        RespondActivityTaskFailedError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RespondActivityTaskFailedError {
@@ -5341,13 +4375,6 @@ impl Error for RespondActivityTaskFailedError {
         match *self {
             RespondActivityTaskFailedError::OperationNotPermittedFault(ref cause) => cause,
             RespondActivityTaskFailedError::UnknownResourceFault(ref cause) => cause,
-            RespondActivityTaskFailedError::Validation(ref cause) => cause,
-            RespondActivityTaskFailedError::Credentials(ref err) => err.description(),
-            RespondActivityTaskFailedError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RespondActivityTaskFailedError::ParseError(ref cause) => cause,
-            RespondActivityTaskFailedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5358,20 +4385,12 @@ pub enum RespondDecisionTaskCompletedError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RespondDecisionTaskCompletedError {
-    pub fn from_response(res: BufferedHttpResponse) -> RespondDecisionTaskCompletedError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RespondDecisionTaskCompletedError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5384,43 +4403,24 @@ impl RespondDecisionTaskCompletedError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return RespondDecisionTaskCompletedError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RespondDecisionTaskCompletedError::OperationNotPermittedFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RespondDecisionTaskCompletedError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RespondDecisionTaskCompletedError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RespondDecisionTaskCompletedError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RespondDecisionTaskCompletedError {
-    fn from(err: serde_json::error::Error) -> RespondDecisionTaskCompletedError {
-        RespondDecisionTaskCompletedError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RespondDecisionTaskCompletedError {
-    fn from(err: CredentialsError) -> RespondDecisionTaskCompletedError {
-        RespondDecisionTaskCompletedError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RespondDecisionTaskCompletedError {
-    fn from(err: HttpDispatchError) -> RespondDecisionTaskCompletedError {
-        RespondDecisionTaskCompletedError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RespondDecisionTaskCompletedError {
-    fn from(err: io::Error) -> RespondDecisionTaskCompletedError {
-        RespondDecisionTaskCompletedError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RespondDecisionTaskCompletedError {
@@ -5433,13 +4433,6 @@ impl Error for RespondDecisionTaskCompletedError {
         match *self {
             RespondDecisionTaskCompletedError::OperationNotPermittedFault(ref cause) => cause,
             RespondDecisionTaskCompletedError::UnknownResourceFault(ref cause) => cause,
-            RespondDecisionTaskCompletedError::Validation(ref cause) => cause,
-            RespondDecisionTaskCompletedError::Credentials(ref err) => err.description(),
-            RespondDecisionTaskCompletedError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RespondDecisionTaskCompletedError::ParseError(ref cause) => cause,
-            RespondDecisionTaskCompletedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5450,20 +4443,10 @@ pub enum SignalWorkflowExecutionError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SignalWorkflowExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> SignalWorkflowExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SignalWorkflowExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5476,43 +4459,22 @@ impl SignalWorkflowExecutionError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return SignalWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        SignalWorkflowExecutionError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnknownResourceFault" => {
-                    return SignalWorkflowExecutionError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(SignalWorkflowExecutionError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return SignalWorkflowExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SignalWorkflowExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SignalWorkflowExecutionError {
-    fn from(err: serde_json::error::Error) -> SignalWorkflowExecutionError {
-        SignalWorkflowExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SignalWorkflowExecutionError {
-    fn from(err: CredentialsError) -> SignalWorkflowExecutionError {
-        SignalWorkflowExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SignalWorkflowExecutionError {
-    fn from(err: HttpDispatchError) -> SignalWorkflowExecutionError {
-        SignalWorkflowExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SignalWorkflowExecutionError {
-    fn from(err: io::Error) -> SignalWorkflowExecutionError {
-        SignalWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SignalWorkflowExecutionError {
@@ -5525,13 +4487,6 @@ impl Error for SignalWorkflowExecutionError {
         match *self {
             SignalWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
             SignalWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
-            SignalWorkflowExecutionError::Validation(ref cause) => cause,
-            SignalWorkflowExecutionError::Credentials(ref err) => err.description(),
-            SignalWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SignalWorkflowExecutionError::ParseError(ref cause) => cause,
-            SignalWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5550,20 +4505,10 @@ pub enum StartWorkflowExecutionError {
     UnknownResourceFault(String),
     /// <p>Returned by <a>StartWorkflowExecution</a> when an open execution with the same workflowId is already running in the specified domain.</p>
     WorkflowExecutionAlreadyStartedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartWorkflowExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartWorkflowExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartWorkflowExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5576,63 +4521,44 @@ impl StartWorkflowExecutionError {
 
             match *error_type {
                 "DefaultUndefinedFault" => {
-                    return StartWorkflowExecutionError::DefaultUndefinedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(StartWorkflowExecutionError::DefaultUndefinedFault(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededFault" => {
-                    return StartWorkflowExecutionError::LimitExceededFault(String::from(
-                        error_message,
+                    return RusotoError::Service(StartWorkflowExecutionError::LimitExceededFault(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedFault" => {
-                    return StartWorkflowExecutionError::OperationNotPermittedFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartWorkflowExecutionError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TypeDeprecatedFault" => {
-                    return StartWorkflowExecutionError::TypeDeprecatedFault(String::from(
-                        error_message,
+                    return RusotoError::Service(StartWorkflowExecutionError::TypeDeprecatedFault(
+                        String::from(error_message),
                     ));
                 }
                 "UnknownResourceFault" => {
-                    return StartWorkflowExecutionError::UnknownResourceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(StartWorkflowExecutionError::UnknownResourceFault(
+                        String::from(error_message),
                     ));
                 }
                 "WorkflowExecutionAlreadyStartedFault" => {
-                    return StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return StartWorkflowExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartWorkflowExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartWorkflowExecutionError {
-    fn from(err: serde_json::error::Error) -> StartWorkflowExecutionError {
-        StartWorkflowExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartWorkflowExecutionError {
-    fn from(err: CredentialsError) -> StartWorkflowExecutionError {
-        StartWorkflowExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartWorkflowExecutionError {
-    fn from(err: HttpDispatchError) -> StartWorkflowExecutionError {
-        StartWorkflowExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartWorkflowExecutionError {
-    fn from(err: io::Error) -> StartWorkflowExecutionError {
-        StartWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartWorkflowExecutionError {
@@ -5649,13 +4575,6 @@ impl Error for StartWorkflowExecutionError {
             StartWorkflowExecutionError::TypeDeprecatedFault(ref cause) => cause,
             StartWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
             StartWorkflowExecutionError::WorkflowExecutionAlreadyStartedFault(ref cause) => cause,
-            StartWorkflowExecutionError::Validation(ref cause) => cause,
-            StartWorkflowExecutionError::Credentials(ref err) => err.description(),
-            StartWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartWorkflowExecutionError::ParseError(ref cause) => cause,
-            StartWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5666,20 +4585,12 @@ pub enum TerminateWorkflowExecutionError {
     OperationNotPermittedFault(String),
     /// <p>Returned when the named resource cannot be found with in the scope of this operation (region or domain). This could happen if the named resource was never created or is no longer available for this operation.</p>
     UnknownResourceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateWorkflowExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> TerminateWorkflowExecutionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<TerminateWorkflowExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5692,43 +4603,24 @@ impl TerminateWorkflowExecutionError {
 
             match *error_type {
                 "OperationNotPermittedFault" => {
-                    return TerminateWorkflowExecutionError::OperationNotPermittedFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TerminateWorkflowExecutionError::OperationNotPermittedFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnknownResourceFault" => {
-                    return TerminateWorkflowExecutionError::UnknownResourceFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TerminateWorkflowExecutionError::UnknownResourceFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return TerminateWorkflowExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TerminateWorkflowExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TerminateWorkflowExecutionError {
-    fn from(err: serde_json::error::Error) -> TerminateWorkflowExecutionError {
-        TerminateWorkflowExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TerminateWorkflowExecutionError {
-    fn from(err: CredentialsError) -> TerminateWorkflowExecutionError {
-        TerminateWorkflowExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TerminateWorkflowExecutionError {
-    fn from(err: HttpDispatchError) -> TerminateWorkflowExecutionError {
-        TerminateWorkflowExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TerminateWorkflowExecutionError {
-    fn from(err: io::Error) -> TerminateWorkflowExecutionError {
-        TerminateWorkflowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TerminateWorkflowExecutionError {
@@ -5741,13 +4633,6 @@ impl Error for TerminateWorkflowExecutionError {
         match *self {
             TerminateWorkflowExecutionError::OperationNotPermittedFault(ref cause) => cause,
             TerminateWorkflowExecutionError::UnknownResourceFault(ref cause) => cause,
-            TerminateWorkflowExecutionError::Validation(ref cause) => cause,
-            TerminateWorkflowExecutionError::Credentials(ref err) => err.description(),
-            TerminateWorkflowExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            TerminateWorkflowExecutionError::ParseError(ref cause) => cause,
-            TerminateWorkflowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1178,20 +1175,10 @@ pub enum CreateAppError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAppError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAppError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1204,48 +1191,35 @@ impl CreateAppError {
 
             match *error_type {
                 "InternalError" => {
-                    return CreateAppError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateAppError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return CreateAppError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateAppError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingRequiredParameterException" => {
-                    return CreateAppError::MissingRequiredParameter(String::from(error_message));
+                    return RusotoError::Service(CreateAppError::MissingRequiredParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateAppError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(CreateAppError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateAppError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(CreateAppError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateAppError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateAppError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateAppError {
-    fn from(err: serde_json::error::Error) -> CreateAppError {
-        CreateAppError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateAppError {
-    fn from(err: CredentialsError) -> CreateAppError {
-        CreateAppError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAppError {
-    fn from(err: HttpDispatchError) -> CreateAppError {
-        CreateAppError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAppError {
-    fn from(err: io::Error) -> CreateAppError {
-        CreateAppError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateAppError {
@@ -1261,11 +1235,6 @@ impl Error for CreateAppError {
             CreateAppError::MissingRequiredParameter(ref cause) => cause,
             CreateAppError::OperationNotPermitted(ref cause) => cause,
             CreateAppError::UnauthorizedOperation(ref cause) => cause,
-            CreateAppError::Validation(ref cause) => cause,
-            CreateAppError::Credentials(ref err) => err.description(),
-            CreateAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAppError::ParseError(ref cause) => cause,
-            CreateAppError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1290,20 +1259,10 @@ pub enum CreateReplicationJobError {
     TemporarilyUnavailable(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReplicationJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateReplicationJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReplicationJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1316,74 +1275,61 @@ impl CreateReplicationJobError {
 
             match *error_type {
                 "InternalError" => {
-                    return CreateReplicationJobError::InternalError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return CreateReplicationJobError::InvalidParameter(String::from(error_message));
-                }
-                "MissingRequiredParameterException" => {
-                    return CreateReplicationJobError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateReplicationJobError::InternalError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateReplicationJobError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        CreateReplicationJobError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "NoConnectorsAvailableException" => {
-                    return CreateReplicationJobError::NoConnectorsAvailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateReplicationJobError::NoConnectorsAvailable(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateReplicationJobError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateReplicationJobError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ReplicationJobAlreadyExistsException" => {
-                    return CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerCannotBeReplicatedException" => {
-                    return CreateReplicationJobError::ServerCannotBeReplicated(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateReplicationJobError::ServerCannotBeReplicated(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TemporarilyUnavailableException" => {
-                    return CreateReplicationJobError::TemporarilyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateReplicationJobError::TemporarilyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateReplicationJobError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateReplicationJobError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateReplicationJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateReplicationJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateReplicationJobError {
-    fn from(err: serde_json::error::Error) -> CreateReplicationJobError {
-        CreateReplicationJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateReplicationJobError {
-    fn from(err: CredentialsError) -> CreateReplicationJobError {
-        CreateReplicationJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateReplicationJobError {
-    fn from(err: HttpDispatchError) -> CreateReplicationJobError {
-        CreateReplicationJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateReplicationJobError {
-    fn from(err: io::Error) -> CreateReplicationJobError {
-        CreateReplicationJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateReplicationJobError {
@@ -1403,13 +1349,6 @@ impl Error for CreateReplicationJobError {
             CreateReplicationJobError::ServerCannotBeReplicated(ref cause) => cause,
             CreateReplicationJobError::TemporarilyUnavailable(ref cause) => cause,
             CreateReplicationJobError::UnauthorizedOperation(ref cause) => cause,
-            CreateReplicationJobError::Validation(ref cause) => cause,
-            CreateReplicationJobError::Credentials(ref err) => err.description(),
-            CreateReplicationJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateReplicationJobError::ParseError(ref cause) => cause,
-            CreateReplicationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1426,20 +1365,10 @@ pub enum DeleteAppError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAppError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAppError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1452,48 +1381,35 @@ impl DeleteAppError {
 
             match *error_type {
                 "InternalError" => {
-                    return DeleteAppError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteAppError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteAppError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteAppError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingRequiredParameterException" => {
-                    return DeleteAppError::MissingRequiredParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteAppError::MissingRequiredParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteAppError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(DeleteAppError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteAppError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(DeleteAppError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteAppError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteAppError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteAppError {
-    fn from(err: serde_json::error::Error) -> DeleteAppError {
-        DeleteAppError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAppError {
-    fn from(err: CredentialsError) -> DeleteAppError {
-        DeleteAppError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAppError {
-    fn from(err: HttpDispatchError) -> DeleteAppError {
-        DeleteAppError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAppError {
-    fn from(err: io::Error) -> DeleteAppError {
-        DeleteAppError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteAppError {
@@ -1509,11 +1425,6 @@ impl Error for DeleteAppError {
             DeleteAppError::MissingRequiredParameter(ref cause) => cause,
             DeleteAppError::OperationNotPermitted(ref cause) => cause,
             DeleteAppError::UnauthorizedOperation(ref cause) => cause,
-            DeleteAppError::Validation(ref cause) => cause,
-            DeleteAppError::Credentials(ref err) => err.description(),
-            DeleteAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAppError::ParseError(ref cause) => cause,
-            DeleteAppError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1530,20 +1441,12 @@ pub enum DeleteAppLaunchConfigurationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAppLaunchConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAppLaunchConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteAppLaunchConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1556,58 +1459,43 @@ impl DeleteAppLaunchConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return DeleteAppLaunchConfigurationError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteAppLaunchConfigurationError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteAppLaunchConfigurationError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteAppLaunchConfigurationError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingRequiredParameterException" => {
-                    return DeleteAppLaunchConfigurationError::MissingRequiredParameter(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteAppLaunchConfigurationError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteAppLaunchConfigurationError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteAppLaunchConfigurationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteAppLaunchConfigurationError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteAppLaunchConfigurationError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DeleteAppLaunchConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteAppLaunchConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteAppLaunchConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeleteAppLaunchConfigurationError {
-        DeleteAppLaunchConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAppLaunchConfigurationError {
-    fn from(err: CredentialsError) -> DeleteAppLaunchConfigurationError {
-        DeleteAppLaunchConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAppLaunchConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteAppLaunchConfigurationError {
-        DeleteAppLaunchConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAppLaunchConfigurationError {
-    fn from(err: io::Error) -> DeleteAppLaunchConfigurationError {
-        DeleteAppLaunchConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteAppLaunchConfigurationError {
@@ -1623,13 +1511,6 @@ impl Error for DeleteAppLaunchConfigurationError {
             DeleteAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => cause,
             DeleteAppLaunchConfigurationError::OperationNotPermitted(ref cause) => cause,
             DeleteAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => cause,
-            DeleteAppLaunchConfigurationError::Validation(ref cause) => cause,
-            DeleteAppLaunchConfigurationError::Credentials(ref err) => err.description(),
-            DeleteAppLaunchConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteAppLaunchConfigurationError::ParseError(ref cause) => cause,
-            DeleteAppLaunchConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1646,20 +1527,12 @@ pub enum DeleteAppReplicationConfigurationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAppReplicationConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAppReplicationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteAppReplicationConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1672,60 +1545,45 @@ impl DeleteAppReplicationConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return DeleteAppReplicationConfigurationError::InternalError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteAppReplicationConfigurationError::InternalError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return DeleteAppReplicationConfigurationError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteAppReplicationConfigurationError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingRequiredParameterException" => {
-                    return DeleteAppReplicationConfigurationError::MissingRequiredParameter(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteAppReplicationConfigurationError::MissingRequiredParameter(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteAppReplicationConfigurationError::OperationNotPermitted(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteAppReplicationConfigurationError::OperationNotPermitted(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteAppReplicationConfigurationError::UnauthorizedOperation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteAppReplicationConfigurationError::UnauthorizedOperation(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteAppReplicationConfigurationError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteAppReplicationConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteAppReplicationConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeleteAppReplicationConfigurationError {
-        DeleteAppReplicationConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAppReplicationConfigurationError {
-    fn from(err: CredentialsError) -> DeleteAppReplicationConfigurationError {
-        DeleteAppReplicationConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAppReplicationConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteAppReplicationConfigurationError {
-        DeleteAppReplicationConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAppReplicationConfigurationError {
-    fn from(err: io::Error) -> DeleteAppReplicationConfigurationError {
-        DeleteAppReplicationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteAppReplicationConfigurationError {
@@ -1741,13 +1599,6 @@ impl Error for DeleteAppReplicationConfigurationError {
             DeleteAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => cause,
             DeleteAppReplicationConfigurationError::OperationNotPermitted(ref cause) => cause,
             DeleteAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => cause,
-            DeleteAppReplicationConfigurationError::Validation(ref cause) => cause,
-            DeleteAppReplicationConfigurationError::Credentials(ref err) => err.description(),
-            DeleteAppReplicationConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteAppReplicationConfigurationError::ParseError(ref cause) => cause,
-            DeleteAppReplicationConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1764,20 +1615,10 @@ pub enum DeleteReplicationJobError {
     ReplicationJobNotFound(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReplicationJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteReplicationJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReplicationJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1790,56 +1631,37 @@ impl DeleteReplicationJobError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteReplicationJobError::InvalidParameter(String::from(error_message));
-                }
-                "MissingRequiredParameterException" => {
-                    return DeleteReplicationJobError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteReplicationJobError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        DeleteReplicationJobError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "OperationNotPermittedException" => {
-                    return DeleteReplicationJobError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteReplicationJobError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ReplicationJobNotFoundException" => {
-                    return DeleteReplicationJobError::ReplicationJobNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteReplicationJobError::ReplicationJobNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteReplicationJobError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteReplicationJobError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteReplicationJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteReplicationJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteReplicationJobError {
-    fn from(err: serde_json::error::Error) -> DeleteReplicationJobError {
-        DeleteReplicationJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteReplicationJobError {
-    fn from(err: CredentialsError) -> DeleteReplicationJobError {
-        DeleteReplicationJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteReplicationJobError {
-    fn from(err: HttpDispatchError) -> DeleteReplicationJobError {
-        DeleteReplicationJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteReplicationJobError {
-    fn from(err: io::Error) -> DeleteReplicationJobError {
-        DeleteReplicationJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteReplicationJobError {
@@ -1855,13 +1677,6 @@ impl Error for DeleteReplicationJobError {
             DeleteReplicationJobError::OperationNotPermitted(ref cause) => cause,
             DeleteReplicationJobError::ReplicationJobNotFound(ref cause) => cause,
             DeleteReplicationJobError::UnauthorizedOperation(ref cause) => cause,
-            DeleteReplicationJobError::Validation(ref cause) => cause,
-            DeleteReplicationJobError::Credentials(ref err) => err.description(),
-            DeleteReplicationJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteReplicationJobError::ParseError(ref cause) => cause,
-            DeleteReplicationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1876,20 +1691,10 @@ pub enum DeleteServerCatalogError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServerCatalogError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteServerCatalogError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServerCatalogError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1902,51 +1707,30 @@ impl DeleteServerCatalogError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteServerCatalogError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteServerCatalogError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return DeleteServerCatalogError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteServerCatalogError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteServerCatalogError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteServerCatalogError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteServerCatalogError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteServerCatalogError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteServerCatalogError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteServerCatalogError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteServerCatalogError {
-    fn from(err: serde_json::error::Error) -> DeleteServerCatalogError {
-        DeleteServerCatalogError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteServerCatalogError {
-    fn from(err: CredentialsError) -> DeleteServerCatalogError {
-        DeleteServerCatalogError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteServerCatalogError {
-    fn from(err: HttpDispatchError) -> DeleteServerCatalogError {
-        DeleteServerCatalogError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteServerCatalogError {
-    fn from(err: io::Error) -> DeleteServerCatalogError {
-        DeleteServerCatalogError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteServerCatalogError {
@@ -1961,13 +1745,6 @@ impl Error for DeleteServerCatalogError {
             DeleteServerCatalogError::MissingRequiredParameter(ref cause) => cause,
             DeleteServerCatalogError::OperationNotPermitted(ref cause) => cause,
             DeleteServerCatalogError::UnauthorizedOperation(ref cause) => cause,
-            DeleteServerCatalogError::Validation(ref cause) => cause,
-            DeleteServerCatalogError::Credentials(ref err) => err.description(),
-            DeleteServerCatalogError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteServerCatalogError::ParseError(ref cause) => cause,
-            DeleteServerCatalogError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1982,20 +1759,10 @@ pub enum DisassociateConnectorError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateConnectorError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateConnectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateConnectorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2008,51 +1775,32 @@ impl DisassociateConnectorError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DisassociateConnectorError::InvalidParameter(String::from(error_message));
-                }
-                "MissingRequiredParameterException" => {
-                    return DisassociateConnectorError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateConnectorError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        DisassociateConnectorError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "OperationNotPermittedException" => {
-                    return DisassociateConnectorError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateConnectorError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DisassociateConnectorError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateConnectorError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DisassociateConnectorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateConnectorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateConnectorError {
-    fn from(err: serde_json::error::Error) -> DisassociateConnectorError {
-        DisassociateConnectorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateConnectorError {
-    fn from(err: CredentialsError) -> DisassociateConnectorError {
-        DisassociateConnectorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateConnectorError {
-    fn from(err: HttpDispatchError) -> DisassociateConnectorError {
-        DisassociateConnectorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateConnectorError {
-    fn from(err: io::Error) -> DisassociateConnectorError {
-        DisassociateConnectorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateConnectorError {
@@ -2067,13 +1815,6 @@ impl Error for DisassociateConnectorError {
             DisassociateConnectorError::MissingRequiredParameter(ref cause) => cause,
             DisassociateConnectorError::OperationNotPermitted(ref cause) => cause,
             DisassociateConnectorError::UnauthorizedOperation(ref cause) => cause,
-            DisassociateConnectorError::Validation(ref cause) => cause,
-            DisassociateConnectorError::Credentials(ref err) => err.description(),
-            DisassociateConnectorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateConnectorError::ParseError(ref cause) => cause,
-            DisassociateConnectorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2090,20 +1831,10 @@ pub enum GenerateChangeSetError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateChangeSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateChangeSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateChangeSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2116,54 +1847,35 @@ impl GenerateChangeSetError {
 
             match *error_type {
                 "InternalError" => {
-                    return GenerateChangeSetError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GenerateChangeSetError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GenerateChangeSetError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GenerateChangeSetError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return GenerateChangeSetError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateChangeSetError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return GenerateChangeSetError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateChangeSetError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return GenerateChangeSetError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateChangeSetError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GenerateChangeSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GenerateChangeSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GenerateChangeSetError {
-    fn from(err: serde_json::error::Error) -> GenerateChangeSetError {
-        GenerateChangeSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GenerateChangeSetError {
-    fn from(err: CredentialsError) -> GenerateChangeSetError {
-        GenerateChangeSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateChangeSetError {
-    fn from(err: HttpDispatchError) -> GenerateChangeSetError {
-        GenerateChangeSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateChangeSetError {
-    fn from(err: io::Error) -> GenerateChangeSetError {
-        GenerateChangeSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GenerateChangeSetError {
@@ -2179,13 +1891,6 @@ impl Error for GenerateChangeSetError {
             GenerateChangeSetError::MissingRequiredParameter(ref cause) => cause,
             GenerateChangeSetError::OperationNotPermitted(ref cause) => cause,
             GenerateChangeSetError::UnauthorizedOperation(ref cause) => cause,
-            GenerateChangeSetError::Validation(ref cause) => cause,
-            GenerateChangeSetError::Credentials(ref err) => err.description(),
-            GenerateChangeSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GenerateChangeSetError::ParseError(ref cause) => cause,
-            GenerateChangeSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2202,20 +1907,10 @@ pub enum GenerateTemplateError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateTemplateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2228,50 +1923,35 @@ impl GenerateTemplateError {
 
             match *error_type {
                 "InternalError" => {
-                    return GenerateTemplateError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GenerateTemplateError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GenerateTemplateError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GenerateTemplateError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return GenerateTemplateError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateTemplateError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return GenerateTemplateError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(GenerateTemplateError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return GenerateTemplateError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(GenerateTemplateError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GenerateTemplateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GenerateTemplateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GenerateTemplateError {
-    fn from(err: serde_json::error::Error) -> GenerateTemplateError {
-        GenerateTemplateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GenerateTemplateError {
-    fn from(err: CredentialsError) -> GenerateTemplateError {
-        GenerateTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateTemplateError {
-    fn from(err: HttpDispatchError) -> GenerateTemplateError {
-        GenerateTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateTemplateError {
-    fn from(err: io::Error) -> GenerateTemplateError {
-        GenerateTemplateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GenerateTemplateError {
@@ -2287,11 +1967,6 @@ impl Error for GenerateTemplateError {
             GenerateTemplateError::MissingRequiredParameter(ref cause) => cause,
             GenerateTemplateError::OperationNotPermitted(ref cause) => cause,
             GenerateTemplateError::UnauthorizedOperation(ref cause) => cause,
-            GenerateTemplateError::Validation(ref cause) => cause,
-            GenerateTemplateError::Credentials(ref err) => err.description(),
-            GenerateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GenerateTemplateError::ParseError(ref cause) => cause,
-            GenerateTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2308,20 +1983,10 @@ pub enum GetAppError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAppError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2333,45 +1998,36 @@ impl GetAppError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "InternalError" => return GetAppError::InternalError(String::from(error_message)),
+                "InternalError" => {
+                    return RusotoError::Service(GetAppError::InternalError(String::from(
+                        error_message,
+                    )));
+                }
                 "InvalidParameterException" => {
-                    return GetAppError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetAppError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingRequiredParameterException" => {
-                    return GetAppError::MissingRequiredParameter(String::from(error_message));
+                    return RusotoError::Service(GetAppError::MissingRequiredParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return GetAppError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(GetAppError::OperationNotPermitted(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetAppError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(GetAppError::UnauthorizedOperation(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetAppError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAppError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAppError {
-    fn from(err: serde_json::error::Error) -> GetAppError {
-        GetAppError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAppError {
-    fn from(err: CredentialsError) -> GetAppError {
-        GetAppError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAppError {
-    fn from(err: HttpDispatchError) -> GetAppError {
-        GetAppError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAppError {
-    fn from(err: io::Error) -> GetAppError {
-        GetAppError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAppError {
@@ -2387,11 +2043,6 @@ impl Error for GetAppError {
             GetAppError::MissingRequiredParameter(ref cause) => cause,
             GetAppError::OperationNotPermitted(ref cause) => cause,
             GetAppError::UnauthorizedOperation(ref cause) => cause,
-            GetAppError::Validation(ref cause) => cause,
-            GetAppError::Credentials(ref err) => err.description(),
-            GetAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAppError::ParseError(ref cause) => cause,
-            GetAppError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2408,20 +2059,10 @@ pub enum GetAppLaunchConfigurationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAppLaunchConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAppLaunchConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppLaunchConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2434,58 +2075,41 @@ impl GetAppLaunchConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return GetAppLaunchConfigurationError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetAppLaunchConfigurationError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return GetAppLaunchConfigurationError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetAppLaunchConfigurationError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "MissingRequiredParameterException" => {
-                    return GetAppLaunchConfigurationError::MissingRequiredParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetAppLaunchConfigurationError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OperationNotPermittedException" => {
-                    return GetAppLaunchConfigurationError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetAppLaunchConfigurationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedOperationException" => {
-                    return GetAppLaunchConfigurationError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetAppLaunchConfigurationError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetAppLaunchConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAppLaunchConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAppLaunchConfigurationError {
-    fn from(err: serde_json::error::Error) -> GetAppLaunchConfigurationError {
-        GetAppLaunchConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAppLaunchConfigurationError {
-    fn from(err: CredentialsError) -> GetAppLaunchConfigurationError {
-        GetAppLaunchConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAppLaunchConfigurationError {
-    fn from(err: HttpDispatchError) -> GetAppLaunchConfigurationError {
-        GetAppLaunchConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAppLaunchConfigurationError {
-    fn from(err: io::Error) -> GetAppLaunchConfigurationError {
-        GetAppLaunchConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAppLaunchConfigurationError {
@@ -2501,13 +2125,6 @@ impl Error for GetAppLaunchConfigurationError {
             GetAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => cause,
             GetAppLaunchConfigurationError::OperationNotPermitted(ref cause) => cause,
             GetAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => cause,
-            GetAppLaunchConfigurationError::Validation(ref cause) => cause,
-            GetAppLaunchConfigurationError::Credentials(ref err) => err.description(),
-            GetAppLaunchConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAppLaunchConfigurationError::ParseError(ref cause) => cause,
-            GetAppLaunchConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2524,20 +2141,12 @@ pub enum GetAppReplicationConfigurationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAppReplicationConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAppReplicationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAppReplicationConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2550,60 +2159,43 @@ impl GetAppReplicationConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return GetAppReplicationConfigurationError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetAppReplicationConfigurationError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return GetAppReplicationConfigurationError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetAppReplicationConfigurationError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingRequiredParameterException" => {
-                    return GetAppReplicationConfigurationError::MissingRequiredParameter(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetAppReplicationConfigurationError::MissingRequiredParameter(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "OperationNotPermittedException" => {
-                    return GetAppReplicationConfigurationError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedOperationException" => {
-                    return GetAppReplicationConfigurationError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetAppReplicationConfigurationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetAppReplicationConfigurationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        GetAppReplicationConfigurationError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAppReplicationConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAppReplicationConfigurationError {
-    fn from(err: serde_json::error::Error) -> GetAppReplicationConfigurationError {
-        GetAppReplicationConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAppReplicationConfigurationError {
-    fn from(err: CredentialsError) -> GetAppReplicationConfigurationError {
-        GetAppReplicationConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAppReplicationConfigurationError {
-    fn from(err: HttpDispatchError) -> GetAppReplicationConfigurationError {
-        GetAppReplicationConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAppReplicationConfigurationError {
-    fn from(err: io::Error) -> GetAppReplicationConfigurationError {
-        GetAppReplicationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAppReplicationConfigurationError {
@@ -2619,13 +2211,6 @@ impl Error for GetAppReplicationConfigurationError {
             GetAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => cause,
             GetAppReplicationConfigurationError::OperationNotPermitted(ref cause) => cause,
             GetAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => cause,
-            GetAppReplicationConfigurationError::Validation(ref cause) => cause,
-            GetAppReplicationConfigurationError::Credentials(ref err) => err.description(),
-            GetAppReplicationConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAppReplicationConfigurationError::ParseError(ref cause) => cause,
-            GetAppReplicationConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2634,20 +2219,10 @@ impl Error for GetAppReplicationConfigurationError {
 pub enum GetConnectorsError {
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetConnectorsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetConnectorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectorsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2660,36 +2235,15 @@ impl GetConnectorsError {
 
             match *error_type {
                 "UnauthorizedOperationException" => {
-                    return GetConnectorsError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(GetConnectorsError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetConnectorsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetConnectorsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetConnectorsError {
-    fn from(err: serde_json::error::Error) -> GetConnectorsError {
-        GetConnectorsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetConnectorsError {
-    fn from(err: CredentialsError) -> GetConnectorsError {
-        GetConnectorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetConnectorsError {
-    fn from(err: HttpDispatchError) -> GetConnectorsError {
-        GetConnectorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetConnectorsError {
-    fn from(err: io::Error) -> GetConnectorsError {
-        GetConnectorsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetConnectorsError {
@@ -2701,11 +2255,6 @@ impl Error for GetConnectorsError {
     fn description(&self) -> &str {
         match *self {
             GetConnectorsError::UnauthorizedOperation(ref cause) => cause,
-            GetConnectorsError::Validation(ref cause) => cause,
-            GetConnectorsError::Credentials(ref err) => err.description(),
-            GetConnectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetConnectorsError::ParseError(ref cause) => cause,
-            GetConnectorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2718,20 +2267,10 @@ pub enum GetReplicationJobsError {
     MissingRequiredParameter(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReplicationJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReplicationJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReplicationJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2744,46 +2283,25 @@ impl GetReplicationJobsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetReplicationJobsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetReplicationJobsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return GetReplicationJobsError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReplicationJobsError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetReplicationJobsError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReplicationJobsError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetReplicationJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetReplicationJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetReplicationJobsError {
-    fn from(err: serde_json::error::Error) -> GetReplicationJobsError {
-        GetReplicationJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetReplicationJobsError {
-    fn from(err: CredentialsError) -> GetReplicationJobsError {
-        GetReplicationJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReplicationJobsError {
-    fn from(err: HttpDispatchError) -> GetReplicationJobsError {
-        GetReplicationJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReplicationJobsError {
-    fn from(err: io::Error) -> GetReplicationJobsError {
-        GetReplicationJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetReplicationJobsError {
@@ -2797,13 +2315,6 @@ impl Error for GetReplicationJobsError {
             GetReplicationJobsError::InvalidParameter(ref cause) => cause,
             GetReplicationJobsError::MissingRequiredParameter(ref cause) => cause,
             GetReplicationJobsError::UnauthorizedOperation(ref cause) => cause,
-            GetReplicationJobsError::Validation(ref cause) => cause,
-            GetReplicationJobsError::Credentials(ref err) => err.description(),
-            GetReplicationJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReplicationJobsError::ParseError(ref cause) => cause,
-            GetReplicationJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2816,20 +2327,10 @@ pub enum GetReplicationRunsError {
     MissingRequiredParameter(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReplicationRunsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReplicationRunsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReplicationRunsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2842,46 +2343,25 @@ impl GetReplicationRunsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetReplicationRunsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetReplicationRunsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return GetReplicationRunsError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReplicationRunsError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetReplicationRunsError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReplicationRunsError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetReplicationRunsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetReplicationRunsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetReplicationRunsError {
-    fn from(err: serde_json::error::Error) -> GetReplicationRunsError {
-        GetReplicationRunsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetReplicationRunsError {
-    fn from(err: CredentialsError) -> GetReplicationRunsError {
-        GetReplicationRunsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReplicationRunsError {
-    fn from(err: HttpDispatchError) -> GetReplicationRunsError {
-        GetReplicationRunsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReplicationRunsError {
-    fn from(err: io::Error) -> GetReplicationRunsError {
-        GetReplicationRunsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetReplicationRunsError {
@@ -2895,13 +2375,6 @@ impl Error for GetReplicationRunsError {
             GetReplicationRunsError::InvalidParameter(ref cause) => cause,
             GetReplicationRunsError::MissingRequiredParameter(ref cause) => cause,
             GetReplicationRunsError::UnauthorizedOperation(ref cause) => cause,
-            GetReplicationRunsError::Validation(ref cause) => cause,
-            GetReplicationRunsError::Credentials(ref err) => err.description(),
-            GetReplicationRunsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReplicationRunsError::ParseError(ref cause) => cause,
-            GetReplicationRunsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2910,20 +2383,10 @@ impl Error for GetReplicationRunsError {
 pub enum GetServersError {
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetServersError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetServersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2936,36 +2399,15 @@ impl GetServersError {
 
             match *error_type {
                 "UnauthorizedOperationException" => {
-                    return GetServersError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(GetServersError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetServersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetServersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetServersError {
-    fn from(err: serde_json::error::Error) -> GetServersError {
-        GetServersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetServersError {
-    fn from(err: CredentialsError) -> GetServersError {
-        GetServersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetServersError {
-    fn from(err: HttpDispatchError) -> GetServersError {
-        GetServersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetServersError {
-    fn from(err: io::Error) -> GetServersError {
-        GetServersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetServersError {
@@ -2977,11 +2419,6 @@ impl Error for GetServersError {
     fn description(&self) -> &str {
         match *self {
             GetServersError::UnauthorizedOperation(ref cause) => cause,
-            GetServersError::Validation(ref cause) => cause,
-            GetServersError::Credentials(ref err) => err.description(),
-            GetServersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetServersError::ParseError(ref cause) => cause,
-            GetServersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2998,20 +2435,10 @@ pub enum ImportServerCatalogError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportServerCatalogError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportServerCatalogError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportServerCatalogError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3024,56 +2451,35 @@ impl ImportServerCatalogError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ImportServerCatalogError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ImportServerCatalogError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return ImportServerCatalogError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(ImportServerCatalogError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "NoConnectorsAvailableException" => {
-                    return ImportServerCatalogError::NoConnectorsAvailable(String::from(
-                        error_message,
+                    return RusotoError::Service(ImportServerCatalogError::NoConnectorsAvailable(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return ImportServerCatalogError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(ImportServerCatalogError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return ImportServerCatalogError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(ImportServerCatalogError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ImportServerCatalogError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportServerCatalogError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportServerCatalogError {
-    fn from(err: serde_json::error::Error) -> ImportServerCatalogError {
-        ImportServerCatalogError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportServerCatalogError {
-    fn from(err: CredentialsError) -> ImportServerCatalogError {
-        ImportServerCatalogError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportServerCatalogError {
-    fn from(err: HttpDispatchError) -> ImportServerCatalogError {
-        ImportServerCatalogError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportServerCatalogError {
-    fn from(err: io::Error) -> ImportServerCatalogError {
-        ImportServerCatalogError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportServerCatalogError {
@@ -3089,13 +2495,6 @@ impl Error for ImportServerCatalogError {
             ImportServerCatalogError::NoConnectorsAvailable(ref cause) => cause,
             ImportServerCatalogError::OperationNotPermitted(ref cause) => cause,
             ImportServerCatalogError::UnauthorizedOperation(ref cause) => cause,
-            ImportServerCatalogError::Validation(ref cause) => cause,
-            ImportServerCatalogError::Credentials(ref err) => err.description(),
-            ImportServerCatalogError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ImportServerCatalogError::ParseError(ref cause) => cause,
-            ImportServerCatalogError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3112,20 +2511,10 @@ pub enum LaunchAppError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl LaunchAppError {
-    pub fn from_response(res: BufferedHttpResponse) -> LaunchAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LaunchAppError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3138,48 +2527,35 @@ impl LaunchAppError {
 
             match *error_type {
                 "InternalError" => {
-                    return LaunchAppError::InternalError(String::from(error_message));
+                    return RusotoError::Service(LaunchAppError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return LaunchAppError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(LaunchAppError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingRequiredParameterException" => {
-                    return LaunchAppError::MissingRequiredParameter(String::from(error_message));
+                    return RusotoError::Service(LaunchAppError::MissingRequiredParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return LaunchAppError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(LaunchAppError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return LaunchAppError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(LaunchAppError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return LaunchAppError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return LaunchAppError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for LaunchAppError {
-    fn from(err: serde_json::error::Error) -> LaunchAppError {
-        LaunchAppError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for LaunchAppError {
-    fn from(err: CredentialsError) -> LaunchAppError {
-        LaunchAppError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for LaunchAppError {
-    fn from(err: HttpDispatchError) -> LaunchAppError {
-        LaunchAppError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for LaunchAppError {
-    fn from(err: io::Error) -> LaunchAppError {
-        LaunchAppError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for LaunchAppError {
@@ -3195,11 +2571,6 @@ impl Error for LaunchAppError {
             LaunchAppError::MissingRequiredParameter(ref cause) => cause,
             LaunchAppError::OperationNotPermitted(ref cause) => cause,
             LaunchAppError::UnauthorizedOperation(ref cause) => cause,
-            LaunchAppError::Validation(ref cause) => cause,
-            LaunchAppError::Credentials(ref err) => err.description(),
-            LaunchAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            LaunchAppError::ParseError(ref cause) => cause,
-            LaunchAppError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3216,20 +2587,10 @@ pub enum ListAppsError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAppsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAppsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3241,47 +2602,36 @@ impl ListAppsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "InternalError" => return ListAppsError::InternalError(String::from(error_message)),
+                "InternalError" => {
+                    return RusotoError::Service(ListAppsError::InternalError(String::from(
+                        error_message,
+                    )));
+                }
                 "InvalidParameterException" => {
-                    return ListAppsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListAppsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingRequiredParameterException" => {
-                    return ListAppsError::MissingRequiredParameter(String::from(error_message));
+                    return RusotoError::Service(ListAppsError::MissingRequiredParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return ListAppsError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(ListAppsError::OperationNotPermitted(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedOperationException" => {
-                    return ListAppsError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(ListAppsError::UnauthorizedOperation(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListAppsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAppsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAppsError {
-    fn from(err: serde_json::error::Error) -> ListAppsError {
-        ListAppsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAppsError {
-    fn from(err: CredentialsError) -> ListAppsError {
-        ListAppsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAppsError {
-    fn from(err: HttpDispatchError) -> ListAppsError {
-        ListAppsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAppsError {
-    fn from(err: io::Error) -> ListAppsError {
-        ListAppsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAppsError {
@@ -3297,11 +2647,6 @@ impl Error for ListAppsError {
             ListAppsError::MissingRequiredParameter(ref cause) => cause,
             ListAppsError::OperationNotPermitted(ref cause) => cause,
             ListAppsError::UnauthorizedOperation(ref cause) => cause,
-            ListAppsError::Validation(ref cause) => cause,
-            ListAppsError::Credentials(ref err) => err.description(),
-            ListAppsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAppsError::ParseError(ref cause) => cause,
-            ListAppsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3318,20 +2663,10 @@ pub enum PutAppLaunchConfigurationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutAppLaunchConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutAppLaunchConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAppLaunchConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3344,58 +2679,41 @@ impl PutAppLaunchConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return PutAppLaunchConfigurationError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(PutAppLaunchConfigurationError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return PutAppLaunchConfigurationError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(PutAppLaunchConfigurationError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "MissingRequiredParameterException" => {
-                    return PutAppLaunchConfigurationError::MissingRequiredParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutAppLaunchConfigurationError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OperationNotPermittedException" => {
-                    return PutAppLaunchConfigurationError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutAppLaunchConfigurationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedOperationException" => {
-                    return PutAppLaunchConfigurationError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutAppLaunchConfigurationError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return PutAppLaunchConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutAppLaunchConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutAppLaunchConfigurationError {
-    fn from(err: serde_json::error::Error) -> PutAppLaunchConfigurationError {
-        PutAppLaunchConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutAppLaunchConfigurationError {
-    fn from(err: CredentialsError) -> PutAppLaunchConfigurationError {
-        PutAppLaunchConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutAppLaunchConfigurationError {
-    fn from(err: HttpDispatchError) -> PutAppLaunchConfigurationError {
-        PutAppLaunchConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutAppLaunchConfigurationError {
-    fn from(err: io::Error) -> PutAppLaunchConfigurationError {
-        PutAppLaunchConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutAppLaunchConfigurationError {
@@ -3411,13 +2729,6 @@ impl Error for PutAppLaunchConfigurationError {
             PutAppLaunchConfigurationError::MissingRequiredParameter(ref cause) => cause,
             PutAppLaunchConfigurationError::OperationNotPermitted(ref cause) => cause,
             PutAppLaunchConfigurationError::UnauthorizedOperation(ref cause) => cause,
-            PutAppLaunchConfigurationError::Validation(ref cause) => cause,
-            PutAppLaunchConfigurationError::Credentials(ref err) => err.description(),
-            PutAppLaunchConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutAppLaunchConfigurationError::ParseError(ref cause) => cause,
-            PutAppLaunchConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3434,20 +2745,12 @@ pub enum PutAppReplicationConfigurationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutAppReplicationConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutAppReplicationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutAppReplicationConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3460,60 +2763,43 @@ impl PutAppReplicationConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return PutAppReplicationConfigurationError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(PutAppReplicationConfigurationError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return PutAppReplicationConfigurationError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutAppReplicationConfigurationError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingRequiredParameterException" => {
-                    return PutAppReplicationConfigurationError::MissingRequiredParameter(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutAppReplicationConfigurationError::MissingRequiredParameter(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "OperationNotPermittedException" => {
-                    return PutAppReplicationConfigurationError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedOperationException" => {
-                    return PutAppReplicationConfigurationError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return PutAppReplicationConfigurationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        PutAppReplicationConfigurationError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        PutAppReplicationConfigurationError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutAppReplicationConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutAppReplicationConfigurationError {
-    fn from(err: serde_json::error::Error) -> PutAppReplicationConfigurationError {
-        PutAppReplicationConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutAppReplicationConfigurationError {
-    fn from(err: CredentialsError) -> PutAppReplicationConfigurationError {
-        PutAppReplicationConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutAppReplicationConfigurationError {
-    fn from(err: HttpDispatchError) -> PutAppReplicationConfigurationError {
-        PutAppReplicationConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutAppReplicationConfigurationError {
-    fn from(err: io::Error) -> PutAppReplicationConfigurationError {
-        PutAppReplicationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutAppReplicationConfigurationError {
@@ -3529,13 +2815,6 @@ impl Error for PutAppReplicationConfigurationError {
             PutAppReplicationConfigurationError::MissingRequiredParameter(ref cause) => cause,
             PutAppReplicationConfigurationError::OperationNotPermitted(ref cause) => cause,
             PutAppReplicationConfigurationError::UnauthorizedOperation(ref cause) => cause,
-            PutAppReplicationConfigurationError::Validation(ref cause) => cause,
-            PutAppReplicationConfigurationError::Credentials(ref err) => err.description(),
-            PutAppReplicationConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutAppReplicationConfigurationError::ParseError(ref cause) => cause,
-            PutAppReplicationConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3552,20 +2831,10 @@ pub enum StartAppReplicationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartAppReplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartAppReplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAppReplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3578,54 +2847,35 @@ impl StartAppReplicationError {
 
             match *error_type {
                 "InternalError" => {
-                    return StartAppReplicationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(StartAppReplicationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartAppReplicationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StartAppReplicationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return StartAppReplicationError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(StartAppReplicationError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return StartAppReplicationError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(StartAppReplicationError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return StartAppReplicationError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(StartAppReplicationError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartAppReplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartAppReplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartAppReplicationError {
-    fn from(err: serde_json::error::Error) -> StartAppReplicationError {
-        StartAppReplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartAppReplicationError {
-    fn from(err: CredentialsError) -> StartAppReplicationError {
-        StartAppReplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartAppReplicationError {
-    fn from(err: HttpDispatchError) -> StartAppReplicationError {
-        StartAppReplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartAppReplicationError {
-    fn from(err: io::Error) -> StartAppReplicationError {
-        StartAppReplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartAppReplicationError {
@@ -3641,13 +2891,6 @@ impl Error for StartAppReplicationError {
             StartAppReplicationError::MissingRequiredParameter(ref cause) => cause,
             StartAppReplicationError::OperationNotPermitted(ref cause) => cause,
             StartAppReplicationError::UnauthorizedOperation(ref cause) => cause,
-            StartAppReplicationError::Validation(ref cause) => cause,
-            StartAppReplicationError::Credentials(ref err) => err.description(),
-            StartAppReplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartAppReplicationError::ParseError(ref cause) => cause,
-            StartAppReplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3664,20 +2907,12 @@ pub enum StartOnDemandReplicationRunError {
     ReplicationRunLimitExceeded(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartOnDemandReplicationRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartOnDemandReplicationRunError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartOnDemandReplicationRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3690,58 +2925,43 @@ impl StartOnDemandReplicationRunError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return StartOnDemandReplicationRunError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(StartOnDemandReplicationRunError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "MissingRequiredParameterException" => {
-                    return StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OperationNotPermittedException" => {
-                    return StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ReplicationRunLimitExceededException" => {
-                    return StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnauthorizedOperationException" => {
-                    return StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return StartOnDemandReplicationRunError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartOnDemandReplicationRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartOnDemandReplicationRunError {
-    fn from(err: serde_json::error::Error) -> StartOnDemandReplicationRunError {
-        StartOnDemandReplicationRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartOnDemandReplicationRunError {
-    fn from(err: CredentialsError) -> StartOnDemandReplicationRunError {
-        StartOnDemandReplicationRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartOnDemandReplicationRunError {
-    fn from(err: HttpDispatchError) -> StartOnDemandReplicationRunError {
-        StartOnDemandReplicationRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartOnDemandReplicationRunError {
-    fn from(err: io::Error) -> StartOnDemandReplicationRunError {
-        StartOnDemandReplicationRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartOnDemandReplicationRunError {
@@ -3757,13 +2977,6 @@ impl Error for StartOnDemandReplicationRunError {
             StartOnDemandReplicationRunError::OperationNotPermitted(ref cause) => cause,
             StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(ref cause) => cause,
             StartOnDemandReplicationRunError::UnauthorizedOperation(ref cause) => cause,
-            StartOnDemandReplicationRunError::Validation(ref cause) => cause,
-            StartOnDemandReplicationRunError::Credentials(ref err) => err.description(),
-            StartOnDemandReplicationRunError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartOnDemandReplicationRunError::ParseError(ref cause) => cause,
-            StartOnDemandReplicationRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3780,20 +2993,10 @@ pub enum StopAppReplicationError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopAppReplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopAppReplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAppReplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3806,54 +3009,35 @@ impl StopAppReplicationError {
 
             match *error_type {
                 "InternalError" => {
-                    return StopAppReplicationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(StopAppReplicationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StopAppReplicationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StopAppReplicationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MissingRequiredParameterException" => {
-                    return StopAppReplicationError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(StopAppReplicationError::MissingRequiredParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return StopAppReplicationError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(StopAppReplicationError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return StopAppReplicationError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(StopAppReplicationError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StopAppReplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopAppReplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopAppReplicationError {
-    fn from(err: serde_json::error::Error) -> StopAppReplicationError {
-        StopAppReplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopAppReplicationError {
-    fn from(err: CredentialsError) -> StopAppReplicationError {
-        StopAppReplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopAppReplicationError {
-    fn from(err: HttpDispatchError) -> StopAppReplicationError {
-        StopAppReplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopAppReplicationError {
-    fn from(err: io::Error) -> StopAppReplicationError {
-        StopAppReplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopAppReplicationError {
@@ -3869,13 +3053,6 @@ impl Error for StopAppReplicationError {
             StopAppReplicationError::MissingRequiredParameter(ref cause) => cause,
             StopAppReplicationError::OperationNotPermitted(ref cause) => cause,
             StopAppReplicationError::UnauthorizedOperation(ref cause) => cause,
-            StopAppReplicationError::Validation(ref cause) => cause,
-            StopAppReplicationError::Credentials(ref err) => err.description(),
-            StopAppReplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopAppReplicationError::ParseError(ref cause) => cause,
-            StopAppReplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3892,20 +3069,10 @@ pub enum TerminateAppError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateAppError {
-    pub fn from_response(res: BufferedHttpResponse) -> TerminateAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateAppError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3918,48 +3085,35 @@ impl TerminateAppError {
 
             match *error_type {
                 "InternalError" => {
-                    return TerminateAppError::InternalError(String::from(error_message));
+                    return RusotoError::Service(TerminateAppError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return TerminateAppError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(TerminateAppError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingRequiredParameterException" => {
-                    return TerminateAppError::MissingRequiredParameter(String::from(error_message));
+                    return RusotoError::Service(TerminateAppError::MissingRequiredParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return TerminateAppError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(TerminateAppError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return TerminateAppError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(TerminateAppError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return TerminateAppError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TerminateAppError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TerminateAppError {
-    fn from(err: serde_json::error::Error) -> TerminateAppError {
-        TerminateAppError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TerminateAppError {
-    fn from(err: CredentialsError) -> TerminateAppError {
-        TerminateAppError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TerminateAppError {
-    fn from(err: HttpDispatchError) -> TerminateAppError {
-        TerminateAppError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TerminateAppError {
-    fn from(err: io::Error) -> TerminateAppError {
-        TerminateAppError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TerminateAppError {
@@ -3975,11 +3129,6 @@ impl Error for TerminateAppError {
             TerminateAppError::MissingRequiredParameter(ref cause) => cause,
             TerminateAppError::OperationNotPermitted(ref cause) => cause,
             TerminateAppError::UnauthorizedOperation(ref cause) => cause,
-            TerminateAppError::Validation(ref cause) => cause,
-            TerminateAppError::Credentials(ref err) => err.description(),
-            TerminateAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TerminateAppError::ParseError(ref cause) => cause,
-            TerminateAppError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3996,20 +3145,10 @@ pub enum UpdateAppError {
     OperationNotPermitted(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAppError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAppError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAppError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4022,48 +3161,35 @@ impl UpdateAppError {
 
             match *error_type {
                 "InternalError" => {
-                    return UpdateAppError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateAppError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return UpdateAppError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateAppError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MissingRequiredParameterException" => {
-                    return UpdateAppError::MissingRequiredParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateAppError::MissingRequiredParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return UpdateAppError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(UpdateAppError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return UpdateAppError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateAppError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateAppError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateAppError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateAppError {
-    fn from(err: serde_json::error::Error) -> UpdateAppError {
-        UpdateAppError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAppError {
-    fn from(err: CredentialsError) -> UpdateAppError {
-        UpdateAppError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAppError {
-    fn from(err: HttpDispatchError) -> UpdateAppError {
-        UpdateAppError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAppError {
-    fn from(err: io::Error) -> UpdateAppError {
-        UpdateAppError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateAppError {
@@ -4079,11 +3205,6 @@ impl Error for UpdateAppError {
             UpdateAppError::MissingRequiredParameter(ref cause) => cause,
             UpdateAppError::OperationNotPermitted(ref cause) => cause,
             UpdateAppError::UnauthorizedOperation(ref cause) => cause,
-            UpdateAppError::Validation(ref cause) => cause,
-            UpdateAppError::Credentials(ref err) => err.description(),
-            UpdateAppError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateAppError::ParseError(ref cause) => cause,
-            UpdateAppError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4106,20 +3227,10 @@ pub enum UpdateReplicationJobError {
     TemporarilyUnavailable(String),
     /// <p>You lack permissions needed to perform this operation. Check your IAM policies, and ensure that you are using the correct access keys.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateReplicationJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateReplicationJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateReplicationJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4132,69 +3243,54 @@ impl UpdateReplicationJobError {
 
             match *error_type {
                 "InternalError" => {
-                    return UpdateReplicationJobError::InternalError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return UpdateReplicationJobError::InvalidParameter(String::from(error_message));
-                }
-                "MissingRequiredParameterException" => {
-                    return UpdateReplicationJobError::MissingRequiredParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateReplicationJobError::InternalError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateReplicationJobError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "MissingRequiredParameterException" => {
+                    return RusotoError::Service(
+                        UpdateReplicationJobError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "OperationNotPermittedException" => {
-                    return UpdateReplicationJobError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateReplicationJobError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ReplicationJobNotFoundException" => {
-                    return UpdateReplicationJobError::ReplicationJobNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateReplicationJobError::ReplicationJobNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServerCannotBeReplicatedException" => {
-                    return UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TemporarilyUnavailableException" => {
-                    return UpdateReplicationJobError::TemporarilyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateReplicationJobError::TemporarilyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return UpdateReplicationJobError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateReplicationJobError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateReplicationJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateReplicationJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateReplicationJobError {
-    fn from(err: serde_json::error::Error) -> UpdateReplicationJobError {
-        UpdateReplicationJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateReplicationJobError {
-    fn from(err: CredentialsError) -> UpdateReplicationJobError {
-        UpdateReplicationJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateReplicationJobError {
-    fn from(err: HttpDispatchError) -> UpdateReplicationJobError {
-        UpdateReplicationJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateReplicationJobError {
-    fn from(err: io::Error) -> UpdateReplicationJobError {
-        UpdateReplicationJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateReplicationJobError {
@@ -4213,13 +3309,6 @@ impl Error for UpdateReplicationJobError {
             UpdateReplicationJobError::ServerCannotBeReplicated(ref cause) => cause,
             UpdateReplicationJobError::TemporarilyUnavailable(ref cause) => cause,
             UpdateReplicationJobError::UnauthorizedOperation(ref cause) => cause,
-            UpdateReplicationJobError::Validation(ref cause) => cause,
-            UpdateReplicationJobError::Credentials(ref err) => err.description(),
-            UpdateReplicationJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateReplicationJobError::ParseError(ref cause) => cause,
-            UpdateReplicationJobError::Unknown(_) => "unknown error",
         }
     }
 }

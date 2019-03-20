@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1055,20 +1052,10 @@ pub enum GetCostAndUsageError {
     LimitExceeded(String),
     /// <p>Your request parameters changed between pages. Try again with the old parameters or without a pagination token.</p>
     RequestChanged(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCostAndUsageError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCostAndUsageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCostAndUsageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1081,48 +1068,35 @@ impl GetCostAndUsageError {
 
             match *error_type {
                 "BillExpirationException" => {
-                    return GetCostAndUsageError::BillExpiration(String::from(error_message));
+                    return RusotoError::Service(GetCostAndUsageError::BillExpiration(String::from(
+                        error_message,
+                    )));
                 }
                 "DataUnavailableException" => {
-                    return GetCostAndUsageError::DataUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetCostAndUsageError::DataUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetCostAndUsageError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(GetCostAndUsageError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetCostAndUsageError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetCostAndUsageError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestChangedException" => {
-                    return GetCostAndUsageError::RequestChanged(String::from(error_message));
+                    return RusotoError::Service(GetCostAndUsageError::RequestChanged(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetCostAndUsageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCostAndUsageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCostAndUsageError {
-    fn from(err: serde_json::error::Error) -> GetCostAndUsageError {
-        GetCostAndUsageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCostAndUsageError {
-    fn from(err: CredentialsError) -> GetCostAndUsageError {
-        GetCostAndUsageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCostAndUsageError {
-    fn from(err: HttpDispatchError) -> GetCostAndUsageError {
-        GetCostAndUsageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCostAndUsageError {
-    fn from(err: io::Error) -> GetCostAndUsageError {
-        GetCostAndUsageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCostAndUsageError {
@@ -1138,11 +1112,6 @@ impl Error for GetCostAndUsageError {
             GetCostAndUsageError::InvalidNextToken(ref cause) => cause,
             GetCostAndUsageError::LimitExceeded(ref cause) => cause,
             GetCostAndUsageError::RequestChanged(ref cause) => cause,
-            GetCostAndUsageError::Validation(ref cause) => cause,
-            GetCostAndUsageError::Credentials(ref err) => err.description(),
-            GetCostAndUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCostAndUsageError::ParseError(ref cause) => cause,
-            GetCostAndUsageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1153,20 +1122,10 @@ pub enum GetCostForecastError {
     DataUnavailable(String),
     /// <p>You made too many calls in a short period of time. Try again later.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCostForecastError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCostForecastError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCostForecastError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1179,39 +1138,20 @@ impl GetCostForecastError {
 
             match *error_type {
                 "DataUnavailableException" => {
-                    return GetCostForecastError::DataUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetCostForecastError::DataUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetCostForecastError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetCostForecastError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetCostForecastError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCostForecastError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCostForecastError {
-    fn from(err: serde_json::error::Error) -> GetCostForecastError {
-        GetCostForecastError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCostForecastError {
-    fn from(err: CredentialsError) -> GetCostForecastError {
-        GetCostForecastError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCostForecastError {
-    fn from(err: HttpDispatchError) -> GetCostForecastError {
-        GetCostForecastError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCostForecastError {
-    fn from(err: io::Error) -> GetCostForecastError {
-        GetCostForecastError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCostForecastError {
@@ -1224,11 +1164,6 @@ impl Error for GetCostForecastError {
         match *self {
             GetCostForecastError::DataUnavailable(ref cause) => cause,
             GetCostForecastError::LimitExceeded(ref cause) => cause,
-            GetCostForecastError::Validation(ref cause) => cause,
-            GetCostForecastError::Credentials(ref err) => err.description(),
-            GetCostForecastError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCostForecastError::ParseError(ref cause) => cause,
-            GetCostForecastError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1245,20 +1180,10 @@ pub enum GetDimensionValuesError {
     LimitExceeded(String),
     /// <p>Your request parameters changed between pages. Try again with the old parameters or without a pagination token.</p>
     RequestChanged(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDimensionValuesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDimensionValuesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDimensionValuesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1271,48 +1196,35 @@ impl GetDimensionValuesError {
 
             match *error_type {
                 "BillExpirationException" => {
-                    return GetDimensionValuesError::BillExpiration(String::from(error_message));
+                    return RusotoError::Service(GetDimensionValuesError::BillExpiration(
+                        String::from(error_message),
+                    ));
                 }
                 "DataUnavailableException" => {
-                    return GetDimensionValuesError::DataUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetDimensionValuesError::DataUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetDimensionValuesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(GetDimensionValuesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetDimensionValuesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetDimensionValuesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestChangedException" => {
-                    return GetDimensionValuesError::RequestChanged(String::from(error_message));
+                    return RusotoError::Service(GetDimensionValuesError::RequestChanged(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDimensionValuesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDimensionValuesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDimensionValuesError {
-    fn from(err: serde_json::error::Error) -> GetDimensionValuesError {
-        GetDimensionValuesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDimensionValuesError {
-    fn from(err: CredentialsError) -> GetDimensionValuesError {
-        GetDimensionValuesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDimensionValuesError {
-    fn from(err: HttpDispatchError) -> GetDimensionValuesError {
-        GetDimensionValuesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDimensionValuesError {
-    fn from(err: io::Error) -> GetDimensionValuesError {
-        GetDimensionValuesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDimensionValuesError {
@@ -1328,13 +1240,6 @@ impl Error for GetDimensionValuesError {
             GetDimensionValuesError::InvalidNextToken(ref cause) => cause,
             GetDimensionValuesError::LimitExceeded(ref cause) => cause,
             GetDimensionValuesError::RequestChanged(ref cause) => cause,
-            GetDimensionValuesError::Validation(ref cause) => cause,
-            GetDimensionValuesError::Credentials(ref err) => err.description(),
-            GetDimensionValuesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDimensionValuesError::ParseError(ref cause) => cause,
-            GetDimensionValuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1347,20 +1252,10 @@ pub enum GetReservationCoverageError {
     InvalidNextToken(String),
     /// <p>You made too many calls in a short period of time. Try again later.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservationCoverageError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReservationCoverageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReservationCoverageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1373,44 +1268,25 @@ impl GetReservationCoverageError {
 
             match *error_type {
                 "DataUnavailableException" => {
-                    return GetReservationCoverageError::DataUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetReservationCoverageError::DataUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetReservationCoverageError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReservationCoverageError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return GetReservationCoverageError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetReservationCoverageError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetReservationCoverageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetReservationCoverageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetReservationCoverageError {
-    fn from(err: serde_json::error::Error) -> GetReservationCoverageError {
-        GetReservationCoverageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetReservationCoverageError {
-    fn from(err: CredentialsError) -> GetReservationCoverageError {
-        GetReservationCoverageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReservationCoverageError {
-    fn from(err: HttpDispatchError) -> GetReservationCoverageError {
-        GetReservationCoverageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReservationCoverageError {
-    fn from(err: io::Error) -> GetReservationCoverageError {
-        GetReservationCoverageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetReservationCoverageError {
@@ -1424,13 +1300,6 @@ impl Error for GetReservationCoverageError {
             GetReservationCoverageError::DataUnavailable(ref cause) => cause,
             GetReservationCoverageError::InvalidNextToken(ref cause) => cause,
             GetReservationCoverageError::LimitExceeded(ref cause) => cause,
-            GetReservationCoverageError::Validation(ref cause) => cause,
-            GetReservationCoverageError::Credentials(ref err) => err.description(),
-            GetReservationCoverageError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReservationCoverageError::ParseError(ref cause) => cause,
-            GetReservationCoverageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1443,20 +1312,12 @@ pub enum GetReservationPurchaseRecommendationError {
     InvalidNextToken(String),
     /// <p>You made too many calls in a short period of time. Try again later.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservationPurchaseRecommendationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReservationPurchaseRecommendationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetReservationPurchaseRecommendationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1469,50 +1330,31 @@ impl GetReservationPurchaseRecommendationError {
 
             match *error_type {
                 "DataUnavailableException" => {
-                    return GetReservationPurchaseRecommendationError::DataUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetReservationPurchaseRecommendationError::DataUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidNextTokenException" => {
-                    return GetReservationPurchaseRecommendationError::InvalidNextToken(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetReservationPurchaseRecommendationError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "LimitExceededException" => {
-                    return GetReservationPurchaseRecommendationError::LimitExceeded(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetReservationPurchaseRecommendationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetReservationPurchaseRecommendationError::LimitExceeded(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetReservationPurchaseRecommendationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetReservationPurchaseRecommendationError {
-    fn from(err: serde_json::error::Error) -> GetReservationPurchaseRecommendationError {
-        GetReservationPurchaseRecommendationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetReservationPurchaseRecommendationError {
-    fn from(err: CredentialsError) -> GetReservationPurchaseRecommendationError {
-        GetReservationPurchaseRecommendationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReservationPurchaseRecommendationError {
-    fn from(err: HttpDispatchError) -> GetReservationPurchaseRecommendationError {
-        GetReservationPurchaseRecommendationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReservationPurchaseRecommendationError {
-    fn from(err: io::Error) -> GetReservationPurchaseRecommendationError {
-        GetReservationPurchaseRecommendationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetReservationPurchaseRecommendationError {
@@ -1526,13 +1368,6 @@ impl Error for GetReservationPurchaseRecommendationError {
             GetReservationPurchaseRecommendationError::DataUnavailable(ref cause) => cause,
             GetReservationPurchaseRecommendationError::InvalidNextToken(ref cause) => cause,
             GetReservationPurchaseRecommendationError::LimitExceeded(ref cause) => cause,
-            GetReservationPurchaseRecommendationError::Validation(ref cause) => cause,
-            GetReservationPurchaseRecommendationError::Credentials(ref err) => err.description(),
-            GetReservationPurchaseRecommendationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReservationPurchaseRecommendationError::ParseError(ref cause) => cause,
-            GetReservationPurchaseRecommendationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1545,20 +1380,10 @@ pub enum GetReservationUtilizationError {
     InvalidNextToken(String),
     /// <p>You made too many calls in a short period of time. Try again later.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservationUtilizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReservationUtilizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReservationUtilizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1571,48 +1396,25 @@ impl GetReservationUtilizationError {
 
             match *error_type {
                 "DataUnavailableException" => {
-                    return GetReservationUtilizationError::DataUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReservationUtilizationError::DataUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetReservationUtilizationError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReservationUtilizationError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return GetReservationUtilizationError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetReservationUtilizationError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetReservationUtilizationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetReservationUtilizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetReservationUtilizationError {
-    fn from(err: serde_json::error::Error) -> GetReservationUtilizationError {
-        GetReservationUtilizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetReservationUtilizationError {
-    fn from(err: CredentialsError) -> GetReservationUtilizationError {
-        GetReservationUtilizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReservationUtilizationError {
-    fn from(err: HttpDispatchError) -> GetReservationUtilizationError {
-        GetReservationUtilizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReservationUtilizationError {
-    fn from(err: io::Error) -> GetReservationUtilizationError {
-        GetReservationUtilizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetReservationUtilizationError {
@@ -1626,13 +1428,6 @@ impl Error for GetReservationUtilizationError {
             GetReservationUtilizationError::DataUnavailable(ref cause) => cause,
             GetReservationUtilizationError::InvalidNextToken(ref cause) => cause,
             GetReservationUtilizationError::LimitExceeded(ref cause) => cause,
-            GetReservationUtilizationError::Validation(ref cause) => cause,
-            GetReservationUtilizationError::Credentials(ref err) => err.description(),
-            GetReservationUtilizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReservationUtilizationError::ParseError(ref cause) => cause,
-            GetReservationUtilizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1649,20 +1444,10 @@ pub enum GetTagsError {
     LimitExceeded(String),
     /// <p>Your request parameters changed between pages. Try again with the old parameters or without a pagination token.</p>
     RequestChanged(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1675,46 +1460,35 @@ impl GetTagsError {
 
             match *error_type {
                 "BillExpirationException" => {
-                    return GetTagsError::BillExpiration(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::BillExpiration(String::from(
+                        error_message,
+                    )));
                 }
                 "DataUnavailableException" => {
-                    return GetTagsError::DataUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::DataUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return GetTagsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetTagsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestChangedException" => {
-                    return GetTagsError::RequestChanged(String::from(error_message));
+                    return RusotoError::Service(GetTagsError::RequestChanged(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetTagsError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTagsError {
-    fn from(err: serde_json::error::Error) -> GetTagsError {
-        GetTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTagsError {
-    fn from(err: CredentialsError) -> GetTagsError {
-        GetTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTagsError {
-    fn from(err: HttpDispatchError) -> GetTagsError {
-        GetTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTagsError {
-    fn from(err: io::Error) -> GetTagsError {
-        GetTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTagsError {
@@ -1730,11 +1504,6 @@ impl Error for GetTagsError {
             GetTagsError::InvalidNextToken(ref cause) => cause,
             GetTagsError::LimitExceeded(ref cause) => cause,
             GetTagsError::RequestChanged(ref cause) => cause,
-            GetTagsError::Validation(ref cause) => cause,
-            GetTagsError::Credentials(ref err) => err.description(),
-            GetTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTagsError::ParseError(ref cause) => cause,
-            GetTagsError::Unknown(_) => "unknown error",
         }
     }
 }

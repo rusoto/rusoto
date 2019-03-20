@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1441,22 +1438,12 @@ pub enum BatchGetTracesError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetTracesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetTracesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetTracesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1481,39 +1468,20 @@ impl BatchGetTracesError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return BatchGetTracesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(BatchGetTracesError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return BatchGetTracesError::Throttled(String::from(error_message));
+                    return RusotoError::Service(BatchGetTracesError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchGetTracesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetTracesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetTracesError {
-    fn from(err: serde_json::error::Error) -> BatchGetTracesError {
-        BatchGetTracesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetTracesError {
-    fn from(err: CredentialsError) -> BatchGetTracesError {
-        BatchGetTracesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetTracesError {
-    fn from(err: HttpDispatchError) -> BatchGetTracesError {
-        BatchGetTracesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetTracesError {
-    fn from(err: io::Error) -> BatchGetTracesError {
-        BatchGetTracesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetTracesError {
@@ -1526,11 +1494,6 @@ impl Error for BatchGetTracesError {
         match *self {
             BatchGetTracesError::InvalidRequest(ref cause) => cause,
             BatchGetTracesError::Throttled(ref cause) => cause,
-            BatchGetTracesError::Validation(ref cause) => cause,
-            BatchGetTracesError::Credentials(ref err) => err.description(),
-            BatchGetTracesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchGetTracesError::ParseError(ref cause) => cause,
-            BatchGetTracesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1541,22 +1504,12 @@ pub enum CreateGroupError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1581,39 +1534,20 @@ impl CreateGroupError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return CreateGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return CreateGroupError::Throttled(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateGroupError {
-    fn from(err: serde_json::error::Error) -> CreateGroupError {
-        CreateGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateGroupError {
-    fn from(err: CredentialsError) -> CreateGroupError {
-        CreateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGroupError {
-    fn from(err: HttpDispatchError) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGroupError {
-    fn from(err: io::Error) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -1626,11 +1560,6 @@ impl Error for CreateGroupError {
         match *self {
             CreateGroupError::InvalidRequest(ref cause) => cause,
             CreateGroupError::Throttled(ref cause) => cause,
-            CreateGroupError::Validation(ref cause) => cause,
-            CreateGroupError::Credentials(ref err) => err.description(),
-            CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGroupError::ParseError(ref cause) => cause,
-            CreateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1643,22 +1572,12 @@ pub enum CreateSamplingRuleError {
     RuleLimitExceeded(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSamplingRuleError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSamplingRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSamplingRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1683,42 +1602,25 @@ impl CreateSamplingRuleError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return CreateSamplingRuleError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateSamplingRuleError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "RuleLimitExceededException" => {
-                    return CreateSamplingRuleError::RuleLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateSamplingRuleError::RuleLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return CreateSamplingRuleError::Throttled(String::from(error_message));
+                    return RusotoError::Service(CreateSamplingRuleError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateSamplingRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSamplingRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSamplingRuleError {
-    fn from(err: serde_json::error::Error) -> CreateSamplingRuleError {
-        CreateSamplingRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSamplingRuleError {
-    fn from(err: CredentialsError) -> CreateSamplingRuleError {
-        CreateSamplingRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSamplingRuleError {
-    fn from(err: HttpDispatchError) -> CreateSamplingRuleError {
-        CreateSamplingRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSamplingRuleError {
-    fn from(err: io::Error) -> CreateSamplingRuleError {
-        CreateSamplingRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSamplingRuleError {
@@ -1732,13 +1634,6 @@ impl Error for CreateSamplingRuleError {
             CreateSamplingRuleError::InvalidRequest(ref cause) => cause,
             CreateSamplingRuleError::RuleLimitExceeded(ref cause) => cause,
             CreateSamplingRuleError::Throttled(ref cause) => cause,
-            CreateSamplingRuleError::Validation(ref cause) => cause,
-            CreateSamplingRuleError::Credentials(ref err) => err.description(),
-            CreateSamplingRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSamplingRuleError::ParseError(ref cause) => cause,
-            CreateSamplingRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1749,22 +1644,12 @@ pub enum DeleteGroupError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1789,39 +1674,20 @@ impl DeleteGroupError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return DeleteGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return DeleteGroupError::Throttled(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteGroupError {
-        DeleteGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGroupError {
-    fn from(err: CredentialsError) -> DeleteGroupError {
-        DeleteGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGroupError {
-    fn from(err: HttpDispatchError) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGroupError {
-    fn from(err: io::Error) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -1834,11 +1700,6 @@ impl Error for DeleteGroupError {
         match *self {
             DeleteGroupError::InvalidRequest(ref cause) => cause,
             DeleteGroupError::Throttled(ref cause) => cause,
-            DeleteGroupError::Validation(ref cause) => cause,
-            DeleteGroupError::Credentials(ref err) => err.description(),
-            DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGroupError::ParseError(ref cause) => cause,
-            DeleteGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1849,22 +1710,12 @@ pub enum DeleteSamplingRuleError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSamplingRuleError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSamplingRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSamplingRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1889,39 +1740,20 @@ impl DeleteSamplingRuleError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return DeleteSamplingRuleError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteSamplingRuleError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return DeleteSamplingRuleError::Throttled(String::from(error_message));
+                    return RusotoError::Service(DeleteSamplingRuleError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteSamplingRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSamplingRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSamplingRuleError {
-    fn from(err: serde_json::error::Error) -> DeleteSamplingRuleError {
-        DeleteSamplingRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSamplingRuleError {
-    fn from(err: CredentialsError) -> DeleteSamplingRuleError {
-        DeleteSamplingRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSamplingRuleError {
-    fn from(err: HttpDispatchError) -> DeleteSamplingRuleError {
-        DeleteSamplingRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSamplingRuleError {
-    fn from(err: io::Error) -> DeleteSamplingRuleError {
-        DeleteSamplingRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSamplingRuleError {
@@ -1934,13 +1766,6 @@ impl Error for DeleteSamplingRuleError {
         match *self {
             DeleteSamplingRuleError::InvalidRequest(ref cause) => cause,
             DeleteSamplingRuleError::Throttled(ref cause) => cause,
-            DeleteSamplingRuleError::Validation(ref cause) => cause,
-            DeleteSamplingRuleError::Credentials(ref err) => err.description(),
-            DeleteSamplingRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSamplingRuleError::ParseError(ref cause) => cause,
-            DeleteSamplingRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1951,22 +1776,12 @@ pub enum GetEncryptionConfigError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetEncryptionConfigError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetEncryptionConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEncryptionConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1991,39 +1806,20 @@ impl GetEncryptionConfigError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetEncryptionConfigError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetEncryptionConfigError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return GetEncryptionConfigError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetEncryptionConfigError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetEncryptionConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetEncryptionConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetEncryptionConfigError {
-    fn from(err: serde_json::error::Error) -> GetEncryptionConfigError {
-        GetEncryptionConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetEncryptionConfigError {
-    fn from(err: CredentialsError) -> GetEncryptionConfigError {
-        GetEncryptionConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetEncryptionConfigError {
-    fn from(err: HttpDispatchError) -> GetEncryptionConfigError {
-        GetEncryptionConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetEncryptionConfigError {
-    fn from(err: io::Error) -> GetEncryptionConfigError {
-        GetEncryptionConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetEncryptionConfigError {
@@ -2036,13 +1832,6 @@ impl Error for GetEncryptionConfigError {
         match *self {
             GetEncryptionConfigError::InvalidRequest(ref cause) => cause,
             GetEncryptionConfigError::Throttled(ref cause) => cause,
-            GetEncryptionConfigError::Validation(ref cause) => cause,
-            GetEncryptionConfigError::Credentials(ref err) => err.description(),
-            GetEncryptionConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetEncryptionConfigError::ParseError(ref cause) => cause,
-            GetEncryptionConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2053,22 +1842,12 @@ pub enum GetGroupError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2093,39 +1872,20 @@ impl GetGroupError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return GetGroupError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetGroupError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetGroupError {
-    fn from(err: serde_json::error::Error) -> GetGroupError {
-        GetGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetGroupError {
-    fn from(err: CredentialsError) -> GetGroupError {
-        GetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGroupError {
-    fn from(err: HttpDispatchError) -> GetGroupError {
-        GetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGroupError {
-    fn from(err: io::Error) -> GetGroupError {
-        GetGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetGroupError {
@@ -2138,11 +1898,6 @@ impl Error for GetGroupError {
         match *self {
             GetGroupError::InvalidRequest(ref cause) => cause,
             GetGroupError::Throttled(ref cause) => cause,
-            GetGroupError::Validation(ref cause) => cause,
-            GetGroupError::Credentials(ref err) => err.description(),
-            GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupError::ParseError(ref cause) => cause,
-            GetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2153,22 +1908,12 @@ pub enum GetGroupsError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2193,39 +1938,20 @@ impl GetGroupsError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetGroupsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetGroupsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return GetGroupsError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetGroupsError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetGroupsError {
-    fn from(err: serde_json::error::Error) -> GetGroupsError {
-        GetGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetGroupsError {
-    fn from(err: CredentialsError) -> GetGroupsError {
-        GetGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGroupsError {
-    fn from(err: HttpDispatchError) -> GetGroupsError {
-        GetGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGroupsError {
-    fn from(err: io::Error) -> GetGroupsError {
-        GetGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetGroupsError {
@@ -2238,11 +1964,6 @@ impl Error for GetGroupsError {
         match *self {
             GetGroupsError::InvalidRequest(ref cause) => cause,
             GetGroupsError::Throttled(ref cause) => cause,
-            GetGroupsError::Validation(ref cause) => cause,
-            GetGroupsError::Credentials(ref err) => err.description(),
-            GetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupsError::ParseError(ref cause) => cause,
-            GetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2253,22 +1974,12 @@ pub enum GetSamplingRulesError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSamplingRulesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetSamplingRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSamplingRulesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2293,39 +2004,20 @@ impl GetSamplingRulesError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetSamplingRulesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetSamplingRulesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return GetSamplingRulesError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetSamplingRulesError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetSamplingRulesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSamplingRulesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSamplingRulesError {
-    fn from(err: serde_json::error::Error) -> GetSamplingRulesError {
-        GetSamplingRulesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSamplingRulesError {
-    fn from(err: CredentialsError) -> GetSamplingRulesError {
-        GetSamplingRulesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSamplingRulesError {
-    fn from(err: HttpDispatchError) -> GetSamplingRulesError {
-        GetSamplingRulesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSamplingRulesError {
-    fn from(err: io::Error) -> GetSamplingRulesError {
-        GetSamplingRulesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSamplingRulesError {
@@ -2338,11 +2030,6 @@ impl Error for GetSamplingRulesError {
         match *self {
             GetSamplingRulesError::InvalidRequest(ref cause) => cause,
             GetSamplingRulesError::Throttled(ref cause) => cause,
-            GetSamplingRulesError::Validation(ref cause) => cause,
-            GetSamplingRulesError::Credentials(ref err) => err.description(),
-            GetSamplingRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSamplingRulesError::ParseError(ref cause) => cause,
-            GetSamplingRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2353,22 +2040,14 @@ pub enum GetSamplingStatisticSummariesError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSamplingStatisticSummariesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetSamplingStatisticSummariesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSamplingStatisticSummariesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2393,43 +2072,20 @@ impl GetSamplingStatisticSummariesError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetSamplingStatisticSummariesError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSamplingStatisticSummariesError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottledException" => {
-                    return GetSamplingStatisticSummariesError::Throttled(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSamplingStatisticSummariesError::Throttled(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetSamplingStatisticSummariesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSamplingStatisticSummariesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSamplingStatisticSummariesError {
-    fn from(err: serde_json::error::Error) -> GetSamplingStatisticSummariesError {
-        GetSamplingStatisticSummariesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSamplingStatisticSummariesError {
-    fn from(err: CredentialsError) -> GetSamplingStatisticSummariesError {
-        GetSamplingStatisticSummariesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSamplingStatisticSummariesError {
-    fn from(err: HttpDispatchError) -> GetSamplingStatisticSummariesError {
-        GetSamplingStatisticSummariesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSamplingStatisticSummariesError {
-    fn from(err: io::Error) -> GetSamplingStatisticSummariesError {
-        GetSamplingStatisticSummariesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSamplingStatisticSummariesError {
@@ -2442,13 +2098,6 @@ impl Error for GetSamplingStatisticSummariesError {
         match *self {
             GetSamplingStatisticSummariesError::InvalidRequest(ref cause) => cause,
             GetSamplingStatisticSummariesError::Throttled(ref cause) => cause,
-            GetSamplingStatisticSummariesError::Validation(ref cause) => cause,
-            GetSamplingStatisticSummariesError::Credentials(ref err) => err.description(),
-            GetSamplingStatisticSummariesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSamplingStatisticSummariesError::ParseError(ref cause) => cause,
-            GetSamplingStatisticSummariesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2459,22 +2108,12 @@ pub enum GetSamplingTargetsError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSamplingTargetsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetSamplingTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSamplingTargetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2499,39 +2138,20 @@ impl GetSamplingTargetsError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetSamplingTargetsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetSamplingTargetsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return GetSamplingTargetsError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetSamplingTargetsError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetSamplingTargetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSamplingTargetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSamplingTargetsError {
-    fn from(err: serde_json::error::Error) -> GetSamplingTargetsError {
-        GetSamplingTargetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSamplingTargetsError {
-    fn from(err: CredentialsError) -> GetSamplingTargetsError {
-        GetSamplingTargetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSamplingTargetsError {
-    fn from(err: HttpDispatchError) -> GetSamplingTargetsError {
-        GetSamplingTargetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSamplingTargetsError {
-    fn from(err: io::Error) -> GetSamplingTargetsError {
-        GetSamplingTargetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSamplingTargetsError {
@@ -2544,13 +2164,6 @@ impl Error for GetSamplingTargetsError {
         match *self {
             GetSamplingTargetsError::InvalidRequest(ref cause) => cause,
             GetSamplingTargetsError::Throttled(ref cause) => cause,
-            GetSamplingTargetsError::Validation(ref cause) => cause,
-            GetSamplingTargetsError::Credentials(ref err) => err.description(),
-            GetSamplingTargetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSamplingTargetsError::ParseError(ref cause) => cause,
-            GetSamplingTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2561,22 +2174,12 @@ pub enum GetServiceGraphError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceGraphError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetServiceGraphError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServiceGraphError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2601,39 +2204,20 @@ impl GetServiceGraphError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetServiceGraphError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetServiceGraphError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return GetServiceGraphError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetServiceGraphError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetServiceGraphError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetServiceGraphError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetServiceGraphError {
-    fn from(err: serde_json::error::Error) -> GetServiceGraphError {
-        GetServiceGraphError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetServiceGraphError {
-    fn from(err: CredentialsError) -> GetServiceGraphError {
-        GetServiceGraphError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetServiceGraphError {
-    fn from(err: HttpDispatchError) -> GetServiceGraphError {
-        GetServiceGraphError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetServiceGraphError {
-    fn from(err: io::Error) -> GetServiceGraphError {
-        GetServiceGraphError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetServiceGraphError {
@@ -2646,11 +2230,6 @@ impl Error for GetServiceGraphError {
         match *self {
             GetServiceGraphError::InvalidRequest(ref cause) => cause,
             GetServiceGraphError::Throttled(ref cause) => cause,
-            GetServiceGraphError::Validation(ref cause) => cause,
-            GetServiceGraphError::Credentials(ref err) => err.description(),
-            GetServiceGraphError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetServiceGraphError::ParseError(ref cause) => cause,
-            GetServiceGraphError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2661,22 +2240,12 @@ pub enum GetTraceGraphError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTraceGraphError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetTraceGraphError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTraceGraphError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2701,39 +2270,20 @@ impl GetTraceGraphError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetTraceGraphError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetTraceGraphError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return GetTraceGraphError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetTraceGraphError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTraceGraphError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTraceGraphError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTraceGraphError {
-    fn from(err: serde_json::error::Error) -> GetTraceGraphError {
-        GetTraceGraphError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTraceGraphError {
-    fn from(err: CredentialsError) -> GetTraceGraphError {
-        GetTraceGraphError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTraceGraphError {
-    fn from(err: HttpDispatchError) -> GetTraceGraphError {
-        GetTraceGraphError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTraceGraphError {
-    fn from(err: io::Error) -> GetTraceGraphError {
-        GetTraceGraphError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTraceGraphError {
@@ -2746,11 +2296,6 @@ impl Error for GetTraceGraphError {
         match *self {
             GetTraceGraphError::InvalidRequest(ref cause) => cause,
             GetTraceGraphError::Throttled(ref cause) => cause,
-            GetTraceGraphError::Validation(ref cause) => cause,
-            GetTraceGraphError::Credentials(ref err) => err.description(),
-            GetTraceGraphError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTraceGraphError::ParseError(ref cause) => cause,
-            GetTraceGraphError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2761,22 +2306,12 @@ pub enum GetTraceSummariesError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTraceSummariesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetTraceSummariesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTraceSummariesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2801,39 +2336,20 @@ impl GetTraceSummariesError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return GetTraceSummariesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetTraceSummariesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return GetTraceSummariesError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetTraceSummariesError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTraceSummariesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTraceSummariesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTraceSummariesError {
-    fn from(err: serde_json::error::Error) -> GetTraceSummariesError {
-        GetTraceSummariesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTraceSummariesError {
-    fn from(err: CredentialsError) -> GetTraceSummariesError {
-        GetTraceSummariesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTraceSummariesError {
-    fn from(err: HttpDispatchError) -> GetTraceSummariesError {
-        GetTraceSummariesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTraceSummariesError {
-    fn from(err: io::Error) -> GetTraceSummariesError {
-        GetTraceSummariesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTraceSummariesError {
@@ -2846,13 +2362,6 @@ impl Error for GetTraceSummariesError {
         match *self {
             GetTraceSummariesError::InvalidRequest(ref cause) => cause,
             GetTraceSummariesError::Throttled(ref cause) => cause,
-            GetTraceSummariesError::Validation(ref cause) => cause,
-            GetTraceSummariesError::Credentials(ref err) => err.description(),
-            GetTraceSummariesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetTraceSummariesError::ParseError(ref cause) => cause,
-            GetTraceSummariesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2863,22 +2372,12 @@ pub enum PutEncryptionConfigError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutEncryptionConfigError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutEncryptionConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutEncryptionConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2903,39 +2402,20 @@ impl PutEncryptionConfigError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return PutEncryptionConfigError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(PutEncryptionConfigError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return PutEncryptionConfigError::Throttled(String::from(error_message));
+                    return RusotoError::Service(PutEncryptionConfigError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutEncryptionConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutEncryptionConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutEncryptionConfigError {
-    fn from(err: serde_json::error::Error) -> PutEncryptionConfigError {
-        PutEncryptionConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutEncryptionConfigError {
-    fn from(err: CredentialsError) -> PutEncryptionConfigError {
-        PutEncryptionConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutEncryptionConfigError {
-    fn from(err: HttpDispatchError) -> PutEncryptionConfigError {
-        PutEncryptionConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutEncryptionConfigError {
-    fn from(err: io::Error) -> PutEncryptionConfigError {
-        PutEncryptionConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutEncryptionConfigError {
@@ -2948,13 +2428,6 @@ impl Error for PutEncryptionConfigError {
         match *self {
             PutEncryptionConfigError::InvalidRequest(ref cause) => cause,
             PutEncryptionConfigError::Throttled(ref cause) => cause,
-            PutEncryptionConfigError::Validation(ref cause) => cause,
-            PutEncryptionConfigError::Credentials(ref err) => err.description(),
-            PutEncryptionConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutEncryptionConfigError::ParseError(ref cause) => cause,
-            PutEncryptionConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2965,22 +2438,12 @@ pub enum PutTelemetryRecordsError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutTelemetryRecordsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutTelemetryRecordsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutTelemetryRecordsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3005,39 +2468,20 @@ impl PutTelemetryRecordsError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return PutTelemetryRecordsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(PutTelemetryRecordsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return PutTelemetryRecordsError::Throttled(String::from(error_message));
+                    return RusotoError::Service(PutTelemetryRecordsError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutTelemetryRecordsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutTelemetryRecordsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutTelemetryRecordsError {
-    fn from(err: serde_json::error::Error) -> PutTelemetryRecordsError {
-        PutTelemetryRecordsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutTelemetryRecordsError {
-    fn from(err: CredentialsError) -> PutTelemetryRecordsError {
-        PutTelemetryRecordsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutTelemetryRecordsError {
-    fn from(err: HttpDispatchError) -> PutTelemetryRecordsError {
-        PutTelemetryRecordsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutTelemetryRecordsError {
-    fn from(err: io::Error) -> PutTelemetryRecordsError {
-        PutTelemetryRecordsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutTelemetryRecordsError {
@@ -3050,13 +2494,6 @@ impl Error for PutTelemetryRecordsError {
         match *self {
             PutTelemetryRecordsError::InvalidRequest(ref cause) => cause,
             PutTelemetryRecordsError::Throttled(ref cause) => cause,
-            PutTelemetryRecordsError::Validation(ref cause) => cause,
-            PutTelemetryRecordsError::Credentials(ref err) => err.description(),
-            PutTelemetryRecordsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutTelemetryRecordsError::ParseError(ref cause) => cause,
-            PutTelemetryRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3067,22 +2504,12 @@ pub enum PutTraceSegmentsError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutTraceSegmentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutTraceSegmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutTraceSegmentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3107,39 +2534,20 @@ impl PutTraceSegmentsError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return PutTraceSegmentsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(PutTraceSegmentsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return PutTraceSegmentsError::Throttled(String::from(error_message));
+                    return RusotoError::Service(PutTraceSegmentsError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutTraceSegmentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutTraceSegmentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutTraceSegmentsError {
-    fn from(err: serde_json::error::Error) -> PutTraceSegmentsError {
-        PutTraceSegmentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutTraceSegmentsError {
-    fn from(err: CredentialsError) -> PutTraceSegmentsError {
-        PutTraceSegmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutTraceSegmentsError {
-    fn from(err: HttpDispatchError) -> PutTraceSegmentsError {
-        PutTraceSegmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutTraceSegmentsError {
-    fn from(err: io::Error) -> PutTraceSegmentsError {
-        PutTraceSegmentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutTraceSegmentsError {
@@ -3152,11 +2560,6 @@ impl Error for PutTraceSegmentsError {
         match *self {
             PutTraceSegmentsError::InvalidRequest(ref cause) => cause,
             PutTraceSegmentsError::Throttled(ref cause) => cause,
-            PutTraceSegmentsError::Validation(ref cause) => cause,
-            PutTraceSegmentsError::Credentials(ref err) => err.description(),
-            PutTraceSegmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutTraceSegmentsError::ParseError(ref cause) => cause,
-            PutTraceSegmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3167,22 +2570,12 @@ pub enum UpdateGroupError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3207,39 +2600,20 @@ impl UpdateGroupError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return UpdateGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return UpdateGroupError::Throttled(String::from(error_message));
+                    return RusotoError::Service(UpdateGroupError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateGroupError {
-        UpdateGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGroupError {
-    fn from(err: CredentialsError) -> UpdateGroupError {
-        UpdateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGroupError {
-    fn from(err: HttpDispatchError) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGroupError {
-    fn from(err: io::Error) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGroupError {
@@ -3252,11 +2626,6 @@ impl Error for UpdateGroupError {
         match *self {
             UpdateGroupError::InvalidRequest(ref cause) => cause,
             UpdateGroupError::Throttled(ref cause) => cause,
-            UpdateGroupError::Validation(ref cause) => cause,
-            UpdateGroupError::Credentials(ref err) => err.description(),
-            UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateGroupError::ParseError(ref cause) => cause,
-            UpdateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3267,22 +2636,12 @@ pub enum UpdateSamplingRuleError {
     InvalidRequest(String),
     /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSamplingRuleError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSamplingRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSamplingRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3307,39 +2666,20 @@ impl UpdateSamplingRuleError {
 
             match error_type {
                 "InvalidRequestException" => {
-                    return UpdateSamplingRuleError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateSamplingRuleError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return UpdateSamplingRuleError::Throttled(String::from(error_message));
+                    return RusotoError::Service(UpdateSamplingRuleError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateSamplingRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSamplingRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSamplingRuleError {
-    fn from(err: serde_json::error::Error) -> UpdateSamplingRuleError {
-        UpdateSamplingRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSamplingRuleError {
-    fn from(err: CredentialsError) -> UpdateSamplingRuleError {
-        UpdateSamplingRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSamplingRuleError {
-    fn from(err: HttpDispatchError) -> UpdateSamplingRuleError {
-        UpdateSamplingRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSamplingRuleError {
-    fn from(err: io::Error) -> UpdateSamplingRuleError {
-        UpdateSamplingRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSamplingRuleError {
@@ -3352,13 +2692,6 @@ impl Error for UpdateSamplingRuleError {
         match *self {
             UpdateSamplingRuleError::InvalidRequest(ref cause) => cause,
             UpdateSamplingRuleError::Throttled(ref cause) => cause,
-            UpdateSamplingRuleError::Validation(ref cause) => cause,
-            UpdateSamplingRuleError::Credentials(ref err) => err.description(),
-            UpdateSamplingRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSamplingRuleError::ParseError(ref cause) => cause,
-            UpdateSamplingRuleError::Unknown(_) => "unknown error",
         }
     }
 }

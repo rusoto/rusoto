@@ -4,6 +4,7 @@ use std::time::Duration;
 use futures::{Async, Future, Poll};
 
 use credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+use error::RusotoError;
 use future::{self, RusotoFuture};
 use request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
 use signature::SignedRequest;
@@ -58,7 +59,7 @@ impl Client {
     pub fn sign_and_dispatch<T, E>(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> Box<Future<Item = T, Error = E> + Send>,
+        response_handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
     ) -> RusotoFuture<T, E> {
         future::new(self.inner.sign_and_dispatch(request), response_handler)
     }

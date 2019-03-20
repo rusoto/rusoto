@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -756,20 +753,10 @@ pub enum BatchGetNamedQueryError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetNamedQueryError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetNamedQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetNamedQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -782,39 +769,20 @@ impl BatchGetNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return BatchGetNamedQueryError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(BatchGetNamedQueryError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return BatchGetNamedQueryError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(BatchGetNamedQueryError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchGetNamedQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetNamedQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetNamedQueryError {
-    fn from(err: serde_json::error::Error) -> BatchGetNamedQueryError {
-        BatchGetNamedQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetNamedQueryError {
-    fn from(err: CredentialsError) -> BatchGetNamedQueryError {
-        BatchGetNamedQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetNamedQueryError {
-    fn from(err: HttpDispatchError) -> BatchGetNamedQueryError {
-        BatchGetNamedQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetNamedQueryError {
-    fn from(err: io::Error) -> BatchGetNamedQueryError {
-        BatchGetNamedQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetNamedQueryError {
@@ -827,13 +795,6 @@ impl Error for BatchGetNamedQueryError {
         match *self {
             BatchGetNamedQueryError::InternalServer(ref cause) => cause,
             BatchGetNamedQueryError::InvalidRequest(ref cause) => cause,
-            BatchGetNamedQueryError::Validation(ref cause) => cause,
-            BatchGetNamedQueryError::Credentials(ref err) => err.description(),
-            BatchGetNamedQueryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetNamedQueryError::ParseError(ref cause) => cause,
-            BatchGetNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -844,20 +805,10 @@ pub enum BatchGetQueryExecutionError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetQueryExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetQueryExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetQueryExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -870,39 +821,20 @@ impl BatchGetQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return BatchGetQueryExecutionError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(BatchGetQueryExecutionError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return BatchGetQueryExecutionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(BatchGetQueryExecutionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchGetQueryExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetQueryExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetQueryExecutionError {
-    fn from(err: serde_json::error::Error) -> BatchGetQueryExecutionError {
-        BatchGetQueryExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetQueryExecutionError {
-    fn from(err: CredentialsError) -> BatchGetQueryExecutionError {
-        BatchGetQueryExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetQueryExecutionError {
-    fn from(err: HttpDispatchError) -> BatchGetQueryExecutionError {
-        BatchGetQueryExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetQueryExecutionError {
-    fn from(err: io::Error) -> BatchGetQueryExecutionError {
-        BatchGetQueryExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetQueryExecutionError {
@@ -915,13 +847,6 @@ impl Error for BatchGetQueryExecutionError {
         match *self {
             BatchGetQueryExecutionError::InternalServer(ref cause) => cause,
             BatchGetQueryExecutionError::InvalidRequest(ref cause) => cause,
-            BatchGetQueryExecutionError::Validation(ref cause) => cause,
-            BatchGetQueryExecutionError::Credentials(ref err) => err.description(),
-            BatchGetQueryExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetQueryExecutionError::ParseError(ref cause) => cause,
-            BatchGetQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -932,20 +857,10 @@ pub enum CreateNamedQueryError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNamedQueryError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateNamedQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNamedQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -958,39 +873,20 @@ impl CreateNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return CreateNamedQueryError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(CreateNamedQueryError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return CreateNamedQueryError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateNamedQueryError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateNamedQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateNamedQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateNamedQueryError {
-    fn from(err: serde_json::error::Error) -> CreateNamedQueryError {
-        CreateNamedQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateNamedQueryError {
-    fn from(err: CredentialsError) -> CreateNamedQueryError {
-        CreateNamedQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateNamedQueryError {
-    fn from(err: HttpDispatchError) -> CreateNamedQueryError {
-        CreateNamedQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateNamedQueryError {
-    fn from(err: io::Error) -> CreateNamedQueryError {
-        CreateNamedQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateNamedQueryError {
@@ -1003,11 +899,6 @@ impl Error for CreateNamedQueryError {
         match *self {
             CreateNamedQueryError::InternalServer(ref cause) => cause,
             CreateNamedQueryError::InvalidRequest(ref cause) => cause,
-            CreateNamedQueryError::Validation(ref cause) => cause,
-            CreateNamedQueryError::Credentials(ref err) => err.description(),
-            CreateNamedQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateNamedQueryError::ParseError(ref cause) => cause,
-            CreateNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1018,20 +909,10 @@ pub enum CreateWorkGroupError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateWorkGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1044,39 +925,20 @@ impl CreateWorkGroupError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return CreateWorkGroupError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(CreateWorkGroupError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return CreateWorkGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateWorkGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateWorkGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateWorkGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateWorkGroupError {
-    fn from(err: serde_json::error::Error) -> CreateWorkGroupError {
-        CreateWorkGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateWorkGroupError {
-    fn from(err: CredentialsError) -> CreateWorkGroupError {
-        CreateWorkGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateWorkGroupError {
-    fn from(err: HttpDispatchError) -> CreateWorkGroupError {
-        CreateWorkGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateWorkGroupError {
-    fn from(err: io::Error) -> CreateWorkGroupError {
-        CreateWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateWorkGroupError {
@@ -1089,11 +951,6 @@ impl Error for CreateWorkGroupError {
         match *self {
             CreateWorkGroupError::InternalServer(ref cause) => cause,
             CreateWorkGroupError::InvalidRequest(ref cause) => cause,
-            CreateWorkGroupError::Validation(ref cause) => cause,
-            CreateWorkGroupError::Credentials(ref err) => err.description(),
-            CreateWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateWorkGroupError::ParseError(ref cause) => cause,
-            CreateWorkGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1104,20 +961,10 @@ pub enum DeleteNamedQueryError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNamedQueryError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteNamedQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNamedQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1130,39 +977,20 @@ impl DeleteNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteNamedQueryError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DeleteNamedQueryError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DeleteNamedQueryError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteNamedQueryError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteNamedQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteNamedQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteNamedQueryError {
-    fn from(err: serde_json::error::Error) -> DeleteNamedQueryError {
-        DeleteNamedQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteNamedQueryError {
-    fn from(err: CredentialsError) -> DeleteNamedQueryError {
-        DeleteNamedQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteNamedQueryError {
-    fn from(err: HttpDispatchError) -> DeleteNamedQueryError {
-        DeleteNamedQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteNamedQueryError {
-    fn from(err: io::Error) -> DeleteNamedQueryError {
-        DeleteNamedQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteNamedQueryError {
@@ -1175,11 +1003,6 @@ impl Error for DeleteNamedQueryError {
         match *self {
             DeleteNamedQueryError::InternalServer(ref cause) => cause,
             DeleteNamedQueryError::InvalidRequest(ref cause) => cause,
-            DeleteNamedQueryError::Validation(ref cause) => cause,
-            DeleteNamedQueryError::Credentials(ref err) => err.description(),
-            DeleteNamedQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteNamedQueryError::ParseError(ref cause) => cause,
-            DeleteNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1190,20 +1013,10 @@ pub enum DeleteWorkGroupError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteWorkGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1216,39 +1029,20 @@ impl DeleteWorkGroupError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteWorkGroupError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DeleteWorkGroupError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DeleteWorkGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteWorkGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteWorkGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteWorkGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteWorkGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteWorkGroupError {
-        DeleteWorkGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteWorkGroupError {
-    fn from(err: CredentialsError) -> DeleteWorkGroupError {
-        DeleteWorkGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteWorkGroupError {
-    fn from(err: HttpDispatchError) -> DeleteWorkGroupError {
-        DeleteWorkGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteWorkGroupError {
-    fn from(err: io::Error) -> DeleteWorkGroupError {
-        DeleteWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteWorkGroupError {
@@ -1261,11 +1055,6 @@ impl Error for DeleteWorkGroupError {
         match *self {
             DeleteWorkGroupError::InternalServer(ref cause) => cause,
             DeleteWorkGroupError::InvalidRequest(ref cause) => cause,
-            DeleteWorkGroupError::Validation(ref cause) => cause,
-            DeleteWorkGroupError::Credentials(ref err) => err.description(),
-            DeleteWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteWorkGroupError::ParseError(ref cause) => cause,
-            DeleteWorkGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1276,20 +1065,10 @@ pub enum GetNamedQueryError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetNamedQueryError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetNamedQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNamedQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1302,39 +1081,20 @@ impl GetNamedQueryError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetNamedQueryError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(GetNamedQueryError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return GetNamedQueryError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetNamedQueryError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetNamedQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetNamedQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetNamedQueryError {
-    fn from(err: serde_json::error::Error) -> GetNamedQueryError {
-        GetNamedQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetNamedQueryError {
-    fn from(err: CredentialsError) -> GetNamedQueryError {
-        GetNamedQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetNamedQueryError {
-    fn from(err: HttpDispatchError) -> GetNamedQueryError {
-        GetNamedQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetNamedQueryError {
-    fn from(err: io::Error) -> GetNamedQueryError {
-        GetNamedQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetNamedQueryError {
@@ -1347,11 +1107,6 @@ impl Error for GetNamedQueryError {
         match *self {
             GetNamedQueryError::InternalServer(ref cause) => cause,
             GetNamedQueryError::InvalidRequest(ref cause) => cause,
-            GetNamedQueryError::Validation(ref cause) => cause,
-            GetNamedQueryError::Credentials(ref err) => err.description(),
-            GetNamedQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetNamedQueryError::ParseError(ref cause) => cause,
-            GetNamedQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1362,20 +1117,10 @@ pub enum GetQueryExecutionError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueryExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQueryExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueryExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1388,39 +1133,20 @@ impl GetQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetQueryExecutionError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(GetQueryExecutionError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return GetQueryExecutionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetQueryExecutionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetQueryExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetQueryExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetQueryExecutionError {
-    fn from(err: serde_json::error::Error) -> GetQueryExecutionError {
-        GetQueryExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetQueryExecutionError {
-    fn from(err: CredentialsError) -> GetQueryExecutionError {
-        GetQueryExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQueryExecutionError {
-    fn from(err: HttpDispatchError) -> GetQueryExecutionError {
-        GetQueryExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQueryExecutionError {
-    fn from(err: io::Error) -> GetQueryExecutionError {
-        GetQueryExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetQueryExecutionError {
@@ -1433,13 +1159,6 @@ impl Error for GetQueryExecutionError {
         match *self {
             GetQueryExecutionError::InternalServer(ref cause) => cause,
             GetQueryExecutionError::InvalidRequest(ref cause) => cause,
-            GetQueryExecutionError::Validation(ref cause) => cause,
-            GetQueryExecutionError::Credentials(ref err) => err.description(),
-            GetQueryExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetQueryExecutionError::ParseError(ref cause) => cause,
-            GetQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1450,20 +1169,10 @@ pub enum GetQueryResultsError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueryResultsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQueryResultsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueryResultsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1476,39 +1185,20 @@ impl GetQueryResultsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetQueryResultsError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(GetQueryResultsError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return GetQueryResultsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetQueryResultsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetQueryResultsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetQueryResultsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetQueryResultsError {
-    fn from(err: serde_json::error::Error) -> GetQueryResultsError {
-        GetQueryResultsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetQueryResultsError {
-    fn from(err: CredentialsError) -> GetQueryResultsError {
-        GetQueryResultsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQueryResultsError {
-    fn from(err: HttpDispatchError) -> GetQueryResultsError {
-        GetQueryResultsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQueryResultsError {
-    fn from(err: io::Error) -> GetQueryResultsError {
-        GetQueryResultsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetQueryResultsError {
@@ -1521,11 +1211,6 @@ impl Error for GetQueryResultsError {
         match *self {
             GetQueryResultsError::InternalServer(ref cause) => cause,
             GetQueryResultsError::InvalidRequest(ref cause) => cause,
-            GetQueryResultsError::Validation(ref cause) => cause,
-            GetQueryResultsError::Credentials(ref err) => err.description(),
-            GetQueryResultsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetQueryResultsError::ParseError(ref cause) => cause,
-            GetQueryResultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1536,20 +1221,10 @@ pub enum GetWorkGroupError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetWorkGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWorkGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1562,39 +1237,20 @@ impl GetWorkGroupError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return GetWorkGroupError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(GetWorkGroupError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return GetWorkGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetWorkGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetWorkGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetWorkGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetWorkGroupError {
-    fn from(err: serde_json::error::Error) -> GetWorkGroupError {
-        GetWorkGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetWorkGroupError {
-    fn from(err: CredentialsError) -> GetWorkGroupError {
-        GetWorkGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetWorkGroupError {
-    fn from(err: HttpDispatchError) -> GetWorkGroupError {
-        GetWorkGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetWorkGroupError {
-    fn from(err: io::Error) -> GetWorkGroupError {
-        GetWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetWorkGroupError {
@@ -1607,11 +1263,6 @@ impl Error for GetWorkGroupError {
         match *self {
             GetWorkGroupError::InternalServer(ref cause) => cause,
             GetWorkGroupError::InvalidRequest(ref cause) => cause,
-            GetWorkGroupError::Validation(ref cause) => cause,
-            GetWorkGroupError::Credentials(ref err) => err.description(),
-            GetWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetWorkGroupError::ParseError(ref cause) => cause,
-            GetWorkGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1622,20 +1273,10 @@ pub enum ListNamedQueriesError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListNamedQueriesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListNamedQueriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNamedQueriesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1648,39 +1289,20 @@ impl ListNamedQueriesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListNamedQueriesError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(ListNamedQueriesError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListNamedQueriesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListNamedQueriesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListNamedQueriesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListNamedQueriesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListNamedQueriesError {
-    fn from(err: serde_json::error::Error) -> ListNamedQueriesError {
-        ListNamedQueriesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListNamedQueriesError {
-    fn from(err: CredentialsError) -> ListNamedQueriesError {
-        ListNamedQueriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListNamedQueriesError {
-    fn from(err: HttpDispatchError) -> ListNamedQueriesError {
-        ListNamedQueriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListNamedQueriesError {
-    fn from(err: io::Error) -> ListNamedQueriesError {
-        ListNamedQueriesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListNamedQueriesError {
@@ -1693,11 +1315,6 @@ impl Error for ListNamedQueriesError {
         match *self {
             ListNamedQueriesError::InternalServer(ref cause) => cause,
             ListNamedQueriesError::InvalidRequest(ref cause) => cause,
-            ListNamedQueriesError::Validation(ref cause) => cause,
-            ListNamedQueriesError::Credentials(ref err) => err.description(),
-            ListNamedQueriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListNamedQueriesError::ParseError(ref cause) => cause,
-            ListNamedQueriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1708,20 +1325,10 @@ pub enum ListQueryExecutionsError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListQueryExecutionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListQueryExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueryExecutionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1734,39 +1341,20 @@ impl ListQueryExecutionsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListQueryExecutionsError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(ListQueryExecutionsError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListQueryExecutionsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListQueryExecutionsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListQueryExecutionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListQueryExecutionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListQueryExecutionsError {
-    fn from(err: serde_json::error::Error) -> ListQueryExecutionsError {
-        ListQueryExecutionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListQueryExecutionsError {
-    fn from(err: CredentialsError) -> ListQueryExecutionsError {
-        ListQueryExecutionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListQueryExecutionsError {
-    fn from(err: HttpDispatchError) -> ListQueryExecutionsError {
-        ListQueryExecutionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListQueryExecutionsError {
-    fn from(err: io::Error) -> ListQueryExecutionsError {
-        ListQueryExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListQueryExecutionsError {
@@ -1779,13 +1367,6 @@ impl Error for ListQueryExecutionsError {
         match *self {
             ListQueryExecutionsError::InternalServer(ref cause) => cause,
             ListQueryExecutionsError::InvalidRequest(ref cause) => cause,
-            ListQueryExecutionsError::Validation(ref cause) => cause,
-            ListQueryExecutionsError::Credentials(ref err) => err.description(),
-            ListQueryExecutionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListQueryExecutionsError::ParseError(ref cause) => cause,
-            ListQueryExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1796,20 +1377,10 @@ pub enum ListWorkGroupsError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListWorkGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListWorkGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1822,39 +1393,20 @@ impl ListWorkGroupsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListWorkGroupsError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(ListWorkGroupsError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ListWorkGroupsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListWorkGroupsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListWorkGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListWorkGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListWorkGroupsError {
-    fn from(err: serde_json::error::Error) -> ListWorkGroupsError {
-        ListWorkGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListWorkGroupsError {
-    fn from(err: CredentialsError) -> ListWorkGroupsError {
-        ListWorkGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListWorkGroupsError {
-    fn from(err: HttpDispatchError) -> ListWorkGroupsError {
-        ListWorkGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListWorkGroupsError {
-    fn from(err: io::Error) -> ListWorkGroupsError {
-        ListWorkGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListWorkGroupsError {
@@ -1867,11 +1419,6 @@ impl Error for ListWorkGroupsError {
         match *self {
             ListWorkGroupsError::InternalServer(ref cause) => cause,
             ListWorkGroupsError::InvalidRequest(ref cause) => cause,
-            ListWorkGroupsError::Validation(ref cause) => cause,
-            ListWorkGroupsError::Credentials(ref err) => err.description(),
-            ListWorkGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListWorkGroupsError::ParseError(ref cause) => cause,
-            ListWorkGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1884,20 +1431,10 @@ pub enum StartQueryExecutionError {
     InvalidRequest(String),
     /// <p>Indicates that the request was throttled.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartQueryExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartQueryExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartQueryExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1910,42 +1447,25 @@ impl StartQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartQueryExecutionError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(StartQueryExecutionError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return StartQueryExecutionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(StartQueryExecutionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return StartQueryExecutionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(StartQueryExecutionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartQueryExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartQueryExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartQueryExecutionError {
-    fn from(err: serde_json::error::Error) -> StartQueryExecutionError {
-        StartQueryExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartQueryExecutionError {
-    fn from(err: CredentialsError) -> StartQueryExecutionError {
-        StartQueryExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartQueryExecutionError {
-    fn from(err: HttpDispatchError) -> StartQueryExecutionError {
-        StartQueryExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartQueryExecutionError {
-    fn from(err: io::Error) -> StartQueryExecutionError {
-        StartQueryExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartQueryExecutionError {
@@ -1959,13 +1479,6 @@ impl Error for StartQueryExecutionError {
             StartQueryExecutionError::InternalServer(ref cause) => cause,
             StartQueryExecutionError::InvalidRequest(ref cause) => cause,
             StartQueryExecutionError::TooManyRequests(ref cause) => cause,
-            StartQueryExecutionError::Validation(ref cause) => cause,
-            StartQueryExecutionError::Credentials(ref err) => err.description(),
-            StartQueryExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartQueryExecutionError::ParseError(ref cause) => cause,
-            StartQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1976,20 +1489,10 @@ pub enum StopQueryExecutionError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopQueryExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopQueryExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopQueryExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2002,39 +1505,20 @@ impl StopQueryExecutionError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopQueryExecutionError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(StopQueryExecutionError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return StopQueryExecutionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(StopQueryExecutionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopQueryExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopQueryExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopQueryExecutionError {
-    fn from(err: serde_json::error::Error) -> StopQueryExecutionError {
-        StopQueryExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopQueryExecutionError {
-    fn from(err: CredentialsError) -> StopQueryExecutionError {
-        StopQueryExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopQueryExecutionError {
-    fn from(err: HttpDispatchError) -> StopQueryExecutionError {
-        StopQueryExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopQueryExecutionError {
-    fn from(err: io::Error) -> StopQueryExecutionError {
-        StopQueryExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopQueryExecutionError {
@@ -2047,13 +1531,6 @@ impl Error for StopQueryExecutionError {
         match *self {
             StopQueryExecutionError::InternalServer(ref cause) => cause,
             StopQueryExecutionError::InvalidRequest(ref cause) => cause,
-            StopQueryExecutionError::Validation(ref cause) => cause,
-            StopQueryExecutionError::Credentials(ref err) => err.description(),
-            StopQueryExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopQueryExecutionError::ParseError(ref cause) => cause,
-            StopQueryExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2064,20 +1541,10 @@ pub enum UpdateWorkGroupError {
     InternalServer(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateWorkGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorkGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2090,39 +1557,20 @@ impl UpdateWorkGroupError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return UpdateWorkGroupError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(UpdateWorkGroupError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return UpdateWorkGroupError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateWorkGroupError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateWorkGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateWorkGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateWorkGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateWorkGroupError {
-        UpdateWorkGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateWorkGroupError {
-    fn from(err: CredentialsError) -> UpdateWorkGroupError {
-        UpdateWorkGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateWorkGroupError {
-    fn from(err: HttpDispatchError) -> UpdateWorkGroupError {
-        UpdateWorkGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateWorkGroupError {
-    fn from(err: io::Error) -> UpdateWorkGroupError {
-        UpdateWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateWorkGroupError {
@@ -2135,11 +1583,6 @@ impl Error for UpdateWorkGroupError {
         match *self {
             UpdateWorkGroupError::InternalServer(ref cause) => cause,
             UpdateWorkGroupError::InvalidRequest(ref cause) => cause,
-            UpdateWorkGroupError::Validation(ref cause) => cause,
-            UpdateWorkGroupError::Credentials(ref err) => err.description(),
-            UpdateWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateWorkGroupError::ParseError(ref cause) => cause,
-            UpdateWorkGroupError::Unknown(_) => "unknown error",
         }
     }
 }

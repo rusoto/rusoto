@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -78,22 +75,12 @@ pub enum InvokeEndpointError {
     ServiceUnavailable(String),
     /// <p> Inspect your request and try again. </p>
     ValidationError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InvokeEndpointError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InvokeEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -118,43 +105,30 @@ impl InvokeEndpointError {
 
             match error_type {
                 "InternalFailure" => {
-                    return InvokeEndpointError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(InvokeEndpointError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
-                "ModelError" => return InvokeEndpointError::ModelError(String::from(error_message)),
+                "ModelError" => {
+                    return RusotoError::Service(InvokeEndpointError::ModelError(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceUnavailable" => {
-                    return InvokeEndpointError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(InvokeEndpointError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "ValidationError" => {
-                    return InvokeEndpointError::ValidationError(String::from(error_message));
+                    return RusotoError::Service(InvokeEndpointError::ValidationError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return InvokeEndpointError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InvokeEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InvokeEndpointError {
-    fn from(err: serde_json::error::Error) -> InvokeEndpointError {
-        InvokeEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InvokeEndpointError {
-    fn from(err: CredentialsError) -> InvokeEndpointError {
-        InvokeEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InvokeEndpointError {
-    fn from(err: HttpDispatchError) -> InvokeEndpointError {
-        InvokeEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InvokeEndpointError {
-    fn from(err: io::Error) -> InvokeEndpointError {
-        InvokeEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InvokeEndpointError {
@@ -169,11 +143,6 @@ impl Error for InvokeEndpointError {
             InvokeEndpointError::ModelError(ref cause) => cause,
             InvokeEndpointError::ServiceUnavailable(ref cause) => cause,
             InvokeEndpointError::ValidationError(ref cause) => cause,
-            InvokeEndpointError::Validation(ref cause) => cause,
-            InvokeEndpointError::Credentials(ref err) => err.description(),
-            InvokeEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            InvokeEndpointError::ParseError(ref cause) => cause,
-            InvokeEndpointError::Unknown(_) => "unknown error",
         }
     }
 }

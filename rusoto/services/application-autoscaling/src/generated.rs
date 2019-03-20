@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -640,20 +637,10 @@ pub enum DeleteScalingPolicyError {
     InternalService(String),
     /// <p>The specified object could not be found. For any operation that depends on the existence of a scalable target, this exception is thrown if the scalable target with the specified service namespace, resource ID, and scalable dimension does not exist. For any operation that deletes or deregisters a resource, this exception is thrown if the resource cannot be found.</p>
     ObjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteScalingPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteScalingPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScalingPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -666,42 +653,25 @@ impl DeleteScalingPolicyError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DeleteScalingPolicyError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(DeleteScalingPolicyError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteScalingPolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteScalingPolicyError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "ObjectNotFoundException" => {
-                    return DeleteScalingPolicyError::ObjectNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteScalingPolicyError::ObjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteScalingPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteScalingPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteScalingPolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteScalingPolicyError {
-        DeleteScalingPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteScalingPolicyError {
-    fn from(err: CredentialsError) -> DeleteScalingPolicyError {
-        DeleteScalingPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteScalingPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteScalingPolicyError {
-        DeleteScalingPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteScalingPolicyError {
-    fn from(err: io::Error) -> DeleteScalingPolicyError {
-        DeleteScalingPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteScalingPolicyError {
@@ -715,13 +685,6 @@ impl Error for DeleteScalingPolicyError {
             DeleteScalingPolicyError::ConcurrentUpdate(ref cause) => cause,
             DeleteScalingPolicyError::InternalService(ref cause) => cause,
             DeleteScalingPolicyError::ObjectNotFound(ref cause) => cause,
-            DeleteScalingPolicyError::Validation(ref cause) => cause,
-            DeleteScalingPolicyError::Credentials(ref err) => err.description(),
-            DeleteScalingPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteScalingPolicyError::ParseError(ref cause) => cause,
-            DeleteScalingPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -734,20 +697,10 @@ pub enum DeleteScheduledActionError {
     InternalService(String),
     /// <p>The specified object could not be found. For any operation that depends on the existence of a scalable target, this exception is thrown if the scalable target with the specified service namespace, resource ID, and scalable dimension does not exist. For any operation that deletes or deregisters a resource, this exception is thrown if the resource cannot be found.</p>
     ObjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteScheduledActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduledActionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -760,42 +713,25 @@ impl DeleteScheduledActionError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DeleteScheduledActionError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(DeleteScheduledActionError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteScheduledActionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteScheduledActionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "ObjectNotFoundException" => {
-                    return DeleteScheduledActionError::ObjectNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteScheduledActionError::ObjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteScheduledActionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteScheduledActionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteScheduledActionError {
-    fn from(err: serde_json::error::Error) -> DeleteScheduledActionError {
-        DeleteScheduledActionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteScheduledActionError {
-    fn from(err: CredentialsError) -> DeleteScheduledActionError {
-        DeleteScheduledActionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteScheduledActionError {
-    fn from(err: HttpDispatchError) -> DeleteScheduledActionError {
-        DeleteScheduledActionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteScheduledActionError {
-    fn from(err: io::Error) -> DeleteScheduledActionError {
-        DeleteScheduledActionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteScheduledActionError {
@@ -809,13 +745,6 @@ impl Error for DeleteScheduledActionError {
             DeleteScheduledActionError::ConcurrentUpdate(ref cause) => cause,
             DeleteScheduledActionError::InternalService(ref cause) => cause,
             DeleteScheduledActionError::ObjectNotFound(ref cause) => cause,
-            DeleteScheduledActionError::Validation(ref cause) => cause,
-            DeleteScheduledActionError::Credentials(ref err) => err.description(),
-            DeleteScheduledActionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteScheduledActionError::ParseError(ref cause) => cause,
-            DeleteScheduledActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -828,20 +757,10 @@ pub enum DeregisterScalableTargetError {
     InternalService(String),
     /// <p>The specified object could not be found. For any operation that depends on the existence of a scalable target, this exception is thrown if the scalable target with the specified service namespace, resource ID, and scalable dimension does not exist. For any operation that deletes or deregisters a resource, this exception is thrown if the resource cannot be found.</p>
     ObjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterScalableTargetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterScalableTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterScalableTargetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -854,48 +773,25 @@ impl DeregisterScalableTargetError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DeregisterScalableTargetError::ConcurrentUpdate(String::from(
-                        error_message,
+                    return RusotoError::Service(DeregisterScalableTargetError::ConcurrentUpdate(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return DeregisterScalableTargetError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DeregisterScalableTargetError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "ObjectNotFoundException" => {
-                    return DeregisterScalableTargetError::ObjectNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeregisterScalableTargetError::ObjectNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeregisterScalableTargetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeregisterScalableTargetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeregisterScalableTargetError {
-    fn from(err: serde_json::error::Error) -> DeregisterScalableTargetError {
-        DeregisterScalableTargetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterScalableTargetError {
-    fn from(err: CredentialsError) -> DeregisterScalableTargetError {
-        DeregisterScalableTargetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterScalableTargetError {
-    fn from(err: HttpDispatchError) -> DeregisterScalableTargetError {
-        DeregisterScalableTargetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterScalableTargetError {
-    fn from(err: io::Error) -> DeregisterScalableTargetError {
-        DeregisterScalableTargetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeregisterScalableTargetError {
@@ -909,13 +805,6 @@ impl Error for DeregisterScalableTargetError {
             DeregisterScalableTargetError::ConcurrentUpdate(ref cause) => cause,
             DeregisterScalableTargetError::InternalService(ref cause) => cause,
             DeregisterScalableTargetError::ObjectNotFound(ref cause) => cause,
-            DeregisterScalableTargetError::Validation(ref cause) => cause,
-            DeregisterScalableTargetError::Credentials(ref err) => err.description(),
-            DeregisterScalableTargetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterScalableTargetError::ParseError(ref cause) => cause,
-            DeregisterScalableTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -928,20 +817,10 @@ pub enum DescribeScalableTargetsError {
     InternalService(String),
     /// <p>The next token supplied was invalid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalableTargetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalableTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalableTargetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -954,48 +833,25 @@ impl DescribeScalableTargetsError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DescribeScalableTargetsError::ConcurrentUpdate(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalableTargetsError::ConcurrentUpdate(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return DescribeScalableTargetsError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalableTargetsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeScalableTargetsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalableTargetsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeScalableTargetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeScalableTargetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeScalableTargetsError {
-    fn from(err: serde_json::error::Error) -> DescribeScalableTargetsError {
-        DescribeScalableTargetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeScalableTargetsError {
-    fn from(err: CredentialsError) -> DescribeScalableTargetsError {
-        DescribeScalableTargetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeScalableTargetsError {
-    fn from(err: HttpDispatchError) -> DescribeScalableTargetsError {
-        DescribeScalableTargetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeScalableTargetsError {
-    fn from(err: io::Error) -> DescribeScalableTargetsError {
-        DescribeScalableTargetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeScalableTargetsError {
@@ -1009,13 +865,6 @@ impl Error for DescribeScalableTargetsError {
             DescribeScalableTargetsError::ConcurrentUpdate(ref cause) => cause,
             DescribeScalableTargetsError::InternalService(ref cause) => cause,
             DescribeScalableTargetsError::InvalidNextToken(ref cause) => cause,
-            DescribeScalableTargetsError::Validation(ref cause) => cause,
-            DescribeScalableTargetsError::Credentials(ref err) => err.description(),
-            DescribeScalableTargetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeScalableTargetsError::ParseError(ref cause) => cause,
-            DescribeScalableTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1028,20 +877,10 @@ pub enum DescribeScalingActivitiesError {
     InternalService(String),
     /// <p>The next token supplied was invalid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingActivitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingActivitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingActivitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1054,48 +893,25 @@ impl DescribeScalingActivitiesError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DescribeScalingActivitiesError::ConcurrentUpdate(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingActivitiesError::ConcurrentUpdate(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return DescribeScalingActivitiesError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingActivitiesError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeScalingActivitiesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingActivitiesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeScalingActivitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeScalingActivitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeScalingActivitiesError {
-    fn from(err: serde_json::error::Error) -> DescribeScalingActivitiesError {
-        DescribeScalingActivitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeScalingActivitiesError {
-    fn from(err: CredentialsError) -> DescribeScalingActivitiesError {
-        DescribeScalingActivitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeScalingActivitiesError {
-    fn from(err: HttpDispatchError) -> DescribeScalingActivitiesError {
-        DescribeScalingActivitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeScalingActivitiesError {
-    fn from(err: io::Error) -> DescribeScalingActivitiesError {
-        DescribeScalingActivitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeScalingActivitiesError {
@@ -1109,13 +925,6 @@ impl Error for DescribeScalingActivitiesError {
             DescribeScalingActivitiesError::ConcurrentUpdate(ref cause) => cause,
             DescribeScalingActivitiesError::InternalService(ref cause) => cause,
             DescribeScalingActivitiesError::InvalidNextToken(ref cause) => cause,
-            DescribeScalingActivitiesError::Validation(ref cause) => cause,
-            DescribeScalingActivitiesError::Credentials(ref err) => err.description(),
-            DescribeScalingActivitiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeScalingActivitiesError::ParseError(ref cause) => cause,
-            DescribeScalingActivitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1130,20 +939,10 @@ pub enum DescribeScalingPoliciesError {
     InternalService(String),
     /// <p>The next token supplied was invalid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingPoliciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1156,53 +955,30 @@ impl DescribeScalingPoliciesError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DescribeScalingPoliciesError::ConcurrentUpdate(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingPoliciesError::ConcurrentUpdate(
+                        String::from(error_message),
                     ));
                 }
                 "FailedResourceAccessException" => {
-                    return DescribeScalingPoliciesError::FailedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingPoliciesError::FailedResourceAccess(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return DescribeScalingPoliciesError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingPoliciesError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeScalingPoliciesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingPoliciesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeScalingPoliciesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeScalingPoliciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeScalingPoliciesError {
-    fn from(err: serde_json::error::Error) -> DescribeScalingPoliciesError {
-        DescribeScalingPoliciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeScalingPoliciesError {
-    fn from(err: CredentialsError) -> DescribeScalingPoliciesError {
-        DescribeScalingPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeScalingPoliciesError {
-    fn from(err: HttpDispatchError) -> DescribeScalingPoliciesError {
-        DescribeScalingPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeScalingPoliciesError {
-    fn from(err: io::Error) -> DescribeScalingPoliciesError {
-        DescribeScalingPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeScalingPoliciesError {
@@ -1217,13 +993,6 @@ impl Error for DescribeScalingPoliciesError {
             DescribeScalingPoliciesError::FailedResourceAccess(ref cause) => cause,
             DescribeScalingPoliciesError::InternalService(ref cause) => cause,
             DescribeScalingPoliciesError::InvalidNextToken(ref cause) => cause,
-            DescribeScalingPoliciesError::Validation(ref cause) => cause,
-            DescribeScalingPoliciesError::Credentials(ref err) => err.description(),
-            DescribeScalingPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeScalingPoliciesError::ParseError(ref cause) => cause,
-            DescribeScalingPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1236,20 +1005,10 @@ pub enum DescribeScheduledActionsError {
     InternalService(String),
     /// <p>The next token supplied was invalid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScheduledActionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeScheduledActionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScheduledActionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1262,48 +1021,25 @@ impl DescribeScheduledActionsError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DescribeScheduledActionsError::ConcurrentUpdate(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScheduledActionsError::ConcurrentUpdate(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return DescribeScheduledActionsError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScheduledActionsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeScheduledActionsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScheduledActionsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeScheduledActionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeScheduledActionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeScheduledActionsError {
-    fn from(err: serde_json::error::Error) -> DescribeScheduledActionsError {
-        DescribeScheduledActionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeScheduledActionsError {
-    fn from(err: CredentialsError) -> DescribeScheduledActionsError {
-        DescribeScheduledActionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeScheduledActionsError {
-    fn from(err: HttpDispatchError) -> DescribeScheduledActionsError {
-        DescribeScheduledActionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeScheduledActionsError {
-    fn from(err: io::Error) -> DescribeScheduledActionsError {
-        DescribeScheduledActionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeScheduledActionsError {
@@ -1317,13 +1053,6 @@ impl Error for DescribeScheduledActionsError {
             DescribeScheduledActionsError::ConcurrentUpdate(ref cause) => cause,
             DescribeScheduledActionsError::InternalService(ref cause) => cause,
             DescribeScheduledActionsError::InvalidNextToken(ref cause) => cause,
-            DescribeScheduledActionsError::Validation(ref cause) => cause,
-            DescribeScheduledActionsError::Credentials(ref err) => err.description(),
-            DescribeScheduledActionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeScheduledActionsError::ParseError(ref cause) => cause,
-            DescribeScheduledActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1340,20 +1069,10 @@ pub enum PutScalingPolicyError {
     LimitExceeded(String),
     /// <p>The specified object could not be found. For any operation that depends on the existence of a scalable target, this exception is thrown if the scalable target with the specified service namespace, resource ID, and scalable dimension does not exist. For any operation that deletes or deregisters a resource, this exception is thrown if the resource cannot be found.</p>
     ObjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutScalingPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutScalingPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScalingPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1366,48 +1085,35 @@ impl PutScalingPolicyError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return PutScalingPolicyError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(PutScalingPolicyError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "FailedResourceAccessException" => {
-                    return PutScalingPolicyError::FailedResourceAccess(String::from(error_message));
+                    return RusotoError::Service(PutScalingPolicyError::FailedResourceAccess(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return PutScalingPolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(PutScalingPolicyError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return PutScalingPolicyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutScalingPolicyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ObjectNotFoundException" => {
-                    return PutScalingPolicyError::ObjectNotFound(String::from(error_message));
+                    return RusotoError::Service(PutScalingPolicyError::ObjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutScalingPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutScalingPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutScalingPolicyError {
-    fn from(err: serde_json::error::Error) -> PutScalingPolicyError {
-        PutScalingPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutScalingPolicyError {
-    fn from(err: CredentialsError) -> PutScalingPolicyError {
-        PutScalingPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutScalingPolicyError {
-    fn from(err: HttpDispatchError) -> PutScalingPolicyError {
-        PutScalingPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutScalingPolicyError {
-    fn from(err: io::Error) -> PutScalingPolicyError {
-        PutScalingPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutScalingPolicyError {
@@ -1423,11 +1129,6 @@ impl Error for PutScalingPolicyError {
             PutScalingPolicyError::InternalService(ref cause) => cause,
             PutScalingPolicyError::LimitExceeded(ref cause) => cause,
             PutScalingPolicyError::ObjectNotFound(ref cause) => cause,
-            PutScalingPolicyError::Validation(ref cause) => cause,
-            PutScalingPolicyError::Credentials(ref err) => err.description(),
-            PutScalingPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutScalingPolicyError::ParseError(ref cause) => cause,
-            PutScalingPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1442,20 +1143,10 @@ pub enum PutScheduledActionError {
     LimitExceeded(String),
     /// <p>The specified object could not be found. For any operation that depends on the existence of a scalable target, this exception is thrown if the scalable target with the specified service namespace, resource ID, and scalable dimension does not exist. For any operation that deletes or deregisters a resource, this exception is thrown if the resource cannot be found.</p>
     ObjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutScheduledActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutScheduledActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutScheduledActionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1468,45 +1159,30 @@ impl PutScheduledActionError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return PutScheduledActionError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(PutScheduledActionError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return PutScheduledActionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(PutScheduledActionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return PutScheduledActionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutScheduledActionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ObjectNotFoundException" => {
-                    return PutScheduledActionError::ObjectNotFound(String::from(error_message));
+                    return RusotoError::Service(PutScheduledActionError::ObjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutScheduledActionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutScheduledActionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutScheduledActionError {
-    fn from(err: serde_json::error::Error) -> PutScheduledActionError {
-        PutScheduledActionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutScheduledActionError {
-    fn from(err: CredentialsError) -> PutScheduledActionError {
-        PutScheduledActionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutScheduledActionError {
-    fn from(err: HttpDispatchError) -> PutScheduledActionError {
-        PutScheduledActionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutScheduledActionError {
-    fn from(err: io::Error) -> PutScheduledActionError {
-        PutScheduledActionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutScheduledActionError {
@@ -1521,13 +1197,6 @@ impl Error for PutScheduledActionError {
             PutScheduledActionError::InternalService(ref cause) => cause,
             PutScheduledActionError::LimitExceeded(ref cause) => cause,
             PutScheduledActionError::ObjectNotFound(ref cause) => cause,
-            PutScheduledActionError::Validation(ref cause) => cause,
-            PutScheduledActionError::Credentials(ref err) => err.description(),
-            PutScheduledActionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutScheduledActionError::ParseError(ref cause) => cause,
-            PutScheduledActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1540,20 +1209,10 @@ pub enum RegisterScalableTargetError {
     InternalService(String),
     /// <p>A per-account resource limit is exceeded. For more information, see <a href="https://docs.aws.amazon.com/ApplicationAutoScaling/latest/userguide/application-auto-scaling-limits.html">Application Auto Scaling Limits</a>.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterScalableTargetError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterScalableTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterScalableTargetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1566,44 +1225,25 @@ impl RegisterScalableTargetError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return RegisterScalableTargetError::ConcurrentUpdate(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterScalableTargetError::ConcurrentUpdate(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return RegisterScalableTargetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(RegisterScalableTargetError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return RegisterScalableTargetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RegisterScalableTargetError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RegisterScalableTargetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterScalableTargetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterScalableTargetError {
-    fn from(err: serde_json::error::Error) -> RegisterScalableTargetError {
-        RegisterScalableTargetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterScalableTargetError {
-    fn from(err: CredentialsError) -> RegisterScalableTargetError {
-        RegisterScalableTargetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterScalableTargetError {
-    fn from(err: HttpDispatchError) -> RegisterScalableTargetError {
-        RegisterScalableTargetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterScalableTargetError {
-    fn from(err: io::Error) -> RegisterScalableTargetError {
-        RegisterScalableTargetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterScalableTargetError {
@@ -1617,13 +1257,6 @@ impl Error for RegisterScalableTargetError {
             RegisterScalableTargetError::ConcurrentUpdate(ref cause) => cause,
             RegisterScalableTargetError::InternalService(ref cause) => cause,
             RegisterScalableTargetError::LimitExceeded(ref cause) => cause,
-            RegisterScalableTargetError::Validation(ref cause) => cause,
-            RegisterScalableTargetError::Credentials(ref err) => err.description(),
-            RegisterScalableTargetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterScalableTargetError::ParseError(ref cause) => cause,
-            RegisterScalableTargetError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -54,22 +51,12 @@ pub enum PostToConnectionError {
     LimitExceeded(String),
     /// <p>The data has exceeded the maximum size allowed.</p>
     PayloadTooLarge(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PostToConnectionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PostToConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostToConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -94,43 +81,30 @@ impl PostToConnectionError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return PostToConnectionError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(PostToConnectionError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
-                "GoneException" => return PostToConnectionError::Gone(String::from(error_message)),
+                "GoneException" => {
+                    return RusotoError::Service(PostToConnectionError::Gone(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return PostToConnectionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PostToConnectionError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "PayloadTooLargeException" => {
-                    return PostToConnectionError::PayloadTooLarge(String::from(error_message));
+                    return RusotoError::Service(PostToConnectionError::PayloadTooLarge(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PostToConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PostToConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PostToConnectionError {
-    fn from(err: serde_json::error::Error) -> PostToConnectionError {
-        PostToConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PostToConnectionError {
-    fn from(err: CredentialsError) -> PostToConnectionError {
-        PostToConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PostToConnectionError {
-    fn from(err: HttpDispatchError) -> PostToConnectionError {
-        PostToConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PostToConnectionError {
-    fn from(err: io::Error) -> PostToConnectionError {
-        PostToConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PostToConnectionError {
@@ -145,11 +119,6 @@ impl Error for PostToConnectionError {
             PostToConnectionError::Gone(ref cause) => cause,
             PostToConnectionError::LimitExceeded(ref cause) => cause,
             PostToConnectionError::PayloadTooLarge(ref cause) => cause,
-            PostToConnectionError::Validation(ref cause) => cause,
-            PostToConnectionError::Credentials(ref err) => err.description(),
-            PostToConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PostToConnectionError::ParseError(ref cause) => cause,
-            PostToConnectionError::Unknown(_) => "unknown error",
         }
     }
 }

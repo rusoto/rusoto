@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -21685,20 +21682,10 @@ pub enum AddRoleToDBClusterError {
     DBClusterRoleQuotaExceededFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddRoleToDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddRoleToDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRoleToDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21706,30 +21693,38 @@ impl AddRoleToDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return AddRoleToDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddRoleToDBClusterError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterRoleAlreadyExists" => {
-                        return AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DBClusterRoleQuotaExceeded" => {
-                        return AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return AddRoleToDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddRoleToDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AddRoleToDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21738,28 +21733,6 @@ impl AddRoleToDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddRoleToDBClusterError {
-    fn from(err: XmlParseError) -> AddRoleToDBClusterError {
-        let XmlParseError(message) = err;
-        AddRoleToDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddRoleToDBClusterError {
-    fn from(err: CredentialsError) -> AddRoleToDBClusterError {
-        AddRoleToDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddRoleToDBClusterError {
-    fn from(err: HttpDispatchError) -> AddRoleToDBClusterError {
-        AddRoleToDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddRoleToDBClusterError {
-    fn from(err: io::Error) -> AddRoleToDBClusterError {
-        AddRoleToDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddRoleToDBClusterError {
@@ -21774,13 +21747,6 @@ impl Error for AddRoleToDBClusterError {
             AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(ref cause) => cause,
             AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(ref cause) => cause,
             AddRoleToDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            AddRoleToDBClusterError::Validation(ref cause) => cause,
-            AddRoleToDBClusterError::Credentials(ref err) => err.description(),
-            AddRoleToDBClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddRoleToDBClusterError::ParseError(ref cause) => cause,
-            AddRoleToDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21795,20 +21761,10 @@ pub enum AddRoleToDBInstanceError {
     DBInstanceRoleQuotaExceededFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddRoleToDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddRoleToDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRoleToDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21816,30 +21772,38 @@ impl AddRoleToDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return AddRoleToDBInstanceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddRoleToDBInstanceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceRoleAlreadyExists" => {
-                        return AddRoleToDBInstanceError::DBInstanceRoleAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AddRoleToDBInstanceError::DBInstanceRoleAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBInstanceRoleQuotaExceeded" => {
-                        return AddRoleToDBInstanceError::DBInstanceRoleQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AddRoleToDBInstanceError::DBInstanceRoleQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBInstanceState" => {
-                        return AddRoleToDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddRoleToDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AddRoleToDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21848,28 +21812,6 @@ impl AddRoleToDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddRoleToDBInstanceError {
-    fn from(err: XmlParseError) -> AddRoleToDBInstanceError {
-        let XmlParseError(message) = err;
-        AddRoleToDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddRoleToDBInstanceError {
-    fn from(err: CredentialsError) -> AddRoleToDBInstanceError {
-        AddRoleToDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddRoleToDBInstanceError {
-    fn from(err: HttpDispatchError) -> AddRoleToDBInstanceError {
-        AddRoleToDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddRoleToDBInstanceError {
-    fn from(err: io::Error) -> AddRoleToDBInstanceError {
-        AddRoleToDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddRoleToDBInstanceError {
@@ -21884,13 +21826,6 @@ impl Error for AddRoleToDBInstanceError {
             AddRoleToDBInstanceError::DBInstanceRoleAlreadyExistsFault(ref cause) => cause,
             AddRoleToDBInstanceError::DBInstanceRoleQuotaExceededFault(ref cause) => cause,
             AddRoleToDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
-            AddRoleToDBInstanceError::Validation(ref cause) => cause,
-            AddRoleToDBInstanceError::Credentials(ref err) => err.description(),
-            AddRoleToDBInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddRoleToDBInstanceError::ParseError(ref cause) => cause,
-            AddRoleToDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21901,20 +21836,12 @@ pub enum AddSourceIdentifierToSubscriptionError {
     SourceNotFoundFault(String),
     /// <p>The subscription name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddSourceIdentifierToSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddSourceIdentifierToSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AddSourceIdentifierToSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21922,20 +21849,24 @@ impl AddSourceIdentifierToSubscriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "SourceNotFound" => {
-                        return AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionNotFound" => {
-                        return AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        AddSourceIdentifierToSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21944,28 +21875,6 @@ impl AddSourceIdentifierToSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddSourceIdentifierToSubscriptionError {
-    fn from(err: XmlParseError) -> AddSourceIdentifierToSubscriptionError {
-        let XmlParseError(message) = err;
-        AddSourceIdentifierToSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddSourceIdentifierToSubscriptionError {
-    fn from(err: CredentialsError) -> AddSourceIdentifierToSubscriptionError {
-        AddSourceIdentifierToSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddSourceIdentifierToSubscriptionError {
-    fn from(err: HttpDispatchError) -> AddSourceIdentifierToSubscriptionError {
-        AddSourceIdentifierToSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddSourceIdentifierToSubscriptionError {
-    fn from(err: io::Error) -> AddSourceIdentifierToSubscriptionError {
-        AddSourceIdentifierToSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddSourceIdentifierToSubscriptionError {
@@ -21978,13 +21887,6 @@ impl Error for AddSourceIdentifierToSubscriptionError {
         match *self {
             AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(ref cause) => cause,
             AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
-            AddSourceIdentifierToSubscriptionError::Validation(ref cause) => cause,
-            AddSourceIdentifierToSubscriptionError::Credentials(ref err) => err.description(),
-            AddSourceIdentifierToSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddSourceIdentifierToSubscriptionError::ParseError(ref cause) => cause,
-            AddSourceIdentifierToSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21997,20 +21899,10 @@ pub enum AddTagsToResourceError {
     DBInstanceNotFoundFault(String),
     /// <p> <i>DBSnapshotIdentifier</i> doesn't refer to an existing DB snapshot. </p>
     DBSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22018,25 +21910,29 @@ impl AddTagsToResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return AddTagsToResourceError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddTagsToResourceError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBInstanceNotFound" => {
-                        return AddTagsToResourceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddTagsToResourceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSnapshotNotFound" => {
-                        return AddTagsToResourceError::DBSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddTagsToResourceError::DBSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AddTagsToResourceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22045,28 +21941,6 @@ impl AddTagsToResourceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddTagsToResourceError {
-    fn from(err: XmlParseError) -> AddTagsToResourceError {
-        let XmlParseError(message) = err;
-        AddTagsToResourceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsToResourceError {
-    fn from(err: CredentialsError) -> AddTagsToResourceError {
-        AddTagsToResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsToResourceError {
-    fn from(err: HttpDispatchError) -> AddTagsToResourceError {
-        AddTagsToResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsToResourceError {
-    fn from(err: io::Error) -> AddTagsToResourceError {
-        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -22080,13 +21954,6 @@ impl Error for AddTagsToResourceError {
             AddTagsToResourceError::DBClusterNotFoundFault(ref cause) => cause,
             AddTagsToResourceError::DBInstanceNotFoundFault(ref cause) => cause,
             AddTagsToResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
-            AddTagsToResourceError::Validation(ref cause) => cause,
-            AddTagsToResourceError::Credentials(ref err) => err.description(),
-            AddTagsToResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddTagsToResourceError::ParseError(ref cause) => cause,
-            AddTagsToResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22099,20 +21966,12 @@ pub enum ApplyPendingMaintenanceActionError {
     InvalidDBInstanceStateFault(String),
     /// <p>The specified resource ID was not found.</p>
     ResourceNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ApplyPendingMaintenanceActionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ApplyPendingMaintenanceActionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ApplyPendingMaintenanceActionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22120,25 +21979,31 @@ impl ApplyPendingMaintenanceActionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidDBClusterStateFault" => {
-                        return ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBInstanceState" => {
-                        return ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ResourceNotFoundFault" => {
-                        return ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ApplyPendingMaintenanceActionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22147,28 +22012,6 @@ impl ApplyPendingMaintenanceActionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ApplyPendingMaintenanceActionError {
-    fn from(err: XmlParseError) -> ApplyPendingMaintenanceActionError {
-        let XmlParseError(message) = err;
-        ApplyPendingMaintenanceActionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ApplyPendingMaintenanceActionError {
-    fn from(err: CredentialsError) -> ApplyPendingMaintenanceActionError {
-        ApplyPendingMaintenanceActionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ApplyPendingMaintenanceActionError {
-    fn from(err: HttpDispatchError) -> ApplyPendingMaintenanceActionError {
-        ApplyPendingMaintenanceActionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ApplyPendingMaintenanceActionError {
-    fn from(err: io::Error) -> ApplyPendingMaintenanceActionError {
-        ApplyPendingMaintenanceActionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ApplyPendingMaintenanceActionError {
@@ -22182,13 +22025,6 @@ impl Error for ApplyPendingMaintenanceActionError {
             ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(ref cause) => cause,
             ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(ref cause) => cause,
             ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
-            ApplyPendingMaintenanceActionError::Validation(ref cause) => cause,
-            ApplyPendingMaintenanceActionError::Credentials(ref err) => err.description(),
-            ApplyPendingMaintenanceActionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ApplyPendingMaintenanceActionError::ParseError(ref cause) => cause,
-            ApplyPendingMaintenanceActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22203,31 +22039,51 @@ pub enum AuthorizeDBSecurityGroupIngressError {
     DBSecurityGroupNotFoundFault(String),
     /// <p>The state of the DB security group doesn't allow deletion.</p>
     InvalidDBSecurityGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AuthorizeDBSecurityGroupIngressError {
-    pub fn from_response(res: BufferedHttpResponse) -> AuthorizeDBSecurityGroupIngressError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AuthorizeDBSecurityGroupIngressError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => return AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceeded" => return AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"DBSecurityGroupNotFound" => return AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidDBSecurityGroupState" => return AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "AuthorizationAlreadyExists" => {
+                        return RusotoError::Service(
+                            AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "AuthorizationQuotaExceeded" => {
+                        return RusotoError::Service(
+                            AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSecurityGroupNotFound" => {
+                        return RusotoError::Service(
+                            AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBSecurityGroupState" => {
+                        return RusotoError::Service(
+                            AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        AuthorizeDBSecurityGroupIngressError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22236,28 +22092,6 @@ impl AuthorizeDBSecurityGroupIngressError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AuthorizeDBSecurityGroupIngressError {
-    fn from(err: XmlParseError) -> AuthorizeDBSecurityGroupIngressError {
-        let XmlParseError(message) = err;
-        AuthorizeDBSecurityGroupIngressError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AuthorizeDBSecurityGroupIngressError {
-    fn from(err: CredentialsError) -> AuthorizeDBSecurityGroupIngressError {
-        AuthorizeDBSecurityGroupIngressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AuthorizeDBSecurityGroupIngressError {
-    fn from(err: HttpDispatchError) -> AuthorizeDBSecurityGroupIngressError {
-        AuthorizeDBSecurityGroupIngressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AuthorizeDBSecurityGroupIngressError {
-    fn from(err: io::Error) -> AuthorizeDBSecurityGroupIngressError {
-        AuthorizeDBSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AuthorizeDBSecurityGroupIngressError {
@@ -22278,13 +22112,6 @@ impl Error for AuthorizeDBSecurityGroupIngressError {
             AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(ref cause) => {
                 cause
             }
-            AuthorizeDBSecurityGroupIngressError::Validation(ref cause) => cause,
-            AuthorizeDBSecurityGroupIngressError::Credentials(ref err) => err.description(),
-            AuthorizeDBSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AuthorizeDBSecurityGroupIngressError::ParseError(ref cause) => cause,
-            AuthorizeDBSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22295,20 +22122,10 @@ pub enum BacktrackDBClusterError {
     DBClusterNotFoundFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BacktrackDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> BacktrackDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BacktrackDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22316,20 +22133,24 @@ impl BacktrackDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return BacktrackDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            BacktrackDBClusterError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return BacktrackDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            BacktrackDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        BacktrackDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22338,28 +22159,6 @@ impl BacktrackDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for BacktrackDBClusterError {
-    fn from(err: XmlParseError) -> BacktrackDBClusterError {
-        let XmlParseError(message) = err;
-        BacktrackDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for BacktrackDBClusterError {
-    fn from(err: CredentialsError) -> BacktrackDBClusterError {
-        BacktrackDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BacktrackDBClusterError {
-    fn from(err: HttpDispatchError) -> BacktrackDBClusterError {
-        BacktrackDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BacktrackDBClusterError {
-    fn from(err: io::Error) -> BacktrackDBClusterError {
-        BacktrackDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BacktrackDBClusterError {
@@ -22372,13 +22171,6 @@ impl Error for BacktrackDBClusterError {
         match *self {
             BacktrackDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
             BacktrackDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            BacktrackDBClusterError::Validation(ref cause) => cause,
-            BacktrackDBClusterError::Credentials(ref err) => err.description(),
-            BacktrackDBClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BacktrackDBClusterError::ParseError(ref cause) => cause,
-            BacktrackDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22391,20 +22183,12 @@ pub enum CopyDBClusterParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB parameter groups.</p>
     DBParameterGroupQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyDBClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyDBClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CopyDBClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22412,25 +22196,31 @@ impl CopyDBClusterParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupAlreadyExists" => {
-                        return CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBParameterGroupNotFound" => {
-                        return CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBParameterGroupQuotaExceeded" => {
-                        return CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CopyDBClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22439,28 +22229,6 @@ impl CopyDBClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CopyDBClusterParameterGroupError {
-    fn from(err: XmlParseError) -> CopyDBClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        CopyDBClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CopyDBClusterParameterGroupError {
-    fn from(err: CredentialsError) -> CopyDBClusterParameterGroupError {
-        CopyDBClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyDBClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> CopyDBClusterParameterGroupError {
-        CopyDBClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyDBClusterParameterGroupError {
-    fn from(err: io::Error) -> CopyDBClusterParameterGroupError {
-        CopyDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyDBClusterParameterGroupError {
@@ -22478,13 +22246,6 @@ impl Error for CopyDBClusterParameterGroupError {
             CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => {
                 cause
             }
-            CopyDBClusterParameterGroupError::Validation(ref cause) => cause,
-            CopyDBClusterParameterGroupError::Credentials(ref err) => err.description(),
-            CopyDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CopyDBClusterParameterGroupError::ParseError(ref cause) => cause,
-            CopyDBClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22503,20 +22264,10 @@ pub enum CopyDBClusterSnapshotError {
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyDBClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyDBClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22524,40 +22275,52 @@ impl CopyDBClusterSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterSnapshotAlreadyExistsFault" => {
-                        return CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBClusterSnapshotNotFoundFault" => {
-                        return CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
-                        return CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return CopyDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotQuotaExceeded" => {
-                        return CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CopyDBClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22566,28 +22329,6 @@ impl CopyDBClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CopyDBClusterSnapshotError {
-    fn from(err: XmlParseError) -> CopyDBClusterSnapshotError {
-        let XmlParseError(message) = err;
-        CopyDBClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CopyDBClusterSnapshotError {
-    fn from(err: CredentialsError) -> CopyDBClusterSnapshotError {
-        CopyDBClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyDBClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> CopyDBClusterSnapshotError {
-        CopyDBClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyDBClusterSnapshotError {
-    fn from(err: io::Error) -> CopyDBClusterSnapshotError {
-        CopyDBClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyDBClusterSnapshotError {
@@ -22604,13 +22345,6 @@ impl Error for CopyDBClusterSnapshotError {
             CopyDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
             CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
             CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
-            CopyDBClusterSnapshotError::Validation(ref cause) => cause,
-            CopyDBClusterSnapshotError::Credentials(ref err) => err.description(),
-            CopyDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CopyDBClusterSnapshotError::ParseError(ref cause) => cause,
-            CopyDBClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22623,20 +22357,10 @@ pub enum CopyDBParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB parameter groups.</p>
     DBParameterGroupQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyDBParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyDBParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22644,25 +22368,31 @@ impl CopyDBParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupAlreadyExists" => {
-                        return CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBParameterGroupNotFound" => {
-                        return CopyDBParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DBParameterGroupQuotaExceeded" => {
-                        return CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CopyDBParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22671,28 +22401,6 @@ impl CopyDBParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CopyDBParameterGroupError {
-    fn from(err: XmlParseError) -> CopyDBParameterGroupError {
-        let XmlParseError(message) = err;
-        CopyDBParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CopyDBParameterGroupError {
-    fn from(err: CredentialsError) -> CopyDBParameterGroupError {
-        CopyDBParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyDBParameterGroupError {
-    fn from(err: HttpDispatchError) -> CopyDBParameterGroupError {
-        CopyDBParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyDBParameterGroupError {
-    fn from(err: io::Error) -> CopyDBParameterGroupError {
-        CopyDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyDBParameterGroupError {
@@ -22706,13 +22414,6 @@ impl Error for CopyDBParameterGroupError {
             CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,
             CopyDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
             CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,
-            CopyDBParameterGroupError::Validation(ref cause) => cause,
-            CopyDBParameterGroupError::Credentials(ref err) => err.description(),
-            CopyDBParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CopyDBParameterGroupError::ParseError(ref cause) => cause,
-            CopyDBParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22729,20 +22430,10 @@ pub enum CopyDBSnapshotError {
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyDBSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyDBSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyDBSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22750,35 +22441,41 @@ impl CopyDBSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotAlreadyExists" => {
-                        return CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSnapshotNotFound" => {
-                        return CopyDBSnapshotError::DBSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CopyDBSnapshotError::DBSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDBSnapshotState" => {
-                        return CopyDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return CopyDBSnapshotError::KMSKeyNotAccessibleFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CopyDBSnapshotError::KMSKeyNotAccessibleFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SnapshotQuotaExceeded" => {
-                        return CopyDBSnapshotError::SnapshotQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyDBSnapshotError::SnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CopyDBSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22787,28 +22484,6 @@ impl CopyDBSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CopyDBSnapshotError {
-    fn from(err: XmlParseError) -> CopyDBSnapshotError {
-        let XmlParseError(message) = err;
-        CopyDBSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CopyDBSnapshotError {
-    fn from(err: CredentialsError) -> CopyDBSnapshotError {
-        CopyDBSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyDBSnapshotError {
-    fn from(err: HttpDispatchError) -> CopyDBSnapshotError {
-        CopyDBSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyDBSnapshotError {
-    fn from(err: io::Error) -> CopyDBSnapshotError {
-        CopyDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyDBSnapshotError {
@@ -22824,11 +22499,6 @@ impl Error for CopyDBSnapshotError {
             CopyDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
             CopyDBSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
             CopyDBSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
-            CopyDBSnapshotError::Validation(ref cause) => cause,
-            CopyDBSnapshotError::Credentials(ref err) => err.description(),
-            CopyDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopyDBSnapshotError::ParseError(ref cause) => cause,
-            CopyDBSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22841,20 +22511,10 @@ pub enum CopyOptionGroupError {
     OptionGroupNotFoundFault(String),
     /// <p>The quota of 20 option groups was exceeded for this AWS account.</p>
     OptionGroupQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyOptionGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyOptionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyOptionGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22862,25 +22522,29 @@ impl CopyOptionGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OptionGroupAlreadyExistsFault" => {
-                        return CopyOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OptionGroupNotFoundFault" => {
-                        return CopyOptionGroupError::OptionGroupNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CopyOptionGroupError::OptionGroupNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "OptionGroupQuotaExceededFault" => {
-                        return CopyOptionGroupError::OptionGroupQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyOptionGroupError::OptionGroupQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CopyOptionGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22889,28 +22553,6 @@ impl CopyOptionGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CopyOptionGroupError {
-    fn from(err: XmlParseError) -> CopyOptionGroupError {
-        let XmlParseError(message) = err;
-        CopyOptionGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CopyOptionGroupError {
-    fn from(err: CredentialsError) -> CopyOptionGroupError {
-        CopyOptionGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyOptionGroupError {
-    fn from(err: HttpDispatchError) -> CopyOptionGroupError {
-        CopyOptionGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyOptionGroupError {
-    fn from(err: io::Error) -> CopyOptionGroupError {
-        CopyOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyOptionGroupError {
@@ -22924,11 +22566,6 @@ impl Error for CopyOptionGroupError {
             CopyOptionGroupError::OptionGroupAlreadyExistsFault(ref cause) => cause,
             CopyOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,
             CopyOptionGroupError::OptionGroupQuotaExceededFault(ref cause) => cause,
-            CopyOptionGroupError::Validation(ref cause) => cause,
-            CopyOptionGroupError::Credentials(ref err) => err.description(),
-            CopyOptionGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopyOptionGroupError::ParseError(ref cause) => cause,
-            CopyOptionGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22969,20 +22606,10 @@ pub enum CreateDBClusterError {
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would result in the user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22990,95 +22617,121 @@ impl CreateDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterAlreadyExistsFault" => {
-                        return CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterNotFoundFault" => {
-                        return CreateDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBClusterError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBClusterParameterGroupNotFound" => {
-                        return CreateDBClusterError::DBClusterParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterError::DBClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBClusterQuotaExceededFault" => {
-                        return CreateDBClusterError::DBClusterQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::DBClusterQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceNotFound" => {
-                        return CreateDBClusterError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBClusterError::DBInstanceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DBSubnetGroupNotFoundFault" => {
-                        return CreateDBClusterError::DBSubnetGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "GlobalClusterNotFoundFault" => {
-                        return CreateDBClusterError::GlobalClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::GlobalClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientStorageClusterCapacity" => {
-                        return CreateDBClusterError::InsufficientStorageClusterCapacityFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterError::InsufficientStorageClusterCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return CreateDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return CreateDBClusterError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBSubnetGroupStateFault" => {
-                        return CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidGlobalClusterStateFault" => {
-                        return CreateDBClusterError::InvalidGlobalClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::InvalidGlobalClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return CreateDBClusterError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBClusterError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return CreateDBClusterError::KMSKeyNotAccessibleFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBClusterError::KMSKeyNotAccessibleFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "StorageQuotaExceeded" => {
-                        return CreateDBClusterError::StorageQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::StorageQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23087,28 +22740,6 @@ impl CreateDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBClusterError {
-    fn from(err: XmlParseError) -> CreateDBClusterError {
-        let XmlParseError(message) = err;
-        CreateDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBClusterError {
-    fn from(err: CredentialsError) -> CreateDBClusterError {
-        CreateDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBClusterError {
-    fn from(err: HttpDispatchError) -> CreateDBClusterError {
-        CreateDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBClusterError {
-    fn from(err: io::Error) -> CreateDBClusterError {
-        CreateDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBClusterError {
@@ -23136,11 +22767,6 @@ impl Error for CreateDBClusterError {
             CreateDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
             CreateDBClusterError::KMSKeyNotAccessibleFault(ref cause) => cause,
             CreateDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
-            CreateDBClusterError::Validation(ref cause) => cause,
-            CreateDBClusterError::Credentials(ref err) => err.description(),
-            CreateDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDBClusterError::ParseError(ref cause) => cause,
-            CreateDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23159,20 +22785,10 @@ pub enum CreateDBClusterEndpointError {
     InvalidDBClusterStateFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBClusterEndpointError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBClusterEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterEndpointError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23180,40 +22796,52 @@ impl CreateDBClusterEndpointError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterEndpointAlreadyExistsFault" => {
-                        return CreateDBClusterEndpointError::DBClusterEndpointAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBClusterEndpointAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBClusterEndpointQuotaExceededFault" => {
-                        return CreateDBClusterEndpointError::DBClusterEndpointQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBClusterEndpointQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBClusterNotFoundFault" => {
-                        return CreateDBClusterEndpointError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceNotFound" => {
-                        return CreateDBClusterEndpointError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return CreateDBClusterEndpointError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBInstanceState" => {
-                        return CreateDBClusterEndpointError::InvalidDBInstanceStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::InvalidDBInstanceStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBClusterEndpointError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23222,28 +22850,6 @@ impl CreateDBClusterEndpointError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBClusterEndpointError {
-    fn from(err: XmlParseError) -> CreateDBClusterEndpointError {
-        let XmlParseError(message) = err;
-        CreateDBClusterEndpointError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBClusterEndpointError {
-    fn from(err: CredentialsError) -> CreateDBClusterEndpointError {
-        CreateDBClusterEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBClusterEndpointError {
-    fn from(err: HttpDispatchError) -> CreateDBClusterEndpointError {
-        CreateDBClusterEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBClusterEndpointError {
-    fn from(err: io::Error) -> CreateDBClusterEndpointError {
-        CreateDBClusterEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBClusterEndpointError {
@@ -23260,13 +22866,6 @@ impl Error for CreateDBClusterEndpointError {
             CreateDBClusterEndpointError::DBInstanceNotFoundFault(ref cause) => cause,
             CreateDBClusterEndpointError::InvalidDBClusterStateFault(ref cause) => cause,
             CreateDBClusterEndpointError::InvalidDBInstanceStateFault(ref cause) => cause,
-            CreateDBClusterEndpointError::Validation(ref cause) => cause,
-            CreateDBClusterEndpointError::Credentials(ref err) => err.description(),
-            CreateDBClusterEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDBClusterEndpointError::ParseError(ref cause) => cause,
-            CreateDBClusterEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23277,31 +22876,37 @@ pub enum CreateDBClusterParameterGroupError {
     DBParameterGroupAlreadyExistsFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB parameter groups.</p>
     DBParameterGroupQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateDBClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBParameterGroupAlreadyExists" => return CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"DBParameterGroupQuotaExceeded" => return CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DBParameterGroupAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBParameterGroupQuotaExceeded" => {
+                        return RusotoError::Service(
+                            CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        CreateDBClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23310,28 +22915,6 @@ impl CreateDBClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBClusterParameterGroupError {
-    fn from(err: XmlParseError) -> CreateDBClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        CreateDBClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBClusterParameterGroupError {
-    fn from(err: CredentialsError) -> CreateDBClusterParameterGroupError {
-        CreateDBClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> CreateDBClusterParameterGroupError {
-        CreateDBClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBClusterParameterGroupError {
-    fn from(err: io::Error) -> CreateDBClusterParameterGroupError {
-        CreateDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBClusterParameterGroupError {
@@ -23348,13 +22931,6 @@ impl Error for CreateDBClusterParameterGroupError {
             CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => {
                 cause
             }
-            CreateDBClusterParameterGroupError::Validation(ref cause) => cause,
-            CreateDBClusterParameterGroupError::Credentials(ref err) => err.description(),
-            CreateDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDBClusterParameterGroupError::ParseError(ref cause) => cause,
-            CreateDBClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23371,20 +22947,10 @@ pub enum CreateDBClusterSnapshotError {
     InvalidDBClusterStateFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23392,35 +22958,45 @@ impl CreateDBClusterSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return CreateDBClusterSnapshotError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterSnapshotError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
-                        return CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
-                        return CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return CreateDBClusterSnapshotError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "SnapshotQuotaExceeded" => {
-                        return CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23429,28 +23005,6 @@ impl CreateDBClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBClusterSnapshotError {
-    fn from(err: XmlParseError) -> CreateDBClusterSnapshotError {
-        let XmlParseError(message) = err;
-        CreateDBClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBClusterSnapshotError {
-    fn from(err: CredentialsError) -> CreateDBClusterSnapshotError {
-        CreateDBClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateDBClusterSnapshotError {
-        CreateDBClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBClusterSnapshotError {
-    fn from(err: io::Error) -> CreateDBClusterSnapshotError {
-        CreateDBClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBClusterSnapshotError {
@@ -23466,13 +23020,6 @@ impl Error for CreateDBClusterSnapshotError {
             CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
             CreateDBClusterSnapshotError::InvalidDBClusterStateFault(ref cause) => cause,
             CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
-            CreateDBClusterSnapshotError::Validation(ref cause) => cause,
-            CreateDBClusterSnapshotError::Credentials(ref err) => err.description(),
-            CreateDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDBClusterSnapshotError::ParseError(ref cause) => cause,
-            CreateDBClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23517,20 +23064,10 @@ pub enum CreateDBInstanceError {
     StorageQuotaExceededFault(String),
     /// <p>Storage of the <i>StorageType</i> specified can't be associated with the DB instance. </p>
     StorageTypeNotSupportedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23538,105 +23075,137 @@ impl CreateDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationNotFound" => {
-                        return CreateDBInstanceError::AuthorizationNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::AuthorizationNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "BackupPolicyNotFoundFault" => {
-                        return CreateDBInstanceError::BackupPolicyNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::BackupPolicyNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterNotFoundFault" => {
-                        return CreateDBInstanceError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBInstanceError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBInstanceAlreadyExists" => {
-                        return CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBParameterGroupNotFound" => {
-                        return CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSecurityGroupNotFound" => {
-                        return CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetGroupNotFoundFault" => {
-                        return CreateDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DomainNotFoundFault" => {
-                        return CreateDBInstanceError::DomainNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBInstanceError::DomainNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InstanceQuotaExceeded" => {
-                        return CreateDBInstanceError::InstanceQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::InstanceQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientDBInstanceCapacity" => {
-                        return CreateDBInstanceError::InsufficientDBInstanceCapacityFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBInstanceError::InsufficientDBInstanceCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return CreateDBInstanceError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return CreateDBInstanceError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBInstanceError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return CreateDBInstanceError::InvalidVPCNetworkStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::InvalidVPCNetworkStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return CreateDBInstanceError::KMSKeyNotAccessibleFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::KMSKeyNotAccessibleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OptionGroupNotFoundFault" => {
-                        return CreateDBInstanceError::OptionGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::OptionGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
-                        return CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "StorageQuotaExceeded" => {
-                        return CreateDBInstanceError::StorageQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::StorageQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "StorageTypeNotSupported" => {
-                        return CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23645,28 +23214,6 @@ impl CreateDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBInstanceError {
-    fn from(err: XmlParseError) -> CreateDBInstanceError {
-        let XmlParseError(message) = err;
-        CreateDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBInstanceError {
-    fn from(err: CredentialsError) -> CreateDBInstanceError {
-        CreateDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBInstanceError {
-    fn from(err: HttpDispatchError) -> CreateDBInstanceError {
-        CreateDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBInstanceError {
-    fn from(err: io::Error) -> CreateDBInstanceError {
-        CreateDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBInstanceError {
@@ -23696,11 +23243,6 @@ impl Error for CreateDBInstanceError {
             CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
             CreateDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
             CreateDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
-            CreateDBInstanceError::Validation(ref cause) => cause,
-            CreateDBInstanceError::Credentials(ref err) => err.description(),
-            CreateDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDBInstanceError::ParseError(ref cause) => cause,
-            CreateDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23743,31 +23285,149 @@ pub enum CreateDBInstanceReadReplicaError {
     StorageQuotaExceededFault(String),
     /// <p>Storage of the <i>StorageType</i> specified can't be associated with the DB instance. </p>
     StorageTypeNotSupportedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBInstanceReadReplicaError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBInstanceReadReplicaError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateDBInstanceReadReplicaError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBInstanceAlreadyExists" => return CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBInstanceNotFound" => return CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupNotFound" => return CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFound" => return CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => return CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotAllowedFault" => return CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceeded" => return CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacity" => return CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBInstanceState" => return CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidDBSubnetGroupFault" => return CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(String::from(parsed_error.message)),"InvalidSubnet" => return CreateDBInstanceReadReplicaError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => return CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => return CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => return CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceeded" => return CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupported" => return CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DBInstanceAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSecurityGroupNotFound" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupNotAllowedFault" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InstanceQuotaExceeded" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientDBInstanceCapacity" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBSubnetGroupFault" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidSubnet" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::InvalidSubnet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "OptionGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ProvisionedIopsNotAvailableInAZFault" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "StorageQuotaExceeded" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "StorageTypeNotSupported" => {
+                        return RusotoError::Service(
+                            CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        CreateDBInstanceReadReplicaError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23776,28 +23436,6 @@ impl CreateDBInstanceReadReplicaError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBInstanceReadReplicaError {
-    fn from(err: XmlParseError) -> CreateDBInstanceReadReplicaError {
-        let XmlParseError(message) = err;
-        CreateDBInstanceReadReplicaError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBInstanceReadReplicaError {
-    fn from(err: CredentialsError) -> CreateDBInstanceReadReplicaError {
-        CreateDBInstanceReadReplicaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBInstanceReadReplicaError {
-    fn from(err: HttpDispatchError) -> CreateDBInstanceReadReplicaError {
-        CreateDBInstanceReadReplicaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBInstanceReadReplicaError {
-    fn from(err: io::Error) -> CreateDBInstanceReadReplicaError {
-        CreateDBInstanceReadReplicaError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBInstanceReadReplicaError {
@@ -23832,13 +23470,6 @@ impl Error for CreateDBInstanceReadReplicaError {
             }
             CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(ref cause) => cause,
             CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(ref cause) => cause,
-            CreateDBInstanceReadReplicaError::Validation(ref cause) => cause,
-            CreateDBInstanceReadReplicaError::Credentials(ref err) => err.description(),
-            CreateDBInstanceReadReplicaError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDBInstanceReadReplicaError::ParseError(ref cause) => cause,
-            CreateDBInstanceReadReplicaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23849,20 +23480,10 @@ pub enum CreateDBParameterGroupError {
     DBParameterGroupAlreadyExistsFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB parameter groups.</p>
     DBParameterGroupQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23870,20 +23491,24 @@ impl CreateDBParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupAlreadyExists" => {
-                        return CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBParameterGroupQuotaExceeded" => {
-                        return CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23892,28 +23517,6 @@ impl CreateDBParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBParameterGroupError {
-    fn from(err: XmlParseError) -> CreateDBParameterGroupError {
-        let XmlParseError(message) = err;
-        CreateDBParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBParameterGroupError {
-    fn from(err: CredentialsError) -> CreateDBParameterGroupError {
-        CreateDBParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBParameterGroupError {
-    fn from(err: HttpDispatchError) -> CreateDBParameterGroupError {
-        CreateDBParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBParameterGroupError {
-    fn from(err: io::Error) -> CreateDBParameterGroupError {
-        CreateDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBParameterGroupError {
@@ -23926,13 +23529,6 @@ impl Error for CreateDBParameterGroupError {
         match *self {
             CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(ref cause) => cause,
             CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(ref cause) => cause,
-            CreateDBParameterGroupError::Validation(ref cause) => cause,
-            CreateDBParameterGroupError::Credentials(ref err) => err.description(),
-            CreateDBParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDBParameterGroupError::ParseError(ref cause) => cause,
-            CreateDBParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23945,20 +23541,10 @@ pub enum CreateDBSecurityGroupError {
     DBSecurityGroupNotSupportedFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB security groups.</p>
     DBSecurityGroupQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBSecurityGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBSecurityGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBSecurityGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23966,25 +23552,31 @@ impl CreateDBSecurityGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSecurityGroupAlreadyExists" => {
-                        return CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSecurityGroupNotSupported" => {
-                        return CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "QuotaExceeded.DBSecurityGroup" => {
-                        return CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBSecurityGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23993,28 +23585,6 @@ impl CreateDBSecurityGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBSecurityGroupError {
-    fn from(err: XmlParseError) -> CreateDBSecurityGroupError {
-        let XmlParseError(message) = err;
-        CreateDBSecurityGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBSecurityGroupError {
-    fn from(err: CredentialsError) -> CreateDBSecurityGroupError {
-        CreateDBSecurityGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBSecurityGroupError {
-    fn from(err: HttpDispatchError) -> CreateDBSecurityGroupError {
-        CreateDBSecurityGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBSecurityGroupError {
-    fn from(err: io::Error) -> CreateDBSecurityGroupError {
-        CreateDBSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBSecurityGroupError {
@@ -24028,13 +23598,6 @@ impl Error for CreateDBSecurityGroupError {
             CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(ref cause) => cause,
             CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(ref cause) => cause,
             CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(ref cause) => cause,
-            CreateDBSecurityGroupError::Validation(ref cause) => cause,
-            CreateDBSecurityGroupError::Credentials(ref err) => err.description(),
-            CreateDBSecurityGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDBSecurityGroupError::ParseError(ref cause) => cause,
-            CreateDBSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24049,20 +23612,10 @@ pub enum CreateDBSnapshotError {
     InvalidDBInstanceStateFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24070,30 +23623,36 @@ impl CreateDBSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return CreateDBSnapshotError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBSnapshotError::DBInstanceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBSnapshotAlreadyExists" => {
-                        return CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return CreateDBSnapshotError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBSnapshotError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotQuotaExceeded" => {
-                        return CreateDBSnapshotError::SnapshotQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBSnapshotError::SnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24102,28 +23661,6 @@ impl CreateDBSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBSnapshotError {
-    fn from(err: XmlParseError) -> CreateDBSnapshotError {
-        let XmlParseError(message) = err;
-        CreateDBSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBSnapshotError {
-    fn from(err: CredentialsError) -> CreateDBSnapshotError {
-        CreateDBSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateDBSnapshotError {
-        CreateDBSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBSnapshotError {
-    fn from(err: io::Error) -> CreateDBSnapshotError {
-        CreateDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBSnapshotError {
@@ -24138,11 +23675,6 @@ impl Error for CreateDBSnapshotError {
             CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(ref cause) => cause,
             CreateDBSnapshotError::InvalidDBInstanceStateFault(ref cause) => cause,
             CreateDBSnapshotError::SnapshotQuotaExceededFault(ref cause) => cause,
-            CreateDBSnapshotError::Validation(ref cause) => cause,
-            CreateDBSnapshotError::Credentials(ref err) => err.description(),
-            CreateDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDBSnapshotError::ParseError(ref cause) => cause,
-            CreateDBSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24159,20 +23691,10 @@ pub enum CreateDBSubnetGroupError {
     DBSubnetQuotaExceededFault(String),
     /// <p>The requested subnet is invalid, or multiple subnets were requested that are not all in a common VPC.</p>
     InvalidSubnet(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDBSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDBSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBSubnetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24180,35 +23702,43 @@ impl CreateDBSubnetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSubnetGroupAlreadyExists" => {
-                        return CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetGroupQuotaExceeded" => {
-                        return CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetQuotaExceededFault" => {
-                        return CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return CreateDBSubnetGroupError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDBSubnetGroupError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateDBSubnetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24217,28 +23747,6 @@ impl CreateDBSubnetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDBSubnetGroupError {
-    fn from(err: XmlParseError) -> CreateDBSubnetGroupError {
-        let XmlParseError(message) = err;
-        CreateDBSubnetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDBSubnetGroupError {
-    fn from(err: CredentialsError) -> CreateDBSubnetGroupError {
-        CreateDBSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDBSubnetGroupError {
-    fn from(err: HttpDispatchError) -> CreateDBSubnetGroupError {
-        CreateDBSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDBSubnetGroupError {
-    fn from(err: io::Error) -> CreateDBSubnetGroupError {
-        CreateDBSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDBSubnetGroupError {
@@ -24254,13 +23762,6 @@ impl Error for CreateDBSubnetGroupError {
             CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(ref cause) => cause,
             CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
             CreateDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
-            CreateDBSubnetGroupError::Validation(ref cause) => cause,
-            CreateDBSubnetGroupError::Credentials(ref err) => err.description(),
-            CreateDBSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDBSubnetGroupError::ParseError(ref cause) => cause,
-            CreateDBSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24281,20 +23782,10 @@ pub enum CreateEventSubscriptionError {
     SubscriptionAlreadyExistFault(String),
     /// <p>The supplied category does not exist.</p>
     SubscriptionCategoryNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEventSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24302,45 +23793,59 @@ impl CreateEventSubscriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EventSubscriptionQuotaExceeded" => {
-                        return CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SNSInvalidTopic" => {
-                        return CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSNoAuthorization" => {
-                        return CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSTopicArnNotFound" => {
-                        return CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SourceNotFound" => {
-                        return CreateEventSubscriptionError::SourceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SourceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SubscriptionAlreadyExist" => {
-                        return CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionCategoryNotFound" => {
-                        return CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateEventSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24349,28 +23854,6 @@ impl CreateEventSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateEventSubscriptionError {
-    fn from(err: XmlParseError) -> CreateEventSubscriptionError {
-        let XmlParseError(message) = err;
-        CreateEventSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateEventSubscriptionError {
-    fn from(err: CredentialsError) -> CreateEventSubscriptionError {
-        CreateEventSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateEventSubscriptionError {
-    fn from(err: HttpDispatchError) -> CreateEventSubscriptionError {
-        CreateEventSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateEventSubscriptionError {
-    fn from(err: io::Error) -> CreateEventSubscriptionError {
-        CreateEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEventSubscriptionError {
@@ -24388,13 +23871,6 @@ impl Error for CreateEventSubscriptionError {
             CreateEventSubscriptionError::SourceNotFoundFault(ref cause) => cause,
             CreateEventSubscriptionError::SubscriptionAlreadyExistFault(ref cause) => cause,
             CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,
-            CreateEventSubscriptionError::Validation(ref cause) => cause,
-            CreateEventSubscriptionError::Credentials(ref err) => err.description(),
-            CreateEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateEventSubscriptionError::ParseError(ref cause) => cause,
-            CreateEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24409,20 +23885,10 @@ pub enum CreateGlobalClusterError {
     GlobalClusterQuotaExceededFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGlobalClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGlobalClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24430,30 +23896,38 @@ impl CreateGlobalClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return CreateGlobalClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "GlobalClusterAlreadyExistsFault" => {
-                        return CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "GlobalClusterQuotaExceededFault" => {
-                        return CreateGlobalClusterError::GlobalClusterQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::GlobalClusterQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return CreateGlobalClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateGlobalClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24462,28 +23936,6 @@ impl CreateGlobalClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateGlobalClusterError {
-    fn from(err: XmlParseError) -> CreateGlobalClusterError {
-        let XmlParseError(message) = err;
-        CreateGlobalClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateGlobalClusterError {
-    fn from(err: CredentialsError) -> CreateGlobalClusterError {
-        CreateGlobalClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGlobalClusterError {
-    fn from(err: HttpDispatchError) -> CreateGlobalClusterError {
-        CreateGlobalClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGlobalClusterError {
-    fn from(err: io::Error) -> CreateGlobalClusterError {
-        CreateGlobalClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateGlobalClusterError {
@@ -24498,13 +23950,6 @@ impl Error for CreateGlobalClusterError {
             CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(ref cause) => cause,
             CreateGlobalClusterError::GlobalClusterQuotaExceededFault(ref cause) => cause,
             CreateGlobalClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            CreateGlobalClusterError::Validation(ref cause) => cause,
-            CreateGlobalClusterError::Credentials(ref err) => err.description(),
-            CreateGlobalClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateGlobalClusterError::ParseError(ref cause) => cause,
-            CreateGlobalClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24515,20 +23960,10 @@ pub enum CreateOptionGroupError {
     OptionGroupAlreadyExistsFault(String),
     /// <p>The quota of 20 option groups was exceeded for this AWS account.</p>
     OptionGroupQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateOptionGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateOptionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateOptionGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24536,20 +23971,24 @@ impl CreateOptionGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OptionGroupAlreadyExistsFault" => {
-                        return CreateOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OptionGroupQuotaExceededFault" => {
-                        return CreateOptionGroupError::OptionGroupQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateOptionGroupError::OptionGroupQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateOptionGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24558,28 +23997,6 @@ impl CreateOptionGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateOptionGroupError {
-    fn from(err: XmlParseError) -> CreateOptionGroupError {
-        let XmlParseError(message) = err;
-        CreateOptionGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateOptionGroupError {
-    fn from(err: CredentialsError) -> CreateOptionGroupError {
-        CreateOptionGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateOptionGroupError {
-    fn from(err: HttpDispatchError) -> CreateOptionGroupError {
-        CreateOptionGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateOptionGroupError {
-    fn from(err: io::Error) -> CreateOptionGroupError {
-        CreateOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateOptionGroupError {
@@ -24592,13 +24009,6 @@ impl Error for CreateOptionGroupError {
         match *self {
             CreateOptionGroupError::OptionGroupAlreadyExistsFault(ref cause) => cause,
             CreateOptionGroupError::OptionGroupQuotaExceededFault(ref cause) => cause,
-            CreateOptionGroupError::Validation(ref cause) => cause,
-            CreateOptionGroupError::Credentials(ref err) => err.description(),
-            CreateOptionGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateOptionGroupError::ParseError(ref cause) => cause,
-            CreateOptionGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24615,20 +24025,10 @@ pub enum DeleteDBClusterError {
     InvalidDBClusterStateFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24636,35 +24036,43 @@ impl DeleteDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return DeleteDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteDBClusterError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
-                        return DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
-                        return DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return DeleteDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotQuotaExceeded" => {
-                        return DeleteDBClusterError::SnapshotQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBClusterError::SnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24673,28 +24081,6 @@ impl DeleteDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBClusterError {
-    fn from(err: XmlParseError) -> DeleteDBClusterError {
-        let XmlParseError(message) = err;
-        DeleteDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBClusterError {
-    fn from(err: CredentialsError) -> DeleteDBClusterError {
-        DeleteDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBClusterError {
-    fn from(err: HttpDispatchError) -> DeleteDBClusterError {
-        DeleteDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBClusterError {
-    fn from(err: io::Error) -> DeleteDBClusterError {
-        DeleteDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBClusterError {
@@ -24710,11 +24096,6 @@ impl Error for DeleteDBClusterError {
             DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
             DeleteDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
             DeleteDBClusterError::SnapshotQuotaExceededFault(ref cause) => cause,
-            DeleteDBClusterError::Validation(ref cause) => cause,
-            DeleteDBClusterError::Credentials(ref err) => err.description(),
-            DeleteDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDBClusterError::ParseError(ref cause) => cause,
-            DeleteDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24727,20 +24108,10 @@ pub enum DeleteDBClusterEndpointError {
     InvalidDBClusterEndpointStateFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBClusterEndpointError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBClusterEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterEndpointError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24748,25 +24119,31 @@ impl DeleteDBClusterEndpointError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterEndpointNotFoundFault" => {
-                        return DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterEndpointStateFault" => {
-                        return DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return DeleteDBClusterEndpointError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterEndpointError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBClusterEndpointError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24775,28 +24152,6 @@ impl DeleteDBClusterEndpointError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBClusterEndpointError {
-    fn from(err: XmlParseError) -> DeleteDBClusterEndpointError {
-        let XmlParseError(message) = err;
-        DeleteDBClusterEndpointError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBClusterEndpointError {
-    fn from(err: CredentialsError) -> DeleteDBClusterEndpointError {
-        DeleteDBClusterEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBClusterEndpointError {
-    fn from(err: HttpDispatchError) -> DeleteDBClusterEndpointError {
-        DeleteDBClusterEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBClusterEndpointError {
-    fn from(err: io::Error) -> DeleteDBClusterEndpointError {
-        DeleteDBClusterEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBClusterEndpointError {
@@ -24810,13 +24165,6 @@ impl Error for DeleteDBClusterEndpointError {
             DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(ref cause) => cause,
             DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(ref cause) => cause,
             DeleteDBClusterEndpointError::InvalidDBClusterStateFault(ref cause) => cause,
-            DeleteDBClusterEndpointError::Validation(ref cause) => cause,
-            DeleteDBClusterEndpointError::Credentials(ref err) => err.description(),
-            DeleteDBClusterEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDBClusterEndpointError::ParseError(ref cause) => cause,
-            DeleteDBClusterEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24827,20 +24175,12 @@ pub enum DeleteDBClusterParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you can't delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteDBClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24848,20 +24188,24 @@ impl DeleteDBClusterParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBParameterGroupState" => {
-                        return DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24870,28 +24214,6 @@ impl DeleteDBClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBClusterParameterGroupError {
-    fn from(err: XmlParseError) -> DeleteDBClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        DeleteDBClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBClusterParameterGroupError {
-    fn from(err: CredentialsError) -> DeleteDBClusterParameterGroupError {
-        DeleteDBClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> DeleteDBClusterParameterGroupError {
-        DeleteDBClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBClusterParameterGroupError {
-    fn from(err: io::Error) -> DeleteDBClusterParameterGroupError {
-        DeleteDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBClusterParameterGroupError {
@@ -24906,13 +24228,6 @@ impl Error for DeleteDBClusterParameterGroupError {
             DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
                 cause
             }
-            DeleteDBClusterParameterGroupError::Validation(ref cause) => cause,
-            DeleteDBClusterParameterGroupError::Credentials(ref err) => err.description(),
-            DeleteDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDBClusterParameterGroupError::ParseError(ref cause) => cause,
-            DeleteDBClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24923,20 +24238,10 @@ pub enum DeleteDBClusterSnapshotError {
     DBClusterSnapshotNotFoundFault(String),
     /// <p>The supplied value isn't a valid DB cluster snapshot state.</p>
     InvalidDBClusterSnapshotStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24944,20 +24249,24 @@ impl DeleteDBClusterSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterSnapshotNotFoundFault" => {
-                        return DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
-                        return DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24966,28 +24275,6 @@ impl DeleteDBClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBClusterSnapshotError {
-    fn from(err: XmlParseError) -> DeleteDBClusterSnapshotError {
-        let XmlParseError(message) = err;
-        DeleteDBClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBClusterSnapshotError {
-    fn from(err: CredentialsError) -> DeleteDBClusterSnapshotError {
-        DeleteDBClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> DeleteDBClusterSnapshotError {
-        DeleteDBClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBClusterSnapshotError {
-    fn from(err: io::Error) -> DeleteDBClusterSnapshotError {
-        DeleteDBClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBClusterSnapshotError {
@@ -25000,13 +24287,6 @@ impl Error for DeleteDBClusterSnapshotError {
         match *self {
             DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
             DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(ref cause) => cause,
-            DeleteDBClusterSnapshotError::Validation(ref cause) => cause,
-            DeleteDBClusterSnapshotError::Credentials(ref err) => err.description(),
-            DeleteDBClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDBClusterSnapshotError::ParseError(ref cause) => cause,
-            DeleteDBClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25025,20 +24305,10 @@ pub enum DeleteDBInstanceError {
     InvalidDBInstanceStateFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25046,40 +24316,50 @@ impl DeleteDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceAutomatedBackupQuotaExceeded" => {
-                        return DeleteDBInstanceError::DBInstanceAutomatedBackupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBInstanceError::DBInstanceAutomatedBackupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBInstanceNotFound" => {
-                        return DeleteDBInstanceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteDBInstanceError::DBInstanceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBSnapshotAlreadyExists" => {
-                        return DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return DeleteDBInstanceError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBInstanceError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotQuotaExceeded" => {
-                        return DeleteDBInstanceError::SnapshotQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBInstanceError::SnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25088,28 +24368,6 @@ impl DeleteDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBInstanceError {
-    fn from(err: XmlParseError) -> DeleteDBInstanceError {
-        let XmlParseError(message) = err;
-        DeleteDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBInstanceError {
-    fn from(err: CredentialsError) -> DeleteDBInstanceError {
-        DeleteDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBInstanceError {
-    fn from(err: HttpDispatchError) -> DeleteDBInstanceError {
-        DeleteDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBInstanceError {
-    fn from(err: io::Error) -> DeleteDBInstanceError {
-        DeleteDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBInstanceError {
@@ -25126,11 +24384,6 @@ impl Error for DeleteDBInstanceError {
             DeleteDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
             DeleteDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
             DeleteDBInstanceError::SnapshotQuotaExceededFault(ref cause) => cause,
-            DeleteDBInstanceError::Validation(ref cause) => cause,
-            DeleteDBInstanceError::Credentials(ref err) => err.description(),
-            DeleteDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDBInstanceError::ParseError(ref cause) => cause,
-            DeleteDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25141,31 +24394,23 @@ pub enum DeleteDBInstanceAutomatedBackupError {
     DBInstanceAutomatedBackupNotFoundFault(String),
     /// <p>The automated backup is in an invalid state. For example, this automated backup is associated with an active instance. </p>
     InvalidDBInstanceAutomatedBackupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBInstanceAutomatedBackupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBInstanceAutomatedBackupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteDBInstanceAutomatedBackupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBInstanceAutomatedBackupNotFound" => return DeleteDBInstanceAutomatedBackupError::DBInstanceAutomatedBackupNotFoundFault(String::from(parsed_error.message)),"InvalidDBInstanceAutomatedBackupState" => return DeleteDBInstanceAutomatedBackupError::InvalidDBInstanceAutomatedBackupStateFault(String::from(parsed_error.message)),_ => {}
+                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::DBInstanceAutomatedBackupNotFoundFault(String::from(parsed_error.message))),"InvalidDBInstanceAutomatedBackupState" => return RusotoError::Service(DeleteDBInstanceAutomatedBackupError::InvalidDBInstanceAutomatedBackupStateFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        DeleteDBInstanceAutomatedBackupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25174,28 +24419,6 @@ impl DeleteDBInstanceAutomatedBackupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBInstanceAutomatedBackupError {
-    fn from(err: XmlParseError) -> DeleteDBInstanceAutomatedBackupError {
-        let XmlParseError(message) = err;
-        DeleteDBInstanceAutomatedBackupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBInstanceAutomatedBackupError {
-    fn from(err: CredentialsError) -> DeleteDBInstanceAutomatedBackupError {
-        DeleteDBInstanceAutomatedBackupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBInstanceAutomatedBackupError {
-    fn from(err: HttpDispatchError) -> DeleteDBInstanceAutomatedBackupError {
-        DeleteDBInstanceAutomatedBackupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBInstanceAutomatedBackupError {
-    fn from(err: io::Error) -> DeleteDBInstanceAutomatedBackupError {
-        DeleteDBInstanceAutomatedBackupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBInstanceAutomatedBackupError {
@@ -25212,13 +24435,6 @@ impl Error for DeleteDBInstanceAutomatedBackupError {
             DeleteDBInstanceAutomatedBackupError::InvalidDBInstanceAutomatedBackupStateFault(
                 ref cause,
             ) => cause,
-            DeleteDBInstanceAutomatedBackupError::Validation(ref cause) => cause,
-            DeleteDBInstanceAutomatedBackupError::Credentials(ref err) => err.description(),
-            DeleteDBInstanceAutomatedBackupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDBInstanceAutomatedBackupError::ParseError(ref cause) => cause,
-            DeleteDBInstanceAutomatedBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25229,20 +24445,10 @@ pub enum DeleteDBParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you can't delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25250,20 +24456,24 @@ impl DeleteDBParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBParameterGroupState" => {
-                        return DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25272,28 +24482,6 @@ impl DeleteDBParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBParameterGroupError {
-    fn from(err: XmlParseError) -> DeleteDBParameterGroupError {
-        let XmlParseError(message) = err;
-        DeleteDBParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBParameterGroupError {
-    fn from(err: CredentialsError) -> DeleteDBParameterGroupError {
-        DeleteDBParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBParameterGroupError {
-    fn from(err: HttpDispatchError) -> DeleteDBParameterGroupError {
-        DeleteDBParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBParameterGroupError {
-    fn from(err: io::Error) -> DeleteDBParameterGroupError {
-        DeleteDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBParameterGroupError {
@@ -25306,13 +24494,6 @@ impl Error for DeleteDBParameterGroupError {
         match *self {
             DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
             DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
-            DeleteDBParameterGroupError::Validation(ref cause) => cause,
-            DeleteDBParameterGroupError::Credentials(ref err) => err.description(),
-            DeleteDBParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDBParameterGroupError::ParseError(ref cause) => cause,
-            DeleteDBParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25323,20 +24504,10 @@ pub enum DeleteDBSecurityGroupError {
     DBSecurityGroupNotFoundFault(String),
     /// <p>The state of the DB security group doesn't allow deletion.</p>
     InvalidDBSecurityGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBSecurityGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBSecurityGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBSecurityGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25344,20 +24515,24 @@ impl DeleteDBSecurityGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSecurityGroupNotFound" => {
-                        return DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBSecurityGroupState" => {
-                        return DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBSecurityGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25366,28 +24541,6 @@ impl DeleteDBSecurityGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBSecurityGroupError {
-    fn from(err: XmlParseError) -> DeleteDBSecurityGroupError {
-        let XmlParseError(message) = err;
-        DeleteDBSecurityGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBSecurityGroupError {
-    fn from(err: CredentialsError) -> DeleteDBSecurityGroupError {
-        DeleteDBSecurityGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBSecurityGroupError {
-    fn from(err: HttpDispatchError) -> DeleteDBSecurityGroupError {
-        DeleteDBSecurityGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBSecurityGroupError {
-    fn from(err: io::Error) -> DeleteDBSecurityGroupError {
-        DeleteDBSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBSecurityGroupError {
@@ -25400,13 +24553,6 @@ impl Error for DeleteDBSecurityGroupError {
         match *self {
             DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(ref cause) => cause,
             DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
-            DeleteDBSecurityGroupError::Validation(ref cause) => cause,
-            DeleteDBSecurityGroupError::Credentials(ref err) => err.description(),
-            DeleteDBSecurityGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDBSecurityGroupError::ParseError(ref cause) => cause,
-            DeleteDBSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25417,20 +24563,10 @@ pub enum DeleteDBSnapshotError {
     DBSnapshotNotFoundFault(String),
     /// <p>The state of the DB snapshot doesn't allow deletion.</p>
     InvalidDBSnapshotStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25438,20 +24574,22 @@ impl DeleteDBSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotNotFound" => {
-                        return DeleteDBSnapshotError::DBSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteDBSnapshotError::DBSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDBSnapshotState" => {
-                        return DeleteDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25460,28 +24598,6 @@ impl DeleteDBSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBSnapshotError {
-    fn from(err: XmlParseError) -> DeleteDBSnapshotError {
-        let XmlParseError(message) = err;
-        DeleteDBSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBSnapshotError {
-    fn from(err: CredentialsError) -> DeleteDBSnapshotError {
-        DeleteDBSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBSnapshotError {
-    fn from(err: HttpDispatchError) -> DeleteDBSnapshotError {
-        DeleteDBSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBSnapshotError {
-    fn from(err: io::Error) -> DeleteDBSnapshotError {
-        DeleteDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBSnapshotError {
@@ -25494,11 +24610,6 @@ impl Error for DeleteDBSnapshotError {
         match *self {
             DeleteDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
             DeleteDBSnapshotError::InvalidDBSnapshotStateFault(ref cause) => cause,
-            DeleteDBSnapshotError::Validation(ref cause) => cause,
-            DeleteDBSnapshotError::Credentials(ref err) => err.description(),
-            DeleteDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDBSnapshotError::ParseError(ref cause) => cause,
-            DeleteDBSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25511,20 +24622,10 @@ pub enum DeleteDBSubnetGroupError {
     InvalidDBSubnetGroupStateFault(String),
     /// <p> The DB subnet isn't in the <i>available</i> state. </p>
     InvalidDBSubnetStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDBSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDBSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBSubnetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25532,25 +24633,31 @@ impl DeleteDBSubnetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSubnetGroupNotFoundFault" => {
-                        return DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBSubnetGroupStateFault" => {
-                        return DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBSubnetStateFault" => {
-                        return DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDBSubnetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25559,28 +24666,6 @@ impl DeleteDBSubnetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDBSubnetGroupError {
-    fn from(err: XmlParseError) -> DeleteDBSubnetGroupError {
-        let XmlParseError(message) = err;
-        DeleteDBSubnetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDBSubnetGroupError {
-    fn from(err: CredentialsError) -> DeleteDBSubnetGroupError {
-        DeleteDBSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDBSubnetGroupError {
-    fn from(err: HttpDispatchError) -> DeleteDBSubnetGroupError {
-        DeleteDBSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDBSubnetGroupError {
-    fn from(err: io::Error) -> DeleteDBSubnetGroupError {
-        DeleteDBSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDBSubnetGroupError {
@@ -25594,13 +24679,6 @@ impl Error for DeleteDBSubnetGroupError {
             DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(ref cause) => cause,
             DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(ref cause) => cause,
             DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(ref cause) => cause,
-            DeleteDBSubnetGroupError::Validation(ref cause) => cause,
-            DeleteDBSubnetGroupError::Credentials(ref err) => err.description(),
-            DeleteDBSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDBSubnetGroupError::ParseError(ref cause) => cause,
-            DeleteDBSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25611,20 +24689,10 @@ pub enum DeleteEventSubscriptionError {
     InvalidEventSubscriptionStateFault(String),
     /// <p>The subscription name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEventSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25632,20 +24700,24 @@ impl DeleteEventSubscriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidEventSubscriptionState" => {
-                        return DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionNotFound" => {
-                        return DeleteEventSubscriptionError::SubscriptionNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteEventSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25654,28 +24726,6 @@ impl DeleteEventSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteEventSubscriptionError {
-    fn from(err: XmlParseError) -> DeleteEventSubscriptionError {
-        let XmlParseError(message) = err;
-        DeleteEventSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEventSubscriptionError {
-    fn from(err: CredentialsError) -> DeleteEventSubscriptionError {
-        DeleteEventSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEventSubscriptionError {
-    fn from(err: HttpDispatchError) -> DeleteEventSubscriptionError {
-        DeleteEventSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEventSubscriptionError {
-    fn from(err: io::Error) -> DeleteEventSubscriptionError {
-        DeleteEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEventSubscriptionError {
@@ -25688,13 +24738,6 @@ impl Error for DeleteEventSubscriptionError {
         match *self {
             DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(ref cause) => cause,
             DeleteEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
-            DeleteEventSubscriptionError::Validation(ref cause) => cause,
-            DeleteEventSubscriptionError::Credentials(ref err) => err.description(),
-            DeleteEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEventSubscriptionError::ParseError(ref cause) => cause,
-            DeleteEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25705,20 +24748,10 @@ pub enum DeleteGlobalClusterError {
     GlobalClusterNotFoundFault(String),
     /// <p><p/></p>
     InvalidGlobalClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGlobalClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGlobalClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25726,20 +24759,24 @@ impl DeleteGlobalClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "GlobalClusterNotFoundFault" => {
-                        return DeleteGlobalClusterError::GlobalClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteGlobalClusterError::GlobalClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidGlobalClusterStateFault" => {
-                        return DeleteGlobalClusterError::InvalidGlobalClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteGlobalClusterError::InvalidGlobalClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteGlobalClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25748,28 +24785,6 @@ impl DeleteGlobalClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteGlobalClusterError {
-    fn from(err: XmlParseError) -> DeleteGlobalClusterError {
-        let XmlParseError(message) = err;
-        DeleteGlobalClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGlobalClusterError {
-    fn from(err: CredentialsError) -> DeleteGlobalClusterError {
-        DeleteGlobalClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGlobalClusterError {
-    fn from(err: HttpDispatchError) -> DeleteGlobalClusterError {
-        DeleteGlobalClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGlobalClusterError {
-    fn from(err: io::Error) -> DeleteGlobalClusterError {
-        DeleteGlobalClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteGlobalClusterError {
@@ -25782,13 +24797,6 @@ impl Error for DeleteGlobalClusterError {
         match *self {
             DeleteGlobalClusterError::GlobalClusterNotFoundFault(ref cause) => cause,
             DeleteGlobalClusterError::InvalidGlobalClusterStateFault(ref cause) => cause,
-            DeleteGlobalClusterError::Validation(ref cause) => cause,
-            DeleteGlobalClusterError::Credentials(ref err) => err.description(),
-            DeleteGlobalClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteGlobalClusterError::ParseError(ref cause) => cause,
-            DeleteGlobalClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25799,20 +24807,10 @@ pub enum DeleteOptionGroupError {
     InvalidOptionGroupStateFault(String),
     /// <p>The specified option group could not be found.</p>
     OptionGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteOptionGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteOptionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteOptionGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25820,20 +24818,24 @@ impl DeleteOptionGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidOptionGroupStateFault" => {
-                        return DeleteOptionGroupError::InvalidOptionGroupStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteOptionGroupError::InvalidOptionGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OptionGroupNotFoundFault" => {
-                        return DeleteOptionGroupError::OptionGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteOptionGroupError::OptionGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteOptionGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25842,28 +24844,6 @@ impl DeleteOptionGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteOptionGroupError {
-    fn from(err: XmlParseError) -> DeleteOptionGroupError {
-        let XmlParseError(message) = err;
-        DeleteOptionGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteOptionGroupError {
-    fn from(err: CredentialsError) -> DeleteOptionGroupError {
-        DeleteOptionGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteOptionGroupError {
-    fn from(err: HttpDispatchError) -> DeleteOptionGroupError {
-        DeleteOptionGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteOptionGroupError {
-    fn from(err: io::Error) -> DeleteOptionGroupError {
-        DeleteOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteOptionGroupError {
@@ -25876,33 +24856,15 @@ impl Error for DeleteOptionGroupError {
         match *self {
             DeleteOptionGroupError::InvalidOptionGroupStateFault(ref cause) => cause,
             DeleteOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,
-            DeleteOptionGroupError::Validation(ref cause) => cause,
-            DeleteOptionGroupError::Credentials(ref err) => err.description(),
-            DeleteOptionGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteOptionGroupError::ParseError(ref cause) => cause,
-            DeleteOptionGroupError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
-pub enum DescribeAccountAttributesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeAccountAttributesError {}
 
 impl DescribeAccountAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25913,7 +24875,7 @@ impl DescribeAccountAttributesError {
                 }
             }
         }
-        DescribeAccountAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25922,28 +24884,6 @@ impl DescribeAccountAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeAccountAttributesError {
-    fn from(err: XmlParseError) -> DescribeAccountAttributesError {
-        let XmlParseError(message) = err;
-        DescribeAccountAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAccountAttributesError {
-    fn from(err: CredentialsError) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAccountAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAccountAttributesError {
-    fn from(err: io::Error) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -25953,15 +24893,7 @@ impl fmt::Display for DescribeAccountAttributesError {
 }
 impl Error for DescribeAccountAttributesError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeAccountAttributesError::Validation(ref cause) => cause,
-            DescribeAccountAttributesError::Credentials(ref err) => err.description(),
-            DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAccountAttributesError::ParseError(ref cause) => cause,
-            DescribeAccountAttributesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeCertificates
@@ -25969,20 +24901,10 @@ impl Error for DescribeAccountAttributesError {
 pub enum DescribeCertificatesError {
     /// <p> <i>CertificateIdentifier</i> doesn't refer to an existing certificate. </p>
     CertificateNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25990,15 +24912,17 @@ impl DescribeCertificatesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CertificateNotFound" => {
-                        return DescribeCertificatesError::CertificateNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeCertificatesError::CertificateNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeCertificatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26007,28 +24931,6 @@ impl DescribeCertificatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeCertificatesError {
-    fn from(err: XmlParseError) -> DescribeCertificatesError {
-        let XmlParseError(message) = err;
-        DescribeCertificatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCertificatesError {
-    fn from(err: CredentialsError) -> DescribeCertificatesError {
-        DescribeCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCertificatesError {
-    fn from(err: HttpDispatchError) -> DescribeCertificatesError {
-        DescribeCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCertificatesError {
-    fn from(err: io::Error) -> DescribeCertificatesError {
-        DescribeCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeCertificatesError {
@@ -26040,13 +24942,6 @@ impl Error for DescribeCertificatesError {
     fn description(&self) -> &str {
         match *self {
             DescribeCertificatesError::CertificateNotFoundFault(ref cause) => cause,
-            DescribeCertificatesError::Validation(ref cause) => cause,
-            DescribeCertificatesError::Credentials(ref err) => err.description(),
-            DescribeCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCertificatesError::ParseError(ref cause) => cause,
-            DescribeCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26057,20 +24952,12 @@ pub enum DescribeDBClusterBacktracksError {
     DBClusterBacktrackNotFoundFault(String),
     /// <p> <i>DBClusterIdentifier</i> doesn't refer to an existing DB cluster. </p>
     DBClusterNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBClusterBacktracksError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBClusterBacktracksError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBClusterBacktracksError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26078,20 +24965,24 @@ impl DescribeDBClusterBacktracksError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterBacktrackNotFoundFault" => {
-                        return DescribeDBClusterBacktracksError::DBClusterBacktrackNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBClusterBacktracksError::DBClusterBacktrackNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBClusterNotFoundFault" => {
-                        return DescribeDBClusterBacktracksError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBClusterBacktracksError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBClusterBacktracksError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26100,28 +24991,6 @@ impl DescribeDBClusterBacktracksError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBClusterBacktracksError {
-    fn from(err: XmlParseError) -> DescribeDBClusterBacktracksError {
-        let XmlParseError(message) = err;
-        DescribeDBClusterBacktracksError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBClusterBacktracksError {
-    fn from(err: CredentialsError) -> DescribeDBClusterBacktracksError {
-        DescribeDBClusterBacktracksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBClusterBacktracksError {
-    fn from(err: HttpDispatchError) -> DescribeDBClusterBacktracksError {
-        DescribeDBClusterBacktracksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBClusterBacktracksError {
-    fn from(err: io::Error) -> DescribeDBClusterBacktracksError {
-        DescribeDBClusterBacktracksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterBacktracksError {
@@ -26134,13 +25003,6 @@ impl Error for DescribeDBClusterBacktracksError {
         match *self {
             DescribeDBClusterBacktracksError::DBClusterBacktrackNotFoundFault(ref cause) => cause,
             DescribeDBClusterBacktracksError::DBClusterNotFoundFault(ref cause) => cause,
-            DescribeDBClusterBacktracksError::Validation(ref cause) => cause,
-            DescribeDBClusterBacktracksError::Credentials(ref err) => err.description(),
-            DescribeDBClusterBacktracksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBClusterBacktracksError::ParseError(ref cause) => cause,
-            DescribeDBClusterBacktracksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26149,20 +25011,12 @@ impl Error for DescribeDBClusterBacktracksError {
 pub enum DescribeDBClusterEndpointsError {
     /// <p> <i>DBClusterIdentifier</i> doesn't refer to an existing DB cluster. </p>
     DBClusterNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBClusterEndpointsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBClusterEndpointsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBClusterEndpointsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26170,15 +25024,17 @@ impl DescribeDBClusterEndpointsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return DescribeDBClusterEndpointsError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBClusterEndpointsError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBClusterEndpointsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26187,28 +25043,6 @@ impl DescribeDBClusterEndpointsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBClusterEndpointsError {
-    fn from(err: XmlParseError) -> DescribeDBClusterEndpointsError {
-        let XmlParseError(message) = err;
-        DescribeDBClusterEndpointsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBClusterEndpointsError {
-    fn from(err: CredentialsError) -> DescribeDBClusterEndpointsError {
-        DescribeDBClusterEndpointsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBClusterEndpointsError {
-    fn from(err: HttpDispatchError) -> DescribeDBClusterEndpointsError {
-        DescribeDBClusterEndpointsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBClusterEndpointsError {
-    fn from(err: io::Error) -> DescribeDBClusterEndpointsError {
-        DescribeDBClusterEndpointsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterEndpointsError {
@@ -26220,13 +25054,6 @@ impl Error for DescribeDBClusterEndpointsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBClusterEndpointsError::DBClusterNotFoundFault(ref cause) => cause,
-            DescribeDBClusterEndpointsError::Validation(ref cause) => cause,
-            DescribeDBClusterEndpointsError::Credentials(ref err) => err.description(),
-            DescribeDBClusterEndpointsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBClusterEndpointsError::ParseError(ref cause) => cause,
-            DescribeDBClusterEndpointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26235,20 +25062,12 @@ impl Error for DescribeDBClusterEndpointsError {
 pub enum DescribeDBClusterParameterGroupsError {
     /// <p> <i>DBParameterGroupName</i> doesn't refer to an existing DB parameter group. </p>
     DBParameterGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBClusterParameterGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBClusterParameterGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBClusterParameterGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26256,15 +25075,17 @@ impl DescribeDBClusterParameterGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBClusterParameterGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26273,28 +25094,6 @@ impl DescribeDBClusterParameterGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBClusterParameterGroupsError {
-    fn from(err: XmlParseError) -> DescribeDBClusterParameterGroupsError {
-        let XmlParseError(message) = err;
-        DescribeDBClusterParameterGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBClusterParameterGroupsError {
-    fn from(err: CredentialsError) -> DescribeDBClusterParameterGroupsError {
-        DescribeDBClusterParameterGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBClusterParameterGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeDBClusterParameterGroupsError {
-        DescribeDBClusterParameterGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBClusterParameterGroupsError {
-    fn from(err: io::Error) -> DescribeDBClusterParameterGroupsError {
-        DescribeDBClusterParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterParameterGroupsError {
@@ -26308,13 +25107,6 @@ impl Error for DescribeDBClusterParameterGroupsError {
             DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => {
                 cause
             }
-            DescribeDBClusterParameterGroupsError::Validation(ref cause) => cause,
-            DescribeDBClusterParameterGroupsError::Credentials(ref err) => err.description(),
-            DescribeDBClusterParameterGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBClusterParameterGroupsError::ParseError(ref cause) => cause,
-            DescribeDBClusterParameterGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26323,20 +25115,12 @@ impl Error for DescribeDBClusterParameterGroupsError {
 pub enum DescribeDBClusterParametersError {
     /// <p> <i>DBParameterGroupName</i> doesn't refer to an existing DB parameter group. </p>
     DBParameterGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBClusterParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBClusterParametersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBClusterParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26344,15 +25128,17 @@ impl DescribeDBClusterParametersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBClusterParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26361,28 +25147,6 @@ impl DescribeDBClusterParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBClusterParametersError {
-    fn from(err: XmlParseError) -> DescribeDBClusterParametersError {
-        let XmlParseError(message) = err;
-        DescribeDBClusterParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBClusterParametersError {
-    fn from(err: CredentialsError) -> DescribeDBClusterParametersError {
-        DescribeDBClusterParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBClusterParametersError {
-    fn from(err: HttpDispatchError) -> DescribeDBClusterParametersError {
-        DescribeDBClusterParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBClusterParametersError {
-    fn from(err: io::Error) -> DescribeDBClusterParametersError {
-        DescribeDBClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterParametersError {
@@ -26394,13 +25158,6 @@ impl Error for DescribeDBClusterParametersError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeDBClusterParametersError::Validation(ref cause) => cause,
-            DescribeDBClusterParametersError::Credentials(ref err) => err.description(),
-            DescribeDBClusterParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBClusterParametersError::ParseError(ref cause) => cause,
-            DescribeDBClusterParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26409,31 +25166,28 @@ impl Error for DescribeDBClusterParametersError {
 pub enum DescribeDBClusterSnapshotAttributesError {
     /// <p> <i>DBClusterSnapshotIdentifier</i> doesn't refer to an existing DB cluster snapshot. </p>
     DBClusterSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBClusterSnapshotAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBClusterSnapshotAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBClusterSnapshotAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBClusterSnapshotNotFoundFault" => return DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DBClusterSnapshotNotFoundFault" => return RusotoError::Service(
+                        DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        DescribeDBClusterSnapshotAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26442,28 +25196,6 @@ impl DescribeDBClusterSnapshotAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBClusterSnapshotAttributesError {
-    fn from(err: XmlParseError) -> DescribeDBClusterSnapshotAttributesError {
-        let XmlParseError(message) = err;
-        DescribeDBClusterSnapshotAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBClusterSnapshotAttributesError {
-    fn from(err: CredentialsError) -> DescribeDBClusterSnapshotAttributesError {
-        DescribeDBClusterSnapshotAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBClusterSnapshotAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeDBClusterSnapshotAttributesError {
-        DescribeDBClusterSnapshotAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBClusterSnapshotAttributesError {
-    fn from(err: io::Error) -> DescribeDBClusterSnapshotAttributesError {
-        DescribeDBClusterSnapshotAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterSnapshotAttributesError {
@@ -26477,13 +25209,6 @@ impl Error for DescribeDBClusterSnapshotAttributesError {
             DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(ref cause) => {
                 cause
             }
-            DescribeDBClusterSnapshotAttributesError::Validation(ref cause) => cause,
-            DescribeDBClusterSnapshotAttributesError::Credentials(ref err) => err.description(),
-            DescribeDBClusterSnapshotAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBClusterSnapshotAttributesError::ParseError(ref cause) => cause,
-            DescribeDBClusterSnapshotAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26492,20 +25217,12 @@ impl Error for DescribeDBClusterSnapshotAttributesError {
 pub enum DescribeDBClusterSnapshotsError {
     /// <p> <i>DBClusterSnapshotIdentifier</i> doesn't refer to an existing DB cluster snapshot. </p>
     DBClusterSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBClusterSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBClusterSnapshotsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBClusterSnapshotsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26513,15 +25230,17 @@ impl DescribeDBClusterSnapshotsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterSnapshotNotFoundFault" => {
-                        return DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBClusterSnapshotsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26530,28 +25249,6 @@ impl DescribeDBClusterSnapshotsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBClusterSnapshotsError {
-    fn from(err: XmlParseError) -> DescribeDBClusterSnapshotsError {
-        let XmlParseError(message) = err;
-        DescribeDBClusterSnapshotsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBClusterSnapshotsError {
-    fn from(err: CredentialsError) -> DescribeDBClusterSnapshotsError {
-        DescribeDBClusterSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBClusterSnapshotsError {
-    fn from(err: HttpDispatchError) -> DescribeDBClusterSnapshotsError {
-        DescribeDBClusterSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBClusterSnapshotsError {
-    fn from(err: io::Error) -> DescribeDBClusterSnapshotsError {
-        DescribeDBClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClusterSnapshotsError {
@@ -26563,13 +25260,6 @@ impl Error for DescribeDBClusterSnapshotsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
-            DescribeDBClusterSnapshotsError::Validation(ref cause) => cause,
-            DescribeDBClusterSnapshotsError::Credentials(ref err) => err.description(),
-            DescribeDBClusterSnapshotsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBClusterSnapshotsError::ParseError(ref cause) => cause,
-            DescribeDBClusterSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26578,20 +25268,10 @@ impl Error for DescribeDBClusterSnapshotsError {
 pub enum DescribeDBClustersError {
     /// <p> <i>DBClusterIdentifier</i> doesn't refer to an existing DB cluster. </p>
     DBClusterNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBClustersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBClustersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26599,15 +25279,17 @@ impl DescribeDBClustersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return DescribeDBClustersError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeDBClustersError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBClustersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26616,28 +25298,6 @@ impl DescribeDBClustersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBClustersError {
-    fn from(err: XmlParseError) -> DescribeDBClustersError {
-        let XmlParseError(message) = err;
-        DescribeDBClustersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBClustersError {
-    fn from(err: CredentialsError) -> DescribeDBClustersError {
-        DescribeDBClustersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBClustersError {
-    fn from(err: HttpDispatchError) -> DescribeDBClustersError {
-        DescribeDBClustersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBClustersError {
-    fn from(err: io::Error) -> DescribeDBClustersError {
-        DescribeDBClustersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBClustersError {
@@ -26649,33 +25309,15 @@ impl Error for DescribeDBClustersError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBClustersError::DBClusterNotFoundFault(ref cause) => cause,
-            DescribeDBClustersError::Validation(ref cause) => cause,
-            DescribeDBClustersError::Credentials(ref err) => err.description(),
-            DescribeDBClustersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBClustersError::ParseError(ref cause) => cause,
-            DescribeDBClustersError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeDBEngineVersions
 #[derive(Debug, PartialEq)]
-pub enum DescribeDBEngineVersionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeDBEngineVersionsError {}
 
 impl DescribeDBEngineVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBEngineVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBEngineVersionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26686,7 +25328,7 @@ impl DescribeDBEngineVersionsError {
                 }
             }
         }
-        DescribeDBEngineVersionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26695,28 +25337,6 @@ impl DescribeDBEngineVersionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBEngineVersionsError {
-    fn from(err: XmlParseError) -> DescribeDBEngineVersionsError {
-        let XmlParseError(message) = err;
-        DescribeDBEngineVersionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBEngineVersionsError {
-    fn from(err: CredentialsError) -> DescribeDBEngineVersionsError {
-        DescribeDBEngineVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBEngineVersionsError {
-    fn from(err: HttpDispatchError) -> DescribeDBEngineVersionsError {
-        DescribeDBEngineVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBEngineVersionsError {
-    fn from(err: io::Error) -> DescribeDBEngineVersionsError {
-        DescribeDBEngineVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBEngineVersionsError {
@@ -26726,15 +25346,7 @@ impl fmt::Display for DescribeDBEngineVersionsError {
 }
 impl Error for DescribeDBEngineVersionsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeDBEngineVersionsError::Validation(ref cause) => cause,
-            DescribeDBEngineVersionsError::Credentials(ref err) => err.description(),
-            DescribeDBEngineVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBEngineVersionsError::ParseError(ref cause) => cause,
-            DescribeDBEngineVersionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeDBInstanceAutomatedBackups
@@ -26742,31 +25354,23 @@ impl Error for DescribeDBEngineVersionsError {
 pub enum DescribeDBInstanceAutomatedBackupsError {
     /// <p>No automated backup for this DB instance was found.</p>
     DBInstanceAutomatedBackupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBInstanceAutomatedBackupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBInstanceAutomatedBackupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBInstanceAutomatedBackupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBInstanceAutomatedBackupNotFound" => return DescribeDBInstanceAutomatedBackupsError::DBInstanceAutomatedBackupNotFoundFault(String::from(parsed_error.message)),_ => {}
+                                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(DescribeDBInstanceAutomatedBackupsError::DBInstanceAutomatedBackupNotFoundFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        DescribeDBInstanceAutomatedBackupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26775,28 +25379,6 @@ impl DescribeDBInstanceAutomatedBackupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBInstanceAutomatedBackupsError {
-    fn from(err: XmlParseError) -> DescribeDBInstanceAutomatedBackupsError {
-        let XmlParseError(message) = err;
-        DescribeDBInstanceAutomatedBackupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBInstanceAutomatedBackupsError {
-    fn from(err: CredentialsError) -> DescribeDBInstanceAutomatedBackupsError {
-        DescribeDBInstanceAutomatedBackupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBInstanceAutomatedBackupsError {
-    fn from(err: HttpDispatchError) -> DescribeDBInstanceAutomatedBackupsError {
-        DescribeDBInstanceAutomatedBackupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBInstanceAutomatedBackupsError {
-    fn from(err: io::Error) -> DescribeDBInstanceAutomatedBackupsError {
-        DescribeDBInstanceAutomatedBackupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBInstanceAutomatedBackupsError {
@@ -26810,13 +25392,6 @@ impl Error for DescribeDBInstanceAutomatedBackupsError {
             DescribeDBInstanceAutomatedBackupsError::DBInstanceAutomatedBackupNotFoundFault(
                 ref cause,
             ) => cause,
-            DescribeDBInstanceAutomatedBackupsError::Validation(ref cause) => cause,
-            DescribeDBInstanceAutomatedBackupsError::Credentials(ref err) => err.description(),
-            DescribeDBInstanceAutomatedBackupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBInstanceAutomatedBackupsError::ParseError(ref cause) => cause,
-            DescribeDBInstanceAutomatedBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26825,20 +25400,10 @@ impl Error for DescribeDBInstanceAutomatedBackupsError {
 pub enum DescribeDBInstancesError {
     /// <p> <i>DBInstanceIdentifier</i> doesn't refer to an existing DB instance. </p>
     DBInstanceNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBInstancesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26846,15 +25411,17 @@ impl DescribeDBInstancesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return DescribeDBInstancesError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeDBInstancesError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBInstancesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26863,28 +25430,6 @@ impl DescribeDBInstancesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBInstancesError {
-    fn from(err: XmlParseError) -> DescribeDBInstancesError {
-        let XmlParseError(message) = err;
-        DescribeDBInstancesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBInstancesError {
-    fn from(err: CredentialsError) -> DescribeDBInstancesError {
-        DescribeDBInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBInstancesError {
-    fn from(err: HttpDispatchError) -> DescribeDBInstancesError {
-        DescribeDBInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBInstancesError {
-    fn from(err: io::Error) -> DescribeDBInstancesError {
-        DescribeDBInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBInstancesError {
@@ -26896,13 +25441,6 @@ impl Error for DescribeDBInstancesError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBInstancesError::DBInstanceNotFoundFault(ref cause) => cause,
-            DescribeDBInstancesError::Validation(ref cause) => cause,
-            DescribeDBInstancesError::Credentials(ref err) => err.description(),
-            DescribeDBInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBInstancesError::ParseError(ref cause) => cause,
-            DescribeDBInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26911,20 +25449,10 @@ impl Error for DescribeDBInstancesError {
 pub enum DescribeDBLogFilesError {
     /// <p> <i>DBInstanceIdentifier</i> doesn't refer to an existing DB instance. </p>
     DBInstanceNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBLogFilesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBLogFilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBLogFilesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26932,15 +25460,17 @@ impl DescribeDBLogFilesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return DescribeDBLogFilesError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeDBLogFilesError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBLogFilesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26949,28 +25479,6 @@ impl DescribeDBLogFilesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBLogFilesError {
-    fn from(err: XmlParseError) -> DescribeDBLogFilesError {
-        let XmlParseError(message) = err;
-        DescribeDBLogFilesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBLogFilesError {
-    fn from(err: CredentialsError) -> DescribeDBLogFilesError {
-        DescribeDBLogFilesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBLogFilesError {
-    fn from(err: HttpDispatchError) -> DescribeDBLogFilesError {
-        DescribeDBLogFilesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBLogFilesError {
-    fn from(err: io::Error) -> DescribeDBLogFilesError {
-        DescribeDBLogFilesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBLogFilesError {
@@ -26982,13 +25490,6 @@ impl Error for DescribeDBLogFilesError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBLogFilesError::DBInstanceNotFoundFault(ref cause) => cause,
-            DescribeDBLogFilesError::Validation(ref cause) => cause,
-            DescribeDBLogFilesError::Credentials(ref err) => err.description(),
-            DescribeDBLogFilesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBLogFilesError::ParseError(ref cause) => cause,
-            DescribeDBLogFilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26997,20 +25498,10 @@ impl Error for DescribeDBLogFilesError {
 pub enum DescribeDBParameterGroupsError {
     /// <p> <i>DBParameterGroupName</i> doesn't refer to an existing DB parameter group. </p>
     DBParameterGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBParameterGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBParameterGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBParameterGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27018,15 +25509,17 @@ impl DescribeDBParameterGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBParameterGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27035,28 +25528,6 @@ impl DescribeDBParameterGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBParameterGroupsError {
-    fn from(err: XmlParseError) -> DescribeDBParameterGroupsError {
-        let XmlParseError(message) = err;
-        DescribeDBParameterGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBParameterGroupsError {
-    fn from(err: CredentialsError) -> DescribeDBParameterGroupsError {
-        DescribeDBParameterGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBParameterGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeDBParameterGroupsError {
-        DescribeDBParameterGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBParameterGroupsError {
-    fn from(err: io::Error) -> DescribeDBParameterGroupsError {
-        DescribeDBParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBParameterGroupsError {
@@ -27068,13 +25539,6 @@ impl Error for DescribeDBParameterGroupsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeDBParameterGroupsError::Validation(ref cause) => cause,
-            DescribeDBParameterGroupsError::Credentials(ref err) => err.description(),
-            DescribeDBParameterGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBParameterGroupsError::ParseError(ref cause) => cause,
-            DescribeDBParameterGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27083,20 +25547,10 @@ impl Error for DescribeDBParameterGroupsError {
 pub enum DescribeDBParametersError {
     /// <p> <i>DBParameterGroupName</i> doesn't refer to an existing DB parameter group. </p>
     DBParameterGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27104,15 +25558,17 @@ impl DescribeDBParametersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return DescribeDBParametersError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBParametersError::DBParameterGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27121,28 +25577,6 @@ impl DescribeDBParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBParametersError {
-    fn from(err: XmlParseError) -> DescribeDBParametersError {
-        let XmlParseError(message) = err;
-        DescribeDBParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBParametersError {
-    fn from(err: CredentialsError) -> DescribeDBParametersError {
-        DescribeDBParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBParametersError {
-    fn from(err: HttpDispatchError) -> DescribeDBParametersError {
-        DescribeDBParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBParametersError {
-    fn from(err: io::Error) -> DescribeDBParametersError {
-        DescribeDBParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBParametersError {
@@ -27154,13 +25588,6 @@ impl Error for DescribeDBParametersError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBParametersError::DBParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeDBParametersError::Validation(ref cause) => cause,
-            DescribeDBParametersError::Credentials(ref err) => err.description(),
-            DescribeDBParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBParametersError::ParseError(ref cause) => cause,
-            DescribeDBParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27169,20 +25596,10 @@ impl Error for DescribeDBParametersError {
 pub enum DescribeDBSecurityGroupsError {
     /// <p> <i>DBSecurityGroupName</i> doesn't refer to an existing DB security group. </p>
     DBSecurityGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBSecurityGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBSecurityGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBSecurityGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27190,15 +25607,17 @@ impl DescribeDBSecurityGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSecurityGroupNotFound" => {
-                        return DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBSecurityGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27207,28 +25626,6 @@ impl DescribeDBSecurityGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBSecurityGroupsError {
-    fn from(err: XmlParseError) -> DescribeDBSecurityGroupsError {
-        let XmlParseError(message) = err;
-        DescribeDBSecurityGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBSecurityGroupsError {
-    fn from(err: CredentialsError) -> DescribeDBSecurityGroupsError {
-        DescribeDBSecurityGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBSecurityGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeDBSecurityGroupsError {
-        DescribeDBSecurityGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBSecurityGroupsError {
-    fn from(err: io::Error) -> DescribeDBSecurityGroupsError {
-        DescribeDBSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBSecurityGroupsError {
@@ -27240,13 +25637,6 @@ impl Error for DescribeDBSecurityGroupsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(ref cause) => cause,
-            DescribeDBSecurityGroupsError::Validation(ref cause) => cause,
-            DescribeDBSecurityGroupsError::Credentials(ref err) => err.description(),
-            DescribeDBSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBSecurityGroupsError::ParseError(ref cause) => cause,
-            DescribeDBSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27255,20 +25645,12 @@ impl Error for DescribeDBSecurityGroupsError {
 pub enum DescribeDBSnapshotAttributesError {
     /// <p> <i>DBSnapshotIdentifier</i> doesn't refer to an existing DB snapshot. </p>
     DBSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBSnapshotAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBSnapshotAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBSnapshotAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27276,15 +25658,17 @@ impl DescribeDBSnapshotAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotNotFound" => {
-                        return DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBSnapshotAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27293,28 +25677,6 @@ impl DescribeDBSnapshotAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBSnapshotAttributesError {
-    fn from(err: XmlParseError) -> DescribeDBSnapshotAttributesError {
-        let XmlParseError(message) = err;
-        DescribeDBSnapshotAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBSnapshotAttributesError {
-    fn from(err: CredentialsError) -> DescribeDBSnapshotAttributesError {
-        DescribeDBSnapshotAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBSnapshotAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeDBSnapshotAttributesError {
-        DescribeDBSnapshotAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBSnapshotAttributesError {
-    fn from(err: io::Error) -> DescribeDBSnapshotAttributesError {
-        DescribeDBSnapshotAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBSnapshotAttributesError {
@@ -27326,13 +25688,6 @@ impl Error for DescribeDBSnapshotAttributesError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(ref cause) => cause,
-            DescribeDBSnapshotAttributesError::Validation(ref cause) => cause,
-            DescribeDBSnapshotAttributesError::Credentials(ref err) => err.description(),
-            DescribeDBSnapshotAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBSnapshotAttributesError::ParseError(ref cause) => cause,
-            DescribeDBSnapshotAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27341,20 +25696,10 @@ impl Error for DescribeDBSnapshotAttributesError {
 pub enum DescribeDBSnapshotsError {
     /// <p> <i>DBSnapshotIdentifier</i> doesn't refer to an existing DB snapshot. </p>
     DBSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBSnapshotsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27362,15 +25707,17 @@ impl DescribeDBSnapshotsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotNotFound" => {
-                        return DescribeDBSnapshotsError::DBSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeDBSnapshotsError::DBSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBSnapshotsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27379,28 +25726,6 @@ impl DescribeDBSnapshotsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBSnapshotsError {
-    fn from(err: XmlParseError) -> DescribeDBSnapshotsError {
-        let XmlParseError(message) = err;
-        DescribeDBSnapshotsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBSnapshotsError {
-    fn from(err: CredentialsError) -> DescribeDBSnapshotsError {
-        DescribeDBSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBSnapshotsError {
-    fn from(err: HttpDispatchError) -> DescribeDBSnapshotsError {
-        DescribeDBSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBSnapshotsError {
-    fn from(err: io::Error) -> DescribeDBSnapshotsError {
-        DescribeDBSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBSnapshotsError {
@@ -27412,13 +25737,6 @@ impl Error for DescribeDBSnapshotsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBSnapshotsError::DBSnapshotNotFoundFault(ref cause) => cause,
-            DescribeDBSnapshotsError::Validation(ref cause) => cause,
-            DescribeDBSnapshotsError::Credentials(ref err) => err.description(),
-            DescribeDBSnapshotsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBSnapshotsError::ParseError(ref cause) => cause,
-            DescribeDBSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27427,20 +25745,10 @@ impl Error for DescribeDBSnapshotsError {
 pub enum DescribeDBSubnetGroupsError {
     /// <p> <i>DBSubnetGroupName</i> doesn't refer to an existing DB subnet group. </p>
     DBSubnetGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDBSubnetGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDBSubnetGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDBSubnetGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27448,15 +25756,17 @@ impl DescribeDBSubnetGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSubnetGroupNotFoundFault" => {
-                        return DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDBSubnetGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27465,28 +25775,6 @@ impl DescribeDBSubnetGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDBSubnetGroupsError {
-    fn from(err: XmlParseError) -> DescribeDBSubnetGroupsError {
-        let XmlParseError(message) = err;
-        DescribeDBSubnetGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDBSubnetGroupsError {
-    fn from(err: CredentialsError) -> DescribeDBSubnetGroupsError {
-        DescribeDBSubnetGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDBSubnetGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeDBSubnetGroupsError {
-        DescribeDBSubnetGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDBSubnetGroupsError {
-    fn from(err: io::Error) -> DescribeDBSubnetGroupsError {
-        DescribeDBSubnetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDBSubnetGroupsError {
@@ -27498,33 +25786,17 @@ impl Error for DescribeDBSubnetGroupsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(ref cause) => cause,
-            DescribeDBSubnetGroupsError::Validation(ref cause) => cause,
-            DescribeDBSubnetGroupsError::Credentials(ref err) => err.description(),
-            DescribeDBSubnetGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDBSubnetGroupsError::ParseError(ref cause) => cause,
-            DescribeDBSubnetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeEngineDefaultClusterParameters
 #[derive(Debug, PartialEq)]
-pub enum DescribeEngineDefaultClusterParametersError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEngineDefaultClusterParametersError {}
 
 impl DescribeEngineDefaultClusterParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEngineDefaultClusterParametersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEngineDefaultClusterParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27535,7 +25807,7 @@ impl DescribeEngineDefaultClusterParametersError {
                 }
             }
         }
-        DescribeEngineDefaultClusterParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27544,28 +25816,6 @@ impl DescribeEngineDefaultClusterParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEngineDefaultClusterParametersError {
-    fn from(err: XmlParseError) -> DescribeEngineDefaultClusterParametersError {
-        let XmlParseError(message) = err;
-        DescribeEngineDefaultClusterParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEngineDefaultClusterParametersError {
-    fn from(err: CredentialsError) -> DescribeEngineDefaultClusterParametersError {
-        DescribeEngineDefaultClusterParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEngineDefaultClusterParametersError {
-    fn from(err: HttpDispatchError) -> DescribeEngineDefaultClusterParametersError {
-        DescribeEngineDefaultClusterParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEngineDefaultClusterParametersError {
-    fn from(err: io::Error) -> DescribeEngineDefaultClusterParametersError {
-        DescribeEngineDefaultClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEngineDefaultClusterParametersError {
@@ -27575,34 +25825,17 @@ impl fmt::Display for DescribeEngineDefaultClusterParametersError {
 }
 impl Error for DescribeEngineDefaultClusterParametersError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEngineDefaultClusterParametersError::Validation(ref cause) => cause,
-            DescribeEngineDefaultClusterParametersError::Credentials(ref err) => err.description(),
-            DescribeEngineDefaultClusterParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEngineDefaultClusterParametersError::ParseError(ref cause) => cause,
-            DescribeEngineDefaultClusterParametersError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeEngineDefaultParameters
 #[derive(Debug, PartialEq)]
-pub enum DescribeEngineDefaultParametersError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEngineDefaultParametersError {}
 
 impl DescribeEngineDefaultParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEngineDefaultParametersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEngineDefaultParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27613,7 +25846,7 @@ impl DescribeEngineDefaultParametersError {
                 }
             }
         }
-        DescribeEngineDefaultParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27622,28 +25855,6 @@ impl DescribeEngineDefaultParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEngineDefaultParametersError {
-    fn from(err: XmlParseError) -> DescribeEngineDefaultParametersError {
-        let XmlParseError(message) = err;
-        DescribeEngineDefaultParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEngineDefaultParametersError {
-    fn from(err: CredentialsError) -> DescribeEngineDefaultParametersError {
-        DescribeEngineDefaultParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEngineDefaultParametersError {
-    fn from(err: HttpDispatchError) -> DescribeEngineDefaultParametersError {
-        DescribeEngineDefaultParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEngineDefaultParametersError {
-    fn from(err: io::Error) -> DescribeEngineDefaultParametersError {
-        DescribeEngineDefaultParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEngineDefaultParametersError {
@@ -27653,34 +25864,15 @@ impl fmt::Display for DescribeEngineDefaultParametersError {
 }
 impl Error for DescribeEngineDefaultParametersError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEngineDefaultParametersError::Validation(ref cause) => cause,
-            DescribeEngineDefaultParametersError::Credentials(ref err) => err.description(),
-            DescribeEngineDefaultParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEngineDefaultParametersError::ParseError(ref cause) => cause,
-            DescribeEngineDefaultParametersError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
-pub enum DescribeEventCategoriesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEventCategoriesError {}
 
 impl DescribeEventCategoriesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventCategoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventCategoriesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27691,7 +25883,7 @@ impl DescribeEventCategoriesError {
                 }
             }
         }
-        DescribeEventCategoriesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27700,28 +25892,6 @@ impl DescribeEventCategoriesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEventCategoriesError {
-    fn from(err: XmlParseError) -> DescribeEventCategoriesError {
-        let XmlParseError(message) = err;
-        DescribeEventCategoriesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventCategoriesError {
-    fn from(err: CredentialsError) -> DescribeEventCategoriesError {
-        DescribeEventCategoriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventCategoriesError {
-    fn from(err: HttpDispatchError) -> DescribeEventCategoriesError {
-        DescribeEventCategoriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventCategoriesError {
-    fn from(err: io::Error) -> DescribeEventCategoriesError {
-        DescribeEventCategoriesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventCategoriesError {
@@ -27731,15 +25901,7 @@ impl fmt::Display for DescribeEventCategoriesError {
 }
 impl Error for DescribeEventCategoriesError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEventCategoriesError::Validation(ref cause) => cause,
-            DescribeEventCategoriesError::Credentials(ref err) => err.description(),
-            DescribeEventCategoriesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEventCategoriesError::ParseError(ref cause) => cause,
-            DescribeEventCategoriesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeEventSubscriptions
@@ -27747,20 +25909,12 @@ impl Error for DescribeEventCategoriesError {
 pub enum DescribeEventSubscriptionsError {
     /// <p>The subscription name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventSubscriptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventSubscriptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEventSubscriptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27768,15 +25922,17 @@ impl DescribeEventSubscriptionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "SubscriptionNotFound" => {
-                        return DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeEventSubscriptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27785,28 +25941,6 @@ impl DescribeEventSubscriptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEventSubscriptionsError {
-    fn from(err: XmlParseError) -> DescribeEventSubscriptionsError {
-        let XmlParseError(message) = err;
-        DescribeEventSubscriptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventSubscriptionsError {
-    fn from(err: CredentialsError) -> DescribeEventSubscriptionsError {
-        DescribeEventSubscriptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventSubscriptionsError {
-    fn from(err: HttpDispatchError) -> DescribeEventSubscriptionsError {
-        DescribeEventSubscriptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventSubscriptionsError {
-    fn from(err: io::Error) -> DescribeEventSubscriptionsError {
-        DescribeEventSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
@@ -27818,33 +25952,15 @@ impl Error for DescribeEventSubscriptionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeEventSubscriptionsError::SubscriptionNotFoundFault(ref cause) => cause,
-            DescribeEventSubscriptionsError::Validation(ref cause) => cause,
-            DescribeEventSubscriptionsError::Credentials(ref err) => err.description(),
-            DescribeEventSubscriptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEventSubscriptionsError::ParseError(ref cause) => cause,
-            DescribeEventSubscriptionsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
-pub enum DescribeEventsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEventsError {}
 
 impl DescribeEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27855,7 +25971,7 @@ impl DescribeEventsError {
                 }
             }
         }
-        DescribeEventsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27864,28 +25980,6 @@ impl DescribeEventsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEventsError {
-    fn from(err: XmlParseError) -> DescribeEventsError {
-        let XmlParseError(message) = err;
-        DescribeEventsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventsError {
-    fn from(err: CredentialsError) -> DescribeEventsError {
-        DescribeEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventsError {
-    fn from(err: HttpDispatchError) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventsError {
-    fn from(err: io::Error) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -27895,13 +25989,7 @@ impl fmt::Display for DescribeEventsError {
 }
 impl Error for DescribeEventsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEventsError::Validation(ref cause) => cause,
-            DescribeEventsError::Credentials(ref err) => err.description(),
-            DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::ParseError(ref cause) => cause,
-            DescribeEventsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeGlobalClusters
@@ -27909,20 +25997,10 @@ impl Error for DescribeEventsError {
 pub enum DescribeGlobalClustersError {
     /// <p><p/></p>
     GlobalClusterNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGlobalClustersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeGlobalClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalClustersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27930,15 +26008,17 @@ impl DescribeGlobalClustersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "GlobalClusterNotFoundFault" => {
-                        return DescribeGlobalClustersError::GlobalClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeGlobalClustersError::GlobalClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeGlobalClustersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27947,28 +26027,6 @@ impl DescribeGlobalClustersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeGlobalClustersError {
-    fn from(err: XmlParseError) -> DescribeGlobalClustersError {
-        let XmlParseError(message) = err;
-        DescribeGlobalClustersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeGlobalClustersError {
-    fn from(err: CredentialsError) -> DescribeGlobalClustersError {
-        DescribeGlobalClustersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeGlobalClustersError {
-    fn from(err: HttpDispatchError) -> DescribeGlobalClustersError {
-        DescribeGlobalClustersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeGlobalClustersError {
-    fn from(err: io::Error) -> DescribeGlobalClustersError {
-        DescribeGlobalClustersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeGlobalClustersError {
@@ -27980,33 +26038,17 @@ impl Error for DescribeGlobalClustersError {
     fn description(&self) -> &str {
         match *self {
             DescribeGlobalClustersError::GlobalClusterNotFoundFault(ref cause) => cause,
-            DescribeGlobalClustersError::Validation(ref cause) => cause,
-            DescribeGlobalClustersError::Credentials(ref err) => err.description(),
-            DescribeGlobalClustersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeGlobalClustersError::ParseError(ref cause) => cause,
-            DescribeGlobalClustersError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeOptionGroupOptions
 #[derive(Debug, PartialEq)]
-pub enum DescribeOptionGroupOptionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeOptionGroupOptionsError {}
 
 impl DescribeOptionGroupOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOptionGroupOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOptionGroupOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28017,7 +26059,7 @@ impl DescribeOptionGroupOptionsError {
                 }
             }
         }
-        DescribeOptionGroupOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28026,28 +26068,6 @@ impl DescribeOptionGroupOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeOptionGroupOptionsError {
-    fn from(err: XmlParseError) -> DescribeOptionGroupOptionsError {
-        let XmlParseError(message) = err;
-        DescribeOptionGroupOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOptionGroupOptionsError {
-    fn from(err: CredentialsError) -> DescribeOptionGroupOptionsError {
-        DescribeOptionGroupOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOptionGroupOptionsError {
-    fn from(err: HttpDispatchError) -> DescribeOptionGroupOptionsError {
-        DescribeOptionGroupOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOptionGroupOptionsError {
-    fn from(err: io::Error) -> DescribeOptionGroupOptionsError {
-        DescribeOptionGroupOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOptionGroupOptionsError {
@@ -28057,15 +26077,7 @@ impl fmt::Display for DescribeOptionGroupOptionsError {
 }
 impl Error for DescribeOptionGroupOptionsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeOptionGroupOptionsError::Validation(ref cause) => cause,
-            DescribeOptionGroupOptionsError::Credentials(ref err) => err.description(),
-            DescribeOptionGroupOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOptionGroupOptionsError::ParseError(ref cause) => cause,
-            DescribeOptionGroupOptionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeOptionGroups
@@ -28073,20 +26085,10 @@ impl Error for DescribeOptionGroupOptionsError {
 pub enum DescribeOptionGroupsError {
     /// <p>The specified option group could not be found.</p>
     OptionGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeOptionGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOptionGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOptionGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28094,15 +26096,17 @@ impl DescribeOptionGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OptionGroupNotFoundFault" => {
-                        return DescribeOptionGroupsError::OptionGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeOptionGroupsError::OptionGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeOptionGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28111,28 +26115,6 @@ impl DescribeOptionGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeOptionGroupsError {
-    fn from(err: XmlParseError) -> DescribeOptionGroupsError {
-        let XmlParseError(message) = err;
-        DescribeOptionGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOptionGroupsError {
-    fn from(err: CredentialsError) -> DescribeOptionGroupsError {
-        DescribeOptionGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOptionGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeOptionGroupsError {
-        DescribeOptionGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOptionGroupsError {
-    fn from(err: io::Error) -> DescribeOptionGroupsError {
-        DescribeOptionGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOptionGroupsError {
@@ -28144,33 +26126,17 @@ impl Error for DescribeOptionGroupsError {
     fn description(&self) -> &str {
         match *self {
             DescribeOptionGroupsError::OptionGroupNotFoundFault(ref cause) => cause,
-            DescribeOptionGroupsError::Validation(ref cause) => cause,
-            DescribeOptionGroupsError::Credentials(ref err) => err.description(),
-            DescribeOptionGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOptionGroupsError::ParseError(ref cause) => cause,
-            DescribeOptionGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeOrderableDBInstanceOptions
 #[derive(Debug, PartialEq)]
-pub enum DescribeOrderableDBInstanceOptionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeOrderableDBInstanceOptionsError {}
 
 impl DescribeOrderableDBInstanceOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOrderableDBInstanceOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrderableDBInstanceOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28181,7 +26147,7 @@ impl DescribeOrderableDBInstanceOptionsError {
                 }
             }
         }
-        DescribeOrderableDBInstanceOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28190,28 +26156,6 @@ impl DescribeOrderableDBInstanceOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeOrderableDBInstanceOptionsError {
-    fn from(err: XmlParseError) -> DescribeOrderableDBInstanceOptionsError {
-        let XmlParseError(message) = err;
-        DescribeOrderableDBInstanceOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOrderableDBInstanceOptionsError {
-    fn from(err: CredentialsError) -> DescribeOrderableDBInstanceOptionsError {
-        DescribeOrderableDBInstanceOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOrderableDBInstanceOptionsError {
-    fn from(err: HttpDispatchError) -> DescribeOrderableDBInstanceOptionsError {
-        DescribeOrderableDBInstanceOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOrderableDBInstanceOptionsError {
-    fn from(err: io::Error) -> DescribeOrderableDBInstanceOptionsError {
-        DescribeOrderableDBInstanceOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeOrderableDBInstanceOptionsError {
@@ -28221,15 +26165,7 @@ impl fmt::Display for DescribeOrderableDBInstanceOptionsError {
 }
 impl Error for DescribeOrderableDBInstanceOptionsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeOrderableDBInstanceOptionsError::Validation(ref cause) => cause,
-            DescribeOrderableDBInstanceOptionsError::Credentials(ref err) => err.description(),
-            DescribeOrderableDBInstanceOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOrderableDBInstanceOptionsError::ParseError(ref cause) => cause,
-            DescribeOrderableDBInstanceOptionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribePendingMaintenanceActions
@@ -28237,20 +26173,12 @@ impl Error for DescribeOrderableDBInstanceOptionsError {
 pub enum DescribePendingMaintenanceActionsError {
     /// <p>The specified resource ID was not found.</p>
     ResourceNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePendingMaintenanceActionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribePendingMaintenanceActionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribePendingMaintenanceActionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28258,15 +26186,17 @@ impl DescribePendingMaintenanceActionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ResourceNotFoundFault" => {
-                        return DescribePendingMaintenanceActionsError::ResourceNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribePendingMaintenanceActionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28275,28 +26205,6 @@ impl DescribePendingMaintenanceActionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribePendingMaintenanceActionsError {
-    fn from(err: XmlParseError) -> DescribePendingMaintenanceActionsError {
-        let XmlParseError(message) = err;
-        DescribePendingMaintenanceActionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribePendingMaintenanceActionsError {
-    fn from(err: CredentialsError) -> DescribePendingMaintenanceActionsError {
-        DescribePendingMaintenanceActionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribePendingMaintenanceActionsError {
-    fn from(err: HttpDispatchError) -> DescribePendingMaintenanceActionsError {
-        DescribePendingMaintenanceActionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribePendingMaintenanceActionsError {
-    fn from(err: io::Error) -> DescribePendingMaintenanceActionsError {
-        DescribePendingMaintenanceActionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribePendingMaintenanceActionsError {
@@ -28308,13 +26216,6 @@ impl Error for DescribePendingMaintenanceActionsError {
     fn description(&self) -> &str {
         match *self {
             DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,
-            DescribePendingMaintenanceActionsError::Validation(ref cause) => cause,
-            DescribePendingMaintenanceActionsError::Credentials(ref err) => err.description(),
-            DescribePendingMaintenanceActionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribePendingMaintenanceActionsError::ParseError(ref cause) => cause,
-            DescribePendingMaintenanceActionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28323,20 +26224,12 @@ impl Error for DescribePendingMaintenanceActionsError {
 pub enum DescribeReservedDBInstancesError {
     /// <p>The specified reserved DB Instance not found.</p>
     ReservedDBInstanceNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedDBInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedDBInstancesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeReservedDBInstancesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28344,15 +26237,17 @@ impl DescribeReservedDBInstancesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ReservedDBInstanceNotFound" => {
-                        return DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeReservedDBInstancesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28361,28 +26256,6 @@ impl DescribeReservedDBInstancesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeReservedDBInstancesError {
-    fn from(err: XmlParseError) -> DescribeReservedDBInstancesError {
-        let XmlParseError(message) = err;
-        DescribeReservedDBInstancesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeReservedDBInstancesError {
-    fn from(err: CredentialsError) -> DescribeReservedDBInstancesError {
-        DescribeReservedDBInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeReservedDBInstancesError {
-    fn from(err: HttpDispatchError) -> DescribeReservedDBInstancesError {
-        DescribeReservedDBInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeReservedDBInstancesError {
-    fn from(err: io::Error) -> DescribeReservedDBInstancesError {
-        DescribeReservedDBInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedDBInstancesError {
@@ -28394,13 +26267,6 @@ impl Error for DescribeReservedDBInstancesError {
     fn description(&self) -> &str {
         match *self {
             DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(ref cause) => cause,
-            DescribeReservedDBInstancesError::Validation(ref cause) => cause,
-            DescribeReservedDBInstancesError::Credentials(ref err) => err.description(),
-            DescribeReservedDBInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeReservedDBInstancesError::ParseError(ref cause) => cause,
-            DescribeReservedDBInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28409,31 +26275,23 @@ impl Error for DescribeReservedDBInstancesError {
 pub enum DescribeReservedDBInstancesOfferingsError {
     /// <p>Specified offering does not exist.</p>
     ReservedDBInstancesOfferingNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedDBInstancesOfferingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedDBInstancesOfferingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeReservedDBInstancesOfferingsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ReservedDBInstancesOfferingNotFound" => return DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => {}
+                                    "ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        DescribeReservedDBInstancesOfferingsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28442,28 +26300,6 @@ impl DescribeReservedDBInstancesOfferingsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeReservedDBInstancesOfferingsError {
-    fn from(err: XmlParseError) -> DescribeReservedDBInstancesOfferingsError {
-        let XmlParseError(message) = err;
-        DescribeReservedDBInstancesOfferingsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeReservedDBInstancesOfferingsError {
-    fn from(err: CredentialsError) -> DescribeReservedDBInstancesOfferingsError {
-        DescribeReservedDBInstancesOfferingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeReservedDBInstancesOfferingsError {
-    fn from(err: HttpDispatchError) -> DescribeReservedDBInstancesOfferingsError {
-        DescribeReservedDBInstancesOfferingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeReservedDBInstancesOfferingsError {
-    fn from(err: io::Error) -> DescribeReservedDBInstancesOfferingsError {
-        DescribeReservedDBInstancesOfferingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedDBInstancesOfferingsError {
@@ -28477,33 +26313,15 @@ impl Error for DescribeReservedDBInstancesOfferingsError {
             DescribeReservedDBInstancesOfferingsError::ReservedDBInstancesOfferingNotFoundFault(
                 ref cause,
             ) => cause,
-            DescribeReservedDBInstancesOfferingsError::Validation(ref cause) => cause,
-            DescribeReservedDBInstancesOfferingsError::Credentials(ref err) => err.description(),
-            DescribeReservedDBInstancesOfferingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeReservedDBInstancesOfferingsError::ParseError(ref cause) => cause,
-            DescribeReservedDBInstancesOfferingsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeSourceRegions
 #[derive(Debug, PartialEq)]
-pub enum DescribeSourceRegionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeSourceRegionsError {}
 
 impl DescribeSourceRegionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSourceRegionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSourceRegionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28514,7 +26332,7 @@ impl DescribeSourceRegionsError {
                 }
             }
         }
-        DescribeSourceRegionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28523,28 +26341,6 @@ impl DescribeSourceRegionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeSourceRegionsError {
-    fn from(err: XmlParseError) -> DescribeSourceRegionsError {
-        let XmlParseError(message) = err;
-        DescribeSourceRegionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSourceRegionsError {
-    fn from(err: CredentialsError) -> DescribeSourceRegionsError {
-        DescribeSourceRegionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSourceRegionsError {
-    fn from(err: HttpDispatchError) -> DescribeSourceRegionsError {
-        DescribeSourceRegionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSourceRegionsError {
-    fn from(err: io::Error) -> DescribeSourceRegionsError {
-        DescribeSourceRegionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSourceRegionsError {
@@ -28554,15 +26350,7 @@ impl fmt::Display for DescribeSourceRegionsError {
 }
 impl Error for DescribeSourceRegionsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeSourceRegionsError::Validation(ref cause) => cause,
-            DescribeSourceRegionsError::Credentials(ref err) => err.description(),
-            DescribeSourceRegionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSourceRegionsError::ParseError(ref cause) => cause,
-            DescribeSourceRegionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeValidDBInstanceModifications
@@ -28572,31 +26360,37 @@ pub enum DescribeValidDBInstanceModificationsError {
     DBInstanceNotFoundFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeValidDBInstanceModificationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeValidDBInstanceModificationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeValidDBInstanceModificationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBInstanceNotFound" => return DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"InvalidDBInstanceState" => return DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        DescribeValidDBInstanceModificationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28605,28 +26399,6 @@ impl DescribeValidDBInstanceModificationsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeValidDBInstanceModificationsError {
-    fn from(err: XmlParseError) -> DescribeValidDBInstanceModificationsError {
-        let XmlParseError(message) = err;
-        DescribeValidDBInstanceModificationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeValidDBInstanceModificationsError {
-    fn from(err: CredentialsError) -> DescribeValidDBInstanceModificationsError {
-        DescribeValidDBInstanceModificationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeValidDBInstanceModificationsError {
-    fn from(err: HttpDispatchError) -> DescribeValidDBInstanceModificationsError {
-        DescribeValidDBInstanceModificationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeValidDBInstanceModificationsError {
-    fn from(err: io::Error) -> DescribeValidDBInstanceModificationsError {
-        DescribeValidDBInstanceModificationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeValidDBInstanceModificationsError {
@@ -28641,13 +26413,6 @@ impl Error for DescribeValidDBInstanceModificationsError {
             DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(ref cause) => {
                 cause
             }
-            DescribeValidDBInstanceModificationsError::Validation(ref cause) => cause,
-            DescribeValidDBInstanceModificationsError::Credentials(ref err) => err.description(),
-            DescribeValidDBInstanceModificationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeValidDBInstanceModificationsError::ParseError(ref cause) => cause,
-            DescribeValidDBInstanceModificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28658,20 +26423,10 @@ pub enum DownloadDBLogFilePortionError {
     DBInstanceNotFoundFault(String),
     /// <p> <i>LogFileName</i> doesn't refer to an existing DB log file.</p>
     DBLogFileNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DownloadDBLogFilePortionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DownloadDBLogFilePortionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DownloadDBLogFilePortionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28679,20 +26434,24 @@ impl DownloadDBLogFilePortionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return DownloadDBLogFilePortionError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DownloadDBLogFilePortionError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBLogFileNotFoundFault" => {
-                        return DownloadDBLogFilePortionError::DBLogFileNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DownloadDBLogFilePortionError::DBLogFileNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DownloadDBLogFilePortionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28701,28 +26460,6 @@ impl DownloadDBLogFilePortionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DownloadDBLogFilePortionError {
-    fn from(err: XmlParseError) -> DownloadDBLogFilePortionError {
-        let XmlParseError(message) = err;
-        DownloadDBLogFilePortionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DownloadDBLogFilePortionError {
-    fn from(err: CredentialsError) -> DownloadDBLogFilePortionError {
-        DownloadDBLogFilePortionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DownloadDBLogFilePortionError {
-    fn from(err: HttpDispatchError) -> DownloadDBLogFilePortionError {
-        DownloadDBLogFilePortionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DownloadDBLogFilePortionError {
-    fn from(err: io::Error) -> DownloadDBLogFilePortionError {
-        DownloadDBLogFilePortionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DownloadDBLogFilePortionError {
@@ -28735,13 +26472,6 @@ impl Error for DownloadDBLogFilePortionError {
         match *self {
             DownloadDBLogFilePortionError::DBInstanceNotFoundFault(ref cause) => cause,
             DownloadDBLogFilePortionError::DBLogFileNotFoundFault(ref cause) => cause,
-            DownloadDBLogFilePortionError::Validation(ref cause) => cause,
-            DownloadDBLogFilePortionError::Credentials(ref err) => err.description(),
-            DownloadDBLogFilePortionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DownloadDBLogFilePortionError::ParseError(ref cause) => cause,
-            DownloadDBLogFilePortionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28754,20 +26484,10 @@ pub enum FailoverDBClusterError {
     InvalidDBClusterStateFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl FailoverDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> FailoverDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FailoverDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28775,25 +26495,29 @@ impl FailoverDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return FailoverDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(FailoverDBClusterError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDBClusterStateFault" => {
-                        return FailoverDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            FailoverDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        FailoverDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28802,28 +26526,6 @@ impl FailoverDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for FailoverDBClusterError {
-    fn from(err: XmlParseError) -> FailoverDBClusterError {
-        let XmlParseError(message) = err;
-        FailoverDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for FailoverDBClusterError {
-    fn from(err: CredentialsError) -> FailoverDBClusterError {
-        FailoverDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for FailoverDBClusterError {
-    fn from(err: HttpDispatchError) -> FailoverDBClusterError {
-        FailoverDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for FailoverDBClusterError {
-    fn from(err: io::Error) -> FailoverDBClusterError {
-        FailoverDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for FailoverDBClusterError {
@@ -28837,13 +26539,6 @@ impl Error for FailoverDBClusterError {
             FailoverDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
             FailoverDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
             FailoverDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
-            FailoverDBClusterError::Validation(ref cause) => cause,
-            FailoverDBClusterError::Credentials(ref err) => err.description(),
-            FailoverDBClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            FailoverDBClusterError::ParseError(ref cause) => cause,
-            FailoverDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28856,20 +26551,10 @@ pub enum ListTagsForResourceError {
     DBInstanceNotFoundFault(String),
     /// <p> <i>DBSnapshotIdentifier</i> doesn't refer to an existing DB snapshot. </p>
     DBSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28877,25 +26562,31 @@ impl ListTagsForResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return ListTagsForResourceError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTagsForResourceError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceNotFound" => {
-                        return ListTagsForResourceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTagsForResourceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSnapshotNotFound" => {
-                        return ListTagsForResourceError::DBSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTagsForResourceError::DBSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListTagsForResourceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28904,28 +26595,6 @@ impl ListTagsForResourceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTagsForResourceError {
-    fn from(err: XmlParseError) -> ListTagsForResourceError {
-        let XmlParseError(message) = err;
-        ListTagsForResourceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -28939,13 +26608,6 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::DBClusterNotFoundFault(ref cause) => cause,
             ListTagsForResourceError::DBInstanceNotFoundFault(ref cause) => cause,
             ListTagsForResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28958,20 +26620,12 @@ pub enum ModifyCurrentDBClusterCapacityError {
     InvalidDBClusterCapacityFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyCurrentDBClusterCapacityError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyCurrentDBClusterCapacityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyCurrentDBClusterCapacityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28979,25 +26633,31 @@ impl ModifyCurrentDBClusterCapacityError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return ModifyCurrentDBClusterCapacityError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyCurrentDBClusterCapacityError::DBClusterNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterCapacityFault" => {
-                        return ModifyCurrentDBClusterCapacityError::InvalidDBClusterCapacityFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyCurrentDBClusterCapacityError::InvalidDBClusterCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return ModifyCurrentDBClusterCapacityError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyCurrentDBClusterCapacityError::InvalidDBClusterStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyCurrentDBClusterCapacityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29006,28 +26666,6 @@ impl ModifyCurrentDBClusterCapacityError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyCurrentDBClusterCapacityError {
-    fn from(err: XmlParseError) -> ModifyCurrentDBClusterCapacityError {
-        let XmlParseError(message) = err;
-        ModifyCurrentDBClusterCapacityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyCurrentDBClusterCapacityError {
-    fn from(err: CredentialsError) -> ModifyCurrentDBClusterCapacityError {
-        ModifyCurrentDBClusterCapacityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyCurrentDBClusterCapacityError {
-    fn from(err: HttpDispatchError) -> ModifyCurrentDBClusterCapacityError {
-        ModifyCurrentDBClusterCapacityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyCurrentDBClusterCapacityError {
-    fn from(err: io::Error) -> ModifyCurrentDBClusterCapacityError {
-        ModifyCurrentDBClusterCapacityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyCurrentDBClusterCapacityError {
@@ -29041,13 +26679,6 @@ impl Error for ModifyCurrentDBClusterCapacityError {
             ModifyCurrentDBClusterCapacityError::DBClusterNotFoundFault(ref cause) => cause,
             ModifyCurrentDBClusterCapacityError::InvalidDBClusterCapacityFault(ref cause) => cause,
             ModifyCurrentDBClusterCapacityError::InvalidDBClusterStateFault(ref cause) => cause,
-            ModifyCurrentDBClusterCapacityError::Validation(ref cause) => cause,
-            ModifyCurrentDBClusterCapacityError::Credentials(ref err) => err.description(),
-            ModifyCurrentDBClusterCapacityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyCurrentDBClusterCapacityError::ParseError(ref cause) => cause,
-            ModifyCurrentDBClusterCapacityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29076,20 +26707,10 @@ pub enum ModifyDBClusterError {
     InvalidVPCNetworkStateFault(String),
     /// <p>The request would result in the user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29097,65 +26718,83 @@ impl ModifyDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterAlreadyExistsFault" => {
-                        return ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterNotFoundFault" => {
-                        return ModifyDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyDBClusterError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBClusterParameterGroupNotFound" => {
-                        return ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetGroupNotFoundFault" => {
-                        return ModifyDBClusterError::DBSubnetGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return ModifyDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBSecurityGroupState" => {
-                        return ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBSubnetGroupStateFault" => {
-                        return ModifyDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return ModifyDBClusterError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyDBClusterError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "StorageQuotaExceeded" => {
-                        return ModifyDBClusterError::StorageQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterError::StorageQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29164,28 +26803,6 @@ impl ModifyDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBClusterError {
-    fn from(err: XmlParseError) -> ModifyDBClusterError {
-        let XmlParseError(message) = err;
-        ModifyDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBClusterError {
-    fn from(err: CredentialsError) -> ModifyDBClusterError {
-        ModifyDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBClusterError {
-    fn from(err: HttpDispatchError) -> ModifyDBClusterError {
-        ModifyDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBClusterError {
-    fn from(err: io::Error) -> ModifyDBClusterError {
-        ModifyDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBClusterError {
@@ -29207,11 +26824,6 @@ impl Error for ModifyDBClusterError {
             ModifyDBClusterError::InvalidSubnet(ref cause) => cause,
             ModifyDBClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
             ModifyDBClusterError::StorageQuotaExceededFault(ref cause) => cause,
-            ModifyDBClusterError::Validation(ref cause) => cause,
-            ModifyDBClusterError::Credentials(ref err) => err.description(),
-            ModifyDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyDBClusterError::ParseError(ref cause) => cause,
-            ModifyDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29228,20 +26840,10 @@ pub enum ModifyDBClusterEndpointError {
     InvalidDBClusterStateFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBClusterEndpointError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBClusterEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBClusterEndpointError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29249,35 +26851,45 @@ impl ModifyDBClusterEndpointError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterEndpointNotFoundFault" => {
-                        return ModifyDBClusterEndpointError::DBClusterEndpointNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::DBClusterEndpointNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBInstanceNotFound" => {
-                        return ModifyDBClusterEndpointError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBClusterEndpointStateFault" => {
-                        return ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return ModifyDBClusterEndpointError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBInstanceState" => {
-                        return ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBClusterEndpointError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29286,28 +26898,6 @@ impl ModifyDBClusterEndpointError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBClusterEndpointError {
-    fn from(err: XmlParseError) -> ModifyDBClusterEndpointError {
-        let XmlParseError(message) = err;
-        ModifyDBClusterEndpointError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBClusterEndpointError {
-    fn from(err: CredentialsError) -> ModifyDBClusterEndpointError {
-        ModifyDBClusterEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBClusterEndpointError {
-    fn from(err: HttpDispatchError) -> ModifyDBClusterEndpointError {
-        ModifyDBClusterEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBClusterEndpointError {
-    fn from(err: io::Error) -> ModifyDBClusterEndpointError {
-        ModifyDBClusterEndpointError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBClusterEndpointError {
@@ -29323,13 +26913,6 @@ impl Error for ModifyDBClusterEndpointError {
             ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(ref cause) => cause,
             ModifyDBClusterEndpointError::InvalidDBClusterStateFault(ref cause) => cause,
             ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(ref cause) => cause,
-            ModifyDBClusterEndpointError::Validation(ref cause) => cause,
-            ModifyDBClusterEndpointError::Credentials(ref err) => err.description(),
-            ModifyDBClusterEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyDBClusterEndpointError::ParseError(ref cause) => cause,
-            ModifyDBClusterEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29340,20 +26923,12 @@ pub enum ModifyDBClusterParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you can't delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyDBClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29361,20 +26936,24 @@ impl ModifyDBClusterParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBParameterGroupState" => {
-                        return ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29383,28 +26962,6 @@ impl ModifyDBClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBClusterParameterGroupError {
-    fn from(err: XmlParseError) -> ModifyDBClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        ModifyDBClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBClusterParameterGroupError {
-    fn from(err: CredentialsError) -> ModifyDBClusterParameterGroupError {
-        ModifyDBClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> ModifyDBClusterParameterGroupError {
-        ModifyDBClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBClusterParameterGroupError {
-    fn from(err: io::Error) -> ModifyDBClusterParameterGroupError {
-        ModifyDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBClusterParameterGroupError {
@@ -29419,13 +26976,6 @@ impl Error for ModifyDBClusterParameterGroupError {
             ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
                 cause
             }
-            ModifyDBClusterParameterGroupError::Validation(ref cause) => cause,
-            ModifyDBClusterParameterGroupError::Credentials(ref err) => err.description(),
-            ModifyDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyDBClusterParameterGroupError::ParseError(ref cause) => cause,
-            ModifyDBClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29438,31 +26988,42 @@ pub enum ModifyDBClusterSnapshotAttributeError {
     InvalidDBClusterSnapshotStateFault(String),
     /// <p>You have exceeded the maximum number of accounts that you can share a manual DB snapshot with.</p>
     SharedSnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBClusterSnapshotAttributeError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBClusterSnapshotAttributeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyDBClusterSnapshotAttributeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBClusterSnapshotNotFoundFault" => return ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => return ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"SharedSnapshotQuotaExceeded" => return ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DBClusterSnapshotNotFoundFault" => {
+                        return RusotoError::Service(
+                            ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBClusterSnapshotStateFault" => return RusotoError::Service(
+                        ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "SharedSnapshotQuotaExceeded" => {
+                        return RusotoError::Service(
+                            ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        ModifyDBClusterSnapshotAttributeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29471,28 +27032,6 @@ impl ModifyDBClusterSnapshotAttributeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBClusterSnapshotAttributeError {
-    fn from(err: XmlParseError) -> ModifyDBClusterSnapshotAttributeError {
-        let XmlParseError(message) = err;
-        ModifyDBClusterSnapshotAttributeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBClusterSnapshotAttributeError {
-    fn from(err: CredentialsError) -> ModifyDBClusterSnapshotAttributeError {
-        ModifyDBClusterSnapshotAttributeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBClusterSnapshotAttributeError {
-    fn from(err: HttpDispatchError) -> ModifyDBClusterSnapshotAttributeError {
-        ModifyDBClusterSnapshotAttributeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBClusterSnapshotAttributeError {
-    fn from(err: io::Error) -> ModifyDBClusterSnapshotAttributeError {
-        ModifyDBClusterSnapshotAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBClusterSnapshotAttributeError {
@@ -29512,13 +27051,6 @@ impl Error for ModifyDBClusterSnapshotAttributeError {
             ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => {
                 cause
             }
-            ModifyDBClusterSnapshotAttributeError::Validation(ref cause) => cause,
-            ModifyDBClusterSnapshotAttributeError::Credentials(ref err) => err.description(),
-            ModifyDBClusterSnapshotAttributeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyDBClusterSnapshotAttributeError::ParseError(ref cause) => cause,
-            ModifyDBClusterSnapshotAttributeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29559,20 +27091,10 @@ pub enum ModifyDBInstanceError {
     StorageQuotaExceededFault(String),
     /// <p>Storage of the <i>StorageType</i> specified can't be associated with the DB instance. </p>
     StorageTypeNotSupportedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29580,95 +27102,125 @@ impl ModifyDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationNotFound" => {
-                        return ModifyDBInstanceError::AuthorizationNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::AuthorizationNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "BackupPolicyNotFoundFault" => {
-                        return ModifyDBInstanceError::BackupPolicyNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::BackupPolicyNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "CertificateNotFound" => {
-                        return ModifyDBInstanceError::CertificateNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::CertificateNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceAlreadyExists" => {
-                        return ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceNotFound" => {
-                        return ModifyDBInstanceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyDBInstanceError::DBInstanceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBParameterGroupNotFound" => {
-                        return ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSecurityGroupNotFound" => {
-                        return ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBUpgradeDependencyFailure" => {
-                        return ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DomainNotFoundFault" => {
-                        return ModifyDBInstanceError::DomainNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyDBInstanceError::DomainNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InsufficientDBInstanceCapacity" => {
-                        return ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBInstanceState" => {
-                        return ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBSecurityGroupState" => {
-                        return ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return ModifyDBInstanceError::InvalidVPCNetworkStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::InvalidVPCNetworkStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OptionGroupNotFoundFault" => {
-                        return ModifyDBInstanceError::OptionGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::OptionGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
-                        return ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "StorageQuotaExceeded" => {
-                        return ModifyDBInstanceError::StorageQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::StorageQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "StorageTypeNotSupported" => {
-                        return ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29677,28 +27229,6 @@ impl ModifyDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBInstanceError {
-    fn from(err: XmlParseError) -> ModifyDBInstanceError {
-        let XmlParseError(message) = err;
-        ModifyDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBInstanceError {
-    fn from(err: CredentialsError) -> ModifyDBInstanceError {
-        ModifyDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBInstanceError {
-    fn from(err: HttpDispatchError) -> ModifyDBInstanceError {
-        ModifyDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBInstanceError {
-    fn from(err: io::Error) -> ModifyDBInstanceError {
-        ModifyDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBInstanceError {
@@ -29726,11 +27256,6 @@ impl Error for ModifyDBInstanceError {
             ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
             ModifyDBInstanceError::StorageQuotaExceededFault(ref cause) => cause,
             ModifyDBInstanceError::StorageTypeNotSupportedFault(ref cause) => cause,
-            ModifyDBInstanceError::Validation(ref cause) => cause,
-            ModifyDBInstanceError::Credentials(ref err) => err.description(),
-            ModifyDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyDBInstanceError::ParseError(ref cause) => cause,
-            ModifyDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29741,20 +27266,10 @@ pub enum ModifyDBParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you can't delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29762,20 +27277,24 @@ impl ModifyDBParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBParameterGroupState" => {
-                        return ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29784,28 +27303,6 @@ impl ModifyDBParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBParameterGroupError {
-    fn from(err: XmlParseError) -> ModifyDBParameterGroupError {
-        let XmlParseError(message) = err;
-        ModifyDBParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBParameterGroupError {
-    fn from(err: CredentialsError) -> ModifyDBParameterGroupError {
-        ModifyDBParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBParameterGroupError {
-    fn from(err: HttpDispatchError) -> ModifyDBParameterGroupError {
-        ModifyDBParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBParameterGroupError {
-    fn from(err: io::Error) -> ModifyDBParameterGroupError {
-        ModifyDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBParameterGroupError {
@@ -29818,13 +27315,6 @@ impl Error for ModifyDBParameterGroupError {
         match *self {
             ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
             ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
-            ModifyDBParameterGroupError::Validation(ref cause) => cause,
-            ModifyDBParameterGroupError::Credentials(ref err) => err.description(),
-            ModifyDBParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyDBParameterGroupError::ParseError(ref cause) => cause,
-            ModifyDBParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29833,20 +27323,10 @@ impl Error for ModifyDBParameterGroupError {
 pub enum ModifyDBSnapshotError {
     /// <p> <i>DBSnapshotIdentifier</i> doesn't refer to an existing DB snapshot. </p>
     DBSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29854,15 +27334,15 @@ impl ModifyDBSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotNotFound" => {
-                        return ModifyDBSnapshotError::DBSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyDBSnapshotError::DBSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29871,28 +27351,6 @@ impl ModifyDBSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBSnapshotError {
-    fn from(err: XmlParseError) -> ModifyDBSnapshotError {
-        let XmlParseError(message) = err;
-        ModifyDBSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBSnapshotError {
-    fn from(err: CredentialsError) -> ModifyDBSnapshotError {
-        ModifyDBSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBSnapshotError {
-    fn from(err: HttpDispatchError) -> ModifyDBSnapshotError {
-        ModifyDBSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBSnapshotError {
-    fn from(err: io::Error) -> ModifyDBSnapshotError {
-        ModifyDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBSnapshotError {
@@ -29904,11 +27362,6 @@ impl Error for ModifyDBSnapshotError {
     fn description(&self) -> &str {
         match *self {
             ModifyDBSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
-            ModifyDBSnapshotError::Validation(ref cause) => cause,
-            ModifyDBSnapshotError::Credentials(ref err) => err.description(),
-            ModifyDBSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyDBSnapshotError::ParseError(ref cause) => cause,
-            ModifyDBSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -29921,20 +27374,10 @@ pub enum ModifyDBSnapshotAttributeError {
     InvalidDBSnapshotStateFault(String),
     /// <p>You have exceeded the maximum number of accounts that you can share a manual DB snapshot with.</p>
     SharedSnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBSnapshotAttributeError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBSnapshotAttributeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBSnapshotAttributeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -29942,25 +27385,31 @@ impl ModifyDBSnapshotAttributeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotNotFound" => {
-                        return ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBSnapshotState" => {
-                        return ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SharedSnapshotQuotaExceeded" => {
-                        return ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBSnapshotAttributeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -29969,28 +27418,6 @@ impl ModifyDBSnapshotAttributeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBSnapshotAttributeError {
-    fn from(err: XmlParseError) -> ModifyDBSnapshotAttributeError {
-        let XmlParseError(message) = err;
-        ModifyDBSnapshotAttributeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBSnapshotAttributeError {
-    fn from(err: CredentialsError) -> ModifyDBSnapshotAttributeError {
-        ModifyDBSnapshotAttributeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBSnapshotAttributeError {
-    fn from(err: HttpDispatchError) -> ModifyDBSnapshotAttributeError {
-        ModifyDBSnapshotAttributeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBSnapshotAttributeError {
-    fn from(err: io::Error) -> ModifyDBSnapshotAttributeError {
-        ModifyDBSnapshotAttributeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBSnapshotAttributeError {
@@ -30004,13 +27431,6 @@ impl Error for ModifyDBSnapshotAttributeError {
             ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(ref cause) => cause,
             ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(ref cause) => cause,
             ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(ref cause) => cause,
-            ModifyDBSnapshotAttributeError::Validation(ref cause) => cause,
-            ModifyDBSnapshotAttributeError::Credentials(ref err) => err.description(),
-            ModifyDBSnapshotAttributeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyDBSnapshotAttributeError::ParseError(ref cause) => cause,
-            ModifyDBSnapshotAttributeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30027,20 +27447,10 @@ pub enum ModifyDBSubnetGroupError {
     InvalidSubnet(String),
     /// <p>The DB subnet is already in use in the Availability Zone.</p>
     SubnetAlreadyInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyDBSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyDBSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBSubnetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30048,35 +27458,41 @@ impl ModifyDBSubnetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetGroupNotFoundFault" => {
-                        return ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSubnetQuotaExceededFault" => {
-                        return ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return ModifyDBSubnetGroupError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyDBSubnetGroupError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SubnetAlreadyInUse" => {
-                        return ModifyDBSubnetGroupError::SubnetAlreadyInUse(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyDBSubnetGroupError::SubnetAlreadyInUse(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ModifyDBSubnetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30085,28 +27501,6 @@ impl ModifyDBSubnetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyDBSubnetGroupError {
-    fn from(err: XmlParseError) -> ModifyDBSubnetGroupError {
-        let XmlParseError(message) = err;
-        ModifyDBSubnetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyDBSubnetGroupError {
-    fn from(err: CredentialsError) -> ModifyDBSubnetGroupError {
-        ModifyDBSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyDBSubnetGroupError {
-    fn from(err: HttpDispatchError) -> ModifyDBSubnetGroupError {
-        ModifyDBSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyDBSubnetGroupError {
-    fn from(err: io::Error) -> ModifyDBSubnetGroupError {
-        ModifyDBSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyDBSubnetGroupError {
@@ -30122,13 +27516,6 @@ impl Error for ModifyDBSubnetGroupError {
             ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(ref cause) => cause,
             ModifyDBSubnetGroupError::InvalidSubnet(ref cause) => cause,
             ModifyDBSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
-            ModifyDBSubnetGroupError::Validation(ref cause) => cause,
-            ModifyDBSubnetGroupError::Credentials(ref err) => err.description(),
-            ModifyDBSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyDBSubnetGroupError::ParseError(ref cause) => cause,
-            ModifyDBSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30147,20 +27534,10 @@ pub enum ModifyEventSubscriptionError {
     SubscriptionCategoryNotFoundFault(String),
     /// <p>The subscription name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyEventSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30168,40 +27545,52 @@ impl ModifyEventSubscriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EventSubscriptionQuotaExceeded" => {
-                        return ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SNSInvalidTopic" => {
-                        return ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSNoAuthorization" => {
-                        return ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSTopicArnNotFound" => {
-                        return ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SubscriptionCategoryNotFound" => {
-                        return ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionNotFound" => {
-                        return ModifyEventSubscriptionError::SubscriptionNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyEventSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30210,28 +27599,6 @@ impl ModifyEventSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyEventSubscriptionError {
-    fn from(err: XmlParseError) -> ModifyEventSubscriptionError {
-        let XmlParseError(message) = err;
-        ModifyEventSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyEventSubscriptionError {
-    fn from(err: CredentialsError) -> ModifyEventSubscriptionError {
-        ModifyEventSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyEventSubscriptionError {
-    fn from(err: HttpDispatchError) -> ModifyEventSubscriptionError {
-        ModifyEventSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyEventSubscriptionError {
-    fn from(err: io::Error) -> ModifyEventSubscriptionError {
-        ModifyEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyEventSubscriptionError {
@@ -30248,13 +27615,6 @@ impl Error for ModifyEventSubscriptionError {
             ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => cause,
             ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => cause,
             ModifyEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::Validation(ref cause) => cause,
-            ModifyEventSubscriptionError::Credentials(ref err) => err.description(),
-            ModifyEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyEventSubscriptionError::ParseError(ref cause) => cause,
-            ModifyEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30265,20 +27625,10 @@ pub enum ModifyGlobalClusterError {
     GlobalClusterNotFoundFault(String),
     /// <p><p/></p>
     InvalidGlobalClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyGlobalClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyGlobalClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30286,20 +27636,24 @@ impl ModifyGlobalClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "GlobalClusterNotFoundFault" => {
-                        return ModifyGlobalClusterError::GlobalClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyGlobalClusterError::GlobalClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidGlobalClusterStateFault" => {
-                        return ModifyGlobalClusterError::InvalidGlobalClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyGlobalClusterError::InvalidGlobalClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyGlobalClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30308,28 +27662,6 @@ impl ModifyGlobalClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyGlobalClusterError {
-    fn from(err: XmlParseError) -> ModifyGlobalClusterError {
-        let XmlParseError(message) = err;
-        ModifyGlobalClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyGlobalClusterError {
-    fn from(err: CredentialsError) -> ModifyGlobalClusterError {
-        ModifyGlobalClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyGlobalClusterError {
-    fn from(err: HttpDispatchError) -> ModifyGlobalClusterError {
-        ModifyGlobalClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyGlobalClusterError {
-    fn from(err: io::Error) -> ModifyGlobalClusterError {
-        ModifyGlobalClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyGlobalClusterError {
@@ -30342,13 +27674,6 @@ impl Error for ModifyGlobalClusterError {
         match *self {
             ModifyGlobalClusterError::GlobalClusterNotFoundFault(ref cause) => cause,
             ModifyGlobalClusterError::InvalidGlobalClusterStateFault(ref cause) => cause,
-            ModifyGlobalClusterError::Validation(ref cause) => cause,
-            ModifyGlobalClusterError::Credentials(ref err) => err.description(),
-            ModifyGlobalClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyGlobalClusterError::ParseError(ref cause) => cause,
-            ModifyGlobalClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30359,20 +27684,10 @@ pub enum ModifyOptionGroupError {
     InvalidOptionGroupStateFault(String),
     /// <p>The specified option group could not be found.</p>
     OptionGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyOptionGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyOptionGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyOptionGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30380,20 +27695,24 @@ impl ModifyOptionGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidOptionGroupStateFault" => {
-                        return ModifyOptionGroupError::InvalidOptionGroupStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyOptionGroupError::InvalidOptionGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OptionGroupNotFoundFault" => {
-                        return ModifyOptionGroupError::OptionGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyOptionGroupError::OptionGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyOptionGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30402,28 +27721,6 @@ impl ModifyOptionGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyOptionGroupError {
-    fn from(err: XmlParseError) -> ModifyOptionGroupError {
-        let XmlParseError(message) = err;
-        ModifyOptionGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyOptionGroupError {
-    fn from(err: CredentialsError) -> ModifyOptionGroupError {
-        ModifyOptionGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyOptionGroupError {
-    fn from(err: HttpDispatchError) -> ModifyOptionGroupError {
-        ModifyOptionGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyOptionGroupError {
-    fn from(err: io::Error) -> ModifyOptionGroupError {
-        ModifyOptionGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyOptionGroupError {
@@ -30436,13 +27733,6 @@ impl Error for ModifyOptionGroupError {
         match *self {
             ModifyOptionGroupError::InvalidOptionGroupStateFault(ref cause) => cause,
             ModifyOptionGroupError::OptionGroupNotFoundFault(ref cause) => cause,
-            ModifyOptionGroupError::Validation(ref cause) => cause,
-            ModifyOptionGroupError::Credentials(ref err) => err.description(),
-            ModifyOptionGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyOptionGroupError::ParseError(ref cause) => cause,
-            ModifyOptionGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30453,20 +27743,10 @@ pub enum PromoteReadReplicaError {
     DBInstanceNotFoundFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PromoteReadReplicaError {
-    pub fn from_response(res: BufferedHttpResponse) -> PromoteReadReplicaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PromoteReadReplicaError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30474,20 +27754,24 @@ impl PromoteReadReplicaError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return PromoteReadReplicaError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PromoteReadReplicaError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return PromoteReadReplicaError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PromoteReadReplicaError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        PromoteReadReplicaError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30496,28 +27780,6 @@ impl PromoteReadReplicaError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PromoteReadReplicaError {
-    fn from(err: XmlParseError) -> PromoteReadReplicaError {
-        let XmlParseError(message) = err;
-        PromoteReadReplicaError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PromoteReadReplicaError {
-    fn from(err: CredentialsError) -> PromoteReadReplicaError {
-        PromoteReadReplicaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PromoteReadReplicaError {
-    fn from(err: HttpDispatchError) -> PromoteReadReplicaError {
-        PromoteReadReplicaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PromoteReadReplicaError {
-    fn from(err: io::Error) -> PromoteReadReplicaError {
-        PromoteReadReplicaError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PromoteReadReplicaError {
@@ -30530,13 +27792,6 @@ impl Error for PromoteReadReplicaError {
         match *self {
             PromoteReadReplicaError::DBInstanceNotFoundFault(ref cause) => cause,
             PromoteReadReplicaError::InvalidDBInstanceStateFault(ref cause) => cause,
-            PromoteReadReplicaError::Validation(ref cause) => cause,
-            PromoteReadReplicaError::Credentials(ref err) => err.description(),
-            PromoteReadReplicaError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PromoteReadReplicaError::ParseError(ref cause) => cause,
-            PromoteReadReplicaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30547,20 +27802,12 @@ pub enum PromoteReadReplicaDBClusterError {
     DBClusterNotFoundFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PromoteReadReplicaDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> PromoteReadReplicaDBClusterError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PromoteReadReplicaDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30568,20 +27815,24 @@ impl PromoteReadReplicaDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        PromoteReadReplicaDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30590,28 +27841,6 @@ impl PromoteReadReplicaDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PromoteReadReplicaDBClusterError {
-    fn from(err: XmlParseError) -> PromoteReadReplicaDBClusterError {
-        let XmlParseError(message) = err;
-        PromoteReadReplicaDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PromoteReadReplicaDBClusterError {
-    fn from(err: CredentialsError) -> PromoteReadReplicaDBClusterError {
-        PromoteReadReplicaDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PromoteReadReplicaDBClusterError {
-    fn from(err: HttpDispatchError) -> PromoteReadReplicaDBClusterError {
-        PromoteReadReplicaDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PromoteReadReplicaDBClusterError {
-    fn from(err: io::Error) -> PromoteReadReplicaDBClusterError {
-        PromoteReadReplicaDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PromoteReadReplicaDBClusterError {
@@ -30624,13 +27853,6 @@ impl Error for PromoteReadReplicaDBClusterError {
         match *self {
             PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
             PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            PromoteReadReplicaDBClusterError::Validation(ref cause) => cause,
-            PromoteReadReplicaDBClusterError::Credentials(ref err) => err.description(),
-            PromoteReadReplicaDBClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PromoteReadReplicaDBClusterError::ParseError(ref cause) => cause,
-            PromoteReadReplicaDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30643,31 +27865,23 @@ pub enum PurchaseReservedDBInstancesOfferingError {
     ReservedDBInstanceQuotaExceededFault(String),
     /// <p>Specified offering does not exist.</p>
     ReservedDBInstancesOfferingNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PurchaseReservedDBInstancesOfferingError {
-    pub fn from_response(res: BufferedHttpResponse) -> PurchaseReservedDBInstancesOfferingError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PurchaseReservedDBInstancesOfferingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ReservedDBInstanceAlreadyExists" => return PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"ReservedDBInstanceQuotaExceeded" => return PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message)),"ReservedDBInstancesOfferingNotFound" => return PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message)),_ => {}
+                                    "ReservedDBInstanceAlreadyExists" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceAlreadyExistsFault(String::from(parsed_error.message))),"ReservedDBInstanceQuotaExceeded" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstanceQuotaExceededFault(String::from(parsed_error.message))),"ReservedDBInstancesOfferingNotFound" => return RusotoError::Service(PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        PurchaseReservedDBInstancesOfferingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30676,28 +27890,6 @@ impl PurchaseReservedDBInstancesOfferingError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PurchaseReservedDBInstancesOfferingError {
-    fn from(err: XmlParseError) -> PurchaseReservedDBInstancesOfferingError {
-        let XmlParseError(message) = err;
-        PurchaseReservedDBInstancesOfferingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PurchaseReservedDBInstancesOfferingError {
-    fn from(err: CredentialsError) -> PurchaseReservedDBInstancesOfferingError {
-        PurchaseReservedDBInstancesOfferingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PurchaseReservedDBInstancesOfferingError {
-    fn from(err: HttpDispatchError) -> PurchaseReservedDBInstancesOfferingError {
-        PurchaseReservedDBInstancesOfferingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PurchaseReservedDBInstancesOfferingError {
-    fn from(err: io::Error) -> PurchaseReservedDBInstancesOfferingError {
-        PurchaseReservedDBInstancesOfferingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PurchaseReservedDBInstancesOfferingError {
@@ -30717,13 +27909,6 @@ impl Error for PurchaseReservedDBInstancesOfferingError {
             PurchaseReservedDBInstancesOfferingError::ReservedDBInstancesOfferingNotFoundFault(
                 ref cause,
             ) => cause,
-            PurchaseReservedDBInstancesOfferingError::Validation(ref cause) => cause,
-            PurchaseReservedDBInstancesOfferingError::Credentials(ref err) => err.description(),
-            PurchaseReservedDBInstancesOfferingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PurchaseReservedDBInstancesOfferingError::ParseError(ref cause) => cause,
-            PurchaseReservedDBInstancesOfferingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30734,20 +27919,10 @@ pub enum RebootDBInstanceError {
     DBInstanceNotFoundFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RebootDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RebootDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30755,20 +27930,22 @@ impl RebootDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return RebootDBInstanceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RebootDBInstanceError::DBInstanceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDBInstanceState" => {
-                        return RebootDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RebootDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RebootDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30777,28 +27954,6 @@ impl RebootDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RebootDBInstanceError {
-    fn from(err: XmlParseError) -> RebootDBInstanceError {
-        let XmlParseError(message) = err;
-        RebootDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RebootDBInstanceError {
-    fn from(err: CredentialsError) -> RebootDBInstanceError {
-        RebootDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RebootDBInstanceError {
-    fn from(err: HttpDispatchError) -> RebootDBInstanceError {
-        RebootDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RebootDBInstanceError {
-    fn from(err: io::Error) -> RebootDBInstanceError {
-        RebootDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RebootDBInstanceError {
@@ -30811,11 +27966,6 @@ impl Error for RebootDBInstanceError {
         match *self {
             RebootDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
             RebootDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
-            RebootDBInstanceError::Validation(ref cause) => cause,
-            RebootDBInstanceError::Credentials(ref err) => err.description(),
-            RebootDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootDBInstanceError::ParseError(ref cause) => cause,
-            RebootDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30828,20 +27978,10 @@ pub enum RemoveFromGlobalClusterError {
     GlobalClusterNotFoundFault(String),
     /// <p><p/></p>
     InvalidGlobalClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveFromGlobalClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveFromGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFromGlobalClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30849,25 +27989,31 @@ impl RemoveFromGlobalClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return RemoveFromGlobalClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveFromGlobalClusterError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "GlobalClusterNotFoundFault" => {
-                        return RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidGlobalClusterStateFault" => {
-                        return RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RemoveFromGlobalClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30876,28 +28022,6 @@ impl RemoveFromGlobalClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveFromGlobalClusterError {
-    fn from(err: XmlParseError) -> RemoveFromGlobalClusterError {
-        let XmlParseError(message) = err;
-        RemoveFromGlobalClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveFromGlobalClusterError {
-    fn from(err: CredentialsError) -> RemoveFromGlobalClusterError {
-        RemoveFromGlobalClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveFromGlobalClusterError {
-    fn from(err: HttpDispatchError) -> RemoveFromGlobalClusterError {
-        RemoveFromGlobalClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveFromGlobalClusterError {
-    fn from(err: io::Error) -> RemoveFromGlobalClusterError {
-        RemoveFromGlobalClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveFromGlobalClusterError {
@@ -30911,13 +28035,6 @@ impl Error for RemoveFromGlobalClusterError {
             RemoveFromGlobalClusterError::DBClusterNotFoundFault(ref cause) => cause,
             RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(ref cause) => cause,
             RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(ref cause) => cause,
-            RemoveFromGlobalClusterError::Validation(ref cause) => cause,
-            RemoveFromGlobalClusterError::Credentials(ref err) => err.description(),
-            RemoveFromGlobalClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveFromGlobalClusterError::ParseError(ref cause) => cause,
-            RemoveFromGlobalClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -30930,20 +28047,10 @@ pub enum RemoveRoleFromDBClusterError {
     DBClusterRoleNotFoundFault(String),
     /// <p>The requested operation can't be performed while the cluster is in this state.</p>
     InvalidDBClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveRoleFromDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveRoleFromDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveRoleFromDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -30951,25 +28058,31 @@ impl RemoveRoleFromDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return RemoveRoleFromDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveRoleFromDBClusterError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterRoleNotFound" => {
-                        return RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RemoveRoleFromDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -30978,28 +28091,6 @@ impl RemoveRoleFromDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveRoleFromDBClusterError {
-    fn from(err: XmlParseError) -> RemoveRoleFromDBClusterError {
-        let XmlParseError(message) = err;
-        RemoveRoleFromDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveRoleFromDBClusterError {
-    fn from(err: CredentialsError) -> RemoveRoleFromDBClusterError {
-        RemoveRoleFromDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveRoleFromDBClusterError {
-    fn from(err: HttpDispatchError) -> RemoveRoleFromDBClusterError {
-        RemoveRoleFromDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveRoleFromDBClusterError {
-    fn from(err: io::Error) -> RemoveRoleFromDBClusterError {
-        RemoveRoleFromDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveRoleFromDBClusterError {
@@ -31013,13 +28104,6 @@ impl Error for RemoveRoleFromDBClusterError {
             RemoveRoleFromDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
             RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(ref cause) => cause,
             RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
-            RemoveRoleFromDBClusterError::Validation(ref cause) => cause,
-            RemoveRoleFromDBClusterError::Credentials(ref err) => err.description(),
-            RemoveRoleFromDBClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveRoleFromDBClusterError::ParseError(ref cause) => cause,
-            RemoveRoleFromDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31032,20 +28116,10 @@ pub enum RemoveRoleFromDBInstanceError {
     DBInstanceRoleNotFoundFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveRoleFromDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveRoleFromDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveRoleFromDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -31053,25 +28127,31 @@ impl RemoveRoleFromDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return RemoveRoleFromDBInstanceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveRoleFromDBInstanceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceRoleNotFound" => {
-                        return RemoveRoleFromDBInstanceError::DBInstanceRoleNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveRoleFromDBInstanceError::DBInstanceRoleNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBInstanceState" => {
-                        return RemoveRoleFromDBInstanceError::InvalidDBInstanceStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveRoleFromDBInstanceError::InvalidDBInstanceStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RemoveRoleFromDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31080,28 +28160,6 @@ impl RemoveRoleFromDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveRoleFromDBInstanceError {
-    fn from(err: XmlParseError) -> RemoveRoleFromDBInstanceError {
-        let XmlParseError(message) = err;
-        RemoveRoleFromDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveRoleFromDBInstanceError {
-    fn from(err: CredentialsError) -> RemoveRoleFromDBInstanceError {
-        RemoveRoleFromDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveRoleFromDBInstanceError {
-    fn from(err: HttpDispatchError) -> RemoveRoleFromDBInstanceError {
-        RemoveRoleFromDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveRoleFromDBInstanceError {
-    fn from(err: io::Error) -> RemoveRoleFromDBInstanceError {
-        RemoveRoleFromDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveRoleFromDBInstanceError {
@@ -31115,13 +28173,6 @@ impl Error for RemoveRoleFromDBInstanceError {
             RemoveRoleFromDBInstanceError::DBInstanceNotFoundFault(ref cause) => cause,
             RemoveRoleFromDBInstanceError::DBInstanceRoleNotFoundFault(ref cause) => cause,
             RemoveRoleFromDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
-            RemoveRoleFromDBInstanceError::Validation(ref cause) => cause,
-            RemoveRoleFromDBInstanceError::Credentials(ref err) => err.description(),
-            RemoveRoleFromDBInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveRoleFromDBInstanceError::ParseError(ref cause) => cause,
-            RemoveRoleFromDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31132,31 +28183,37 @@ pub enum RemoveSourceIdentifierFromSubscriptionError {
     SourceNotFoundFault(String),
     /// <p>The subscription name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveSourceIdentifierFromSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveSourceIdentifierFromSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveSourceIdentifierFromSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "SourceNotFound" => return RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(String::from(parsed_error.message)),"SubscriptionNotFound" => return RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "SourceNotFound" => {
+                        return RusotoError::Service(
+                            RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "SubscriptionNotFound" => {
+                        return RusotoError::Service(
+                            RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        RemoveSourceIdentifierFromSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31165,28 +28222,6 @@ impl RemoveSourceIdentifierFromSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveSourceIdentifierFromSubscriptionError {
-    fn from(err: XmlParseError) -> RemoveSourceIdentifierFromSubscriptionError {
-        let XmlParseError(message) = err;
-        RemoveSourceIdentifierFromSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveSourceIdentifierFromSubscriptionError {
-    fn from(err: CredentialsError) -> RemoveSourceIdentifierFromSubscriptionError {
-        RemoveSourceIdentifierFromSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveSourceIdentifierFromSubscriptionError {
-    fn from(err: HttpDispatchError) -> RemoveSourceIdentifierFromSubscriptionError {
-        RemoveSourceIdentifierFromSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveSourceIdentifierFromSubscriptionError {
-    fn from(err: io::Error) -> RemoveSourceIdentifierFromSubscriptionError {
-        RemoveSourceIdentifierFromSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveSourceIdentifierFromSubscriptionError {
@@ -31201,13 +28236,6 @@ impl Error for RemoveSourceIdentifierFromSubscriptionError {
             RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(ref cause) => {
                 cause
             }
-            RemoveSourceIdentifierFromSubscriptionError::Validation(ref cause) => cause,
-            RemoveSourceIdentifierFromSubscriptionError::Credentials(ref err) => err.description(),
-            RemoveSourceIdentifierFromSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveSourceIdentifierFromSubscriptionError::ParseError(ref cause) => cause,
-            RemoveSourceIdentifierFromSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31220,20 +28248,10 @@ pub enum RemoveTagsFromResourceError {
     DBInstanceNotFoundFault(String),
     /// <p> <i>DBSnapshotIdentifier</i> doesn't refer to an existing DB snapshot. </p>
     DBSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -31241,25 +28259,31 @@ impl RemoveTagsFromResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return RemoveTagsFromResourceError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveTagsFromResourceError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBInstanceNotFound" => {
-                        return RemoveTagsFromResourceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveTagsFromResourceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBSnapshotNotFound" => {
-                        return RemoveTagsFromResourceError::DBSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RemoveTagsFromResourceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31268,28 +28292,6 @@ impl RemoveTagsFromResourceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveTagsFromResourceError {
-    fn from(err: XmlParseError) -> RemoveTagsFromResourceError {
-        let XmlParseError(message) = err;
-        RemoveTagsFromResourceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsFromResourceError {
-    fn from(err: CredentialsError) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsFromResourceError {
-    fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsFromResourceError {
-    fn from(err: io::Error) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -31303,13 +28305,6 @@ impl Error for RemoveTagsFromResourceError {
             RemoveTagsFromResourceError::DBClusterNotFoundFault(ref cause) => cause,
             RemoveTagsFromResourceError::DBInstanceNotFoundFault(ref cause) => cause,
             RemoveTagsFromResourceError::DBSnapshotNotFoundFault(ref cause) => cause,
-            RemoveTagsFromResourceError::Validation(ref cause) => cause,
-            RemoveTagsFromResourceError::Credentials(ref err) => err.description(),
-            RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveTagsFromResourceError::ParseError(ref cause) => cause,
-            RemoveTagsFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31320,20 +28315,12 @@ pub enum ResetDBClusterParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you can't delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResetDBClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResetDBClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ResetDBClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -31341,20 +28328,24 @@ impl ResetDBClusterParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBParameterGroupState" => {
-                        return ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ResetDBClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31363,28 +28354,6 @@ impl ResetDBClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ResetDBClusterParameterGroupError {
-    fn from(err: XmlParseError) -> ResetDBClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        ResetDBClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ResetDBClusterParameterGroupError {
-    fn from(err: CredentialsError) -> ResetDBClusterParameterGroupError {
-        ResetDBClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResetDBClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> ResetDBClusterParameterGroupError {
-        ResetDBClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResetDBClusterParameterGroupError {
-    fn from(err: io::Error) -> ResetDBClusterParameterGroupError {
-        ResetDBClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetDBClusterParameterGroupError {
@@ -31399,13 +28368,6 @@ impl Error for ResetDBClusterParameterGroupError {
             ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => {
                 cause
             }
-            ResetDBClusterParameterGroupError::Validation(ref cause) => cause,
-            ResetDBClusterParameterGroupError::Credentials(ref err) => err.description(),
-            ResetDBClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ResetDBClusterParameterGroupError::ParseError(ref cause) => cause,
-            ResetDBClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31416,20 +28378,10 @@ pub enum ResetDBParameterGroupError {
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you can't delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResetDBParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResetDBParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetDBParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -31437,20 +28389,24 @@ impl ResetDBParameterGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
-                        return ResetDBParameterGroupError::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ResetDBParameterGroupError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBParameterGroupState" => {
-                        return ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ResetDBParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31459,28 +28415,6 @@ impl ResetDBParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ResetDBParameterGroupError {
-    fn from(err: XmlParseError) -> ResetDBParameterGroupError {
-        let XmlParseError(message) = err;
-        ResetDBParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ResetDBParameterGroupError {
-    fn from(err: CredentialsError) -> ResetDBParameterGroupError {
-        ResetDBParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResetDBParameterGroupError {
-    fn from(err: HttpDispatchError) -> ResetDBParameterGroupError {
-        ResetDBParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResetDBParameterGroupError {
-    fn from(err: io::Error) -> ResetDBParameterGroupError {
-        ResetDBParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetDBParameterGroupError {
@@ -31493,13 +28427,6 @@ impl Error for ResetDBParameterGroupError {
         match *self {
             ResetDBParameterGroupError::DBParameterGroupNotFoundFault(ref cause) => cause,
             ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(ref cause) => cause,
-            ResetDBParameterGroupError::Validation(ref cause) => cause,
-            ResetDBParameterGroupError::Credentials(ref err) => err.description(),
-            ResetDBParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ResetDBParameterGroupError::ParseError(ref cause) => cause,
-            ResetDBParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31532,20 +28459,10 @@ pub enum RestoreDBClusterFromS3Error {
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would result in the user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreDBClusterFromS3Error {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreDBClusterFromS3Error {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreDBClusterFromS3Error> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -31553,75 +28470,99 @@ impl RestoreDBClusterFromS3Error {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterAlreadyExistsFault" => {
-                        return RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DBClusterNotFoundFault" => {
-                        return RestoreDBClusterFromS3Error::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterParameterGroupNotFound" => {
-                        return RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBClusterQuotaExceededFault" => {
-                        return RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DBSubnetGroupNotFoundFault" => {
-                        return RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InsufficientStorageClusterCapacity" => {
-                        return RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidDBSubnetGroupStateFault" => {
-                        return RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidS3BucketFault" => {
-                        return RestoreDBClusterFromS3Error::InvalidS3BucketFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::InvalidS3BucketFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return RestoreDBClusterFromS3Error::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RestoreDBClusterFromS3Error::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "StorageQuotaExceeded" => {
-                        return RestoreDBClusterFromS3Error::StorageQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreDBClusterFromS3Error::StorageQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RestoreDBClusterFromS3Error::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31630,28 +28571,6 @@ impl RestoreDBClusterFromS3Error {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreDBClusterFromS3Error {
-    fn from(err: XmlParseError) -> RestoreDBClusterFromS3Error {
-        let XmlParseError(message) = err;
-        RestoreDBClusterFromS3Error::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreDBClusterFromS3Error {
-    fn from(err: CredentialsError) -> RestoreDBClusterFromS3Error {
-        RestoreDBClusterFromS3Error::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreDBClusterFromS3Error {
-    fn from(err: HttpDispatchError) -> RestoreDBClusterFromS3Error {
-        RestoreDBClusterFromS3Error::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreDBClusterFromS3Error {
-    fn from(err: io::Error) -> RestoreDBClusterFromS3Error {
-        RestoreDBClusterFromS3Error::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBClusterFromS3Error {
@@ -31677,13 +28596,6 @@ impl Error for RestoreDBClusterFromS3Error {
             RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(ref cause) => cause,
             RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(ref cause) => cause,
             RestoreDBClusterFromS3Error::StorageQuotaExceededFault(ref cause) => cause,
-            RestoreDBClusterFromS3Error::Validation(ref cause) => cause,
-            RestoreDBClusterFromS3Error::Credentials(ref err) => err.description(),
-            RestoreDBClusterFromS3Error::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreDBClusterFromS3Error::ParseError(ref cause) => cause,
-            RestoreDBClusterFromS3Error::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31722,31 +28634,133 @@ pub enum RestoreDBClusterFromSnapshotError {
     OptionGroupNotFoundFault(String),
     /// <p>The request would result in the user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreDBClusterFromSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreDBClusterFromSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RestoreDBClusterFromSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBClusterAlreadyExistsFault" => return RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFound" => return RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => return RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => return RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFound" => return RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientDBClusterCapacityFault" => return RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacity" => return RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => return RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBSnapshotState" => return RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => return RestoreDBClusterFromSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreDBClusterFromSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => return RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"StorageQuotaExceeded" => return RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DBClusterAlreadyExistsFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBClusterParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBClusterQuotaExceededFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBClusterSnapshotNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSnapshotNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientDBClusterCapacityFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientStorageClusterCapacity" => return RusotoError::Service(
+                        RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidDBClusterSnapshotStateFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBSnapshotState" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidRestoreFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidSubnet" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::InvalidSubnet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "OptionGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "StorageQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        RestoreDBClusterFromSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31755,28 +28769,6 @@ impl RestoreDBClusterFromSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreDBClusterFromSnapshotError {
-    fn from(err: XmlParseError) -> RestoreDBClusterFromSnapshotError {
-        let XmlParseError(message) = err;
-        RestoreDBClusterFromSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreDBClusterFromSnapshotError {
-    fn from(err: CredentialsError) -> RestoreDBClusterFromSnapshotError {
-        RestoreDBClusterFromSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreDBClusterFromSnapshotError {
-    fn from(err: HttpDispatchError) -> RestoreDBClusterFromSnapshotError {
-        RestoreDBClusterFromSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreDBClusterFromSnapshotError {
-    fn from(err: io::Error) -> RestoreDBClusterFromSnapshotError {
-        RestoreDBClusterFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBClusterFromSnapshotError {
@@ -31811,13 +28803,6 @@ impl Error for RestoreDBClusterFromSnapshotError {
             RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(ref cause) => cause,
             RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(ref cause) => cause,
             RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::Validation(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::Credentials(ref err) => err.description(),
-            RestoreDBClusterFromSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreDBClusterFromSnapshotError::ParseError(ref cause) => cause,
-            RestoreDBClusterFromSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -31858,31 +28843,138 @@ pub enum RestoreDBClusterToPointInTimeError {
     OptionGroupNotFoundFault(String),
     /// <p>The request would result in the user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreDBClusterToPointInTimeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreDBClusterToPointInTimeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RestoreDBClusterToPointInTimeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DBClusterAlreadyExistsFault" => return RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(String::from(parsed_error.message)),"DBClusterNotFoundFault" => return RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(String::from(parsed_error.message)),"DBClusterParameterGroupNotFound" => return RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBClusterQuotaExceededFault" => return RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(String::from(parsed_error.message)),"DBClusterSnapshotNotFoundFault" => return RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"InsufficientDBClusterCapacityFault" => return RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(String::from(parsed_error.message)),"InsufficientStorageClusterCapacity" => return RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(String::from(parsed_error.message)),"InvalidDBClusterSnapshotStateFault" => return RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidDBClusterStateFault" => return RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(String::from(parsed_error.message)),"InvalidDBSnapshotState" => return RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => return RestoreDBClusterToPointInTimeError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreDBClusterToPointInTimeError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => return RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"StorageQuotaExceeded" => return RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DBClusterAlreadyExistsFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBClusterParameterGroupNotFound" => return RusotoError::Service(
+                        RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "DBClusterQuotaExceededFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBClusterSnapshotNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientDBClusterCapacityFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientStorageClusterCapacity" => return RusotoError::Service(
+                        RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidDBClusterSnapshotStateFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidDBSnapshotState" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidRestoreFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidSubnet" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::InvalidSubnet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "OptionGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "StorageQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        RestoreDBClusterToPointInTimeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -31891,28 +28983,6 @@ impl RestoreDBClusterToPointInTimeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreDBClusterToPointInTimeError {
-    fn from(err: XmlParseError) -> RestoreDBClusterToPointInTimeError {
-        let XmlParseError(message) = err;
-        RestoreDBClusterToPointInTimeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreDBClusterToPointInTimeError {
-    fn from(err: CredentialsError) -> RestoreDBClusterToPointInTimeError {
-        RestoreDBClusterToPointInTimeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreDBClusterToPointInTimeError {
-    fn from(err: HttpDispatchError) -> RestoreDBClusterToPointInTimeError {
-        RestoreDBClusterToPointInTimeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreDBClusterToPointInTimeError {
-    fn from(err: io::Error) -> RestoreDBClusterToPointInTimeError {
-        RestoreDBClusterToPointInTimeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBClusterToPointInTimeError {
@@ -31948,13 +29018,6 @@ impl Error for RestoreDBClusterToPointInTimeError {
             RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(ref cause) => cause,
             RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(ref cause) => cause,
             RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::Validation(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::Credentials(ref err) => err.description(),
-            RestoreDBClusterToPointInTimeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreDBClusterToPointInTimeError::ParseError(ref cause) => cause,
-            RestoreDBClusterToPointInTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32001,31 +29064,157 @@ pub enum RestoreDBInstanceFromDBSnapshotError {
     StorageQuotaExceededFault(String),
     /// <p>Storage of the <i>StorageType</i> specified can't be associated with the DB instance. </p>
     StorageTypeNotSupportedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreDBInstanceFromDBSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreDBInstanceFromDBSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RestoreDBInstanceFromDBSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationNotFound" => return RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"BackupPolicyNotFoundFault" => return RestoreDBInstanceFromDBSnapshotError::BackupPolicyNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExists" => return RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBParameterGroupNotFound" => return RestoreDBInstanceFromDBSnapshotError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFound" => return RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBSnapshotNotFound" => return RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => return RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DomainNotFoundFault" => return RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceeded" => return RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacity" => return RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBSnapshotState" => return RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => return RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => return RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => return RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceeded" => return RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupported" => return RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "AuthorizationNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "BackupPolicyNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::BackupPolicyNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBInstanceAlreadyExists" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSecurityGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSnapshotNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(
+                        RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "DBSubnetGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DomainNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InstanceQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientDBInstanceCapacity" => return RusotoError::Service(
+                        RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidDBSnapshotState" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidRestoreFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidSubnet" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "OptionGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(
+                        RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "StorageQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "StorageTypeNotSupported" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        RestoreDBInstanceFromDBSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -32034,28 +29223,6 @@ impl RestoreDBInstanceFromDBSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreDBInstanceFromDBSnapshotError {
-    fn from(err: XmlParseError) -> RestoreDBInstanceFromDBSnapshotError {
-        let XmlParseError(message) = err;
-        RestoreDBInstanceFromDBSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreDBInstanceFromDBSnapshotError {
-    fn from(err: CredentialsError) -> RestoreDBInstanceFromDBSnapshotError {
-        RestoreDBInstanceFromDBSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreDBInstanceFromDBSnapshotError {
-    fn from(err: HttpDispatchError) -> RestoreDBInstanceFromDBSnapshotError {
-        RestoreDBInstanceFromDBSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreDBInstanceFromDBSnapshotError {
-    fn from(err: io::Error) -> RestoreDBInstanceFromDBSnapshotError {
-        RestoreDBInstanceFromDBSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBInstanceFromDBSnapshotError {
@@ -32092,13 +29259,6 @@ impl Error for RestoreDBInstanceFromDBSnapshotError {
             ) => cause,
             RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(ref cause) => cause,
             RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(ref cause) => cause,
-            RestoreDBInstanceFromDBSnapshotError::Validation(ref cause) => cause,
-            RestoreDBInstanceFromDBSnapshotError::Credentials(ref err) => err.description(),
-            RestoreDBInstanceFromDBSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreDBInstanceFromDBSnapshotError::ParseError(ref cause) => cause,
-            RestoreDBInstanceFromDBSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32139,20 +29299,10 @@ pub enum RestoreDBInstanceFromS3Error {
     StorageQuotaExceededFault(String),
     /// <p>Storage of the <i>StorageType</i> specified can't be associated with the DB instance. </p>
     StorageTypeNotSupportedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreDBInstanceFromS3Error {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreDBInstanceFromS3Error {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreDBInstanceFromS3Error> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -32160,95 +29310,127 @@ impl RestoreDBInstanceFromS3Error {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationNotFound" => {
-                        return RestoreDBInstanceFromS3Error::AuthorizationNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::AuthorizationNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "BackupPolicyNotFoundFault" => {
-                        return RestoreDBInstanceFromS3Error::BackupPolicyNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::BackupPolicyNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DBInstanceAlreadyExists" => {
-                        return RestoreDBInstanceFromS3Error::DBInstanceAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::DBInstanceAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBParameterGroupNotFound" => {
-                        return RestoreDBInstanceFromS3Error::DBParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSecurityGroupNotFound" => {
-                        return RestoreDBInstanceFromS3Error::DBSecurityGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::DBSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return RestoreDBInstanceFromS3Error::DBSubnetGroupDoesNotCoverEnoughAZs(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSubnetGroupNotFoundFault" => {
-                        return RestoreDBInstanceFromS3Error::DBSubnetGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InstanceQuotaExceeded" => {
-                        return RestoreDBInstanceFromS3Error::InstanceQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::InstanceQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InsufficientDBInstanceCapacity" => {
-                        return RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidS3BucketFault" => {
-                        return RestoreDBInstanceFromS3Error::InvalidS3BucketFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::InvalidS3BucketFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return RestoreDBInstanceFromS3Error::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RestoreDBInstanceFromS3Error::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return RestoreDBInstanceFromS3Error::InvalidVPCNetworkStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::InvalidVPCNetworkStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return RestoreDBInstanceFromS3Error::KMSKeyNotAccessibleFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::KMSKeyNotAccessibleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OptionGroupNotFoundFault" => {
-                        return RestoreDBInstanceFromS3Error::OptionGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::OptionGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
-                        return RestoreDBInstanceFromS3Error::ProvisionedIopsNotAvailableInAZFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::ProvisionedIopsNotAvailableInAZFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "StorageQuotaExceeded" => {
-                        return RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "StorageTypeNotSupported" => {
-                        return RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RestoreDBInstanceFromS3Error::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -32257,28 +29439,6 @@ impl RestoreDBInstanceFromS3Error {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreDBInstanceFromS3Error {
-    fn from(err: XmlParseError) -> RestoreDBInstanceFromS3Error {
-        let XmlParseError(message) = err;
-        RestoreDBInstanceFromS3Error::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreDBInstanceFromS3Error {
-    fn from(err: CredentialsError) -> RestoreDBInstanceFromS3Error {
-        RestoreDBInstanceFromS3Error::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreDBInstanceFromS3Error {
-    fn from(err: HttpDispatchError) -> RestoreDBInstanceFromS3Error {
-        RestoreDBInstanceFromS3Error::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreDBInstanceFromS3Error {
-    fn from(err: io::Error) -> RestoreDBInstanceFromS3Error {
-        RestoreDBInstanceFromS3Error::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBInstanceFromS3Error {
@@ -32306,13 +29466,6 @@ impl Error for RestoreDBInstanceFromS3Error {
             RestoreDBInstanceFromS3Error::ProvisionedIopsNotAvailableInAZFault(ref cause) => cause,
             RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(ref cause) => cause,
             RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(ref cause) => cause,
-            RestoreDBInstanceFromS3Error::Validation(ref cause) => cause,
-            RestoreDBInstanceFromS3Error::Credentials(ref err) => err.description(),
-            RestoreDBInstanceFromS3Error::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreDBInstanceFromS3Error::ParseError(ref cause) => cause,
-            RestoreDBInstanceFromS3Error::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32363,31 +29516,171 @@ pub enum RestoreDBInstanceToPointInTimeError {
     StorageQuotaExceededFault(String),
     /// <p>Storage of the <i>StorageType</i> specified can't be associated with the DB instance. </p>
     StorageTypeNotSupportedFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreDBInstanceToPointInTimeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreDBInstanceToPointInTimeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RestoreDBInstanceToPointInTimeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationNotFound" => return RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"BackupPolicyNotFoundFault" => return RestoreDBInstanceToPointInTimeError::BackupPolicyNotFoundFault(String::from(parsed_error.message)),"DBInstanceAlreadyExists" => return RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(String::from(parsed_error.message)),"DBInstanceAutomatedBackupNotFound" => return RestoreDBInstanceToPointInTimeError::DBInstanceAutomatedBackupNotFoundFault(String::from(parsed_error.message)),"DBInstanceNotFound" => return RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(String::from(parsed_error.message)),"DBParameterGroupNotFound" => return RestoreDBInstanceToPointInTimeError::DBParameterGroupNotFoundFault(String::from(parsed_error.message)),"DBSecurityGroupNotFound" => return RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(String::from(parsed_error.message)),"DBSubnetGroupDoesNotCoverEnoughAZs" => return RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(parsed_error.message)),"DBSubnetGroupNotFoundFault" => return RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DomainNotFoundFault" => return RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(String::from(parsed_error.message)),"InstanceQuotaExceeded" => return RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(String::from(parsed_error.message)),"InsufficientDBInstanceCapacity" => return RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(String::from(parsed_error.message)),"InvalidDBInstanceState" => return RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(String::from(parsed_error.message)),"InvalidRestoreFault" => return RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreDBInstanceToPointInTimeError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"KMSKeyNotAccessibleFault" => return RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(String::from(parsed_error.message)),"OptionGroupNotFoundFault" => return RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(String::from(parsed_error.message)),"PointInTimeRestoreNotEnabled" => return RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(String::from(parsed_error.message)),"ProvisionedIopsNotAvailableInAZFault" => return RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(String::from(parsed_error.message)),"StorageQuotaExceeded" => return RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(String::from(parsed_error.message)),"StorageTypeNotSupported" => return RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "AuthorizationNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "BackupPolicyNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::BackupPolicyNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBInstanceAlreadyExists" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(
+                        RestoreDBInstanceToPointInTimeError::DBInstanceAutomatedBackupNotFoundFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::DBParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSecurityGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupDoesNotCoverEnoughAZs" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DBSubnetGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DomainNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InstanceQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientDBInstanceCapacity" => return RusotoError::Service(
+                        RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidRestoreFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidSubnet" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::InvalidSubnet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "OptionGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "PointInTimeRestoreNotEnabled" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(
+                        RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "StorageQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "StorageTypeNotSupported" => {
+                        return RusotoError::Service(
+                            RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        RestoreDBInstanceToPointInTimeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -32396,28 +29689,6 @@ impl RestoreDBInstanceToPointInTimeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreDBInstanceToPointInTimeError {
-    fn from(err: XmlParseError) -> RestoreDBInstanceToPointInTimeError {
-        let XmlParseError(message) = err;
-        RestoreDBInstanceToPointInTimeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreDBInstanceToPointInTimeError {
-    fn from(err: CredentialsError) -> RestoreDBInstanceToPointInTimeError {
-        RestoreDBInstanceToPointInTimeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreDBInstanceToPointInTimeError {
-    fn from(err: HttpDispatchError) -> RestoreDBInstanceToPointInTimeError {
-        RestoreDBInstanceToPointInTimeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreDBInstanceToPointInTimeError {
-    fn from(err: io::Error) -> RestoreDBInstanceToPointInTimeError {
-        RestoreDBInstanceToPointInTimeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreDBInstanceToPointInTimeError {
@@ -32460,13 +29731,6 @@ impl Error for RestoreDBInstanceToPointInTimeError {
             ) => cause,
             RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(ref cause) => cause,
             RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(ref cause) => cause,
-            RestoreDBInstanceToPointInTimeError::Validation(ref cause) => cause,
-            RestoreDBInstanceToPointInTimeError::Credentials(ref err) => err.description(),
-            RestoreDBInstanceToPointInTimeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreDBInstanceToPointInTimeError::ParseError(ref cause) => cause,
-            RestoreDBInstanceToPointInTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32479,20 +29743,12 @@ pub enum RevokeDBSecurityGroupIngressError {
     DBSecurityGroupNotFoundFault(String),
     /// <p>The state of the DB security group doesn't allow deletion.</p>
     InvalidDBSecurityGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeDBSecurityGroupIngressError {
-    pub fn from_response(res: BufferedHttpResponse) -> RevokeDBSecurityGroupIngressError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RevokeDBSecurityGroupIngressError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -32500,25 +29756,31 @@ impl RevokeDBSecurityGroupIngressError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationNotFound" => {
-                        return RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DBSecurityGroupNotFound" => {
-                        return RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBSecurityGroupState" => {
-                        return RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RevokeDBSecurityGroupIngressError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -32527,28 +29789,6 @@ impl RevokeDBSecurityGroupIngressError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RevokeDBSecurityGroupIngressError {
-    fn from(err: XmlParseError) -> RevokeDBSecurityGroupIngressError {
-        let XmlParseError(message) = err;
-        RevokeDBSecurityGroupIngressError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RevokeDBSecurityGroupIngressError {
-    fn from(err: CredentialsError) -> RevokeDBSecurityGroupIngressError {
-        RevokeDBSecurityGroupIngressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RevokeDBSecurityGroupIngressError {
-    fn from(err: HttpDispatchError) -> RevokeDBSecurityGroupIngressError {
-        RevokeDBSecurityGroupIngressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RevokeDBSecurityGroupIngressError {
-    fn from(err: io::Error) -> RevokeDBSecurityGroupIngressError {
-        RevokeDBSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RevokeDBSecurityGroupIngressError {
@@ -32562,13 +29802,6 @@ impl Error for RevokeDBSecurityGroupIngressError {
             RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(ref cause) => cause,
             RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(ref cause) => cause,
             RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(ref cause) => cause,
-            RevokeDBSecurityGroupIngressError::Validation(ref cause) => cause,
-            RevokeDBSecurityGroupIngressError::Credentials(ref err) => err.description(),
-            RevokeDBSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RevokeDBSecurityGroupIngressError::ParseError(ref cause) => cause,
-            RevokeDBSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32581,20 +29814,10 @@ pub enum StartDBClusterError {
     InvalidDBClusterStateFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -32602,25 +29825,29 @@ impl StartDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return StartDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StartDBClusterError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDBClusterStateFault" => {
-                        return StartDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StartDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return StartDBClusterError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StartDBClusterError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        StartDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -32629,28 +29856,6 @@ impl StartDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for StartDBClusterError {
-    fn from(err: XmlParseError) -> StartDBClusterError {
-        let XmlParseError(message) = err;
-        StartDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for StartDBClusterError {
-    fn from(err: CredentialsError) -> StartDBClusterError {
-        StartDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartDBClusterError {
-    fn from(err: HttpDispatchError) -> StartDBClusterError {
-        StartDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartDBClusterError {
-    fn from(err: io::Error) -> StartDBClusterError {
-        StartDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StartDBClusterError {
@@ -32664,11 +29869,6 @@ impl Error for StartDBClusterError {
             StartDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
             StartDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
             StartDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
-            StartDBClusterError::Validation(ref cause) => cause,
-            StartDBClusterError::Credentials(ref err) => err.description(),
-            StartDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartDBClusterError::ParseError(ref cause) => cause,
-            StartDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32697,20 +29897,10 @@ pub enum StartDBInstanceError {
     InvalidVPCNetworkStateFault(String),
     /// <p>An error occurred accessing an AWS KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -32718,65 +29908,79 @@ impl StartDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationNotFound" => {
-                        return StartDBInstanceError::AuthorizationNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StartDBInstanceError::AuthorizationNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DBClusterNotFoundFault" => {
-                        return StartDBInstanceError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StartDBInstanceError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBInstanceNotFound" => {
-                        return StartDBInstanceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StartDBInstanceError::DBInstanceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
-                        return StartDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            StartDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "DBSubnetGroupNotFoundFault" => {
-                        return StartDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StartDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientDBInstanceCapacity" => {
-                        return StartDBInstanceError::InsufficientDBInstanceCapacityFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            StartDBInstanceError::InsufficientDBInstanceCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return StartDBInstanceError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StartDBInstanceError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return StartDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StartDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return StartDBInstanceError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StartDBInstanceError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return StartDBInstanceError::InvalidVPCNetworkStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StartDBInstanceError::InvalidVPCNetworkStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return StartDBInstanceError::KMSKeyNotAccessibleFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StartDBInstanceError::KMSKeyNotAccessibleFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        StartDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -32785,28 +29989,6 @@ impl StartDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for StartDBInstanceError {
-    fn from(err: XmlParseError) -> StartDBInstanceError {
-        let XmlParseError(message) = err;
-        StartDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for StartDBInstanceError {
-    fn from(err: CredentialsError) -> StartDBInstanceError {
-        StartDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartDBInstanceError {
-    fn from(err: HttpDispatchError) -> StartDBInstanceError {
-        StartDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartDBInstanceError {
-    fn from(err: io::Error) -> StartDBInstanceError {
-        StartDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StartDBInstanceError {
@@ -32828,11 +30010,6 @@ impl Error for StartDBInstanceError {
             StartDBInstanceError::InvalidSubnet(ref cause) => cause,
             StartDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => cause,
             StartDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => cause,
-            StartDBInstanceError::Validation(ref cause) => cause,
-            StartDBInstanceError::Credentials(ref err) => err.description(),
-            StartDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartDBInstanceError::ParseError(ref cause) => cause,
-            StartDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32845,20 +30022,10 @@ pub enum StopDBClusterError {
     InvalidDBClusterStateFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopDBClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopDBClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDBClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -32866,25 +30033,27 @@ impl StopDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return StopDBClusterError::DBClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StopDBClusterError::DBClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDBClusterStateFault" => {
-                        return StopDBClusterError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StopDBClusterError::InvalidDBClusterStateFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDBInstanceState" => {
-                        return StopDBClusterError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StopDBClusterError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        StopDBClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -32893,28 +30062,6 @@ impl StopDBClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for StopDBClusterError {
-    fn from(err: XmlParseError) -> StopDBClusterError {
-        let XmlParseError(message) = err;
-        StopDBClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for StopDBClusterError {
-    fn from(err: CredentialsError) -> StopDBClusterError {
-        StopDBClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopDBClusterError {
-    fn from(err: HttpDispatchError) -> StopDBClusterError {
-        StopDBClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopDBClusterError {
-    fn from(err: io::Error) -> StopDBClusterError {
-        StopDBClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopDBClusterError {
@@ -32928,11 +30075,6 @@ impl Error for StopDBClusterError {
             StopDBClusterError::DBClusterNotFoundFault(ref cause) => cause,
             StopDBClusterError::InvalidDBClusterStateFault(ref cause) => cause,
             StopDBClusterError::InvalidDBInstanceStateFault(ref cause) => cause,
-            StopDBClusterError::Validation(ref cause) => cause,
-            StopDBClusterError::Credentials(ref err) => err.description(),
-            StopDBClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopDBClusterError::ParseError(ref cause) => cause,
-            StopDBClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -32949,20 +30091,10 @@ pub enum StopDBInstanceError {
     InvalidDBInstanceStateFault(String),
     /// <p>The request would result in the user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopDBInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopDBInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopDBInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -32970,35 +30102,43 @@ impl StopDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return StopDBInstanceError::DBInstanceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(StopDBInstanceError::DBInstanceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DBSnapshotAlreadyExists" => {
-                        return StopDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StopDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBClusterStateFault" => {
-                        return StopDBInstanceError::InvalidDBClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StopDBInstanceError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidDBInstanceState" => {
-                        return StopDBInstanceError::InvalidDBInstanceStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StopDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotQuotaExceeded" => {
-                        return StopDBInstanceError::SnapshotQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            StopDBInstanceError::SnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        StopDBInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -33007,28 +30147,6 @@ impl StopDBInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for StopDBInstanceError {
-    fn from(err: XmlParseError) -> StopDBInstanceError {
-        let XmlParseError(message) = err;
-        StopDBInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for StopDBInstanceError {
-    fn from(err: CredentialsError) -> StopDBInstanceError {
-        StopDBInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopDBInstanceError {
-    fn from(err: HttpDispatchError) -> StopDBInstanceError {
-        StopDBInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopDBInstanceError {
-    fn from(err: io::Error) -> StopDBInstanceError {
-        StopDBInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for StopDBInstanceError {
@@ -33044,11 +30162,6 @@ impl Error for StopDBInstanceError {
             StopDBInstanceError::InvalidDBClusterStateFault(ref cause) => cause,
             StopDBInstanceError::InvalidDBInstanceStateFault(ref cause) => cause,
             StopDBInstanceError::SnapshotQuotaExceededFault(ref cause) => cause,
-            StopDBInstanceError::Validation(ref cause) => cause,
-            StopDBInstanceError::Credentials(ref err) => err.description(),
-            StopDBInstanceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopDBInstanceError::ParseError(ref cause) => cause,
-            StopDBInstanceError::Unknown(_) => "unknown error",
         }
     }
 }

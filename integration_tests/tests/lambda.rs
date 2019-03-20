@@ -3,7 +3,7 @@
 extern crate rusoto_core;
 extern crate rusoto_lambda;
 
-use rusoto_core::Region;
+use rusoto_core::{Region, RusotoError};
 use rusoto_lambda::{InvocationRequest, InvokeError, Lambda, LambdaClient, ListFunctionsRequest};
 
 #[test]
@@ -28,7 +28,7 @@ fn should_function_not_found() {
         let result = client.invoke(request).sync();
 
         assert!(result.is_err());
-        if let Err(InvokeError::ResourceNotFound(resp)) = result {
+        if let Err(RusotoError::Service(InvokeError::ResourceNotFound(resp))) = result {
             assert!(resp.contains("Function not found:"));
         } else {
             assert!(
@@ -50,7 +50,7 @@ fn should_function_not_found() {
         let result = client.invoke(request).sync();
 
         assert!(result.is_err());
-        if let Err(InvokeError::ResourceNotFound(resp)) = result {
+        if let Err(RusotoError::Service(InvokeError::ResourceNotFound(resp))) = result {
             assert!(resp.contains("Function not found:"));
         } else {
             assert!(

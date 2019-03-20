@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -2932,20 +2929,10 @@ pub enum CreateDevicePoolError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDevicePoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDevicePoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDevicePoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2958,45 +2945,30 @@ impl CreateDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateDevicePoolError::Argument(String::from(error_message));
+                    return RusotoError::Service(CreateDevicePoolError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateDevicePoolError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateDevicePoolError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateDevicePoolError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateDevicePoolError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return CreateDevicePoolError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(CreateDevicePoolError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateDevicePoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDevicePoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDevicePoolError {
-    fn from(err: serde_json::error::Error) -> CreateDevicePoolError {
-        CreateDevicePoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDevicePoolError {
-    fn from(err: CredentialsError) -> CreateDevicePoolError {
-        CreateDevicePoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDevicePoolError {
-    fn from(err: HttpDispatchError) -> CreateDevicePoolError {
-        CreateDevicePoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDevicePoolError {
-    fn from(err: io::Error) -> CreateDevicePoolError {
-        CreateDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDevicePoolError {
@@ -3011,11 +2983,6 @@ impl Error for CreateDevicePoolError {
             CreateDevicePoolError::LimitExceeded(ref cause) => cause,
             CreateDevicePoolError::NotFound(ref cause) => cause,
             CreateDevicePoolError::ServiceAccount(ref cause) => cause,
-            CreateDevicePoolError::Validation(ref cause) => cause,
-            CreateDevicePoolError::Credentials(ref err) => err.description(),
-            CreateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDevicePoolError::ParseError(ref cause) => cause,
-            CreateDevicePoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3030,20 +2997,10 @@ pub enum CreateInstanceProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3056,45 +3013,30 @@ impl CreateInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateInstanceProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateInstanceProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateInstanceProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return CreateInstanceProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(CreateInstanceProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateInstanceProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateInstanceProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateInstanceProfileError {
-    fn from(err: serde_json::error::Error) -> CreateInstanceProfileError {
-        CreateInstanceProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateInstanceProfileError {
-    fn from(err: CredentialsError) -> CreateInstanceProfileError {
-        CreateInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateInstanceProfileError {
-    fn from(err: HttpDispatchError) -> CreateInstanceProfileError {
-        CreateInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateInstanceProfileError {
-    fn from(err: io::Error) -> CreateInstanceProfileError {
-        CreateInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateInstanceProfileError {
@@ -3109,13 +3051,6 @@ impl Error for CreateInstanceProfileError {
             CreateInstanceProfileError::LimitExceeded(ref cause) => cause,
             CreateInstanceProfileError::NotFound(ref cause) => cause,
             CreateInstanceProfileError::ServiceAccount(ref cause) => cause,
-            CreateInstanceProfileError::Validation(ref cause) => cause,
-            CreateInstanceProfileError::Credentials(ref err) => err.description(),
-            CreateInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateInstanceProfileError::ParseError(ref cause) => cause,
-            CreateInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3130,20 +3065,10 @@ pub enum CreateNetworkProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNetworkProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3156,45 +3081,30 @@ impl CreateNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateNetworkProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(CreateNetworkProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateNetworkProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateNetworkProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateNetworkProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateNetworkProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return CreateNetworkProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(CreateNetworkProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateNetworkProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateNetworkProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateNetworkProfileError {
-    fn from(err: serde_json::error::Error) -> CreateNetworkProfileError {
-        CreateNetworkProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateNetworkProfileError {
-    fn from(err: CredentialsError) -> CreateNetworkProfileError {
-        CreateNetworkProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateNetworkProfileError {
-    fn from(err: HttpDispatchError) -> CreateNetworkProfileError {
-        CreateNetworkProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateNetworkProfileError {
-    fn from(err: io::Error) -> CreateNetworkProfileError {
-        CreateNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateNetworkProfileError {
@@ -3209,13 +3119,6 @@ impl Error for CreateNetworkProfileError {
             CreateNetworkProfileError::LimitExceeded(ref cause) => cause,
             CreateNetworkProfileError::NotFound(ref cause) => cause,
             CreateNetworkProfileError::ServiceAccount(ref cause) => cause,
-            CreateNetworkProfileError::Validation(ref cause) => cause,
-            CreateNetworkProfileError::Credentials(ref err) => err.description(),
-            CreateNetworkProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateNetworkProfileError::ParseError(ref cause) => cause,
-            CreateNetworkProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3230,20 +3133,10 @@ pub enum CreateProjectError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3256,45 +3149,30 @@ impl CreateProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateProjectError::Argument(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return CreateProjectError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateProjectError {
-    fn from(err: serde_json::error::Error) -> CreateProjectError {
-        CreateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateProjectError {
-    fn from(err: CredentialsError) -> CreateProjectError {
-        CreateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateProjectError {
-    fn from(err: HttpDispatchError) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateProjectError {
-    fn from(err: io::Error) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -3309,11 +3187,6 @@ impl Error for CreateProjectError {
             CreateProjectError::LimitExceeded(ref cause) => cause,
             CreateProjectError::NotFound(ref cause) => cause,
             CreateProjectError::ServiceAccount(ref cause) => cause,
-            CreateProjectError::Validation(ref cause) => cause,
-            CreateProjectError::Credentials(ref err) => err.description(),
-            CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProjectError::ParseError(ref cause) => cause,
-            CreateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3328,20 +3201,10 @@ pub enum CreateRemoteAccessSessionError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRemoteAccessSessionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRemoteAccessSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRemoteAccessSessionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3354,49 +3217,30 @@ impl CreateRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateRemoteAccessSessionError::Argument(String::from(error_message));
+                    return RusotoError::Service(CreateRemoteAccessSessionError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateRemoteAccessSessionError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRemoteAccessSessionError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return CreateRemoteAccessSessionError::NotFound(String::from(error_message));
-                }
-                "ServiceAccountException" => {
-                    return CreateRemoteAccessSessionError::ServiceAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRemoteAccessSessionError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateRemoteAccessSessionError::Validation(error_message.to_string());
+                "ServiceAccountException" => {
+                    return RusotoError::Service(CreateRemoteAccessSessionError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRemoteAccessSessionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRemoteAccessSessionError {
-    fn from(err: serde_json::error::Error) -> CreateRemoteAccessSessionError {
-        CreateRemoteAccessSessionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRemoteAccessSessionError {
-    fn from(err: CredentialsError) -> CreateRemoteAccessSessionError {
-        CreateRemoteAccessSessionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRemoteAccessSessionError {
-    fn from(err: HttpDispatchError) -> CreateRemoteAccessSessionError {
-        CreateRemoteAccessSessionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRemoteAccessSessionError {
-    fn from(err: io::Error) -> CreateRemoteAccessSessionError {
-        CreateRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRemoteAccessSessionError {
@@ -3411,13 +3255,6 @@ impl Error for CreateRemoteAccessSessionError {
             CreateRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
             CreateRemoteAccessSessionError::NotFound(ref cause) => cause,
             CreateRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
-            CreateRemoteAccessSessionError::Validation(ref cause) => cause,
-            CreateRemoteAccessSessionError::Credentials(ref err) => err.description(),
-            CreateRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateRemoteAccessSessionError::ParseError(ref cause) => cause,
-            CreateRemoteAccessSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3432,20 +3269,10 @@ pub enum CreateUploadError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3458,45 +3285,30 @@ impl CreateUploadError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateUploadError::Argument(String::from(error_message));
+                    return RusotoError::Service(CreateUploadError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateUploadError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateUploadError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateUploadError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateUploadError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return CreateUploadError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(CreateUploadError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUploadError {
-    fn from(err: serde_json::error::Error) -> CreateUploadError {
-        CreateUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUploadError {
-    fn from(err: CredentialsError) -> CreateUploadError {
-        CreateUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUploadError {
-    fn from(err: HttpDispatchError) -> CreateUploadError {
-        CreateUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUploadError {
-    fn from(err: io::Error) -> CreateUploadError {
-        CreateUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUploadError {
@@ -3511,11 +3323,6 @@ impl Error for CreateUploadError {
             CreateUploadError::LimitExceeded(ref cause) => cause,
             CreateUploadError::NotFound(ref cause) => cause,
             CreateUploadError::ServiceAccount(ref cause) => cause,
-            CreateUploadError::Validation(ref cause) => cause,
-            CreateUploadError::Credentials(ref err) => err.description(),
-            CreateUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUploadError::ParseError(ref cause) => cause,
-            CreateUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3528,20 +3335,10 @@ pub enum CreateVPCEConfigurationError {
     LimitExceeded(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVPCEConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateVPCEConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVPCEConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3554,42 +3351,25 @@ impl CreateVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return CreateVPCEConfigurationError::Argument(String::from(error_message));
+                    return RusotoError::Service(CreateVPCEConfigurationError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateVPCEConfigurationError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateVPCEConfigurationError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAccountException" => {
-                    return CreateVPCEConfigurationError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(CreateVPCEConfigurationError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateVPCEConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateVPCEConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateVPCEConfigurationError {
-    fn from(err: serde_json::error::Error) -> CreateVPCEConfigurationError {
-        CreateVPCEConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateVPCEConfigurationError {
-    fn from(err: CredentialsError) -> CreateVPCEConfigurationError {
-        CreateVPCEConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateVPCEConfigurationError {
-    fn from(err: HttpDispatchError) -> CreateVPCEConfigurationError {
-        CreateVPCEConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateVPCEConfigurationError {
-    fn from(err: io::Error) -> CreateVPCEConfigurationError {
-        CreateVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateVPCEConfigurationError {
@@ -3603,13 +3383,6 @@ impl Error for CreateVPCEConfigurationError {
             CreateVPCEConfigurationError::Argument(ref cause) => cause,
             CreateVPCEConfigurationError::LimitExceeded(ref cause) => cause,
             CreateVPCEConfigurationError::ServiceAccount(ref cause) => cause,
-            CreateVPCEConfigurationError::Validation(ref cause) => cause,
-            CreateVPCEConfigurationError::Credentials(ref err) => err.description(),
-            CreateVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateVPCEConfigurationError::ParseError(ref cause) => cause,
-            CreateVPCEConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3624,20 +3397,10 @@ pub enum DeleteDevicePoolError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDevicePoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDevicePoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDevicePoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3650,45 +3413,30 @@ impl DeleteDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteDevicePoolError::Argument(String::from(error_message));
+                    return RusotoError::Service(DeleteDevicePoolError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteDevicePoolError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteDevicePoolError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteDevicePoolError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDevicePoolError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return DeleteDevicePoolError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteDevicePoolError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDevicePoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDevicePoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDevicePoolError {
-    fn from(err: serde_json::error::Error) -> DeleteDevicePoolError {
-        DeleteDevicePoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDevicePoolError {
-    fn from(err: CredentialsError) -> DeleteDevicePoolError {
-        DeleteDevicePoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDevicePoolError {
-    fn from(err: HttpDispatchError) -> DeleteDevicePoolError {
-        DeleteDevicePoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDevicePoolError {
-    fn from(err: io::Error) -> DeleteDevicePoolError {
-        DeleteDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDevicePoolError {
@@ -3703,11 +3451,6 @@ impl Error for DeleteDevicePoolError {
             DeleteDevicePoolError::LimitExceeded(ref cause) => cause,
             DeleteDevicePoolError::NotFound(ref cause) => cause,
             DeleteDevicePoolError::ServiceAccount(ref cause) => cause,
-            DeleteDevicePoolError::Validation(ref cause) => cause,
-            DeleteDevicePoolError::Credentials(ref err) => err.description(),
-            DeleteDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDevicePoolError::ParseError(ref cause) => cause,
-            DeleteDevicePoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3722,20 +3465,10 @@ pub enum DeleteInstanceProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3748,45 +3481,30 @@ impl DeleteInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteInstanceProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteInstanceProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteInstanceProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return DeleteInstanceProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteInstanceProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteInstanceProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteInstanceProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteInstanceProfileError {
-    fn from(err: serde_json::error::Error) -> DeleteInstanceProfileError {
-        DeleteInstanceProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteInstanceProfileError {
-    fn from(err: CredentialsError) -> DeleteInstanceProfileError {
-        DeleteInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteInstanceProfileError {
-    fn from(err: HttpDispatchError) -> DeleteInstanceProfileError {
-        DeleteInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteInstanceProfileError {
-    fn from(err: io::Error) -> DeleteInstanceProfileError {
-        DeleteInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteInstanceProfileError {
@@ -3801,13 +3519,6 @@ impl Error for DeleteInstanceProfileError {
             DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,
             DeleteInstanceProfileError::NotFound(ref cause) => cause,
             DeleteInstanceProfileError::ServiceAccount(ref cause) => cause,
-            DeleteInstanceProfileError::Validation(ref cause) => cause,
-            DeleteInstanceProfileError::Credentials(ref err) => err.description(),
-            DeleteInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteInstanceProfileError::ParseError(ref cause) => cause,
-            DeleteInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3822,20 +3533,10 @@ pub enum DeleteNetworkProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNetworkProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3848,45 +3549,30 @@ impl DeleteNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteNetworkProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(DeleteNetworkProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteNetworkProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteNetworkProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteNetworkProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteNetworkProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return DeleteNetworkProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteNetworkProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteNetworkProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteNetworkProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteNetworkProfileError {
-    fn from(err: serde_json::error::Error) -> DeleteNetworkProfileError {
-        DeleteNetworkProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteNetworkProfileError {
-    fn from(err: CredentialsError) -> DeleteNetworkProfileError {
-        DeleteNetworkProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteNetworkProfileError {
-    fn from(err: HttpDispatchError) -> DeleteNetworkProfileError {
-        DeleteNetworkProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteNetworkProfileError {
-    fn from(err: io::Error) -> DeleteNetworkProfileError {
-        DeleteNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteNetworkProfileError {
@@ -3901,13 +3587,6 @@ impl Error for DeleteNetworkProfileError {
             DeleteNetworkProfileError::LimitExceeded(ref cause) => cause,
             DeleteNetworkProfileError::NotFound(ref cause) => cause,
             DeleteNetworkProfileError::ServiceAccount(ref cause) => cause,
-            DeleteNetworkProfileError::Validation(ref cause) => cause,
-            DeleteNetworkProfileError::Credentials(ref err) => err.description(),
-            DeleteNetworkProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteNetworkProfileError::ParseError(ref cause) => cause,
-            DeleteNetworkProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3922,20 +3601,10 @@ pub enum DeleteProjectError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3948,45 +3617,30 @@ impl DeleteProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteProjectError::Argument(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return DeleteProjectError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteProjectError {
-    fn from(err: serde_json::error::Error) -> DeleteProjectError {
-        DeleteProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteProjectError {
-    fn from(err: CredentialsError) -> DeleteProjectError {
-        DeleteProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteProjectError {
-    fn from(err: HttpDispatchError) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteProjectError {
-    fn from(err: io::Error) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -4001,11 +3655,6 @@ impl Error for DeleteProjectError {
             DeleteProjectError::LimitExceeded(ref cause) => cause,
             DeleteProjectError::NotFound(ref cause) => cause,
             DeleteProjectError::ServiceAccount(ref cause) => cause,
-            DeleteProjectError::Validation(ref cause) => cause,
-            DeleteProjectError::Credentials(ref err) => err.description(),
-            DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProjectError::ParseError(ref cause) => cause,
-            DeleteProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4020,20 +3669,10 @@ pub enum DeleteRemoteAccessSessionError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRemoteAccessSessionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRemoteAccessSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRemoteAccessSessionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4046,49 +3685,30 @@ impl DeleteRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteRemoteAccessSessionError::Argument(String::from(error_message));
+                    return RusotoError::Service(DeleteRemoteAccessSessionError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteRemoteAccessSessionError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRemoteAccessSessionError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DeleteRemoteAccessSessionError::NotFound(String::from(error_message));
-                }
-                "ServiceAccountException" => {
-                    return DeleteRemoteAccessSessionError::ServiceAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRemoteAccessSessionError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteRemoteAccessSessionError::Validation(error_message.to_string());
+                "ServiceAccountException" => {
+                    return RusotoError::Service(DeleteRemoteAccessSessionError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRemoteAccessSessionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRemoteAccessSessionError {
-    fn from(err: serde_json::error::Error) -> DeleteRemoteAccessSessionError {
-        DeleteRemoteAccessSessionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRemoteAccessSessionError {
-    fn from(err: CredentialsError) -> DeleteRemoteAccessSessionError {
-        DeleteRemoteAccessSessionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRemoteAccessSessionError {
-    fn from(err: HttpDispatchError) -> DeleteRemoteAccessSessionError {
-        DeleteRemoteAccessSessionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRemoteAccessSessionError {
-    fn from(err: io::Error) -> DeleteRemoteAccessSessionError {
-        DeleteRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRemoteAccessSessionError {
@@ -4103,13 +3723,6 @@ impl Error for DeleteRemoteAccessSessionError {
             DeleteRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
             DeleteRemoteAccessSessionError::NotFound(ref cause) => cause,
             DeleteRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
-            DeleteRemoteAccessSessionError::Validation(ref cause) => cause,
-            DeleteRemoteAccessSessionError::Credentials(ref err) => err.description(),
-            DeleteRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRemoteAccessSessionError::ParseError(ref cause) => cause,
-            DeleteRemoteAccessSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4124,20 +3737,10 @@ pub enum DeleteRunError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4149,42 +3752,31 @@ impl DeleteRunError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return DeleteRunError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(DeleteRunError::Argument(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return DeleteRunError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteRunError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return DeleteRunError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteRunError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceAccountException" => {
-                    return DeleteRunError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteRunError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteRunError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRunError {
-    fn from(err: serde_json::error::Error) -> DeleteRunError {
-        DeleteRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRunError {
-    fn from(err: CredentialsError) -> DeleteRunError {
-        DeleteRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRunError {
-    fn from(err: HttpDispatchError) -> DeleteRunError {
-        DeleteRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRunError {
-    fn from(err: io::Error) -> DeleteRunError {
-        DeleteRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRunError {
@@ -4199,11 +3791,6 @@ impl Error for DeleteRunError {
             DeleteRunError::LimitExceeded(ref cause) => cause,
             DeleteRunError::NotFound(ref cause) => cause,
             DeleteRunError::ServiceAccount(ref cause) => cause,
-            DeleteRunError::Validation(ref cause) => cause,
-            DeleteRunError::Credentials(ref err) => err.description(),
-            DeleteRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRunError::ParseError(ref cause) => cause,
-            DeleteRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4218,20 +3805,10 @@ pub enum DeleteUploadError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4244,45 +3821,30 @@ impl DeleteUploadError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteUploadError::Argument(String::from(error_message));
+                    return RusotoError::Service(DeleteUploadError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteUploadError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteUploadError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteUploadError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUploadError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return DeleteUploadError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteUploadError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUploadError {
-    fn from(err: serde_json::error::Error) -> DeleteUploadError {
-        DeleteUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUploadError {
-    fn from(err: CredentialsError) -> DeleteUploadError {
-        DeleteUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUploadError {
-    fn from(err: HttpDispatchError) -> DeleteUploadError {
-        DeleteUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUploadError {
-    fn from(err: io::Error) -> DeleteUploadError {
-        DeleteUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUploadError {
@@ -4297,11 +3859,6 @@ impl Error for DeleteUploadError {
             DeleteUploadError::LimitExceeded(ref cause) => cause,
             DeleteUploadError::NotFound(ref cause) => cause,
             DeleteUploadError::ServiceAccount(ref cause) => cause,
-            DeleteUploadError::Validation(ref cause) => cause,
-            DeleteUploadError::Credentials(ref err) => err.description(),
-            DeleteUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUploadError::ParseError(ref cause) => cause,
-            DeleteUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4316,20 +3873,10 @@ pub enum DeleteVPCEConfigurationError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVPCEConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVPCEConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVPCEConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4342,47 +3889,30 @@ impl DeleteVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return DeleteVPCEConfigurationError::Argument(String::from(error_message));
+                    return RusotoError::Service(DeleteVPCEConfigurationError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOperationException" => {
-                    return DeleteVPCEConfigurationError::InvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteVPCEConfigurationError::InvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DeleteVPCEConfigurationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteVPCEConfigurationError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAccountException" => {
-                    return DeleteVPCEConfigurationError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteVPCEConfigurationError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteVPCEConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteVPCEConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteVPCEConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeleteVPCEConfigurationError {
-        DeleteVPCEConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVPCEConfigurationError {
-    fn from(err: CredentialsError) -> DeleteVPCEConfigurationError {
-        DeleteVPCEConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVPCEConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteVPCEConfigurationError {
-        DeleteVPCEConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVPCEConfigurationError {
-    fn from(err: io::Error) -> DeleteVPCEConfigurationError {
-        DeleteVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteVPCEConfigurationError {
@@ -4397,13 +3927,6 @@ impl Error for DeleteVPCEConfigurationError {
             DeleteVPCEConfigurationError::InvalidOperation(ref cause) => cause,
             DeleteVPCEConfigurationError::NotFound(ref cause) => cause,
             DeleteVPCEConfigurationError::ServiceAccount(ref cause) => cause,
-            DeleteVPCEConfigurationError::Validation(ref cause) => cause,
-            DeleteVPCEConfigurationError::Credentials(ref err) => err.description(),
-            DeleteVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteVPCEConfigurationError::ParseError(ref cause) => cause,
-            DeleteVPCEConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4418,20 +3941,10 @@ pub enum GetAccountSettingsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4444,45 +3957,30 @@ impl GetAccountSettingsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetAccountSettingsError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetAccountSettingsError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetAccountSettingsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetAccountSettingsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetAccountSettingsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetAccountSettingsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetAccountSettingsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetAccountSettingsError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetAccountSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAccountSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAccountSettingsError {
-    fn from(err: serde_json::error::Error) -> GetAccountSettingsError {
-        GetAccountSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountSettingsError {
-    fn from(err: CredentialsError) -> GetAccountSettingsError {
-        GetAccountSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountSettingsError {
-    fn from(err: HttpDispatchError) -> GetAccountSettingsError {
-        GetAccountSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountSettingsError {
-    fn from(err: io::Error) -> GetAccountSettingsError {
-        GetAccountSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAccountSettingsError {
@@ -4497,13 +3995,6 @@ impl Error for GetAccountSettingsError {
             GetAccountSettingsError::LimitExceeded(ref cause) => cause,
             GetAccountSettingsError::NotFound(ref cause) => cause,
             GetAccountSettingsError::ServiceAccount(ref cause) => cause,
-            GetAccountSettingsError::Validation(ref cause) => cause,
-            GetAccountSettingsError::Credentials(ref err) => err.description(),
-            GetAccountSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccountSettingsError::ParseError(ref cause) => cause,
-            GetAccountSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4518,20 +4009,10 @@ pub enum GetDeviceError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4543,42 +4024,31 @@ impl GetDeviceError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return GetDeviceError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(GetDeviceError::Argument(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return GetDeviceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetDeviceError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDeviceError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceAccountException" => {
-                    return GetDeviceError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetDeviceError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeviceError {
-    fn from(err: serde_json::error::Error) -> GetDeviceError {
-        GetDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeviceError {
-    fn from(err: CredentialsError) -> GetDeviceError {
-        GetDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeviceError {
-    fn from(err: HttpDispatchError) -> GetDeviceError {
-        GetDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeviceError {
-    fn from(err: io::Error) -> GetDeviceError {
-        GetDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeviceError {
@@ -4593,11 +4063,6 @@ impl Error for GetDeviceError {
             GetDeviceError::LimitExceeded(ref cause) => cause,
             GetDeviceError::NotFound(ref cause) => cause,
             GetDeviceError::ServiceAccount(ref cause) => cause,
-            GetDeviceError::Validation(ref cause) => cause,
-            GetDeviceError::Credentials(ref err) => err.description(),
-            GetDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDeviceError::ParseError(ref cause) => cause,
-            GetDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4612,20 +4077,10 @@ pub enum GetDeviceInstanceError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeviceInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeviceInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4638,45 +4093,30 @@ impl GetDeviceInstanceError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetDeviceInstanceError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetDeviceInstanceError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetDeviceInstanceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetDeviceInstanceError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetDeviceInstanceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetDeviceInstanceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetDeviceInstanceError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetDeviceInstanceError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDeviceInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeviceInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeviceInstanceError {
-    fn from(err: serde_json::error::Error) -> GetDeviceInstanceError {
-        GetDeviceInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeviceInstanceError {
-    fn from(err: CredentialsError) -> GetDeviceInstanceError {
-        GetDeviceInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeviceInstanceError {
-    fn from(err: HttpDispatchError) -> GetDeviceInstanceError {
-        GetDeviceInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeviceInstanceError {
-    fn from(err: io::Error) -> GetDeviceInstanceError {
-        GetDeviceInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeviceInstanceError {
@@ -4691,13 +4131,6 @@ impl Error for GetDeviceInstanceError {
             GetDeviceInstanceError::LimitExceeded(ref cause) => cause,
             GetDeviceInstanceError::NotFound(ref cause) => cause,
             GetDeviceInstanceError::ServiceAccount(ref cause) => cause,
-            GetDeviceInstanceError::Validation(ref cause) => cause,
-            GetDeviceInstanceError::Credentials(ref err) => err.description(),
-            GetDeviceInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDeviceInstanceError::ParseError(ref cause) => cause,
-            GetDeviceInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4712,20 +4145,10 @@ pub enum GetDevicePoolError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDevicePoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDevicePoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevicePoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4738,45 +4161,30 @@ impl GetDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetDevicePoolError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetDevicePoolError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetDevicePoolError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetDevicePoolError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetDevicePoolError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetDevicePoolError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetDevicePoolError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetDevicePoolError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDevicePoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDevicePoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDevicePoolError {
-    fn from(err: serde_json::error::Error) -> GetDevicePoolError {
-        GetDevicePoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDevicePoolError {
-    fn from(err: CredentialsError) -> GetDevicePoolError {
-        GetDevicePoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDevicePoolError {
-    fn from(err: HttpDispatchError) -> GetDevicePoolError {
-        GetDevicePoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDevicePoolError {
-    fn from(err: io::Error) -> GetDevicePoolError {
-        GetDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDevicePoolError {
@@ -4791,11 +4199,6 @@ impl Error for GetDevicePoolError {
             GetDevicePoolError::LimitExceeded(ref cause) => cause,
             GetDevicePoolError::NotFound(ref cause) => cause,
             GetDevicePoolError::ServiceAccount(ref cause) => cause,
-            GetDevicePoolError::Validation(ref cause) => cause,
-            GetDevicePoolError::Credentials(ref err) => err.description(),
-            GetDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDevicePoolError::ParseError(ref cause) => cause,
-            GetDevicePoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4810,20 +4213,12 @@ pub enum GetDevicePoolCompatibilityError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDevicePoolCompatibilityError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDevicePoolCompatibilityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetDevicePoolCompatibilityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4836,49 +4231,30 @@ impl GetDevicePoolCompatibilityError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetDevicePoolCompatibilityError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetDevicePoolCompatibilityError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetDevicePoolCompatibilityError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDevicePoolCompatibilityError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetDevicePoolCompatibilityError::NotFound(String::from(error_message));
-                }
-                "ServiceAccountException" => {
-                    return GetDevicePoolCompatibilityError::ServiceAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDevicePoolCompatibilityError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetDevicePoolCompatibilityError::Validation(error_message.to_string());
+                "ServiceAccountException" => {
+                    return RusotoError::Service(GetDevicePoolCompatibilityError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDevicePoolCompatibilityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDevicePoolCompatibilityError {
-    fn from(err: serde_json::error::Error) -> GetDevicePoolCompatibilityError {
-        GetDevicePoolCompatibilityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDevicePoolCompatibilityError {
-    fn from(err: CredentialsError) -> GetDevicePoolCompatibilityError {
-        GetDevicePoolCompatibilityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDevicePoolCompatibilityError {
-    fn from(err: HttpDispatchError) -> GetDevicePoolCompatibilityError {
-        GetDevicePoolCompatibilityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDevicePoolCompatibilityError {
-    fn from(err: io::Error) -> GetDevicePoolCompatibilityError {
-        GetDevicePoolCompatibilityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDevicePoolCompatibilityError {
@@ -4893,13 +4269,6 @@ impl Error for GetDevicePoolCompatibilityError {
             GetDevicePoolCompatibilityError::LimitExceeded(ref cause) => cause,
             GetDevicePoolCompatibilityError::NotFound(ref cause) => cause,
             GetDevicePoolCompatibilityError::ServiceAccount(ref cause) => cause,
-            GetDevicePoolCompatibilityError::Validation(ref cause) => cause,
-            GetDevicePoolCompatibilityError::Credentials(ref err) => err.description(),
-            GetDevicePoolCompatibilityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDevicePoolCompatibilityError::ParseError(ref cause) => cause,
-            GetDevicePoolCompatibilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4914,20 +4283,10 @@ pub enum GetInstanceProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4940,45 +4299,30 @@ impl GetInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetInstanceProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetInstanceProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetInstanceProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetInstanceProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetInstanceProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetInstanceProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetInstanceProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetInstanceProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetInstanceProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInstanceProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInstanceProfileError {
-    fn from(err: serde_json::error::Error) -> GetInstanceProfileError {
-        GetInstanceProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceProfileError {
-    fn from(err: CredentialsError) -> GetInstanceProfileError {
-        GetInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceProfileError {
-    fn from(err: HttpDispatchError) -> GetInstanceProfileError {
-        GetInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceProfileError {
-    fn from(err: io::Error) -> GetInstanceProfileError {
-        GetInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInstanceProfileError {
@@ -4993,13 +4337,6 @@ impl Error for GetInstanceProfileError {
             GetInstanceProfileError::LimitExceeded(ref cause) => cause,
             GetInstanceProfileError::NotFound(ref cause) => cause,
             GetInstanceProfileError::ServiceAccount(ref cause) => cause,
-            GetInstanceProfileError::Validation(ref cause) => cause,
-            GetInstanceProfileError::Credentials(ref err) => err.description(),
-            GetInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstanceProfileError::ParseError(ref cause) => cause,
-            GetInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5014,20 +4351,10 @@ pub enum GetJobError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5039,40 +4366,27 @@ impl GetJobError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return GetJobError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(GetJobError::Argument(String::from(error_message)));
+                }
                 "LimitExceededException" => {
-                    return GetJobError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetJobError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetJobError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)));
+                }
                 "ServiceAccountException" => {
-                    return GetJobError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetJobError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetJobError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobError {
-    fn from(err: serde_json::error::Error) -> GetJobError {
-        GetJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobError {
-    fn from(err: CredentialsError) -> GetJobError {
-        GetJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobError {
-    fn from(err: HttpDispatchError) -> GetJobError {
-        GetJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobError {
-    fn from(err: io::Error) -> GetJobError {
-        GetJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobError {
@@ -5087,11 +4401,6 @@ impl Error for GetJobError {
             GetJobError::LimitExceeded(ref cause) => cause,
             GetJobError::NotFound(ref cause) => cause,
             GetJobError::ServiceAccount(ref cause) => cause,
-            GetJobError::Validation(ref cause) => cause,
-            GetJobError::Credentials(ref err) => err.description(),
-            GetJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobError::ParseError(ref cause) => cause,
-            GetJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5106,20 +4415,10 @@ pub enum GetNetworkProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetNetworkProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNetworkProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5132,45 +4431,30 @@ impl GetNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetNetworkProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetNetworkProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetNetworkProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetNetworkProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetNetworkProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetNetworkProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetNetworkProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetNetworkProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetNetworkProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetNetworkProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetNetworkProfileError {
-    fn from(err: serde_json::error::Error) -> GetNetworkProfileError {
-        GetNetworkProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetNetworkProfileError {
-    fn from(err: CredentialsError) -> GetNetworkProfileError {
-        GetNetworkProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetNetworkProfileError {
-    fn from(err: HttpDispatchError) -> GetNetworkProfileError {
-        GetNetworkProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetNetworkProfileError {
-    fn from(err: io::Error) -> GetNetworkProfileError {
-        GetNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetNetworkProfileError {
@@ -5185,13 +4469,6 @@ impl Error for GetNetworkProfileError {
             GetNetworkProfileError::LimitExceeded(ref cause) => cause,
             GetNetworkProfileError::NotFound(ref cause) => cause,
             GetNetworkProfileError::ServiceAccount(ref cause) => cause,
-            GetNetworkProfileError::Validation(ref cause) => cause,
-            GetNetworkProfileError::Credentials(ref err) => err.description(),
-            GetNetworkProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetNetworkProfileError::ParseError(ref cause) => cause,
-            GetNetworkProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5208,20 +4485,10 @@ pub enum GetOfferingStatusError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOfferingStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOfferingStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOfferingStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5234,48 +4501,35 @@ impl GetOfferingStatusError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetOfferingStatusError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetOfferingStatusError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetOfferingStatusError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetOfferingStatusError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotEligibleException" => {
-                    return GetOfferingStatusError::NotEligible(String::from(error_message));
+                    return RusotoError::Service(GetOfferingStatusError::NotEligible(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetOfferingStatusError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetOfferingStatusError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetOfferingStatusError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetOfferingStatusError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetOfferingStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetOfferingStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetOfferingStatusError {
-    fn from(err: serde_json::error::Error) -> GetOfferingStatusError {
-        GetOfferingStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetOfferingStatusError {
-    fn from(err: CredentialsError) -> GetOfferingStatusError {
-        GetOfferingStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOfferingStatusError {
-    fn from(err: HttpDispatchError) -> GetOfferingStatusError {
-        GetOfferingStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOfferingStatusError {
-    fn from(err: io::Error) -> GetOfferingStatusError {
-        GetOfferingStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetOfferingStatusError {
@@ -5291,13 +4545,6 @@ impl Error for GetOfferingStatusError {
             GetOfferingStatusError::NotEligible(ref cause) => cause,
             GetOfferingStatusError::NotFound(ref cause) => cause,
             GetOfferingStatusError::ServiceAccount(ref cause) => cause,
-            GetOfferingStatusError::Validation(ref cause) => cause,
-            GetOfferingStatusError::Credentials(ref err) => err.description(),
-            GetOfferingStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetOfferingStatusError::ParseError(ref cause) => cause,
-            GetOfferingStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5312,20 +4559,10 @@ pub enum GetProjectError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5338,45 +4575,30 @@ impl GetProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetProjectError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetProjectError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetProjectError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetProjectError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetProjectError {
-    fn from(err: serde_json::error::Error) -> GetProjectError {
-        GetProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetProjectError {
-    fn from(err: CredentialsError) -> GetProjectError {
-        GetProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetProjectError {
-    fn from(err: HttpDispatchError) -> GetProjectError {
-        GetProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetProjectError {
-    fn from(err: io::Error) -> GetProjectError {
-        GetProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetProjectError {
@@ -5391,11 +4613,6 @@ impl Error for GetProjectError {
             GetProjectError::LimitExceeded(ref cause) => cause,
             GetProjectError::NotFound(ref cause) => cause,
             GetProjectError::ServiceAccount(ref cause) => cause,
-            GetProjectError::Validation(ref cause) => cause,
-            GetProjectError::Credentials(ref err) => err.description(),
-            GetProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetProjectError::ParseError(ref cause) => cause,
-            GetProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5410,20 +4627,10 @@ pub enum GetRemoteAccessSessionError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRemoteAccessSessionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRemoteAccessSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRemoteAccessSessionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5436,45 +4643,30 @@ impl GetRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetRemoteAccessSessionError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetRemoteAccessSessionError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetRemoteAccessSessionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetRemoteAccessSessionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetRemoteAccessSessionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetRemoteAccessSessionError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAccountException" => {
-                    return GetRemoteAccessSessionError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetRemoteAccessSessionError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRemoteAccessSessionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRemoteAccessSessionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRemoteAccessSessionError {
-    fn from(err: serde_json::error::Error) -> GetRemoteAccessSessionError {
-        GetRemoteAccessSessionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRemoteAccessSessionError {
-    fn from(err: CredentialsError) -> GetRemoteAccessSessionError {
-        GetRemoteAccessSessionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRemoteAccessSessionError {
-    fn from(err: HttpDispatchError) -> GetRemoteAccessSessionError {
-        GetRemoteAccessSessionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRemoteAccessSessionError {
-    fn from(err: io::Error) -> GetRemoteAccessSessionError {
-        GetRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRemoteAccessSessionError {
@@ -5489,13 +4681,6 @@ impl Error for GetRemoteAccessSessionError {
             GetRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
             GetRemoteAccessSessionError::NotFound(ref cause) => cause,
             GetRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
-            GetRemoteAccessSessionError::Validation(ref cause) => cause,
-            GetRemoteAccessSessionError::Credentials(ref err) => err.description(),
-            GetRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRemoteAccessSessionError::ParseError(ref cause) => cause,
-            GetRemoteAccessSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5510,20 +4695,10 @@ pub enum GetRunError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5535,40 +4710,27 @@ impl GetRunError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return GetRunError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(GetRunError::Argument(String::from(error_message)));
+                }
                 "LimitExceededException" => {
-                    return GetRunError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetRunError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetRunError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetRunError::NotFound(String::from(error_message)));
+                }
                 "ServiceAccountException" => {
-                    return GetRunError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetRunError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetRunError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRunError {
-    fn from(err: serde_json::error::Error) -> GetRunError {
-        GetRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRunError {
-    fn from(err: CredentialsError) -> GetRunError {
-        GetRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRunError {
-    fn from(err: HttpDispatchError) -> GetRunError {
-        GetRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRunError {
-    fn from(err: io::Error) -> GetRunError {
-        GetRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRunError {
@@ -5583,11 +4745,6 @@ impl Error for GetRunError {
             GetRunError::LimitExceeded(ref cause) => cause,
             GetRunError::NotFound(ref cause) => cause,
             GetRunError::ServiceAccount(ref cause) => cause,
-            GetRunError::Validation(ref cause) => cause,
-            GetRunError::Credentials(ref err) => err.description(),
-            GetRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRunError::ParseError(ref cause) => cause,
-            GetRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5602,20 +4759,10 @@ pub enum GetSuiteError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSuiteError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSuiteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSuiteError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5627,42 +4774,31 @@ impl GetSuiteError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return GetSuiteError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(GetSuiteError::Argument(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return GetSuiteError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetSuiteError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetSuiteError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetSuiteError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceAccountException" => {
-                    return GetSuiteError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetSuiteError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetSuiteError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSuiteError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSuiteError {
-    fn from(err: serde_json::error::Error) -> GetSuiteError {
-        GetSuiteError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSuiteError {
-    fn from(err: CredentialsError) -> GetSuiteError {
-        GetSuiteError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSuiteError {
-    fn from(err: HttpDispatchError) -> GetSuiteError {
-        GetSuiteError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSuiteError {
-    fn from(err: io::Error) -> GetSuiteError {
-        GetSuiteError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSuiteError {
@@ -5677,11 +4813,6 @@ impl Error for GetSuiteError {
             GetSuiteError::LimitExceeded(ref cause) => cause,
             GetSuiteError::NotFound(ref cause) => cause,
             GetSuiteError::ServiceAccount(ref cause) => cause,
-            GetSuiteError::Validation(ref cause) => cause,
-            GetSuiteError::Credentials(ref err) => err.description(),
-            GetSuiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSuiteError::ParseError(ref cause) => cause,
-            GetSuiteError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5696,20 +4827,10 @@ pub enum GetTestError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTestError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5721,40 +4842,27 @@ impl GetTestError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return GetTestError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(GetTestError::Argument(String::from(error_message)));
+                }
                 "LimitExceededException" => {
-                    return GetTestError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetTestError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetTestError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetTestError::NotFound(String::from(error_message)));
+                }
                 "ServiceAccountException" => {
-                    return GetTestError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetTestError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetTestError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTestError {
-    fn from(err: serde_json::error::Error) -> GetTestError {
-        GetTestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTestError {
-    fn from(err: CredentialsError) -> GetTestError {
-        GetTestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTestError {
-    fn from(err: HttpDispatchError) -> GetTestError {
-        GetTestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTestError {
-    fn from(err: io::Error) -> GetTestError {
-        GetTestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTestError {
@@ -5769,11 +4877,6 @@ impl Error for GetTestError {
             GetTestError::LimitExceeded(ref cause) => cause,
             GetTestError::NotFound(ref cause) => cause,
             GetTestError::ServiceAccount(ref cause) => cause,
-            GetTestError::Validation(ref cause) => cause,
-            GetTestError::Credentials(ref err) => err.description(),
-            GetTestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTestError::ParseError(ref cause) => cause,
-            GetTestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5788,20 +4891,10 @@ pub enum GetUploadError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5813,42 +4906,31 @@ impl GetUploadError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return GetUploadError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(GetUploadError::Argument(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return GetUploadError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetUploadError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetUploadError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetUploadError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceAccountException" => {
-                    return GetUploadError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetUploadError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUploadError {
-    fn from(err: serde_json::error::Error) -> GetUploadError {
-        GetUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUploadError {
-    fn from(err: CredentialsError) -> GetUploadError {
-        GetUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUploadError {
-    fn from(err: HttpDispatchError) -> GetUploadError {
-        GetUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUploadError {
-    fn from(err: io::Error) -> GetUploadError {
-        GetUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUploadError {
@@ -5863,11 +4945,6 @@ impl Error for GetUploadError {
             GetUploadError::LimitExceeded(ref cause) => cause,
             GetUploadError::NotFound(ref cause) => cause,
             GetUploadError::ServiceAccount(ref cause) => cause,
-            GetUploadError::Validation(ref cause) => cause,
-            GetUploadError::Credentials(ref err) => err.description(),
-            GetUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetUploadError::ParseError(ref cause) => cause,
-            GetUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5880,20 +4957,10 @@ pub enum GetVPCEConfigurationError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetVPCEConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetVPCEConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVPCEConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5906,42 +4973,25 @@ impl GetVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return GetVPCEConfigurationError::Argument(String::from(error_message));
+                    return RusotoError::Service(GetVPCEConfigurationError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetVPCEConfigurationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetVPCEConfigurationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return GetVPCEConfigurationError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(GetVPCEConfigurationError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetVPCEConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetVPCEConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetVPCEConfigurationError {
-    fn from(err: serde_json::error::Error) -> GetVPCEConfigurationError {
-        GetVPCEConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetVPCEConfigurationError {
-    fn from(err: CredentialsError) -> GetVPCEConfigurationError {
-        GetVPCEConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetVPCEConfigurationError {
-    fn from(err: HttpDispatchError) -> GetVPCEConfigurationError {
-        GetVPCEConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetVPCEConfigurationError {
-    fn from(err: io::Error) -> GetVPCEConfigurationError {
-        GetVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetVPCEConfigurationError {
@@ -5955,13 +5005,6 @@ impl Error for GetVPCEConfigurationError {
             GetVPCEConfigurationError::Argument(ref cause) => cause,
             GetVPCEConfigurationError::NotFound(ref cause) => cause,
             GetVPCEConfigurationError::ServiceAccount(ref cause) => cause,
-            GetVPCEConfigurationError::Validation(ref cause) => cause,
-            GetVPCEConfigurationError::Credentials(ref err) => err.description(),
-            GetVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetVPCEConfigurationError::ParseError(ref cause) => cause,
-            GetVPCEConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5976,20 +5019,12 @@ pub enum InstallToRemoteAccessSessionError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InstallToRemoteAccessSessionError {
-    pub fn from_response(res: BufferedHttpResponse) -> InstallToRemoteAccessSessionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<InstallToRemoteAccessSessionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6002,49 +5037,30 @@ impl InstallToRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return InstallToRemoteAccessSessionError::Argument(String::from(error_message));
+                    return RusotoError::Service(InstallToRemoteAccessSessionError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return InstallToRemoteAccessSessionError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(InstallToRemoteAccessSessionError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return InstallToRemoteAccessSessionError::NotFound(String::from(error_message));
-                }
-                "ServiceAccountException" => {
-                    return InstallToRemoteAccessSessionError::ServiceAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(InstallToRemoteAccessSessionError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return InstallToRemoteAccessSessionError::Validation(error_message.to_string());
+                "ServiceAccountException" => {
+                    return RusotoError::Service(InstallToRemoteAccessSessionError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InstallToRemoteAccessSessionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InstallToRemoteAccessSessionError {
-    fn from(err: serde_json::error::Error) -> InstallToRemoteAccessSessionError {
-        InstallToRemoteAccessSessionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InstallToRemoteAccessSessionError {
-    fn from(err: CredentialsError) -> InstallToRemoteAccessSessionError {
-        InstallToRemoteAccessSessionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InstallToRemoteAccessSessionError {
-    fn from(err: HttpDispatchError) -> InstallToRemoteAccessSessionError {
-        InstallToRemoteAccessSessionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InstallToRemoteAccessSessionError {
-    fn from(err: io::Error) -> InstallToRemoteAccessSessionError {
-        InstallToRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InstallToRemoteAccessSessionError {
@@ -6059,13 +5075,6 @@ impl Error for InstallToRemoteAccessSessionError {
             InstallToRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
             InstallToRemoteAccessSessionError::NotFound(ref cause) => cause,
             InstallToRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
-            InstallToRemoteAccessSessionError::Validation(ref cause) => cause,
-            InstallToRemoteAccessSessionError::Credentials(ref err) => err.description(),
-            InstallToRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InstallToRemoteAccessSessionError::ParseError(ref cause) => cause,
-            InstallToRemoteAccessSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6080,20 +5089,10 @@ pub enum ListArtifactsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListArtifactsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListArtifactsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArtifactsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6106,45 +5105,30 @@ impl ListArtifactsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListArtifactsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListArtifactsError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListArtifactsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListArtifactsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListArtifactsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListArtifactsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListArtifactsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListArtifactsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListArtifactsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListArtifactsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListArtifactsError {
-    fn from(err: serde_json::error::Error) -> ListArtifactsError {
-        ListArtifactsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListArtifactsError {
-    fn from(err: CredentialsError) -> ListArtifactsError {
-        ListArtifactsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListArtifactsError {
-    fn from(err: HttpDispatchError) -> ListArtifactsError {
-        ListArtifactsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListArtifactsError {
-    fn from(err: io::Error) -> ListArtifactsError {
-        ListArtifactsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListArtifactsError {
@@ -6159,11 +5143,6 @@ impl Error for ListArtifactsError {
             ListArtifactsError::LimitExceeded(ref cause) => cause,
             ListArtifactsError::NotFound(ref cause) => cause,
             ListArtifactsError::ServiceAccount(ref cause) => cause,
-            ListArtifactsError::Validation(ref cause) => cause,
-            ListArtifactsError::Credentials(ref err) => err.description(),
-            ListArtifactsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListArtifactsError::ParseError(ref cause) => cause,
-            ListArtifactsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6178,20 +5157,10 @@ pub enum ListDeviceInstancesError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeviceInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeviceInstancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceInstancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6204,45 +5173,30 @@ impl ListDeviceInstancesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListDeviceInstancesError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListDeviceInstancesError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListDeviceInstancesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListDeviceInstancesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListDeviceInstancesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListDeviceInstancesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListDeviceInstancesError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListDeviceInstancesError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDeviceInstancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDeviceInstancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDeviceInstancesError {
-    fn from(err: serde_json::error::Error) -> ListDeviceInstancesError {
-        ListDeviceInstancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDeviceInstancesError {
-    fn from(err: CredentialsError) -> ListDeviceInstancesError {
-        ListDeviceInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeviceInstancesError {
-    fn from(err: HttpDispatchError) -> ListDeviceInstancesError {
-        ListDeviceInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeviceInstancesError {
-    fn from(err: io::Error) -> ListDeviceInstancesError {
-        ListDeviceInstancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDeviceInstancesError {
@@ -6257,13 +5211,6 @@ impl Error for ListDeviceInstancesError {
             ListDeviceInstancesError::LimitExceeded(ref cause) => cause,
             ListDeviceInstancesError::NotFound(ref cause) => cause,
             ListDeviceInstancesError::ServiceAccount(ref cause) => cause,
-            ListDeviceInstancesError::Validation(ref cause) => cause,
-            ListDeviceInstancesError::Credentials(ref err) => err.description(),
-            ListDeviceInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDeviceInstancesError::ParseError(ref cause) => cause,
-            ListDeviceInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6278,20 +5225,10 @@ pub enum ListDevicePoolsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDevicePoolsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDevicePoolsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicePoolsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6304,45 +5241,30 @@ impl ListDevicePoolsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListDevicePoolsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListDevicePoolsError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListDevicePoolsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListDevicePoolsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListDevicePoolsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListDevicePoolsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListDevicePoolsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListDevicePoolsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListDevicePoolsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDevicePoolsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDevicePoolsError {
-    fn from(err: serde_json::error::Error) -> ListDevicePoolsError {
-        ListDevicePoolsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDevicePoolsError {
-    fn from(err: CredentialsError) -> ListDevicePoolsError {
-        ListDevicePoolsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDevicePoolsError {
-    fn from(err: HttpDispatchError) -> ListDevicePoolsError {
-        ListDevicePoolsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDevicePoolsError {
-    fn from(err: io::Error) -> ListDevicePoolsError {
-        ListDevicePoolsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDevicePoolsError {
@@ -6357,11 +5279,6 @@ impl Error for ListDevicePoolsError {
             ListDevicePoolsError::LimitExceeded(ref cause) => cause,
             ListDevicePoolsError::NotFound(ref cause) => cause,
             ListDevicePoolsError::ServiceAccount(ref cause) => cause,
-            ListDevicePoolsError::Validation(ref cause) => cause,
-            ListDevicePoolsError::Credentials(ref err) => err.description(),
-            ListDevicePoolsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDevicePoolsError::ParseError(ref cause) => cause,
-            ListDevicePoolsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6376,20 +5293,10 @@ pub enum ListDevicesError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDevicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6402,45 +5309,30 @@ impl ListDevicesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListDevicesError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListDevicesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListDevicesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListDevicesError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListDevicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDevicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDevicesError {
-    fn from(err: serde_json::error::Error) -> ListDevicesError {
-        ListDevicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDevicesError {
-    fn from(err: CredentialsError) -> ListDevicesError {
-        ListDevicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDevicesError {
-    fn from(err: HttpDispatchError) -> ListDevicesError {
-        ListDevicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDevicesError {
-    fn from(err: io::Error) -> ListDevicesError {
-        ListDevicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDevicesError {
@@ -6455,11 +5347,6 @@ impl Error for ListDevicesError {
             ListDevicesError::LimitExceeded(ref cause) => cause,
             ListDevicesError::NotFound(ref cause) => cause,
             ListDevicesError::ServiceAccount(ref cause) => cause,
-            ListDevicesError::Validation(ref cause) => cause,
-            ListDevicesError::Credentials(ref err) => err.description(),
-            ListDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDevicesError::ParseError(ref cause) => cause,
-            ListDevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6474,20 +5361,10 @@ pub enum ListInstanceProfilesError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListInstanceProfilesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListInstanceProfilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstanceProfilesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6500,45 +5377,30 @@ impl ListInstanceProfilesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListInstanceProfilesError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListInstanceProfilesError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListInstanceProfilesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListInstanceProfilesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListInstanceProfilesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListInstanceProfilesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListInstanceProfilesError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListInstanceProfilesError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListInstanceProfilesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListInstanceProfilesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListInstanceProfilesError {
-    fn from(err: serde_json::error::Error) -> ListInstanceProfilesError {
-        ListInstanceProfilesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListInstanceProfilesError {
-    fn from(err: CredentialsError) -> ListInstanceProfilesError {
-        ListInstanceProfilesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListInstanceProfilesError {
-    fn from(err: HttpDispatchError) -> ListInstanceProfilesError {
-        ListInstanceProfilesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListInstanceProfilesError {
-    fn from(err: io::Error) -> ListInstanceProfilesError {
-        ListInstanceProfilesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListInstanceProfilesError {
@@ -6553,13 +5415,6 @@ impl Error for ListInstanceProfilesError {
             ListInstanceProfilesError::LimitExceeded(ref cause) => cause,
             ListInstanceProfilesError::NotFound(ref cause) => cause,
             ListInstanceProfilesError::ServiceAccount(ref cause) => cause,
-            ListInstanceProfilesError::Validation(ref cause) => cause,
-            ListInstanceProfilesError::Credentials(ref err) => err.description(),
-            ListInstanceProfilesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListInstanceProfilesError::ParseError(ref cause) => cause,
-            ListInstanceProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6574,20 +5429,10 @@ pub enum ListJobsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6599,42 +5444,31 @@ impl ListJobsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return ListJobsError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(ListJobsError::Argument(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return ListJobsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListJobsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return ListJobsError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(ListJobsError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceAccountException" => {
-                    return ListJobsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListJobsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListJobsError {
-    fn from(err: serde_json::error::Error) -> ListJobsError {
-        ListJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListJobsError {
-    fn from(err: CredentialsError) -> ListJobsError {
-        ListJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListJobsError {
-    fn from(err: HttpDispatchError) -> ListJobsError {
-        ListJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListJobsError {
-    fn from(err: io::Error) -> ListJobsError {
-        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListJobsError {
@@ -6649,11 +5483,6 @@ impl Error for ListJobsError {
             ListJobsError::LimitExceeded(ref cause) => cause,
             ListJobsError::NotFound(ref cause) => cause,
             ListJobsError::ServiceAccount(ref cause) => cause,
-            ListJobsError::Validation(ref cause) => cause,
-            ListJobsError::Credentials(ref err) => err.description(),
-            ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsError::ParseError(ref cause) => cause,
-            ListJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6668,20 +5497,10 @@ pub enum ListNetworkProfilesError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListNetworkProfilesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListNetworkProfilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListNetworkProfilesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6694,45 +5513,30 @@ impl ListNetworkProfilesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListNetworkProfilesError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListNetworkProfilesError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListNetworkProfilesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListNetworkProfilesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListNetworkProfilesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListNetworkProfilesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListNetworkProfilesError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListNetworkProfilesError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListNetworkProfilesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListNetworkProfilesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListNetworkProfilesError {
-    fn from(err: serde_json::error::Error) -> ListNetworkProfilesError {
-        ListNetworkProfilesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListNetworkProfilesError {
-    fn from(err: CredentialsError) -> ListNetworkProfilesError {
-        ListNetworkProfilesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListNetworkProfilesError {
-    fn from(err: HttpDispatchError) -> ListNetworkProfilesError {
-        ListNetworkProfilesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListNetworkProfilesError {
-    fn from(err: io::Error) -> ListNetworkProfilesError {
-        ListNetworkProfilesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListNetworkProfilesError {
@@ -6747,13 +5551,6 @@ impl Error for ListNetworkProfilesError {
             ListNetworkProfilesError::LimitExceeded(ref cause) => cause,
             ListNetworkProfilesError::NotFound(ref cause) => cause,
             ListNetworkProfilesError::ServiceAccount(ref cause) => cause,
-            ListNetworkProfilesError::Validation(ref cause) => cause,
-            ListNetworkProfilesError::Credentials(ref err) => err.description(),
-            ListNetworkProfilesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListNetworkProfilesError::ParseError(ref cause) => cause,
-            ListNetworkProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6770,20 +5567,10 @@ pub enum ListOfferingPromotionsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOfferingPromotionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOfferingPromotionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingPromotionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6796,48 +5583,35 @@ impl ListOfferingPromotionsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListOfferingPromotionsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListOfferingPromotionsError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListOfferingPromotionsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListOfferingPromotionsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotEligibleException" => {
-                    return ListOfferingPromotionsError::NotEligible(String::from(error_message));
+                    return RusotoError::Service(ListOfferingPromotionsError::NotEligible(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListOfferingPromotionsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListOfferingPromotionsError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAccountException" => {
-                    return ListOfferingPromotionsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListOfferingPromotionsError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListOfferingPromotionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOfferingPromotionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOfferingPromotionsError {
-    fn from(err: serde_json::error::Error) -> ListOfferingPromotionsError {
-        ListOfferingPromotionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOfferingPromotionsError {
-    fn from(err: CredentialsError) -> ListOfferingPromotionsError {
-        ListOfferingPromotionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOfferingPromotionsError {
-    fn from(err: HttpDispatchError) -> ListOfferingPromotionsError {
-        ListOfferingPromotionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOfferingPromotionsError {
-    fn from(err: io::Error) -> ListOfferingPromotionsError {
-        ListOfferingPromotionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOfferingPromotionsError {
@@ -6853,13 +5627,6 @@ impl Error for ListOfferingPromotionsError {
             ListOfferingPromotionsError::NotEligible(ref cause) => cause,
             ListOfferingPromotionsError::NotFound(ref cause) => cause,
             ListOfferingPromotionsError::ServiceAccount(ref cause) => cause,
-            ListOfferingPromotionsError::Validation(ref cause) => cause,
-            ListOfferingPromotionsError::Credentials(ref err) => err.description(),
-            ListOfferingPromotionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOfferingPromotionsError::ParseError(ref cause) => cause,
-            ListOfferingPromotionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6876,20 +5643,10 @@ pub enum ListOfferingTransactionsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOfferingTransactionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOfferingTransactionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingTransactionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6902,50 +5659,35 @@ impl ListOfferingTransactionsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListOfferingTransactionsError::Argument(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return ListOfferingTransactionsError::LimitExceeded(String::from(error_message));
-                }
-                "NotEligibleException" => {
-                    return ListOfferingTransactionsError::NotEligible(String::from(error_message));
-                }
-                "NotFoundException" => {
-                    return ListOfferingTransactionsError::NotFound(String::from(error_message));
-                }
-                "ServiceAccountException" => {
-                    return ListOfferingTransactionsError::ServiceAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOfferingTransactionsError::Argument(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListOfferingTransactionsError::Validation(error_message.to_string());
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListOfferingTransactionsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "NotEligibleException" => {
+                    return RusotoError::Service(ListOfferingTransactionsError::NotEligible(
+                        String::from(error_message),
+                    ));
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListOfferingTransactionsError::NotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceAccountException" => {
+                    return RusotoError::Service(ListOfferingTransactionsError::ServiceAccount(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOfferingTransactionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOfferingTransactionsError {
-    fn from(err: serde_json::error::Error) -> ListOfferingTransactionsError {
-        ListOfferingTransactionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOfferingTransactionsError {
-    fn from(err: CredentialsError) -> ListOfferingTransactionsError {
-        ListOfferingTransactionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOfferingTransactionsError {
-    fn from(err: HttpDispatchError) -> ListOfferingTransactionsError {
-        ListOfferingTransactionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOfferingTransactionsError {
-    fn from(err: io::Error) -> ListOfferingTransactionsError {
-        ListOfferingTransactionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOfferingTransactionsError {
@@ -6961,13 +5703,6 @@ impl Error for ListOfferingTransactionsError {
             ListOfferingTransactionsError::NotEligible(ref cause) => cause,
             ListOfferingTransactionsError::NotFound(ref cause) => cause,
             ListOfferingTransactionsError::ServiceAccount(ref cause) => cause,
-            ListOfferingTransactionsError::Validation(ref cause) => cause,
-            ListOfferingTransactionsError::Credentials(ref err) => err.description(),
-            ListOfferingTransactionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOfferingTransactionsError::ParseError(ref cause) => cause,
-            ListOfferingTransactionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6984,20 +5719,10 @@ pub enum ListOfferingsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOfferingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOfferingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOfferingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7010,48 +5735,35 @@ impl ListOfferingsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListOfferingsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListOfferingsError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListOfferingsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListOfferingsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotEligibleException" => {
-                    return ListOfferingsError::NotEligible(String::from(error_message));
+                    return RusotoError::Service(ListOfferingsError::NotEligible(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListOfferingsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListOfferingsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListOfferingsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListOfferingsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListOfferingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOfferingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOfferingsError {
-    fn from(err: serde_json::error::Error) -> ListOfferingsError {
-        ListOfferingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOfferingsError {
-    fn from(err: CredentialsError) -> ListOfferingsError {
-        ListOfferingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOfferingsError {
-    fn from(err: HttpDispatchError) -> ListOfferingsError {
-        ListOfferingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOfferingsError {
-    fn from(err: io::Error) -> ListOfferingsError {
-        ListOfferingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOfferingsError {
@@ -7067,11 +5779,6 @@ impl Error for ListOfferingsError {
             ListOfferingsError::NotEligible(ref cause) => cause,
             ListOfferingsError::NotFound(ref cause) => cause,
             ListOfferingsError::ServiceAccount(ref cause) => cause,
-            ListOfferingsError::Validation(ref cause) => cause,
-            ListOfferingsError::Credentials(ref err) => err.description(),
-            ListOfferingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListOfferingsError::ParseError(ref cause) => cause,
-            ListOfferingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7086,20 +5793,10 @@ pub enum ListProjectsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListProjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7112,45 +5809,30 @@ impl ListProjectsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListProjectsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListProjectsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListProjectsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListProjectsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListProjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListProjectsError {
-    fn from(err: serde_json::error::Error) -> ListProjectsError {
-        ListProjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListProjectsError {
-    fn from(err: CredentialsError) -> ListProjectsError {
-        ListProjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListProjectsError {
-    fn from(err: HttpDispatchError) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListProjectsError {
-    fn from(err: io::Error) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -7165,11 +5847,6 @@ impl Error for ListProjectsError {
             ListProjectsError::LimitExceeded(ref cause) => cause,
             ListProjectsError::NotFound(ref cause) => cause,
             ListProjectsError::ServiceAccount(ref cause) => cause,
-            ListProjectsError::Validation(ref cause) => cause,
-            ListProjectsError::Credentials(ref err) => err.description(),
-            ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListProjectsError::ParseError(ref cause) => cause,
-            ListProjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7184,20 +5861,10 @@ pub enum ListRemoteAccessSessionsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRemoteAccessSessionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRemoteAccessSessionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRemoteAccessSessionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7210,47 +5877,30 @@ impl ListRemoteAccessSessionsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListRemoteAccessSessionsError::Argument(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return ListRemoteAccessSessionsError::LimitExceeded(String::from(error_message));
-                }
-                "NotFoundException" => {
-                    return ListRemoteAccessSessionsError::NotFound(String::from(error_message));
-                }
-                "ServiceAccountException" => {
-                    return ListRemoteAccessSessionsError::ServiceAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(ListRemoteAccessSessionsError::Argument(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListRemoteAccessSessionsError::Validation(error_message.to_string());
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListRemoteAccessSessionsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListRemoteAccessSessionsError::NotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceAccountException" => {
+                    return RusotoError::Service(ListRemoteAccessSessionsError::ServiceAccount(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRemoteAccessSessionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRemoteAccessSessionsError {
-    fn from(err: serde_json::error::Error) -> ListRemoteAccessSessionsError {
-        ListRemoteAccessSessionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRemoteAccessSessionsError {
-    fn from(err: CredentialsError) -> ListRemoteAccessSessionsError {
-        ListRemoteAccessSessionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRemoteAccessSessionsError {
-    fn from(err: HttpDispatchError) -> ListRemoteAccessSessionsError {
-        ListRemoteAccessSessionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRemoteAccessSessionsError {
-    fn from(err: io::Error) -> ListRemoteAccessSessionsError {
-        ListRemoteAccessSessionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRemoteAccessSessionsError {
@@ -7265,13 +5915,6 @@ impl Error for ListRemoteAccessSessionsError {
             ListRemoteAccessSessionsError::LimitExceeded(ref cause) => cause,
             ListRemoteAccessSessionsError::NotFound(ref cause) => cause,
             ListRemoteAccessSessionsError::ServiceAccount(ref cause) => cause,
-            ListRemoteAccessSessionsError::Validation(ref cause) => cause,
-            ListRemoteAccessSessionsError::Credentials(ref err) => err.description(),
-            ListRemoteAccessSessionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListRemoteAccessSessionsError::ParseError(ref cause) => cause,
-            ListRemoteAccessSessionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7286,20 +5929,10 @@ pub enum ListRunsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRunsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRunsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRunsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7311,42 +5944,31 @@ impl ListRunsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return ListRunsError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(ListRunsError::Argument(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return ListRunsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListRunsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return ListRunsError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(ListRunsError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceAccountException" => {
-                    return ListRunsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListRunsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListRunsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRunsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRunsError {
-    fn from(err: serde_json::error::Error) -> ListRunsError {
-        ListRunsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRunsError {
-    fn from(err: CredentialsError) -> ListRunsError {
-        ListRunsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRunsError {
-    fn from(err: HttpDispatchError) -> ListRunsError {
-        ListRunsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRunsError {
-    fn from(err: io::Error) -> ListRunsError {
-        ListRunsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRunsError {
@@ -7361,11 +5983,6 @@ impl Error for ListRunsError {
             ListRunsError::LimitExceeded(ref cause) => cause,
             ListRunsError::NotFound(ref cause) => cause,
             ListRunsError::ServiceAccount(ref cause) => cause,
-            ListRunsError::Validation(ref cause) => cause,
-            ListRunsError::Credentials(ref err) => err.description(),
-            ListRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRunsError::ParseError(ref cause) => cause,
-            ListRunsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7380,20 +5997,10 @@ pub enum ListSamplesError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSamplesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSamplesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSamplesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7406,45 +6013,30 @@ impl ListSamplesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListSamplesError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListSamplesError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListSamplesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListSamplesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListSamplesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListSamplesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListSamplesError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListSamplesError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListSamplesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListSamplesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListSamplesError {
-    fn from(err: serde_json::error::Error) -> ListSamplesError {
-        ListSamplesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListSamplesError {
-    fn from(err: CredentialsError) -> ListSamplesError {
-        ListSamplesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSamplesError {
-    fn from(err: HttpDispatchError) -> ListSamplesError {
-        ListSamplesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSamplesError {
-    fn from(err: io::Error) -> ListSamplesError {
-        ListSamplesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListSamplesError {
@@ -7459,11 +6051,6 @@ impl Error for ListSamplesError {
             ListSamplesError::LimitExceeded(ref cause) => cause,
             ListSamplesError::NotFound(ref cause) => cause,
             ListSamplesError::ServiceAccount(ref cause) => cause,
-            ListSamplesError::Validation(ref cause) => cause,
-            ListSamplesError::Credentials(ref err) => err.description(),
-            ListSamplesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListSamplesError::ParseError(ref cause) => cause,
-            ListSamplesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7478,20 +6065,10 @@ pub enum ListSuitesError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSuitesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSuitesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSuitesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7504,45 +6081,30 @@ impl ListSuitesError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListSuitesError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListSuitesError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListSuitesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListSuitesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListSuitesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListSuitesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListSuitesError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListSuitesError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListSuitesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListSuitesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListSuitesError {
-    fn from(err: serde_json::error::Error) -> ListSuitesError {
-        ListSuitesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListSuitesError {
-    fn from(err: CredentialsError) -> ListSuitesError {
-        ListSuitesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSuitesError {
-    fn from(err: HttpDispatchError) -> ListSuitesError {
-        ListSuitesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSuitesError {
-    fn from(err: io::Error) -> ListSuitesError {
-        ListSuitesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListSuitesError {
@@ -7557,11 +6119,6 @@ impl Error for ListSuitesError {
             ListSuitesError::LimitExceeded(ref cause) => cause,
             ListSuitesError::NotFound(ref cause) => cause,
             ListSuitesError::ServiceAccount(ref cause) => cause,
-            ListSuitesError::Validation(ref cause) => cause,
-            ListSuitesError::Credentials(ref err) => err.description(),
-            ListSuitesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListSuitesError::ParseError(ref cause) => cause,
-            ListSuitesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7576,20 +6133,10 @@ pub enum ListTestsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTestsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTestsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTestsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7601,42 +6148,31 @@ impl ListTestsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return ListTestsError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(ListTestsError::Argument(String::from(
+                        error_message,
+                    )));
+                }
                 "LimitExceededException" => {
-                    return ListTestsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListTestsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return ListTestsError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(ListTestsError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceAccountException" => {
-                    return ListTestsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListTestsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListTestsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTestsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTestsError {
-    fn from(err: serde_json::error::Error) -> ListTestsError {
-        ListTestsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTestsError {
-    fn from(err: CredentialsError) -> ListTestsError {
-        ListTestsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTestsError {
-    fn from(err: HttpDispatchError) -> ListTestsError {
-        ListTestsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTestsError {
-    fn from(err: io::Error) -> ListTestsError {
-        ListTestsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTestsError {
@@ -7651,11 +6187,6 @@ impl Error for ListTestsError {
             ListTestsError::LimitExceeded(ref cause) => cause,
             ListTestsError::NotFound(ref cause) => cause,
             ListTestsError::ServiceAccount(ref cause) => cause,
-            ListTestsError::Validation(ref cause) => cause,
-            ListTestsError::Credentials(ref err) => err.description(),
-            ListTestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTestsError::ParseError(ref cause) => cause,
-            ListTestsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7670,20 +6201,10 @@ pub enum ListUniqueProblemsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUniqueProblemsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUniqueProblemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUniqueProblemsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7696,45 +6217,30 @@ impl ListUniqueProblemsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListUniqueProblemsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListUniqueProblemsError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListUniqueProblemsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListUniqueProblemsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListUniqueProblemsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListUniqueProblemsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListUniqueProblemsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListUniqueProblemsError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListUniqueProblemsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUniqueProblemsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUniqueProblemsError {
-    fn from(err: serde_json::error::Error) -> ListUniqueProblemsError {
-        ListUniqueProblemsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUniqueProblemsError {
-    fn from(err: CredentialsError) -> ListUniqueProblemsError {
-        ListUniqueProblemsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUniqueProblemsError {
-    fn from(err: HttpDispatchError) -> ListUniqueProblemsError {
-        ListUniqueProblemsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUniqueProblemsError {
-    fn from(err: io::Error) -> ListUniqueProblemsError {
-        ListUniqueProblemsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUniqueProblemsError {
@@ -7749,13 +6255,6 @@ impl Error for ListUniqueProblemsError {
             ListUniqueProblemsError::LimitExceeded(ref cause) => cause,
             ListUniqueProblemsError::NotFound(ref cause) => cause,
             ListUniqueProblemsError::ServiceAccount(ref cause) => cause,
-            ListUniqueProblemsError::Validation(ref cause) => cause,
-            ListUniqueProblemsError::Credentials(ref err) => err.description(),
-            ListUniqueProblemsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListUniqueProblemsError::ParseError(ref cause) => cause,
-            ListUniqueProblemsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7770,20 +6269,10 @@ pub enum ListUploadsError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUploadsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUploadsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUploadsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7796,45 +6285,30 @@ impl ListUploadsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListUploadsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListUploadsError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListUploadsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListUploadsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListUploadsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListUploadsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ListUploadsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListUploadsError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListUploadsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUploadsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUploadsError {
-    fn from(err: serde_json::error::Error) -> ListUploadsError {
-        ListUploadsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUploadsError {
-    fn from(err: CredentialsError) -> ListUploadsError {
-        ListUploadsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUploadsError {
-    fn from(err: HttpDispatchError) -> ListUploadsError {
-        ListUploadsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUploadsError {
-    fn from(err: io::Error) -> ListUploadsError {
-        ListUploadsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUploadsError {
@@ -7849,11 +6323,6 @@ impl Error for ListUploadsError {
             ListUploadsError::LimitExceeded(ref cause) => cause,
             ListUploadsError::NotFound(ref cause) => cause,
             ListUploadsError::ServiceAccount(ref cause) => cause,
-            ListUploadsError::Validation(ref cause) => cause,
-            ListUploadsError::Credentials(ref err) => err.description(),
-            ListUploadsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUploadsError::ParseError(ref cause) => cause,
-            ListUploadsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7864,20 +6333,10 @@ pub enum ListVPCEConfigurationsError {
     Argument(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVPCEConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVPCEConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVPCEConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7890,39 +6349,20 @@ impl ListVPCEConfigurationsError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ListVPCEConfigurationsError::Argument(String::from(error_message));
+                    return RusotoError::Service(ListVPCEConfigurationsError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAccountException" => {
-                    return ListVPCEConfigurationsError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ListVPCEConfigurationsError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListVPCEConfigurationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListVPCEConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListVPCEConfigurationsError {
-    fn from(err: serde_json::error::Error) -> ListVPCEConfigurationsError {
-        ListVPCEConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListVPCEConfigurationsError {
-    fn from(err: CredentialsError) -> ListVPCEConfigurationsError {
-        ListVPCEConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVPCEConfigurationsError {
-    fn from(err: HttpDispatchError) -> ListVPCEConfigurationsError {
-        ListVPCEConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVPCEConfigurationsError {
-    fn from(err: io::Error) -> ListVPCEConfigurationsError {
-        ListVPCEConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListVPCEConfigurationsError {
@@ -7935,13 +6375,6 @@ impl Error for ListVPCEConfigurationsError {
         match *self {
             ListVPCEConfigurationsError::Argument(ref cause) => cause,
             ListVPCEConfigurationsError::ServiceAccount(ref cause) => cause,
-            ListVPCEConfigurationsError::Validation(ref cause) => cause,
-            ListVPCEConfigurationsError::Credentials(ref err) => err.description(),
-            ListVPCEConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListVPCEConfigurationsError::ParseError(ref cause) => cause,
-            ListVPCEConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7958,20 +6391,10 @@ pub enum PurchaseOfferingError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PurchaseOfferingError {
-    pub fn from_response(res: BufferedHttpResponse) -> PurchaseOfferingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurchaseOfferingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7984,48 +6407,35 @@ impl PurchaseOfferingError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return PurchaseOfferingError::Argument(String::from(error_message));
+                    return RusotoError::Service(PurchaseOfferingError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PurchaseOfferingError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PurchaseOfferingError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotEligibleException" => {
-                    return PurchaseOfferingError::NotEligible(String::from(error_message));
+                    return RusotoError::Service(PurchaseOfferingError::NotEligible(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return PurchaseOfferingError::NotFound(String::from(error_message));
+                    return RusotoError::Service(PurchaseOfferingError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return PurchaseOfferingError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(PurchaseOfferingError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PurchaseOfferingError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PurchaseOfferingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PurchaseOfferingError {
-    fn from(err: serde_json::error::Error) -> PurchaseOfferingError {
-        PurchaseOfferingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PurchaseOfferingError {
-    fn from(err: CredentialsError) -> PurchaseOfferingError {
-        PurchaseOfferingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PurchaseOfferingError {
-    fn from(err: HttpDispatchError) -> PurchaseOfferingError {
-        PurchaseOfferingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PurchaseOfferingError {
-    fn from(err: io::Error) -> PurchaseOfferingError {
-        PurchaseOfferingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PurchaseOfferingError {
@@ -8041,11 +6451,6 @@ impl Error for PurchaseOfferingError {
             PurchaseOfferingError::NotEligible(ref cause) => cause,
             PurchaseOfferingError::NotFound(ref cause) => cause,
             PurchaseOfferingError::ServiceAccount(ref cause) => cause,
-            PurchaseOfferingError::Validation(ref cause) => cause,
-            PurchaseOfferingError::Credentials(ref err) => err.description(),
-            PurchaseOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PurchaseOfferingError::ParseError(ref cause) => cause,
-            PurchaseOfferingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8062,20 +6467,10 @@ pub enum RenewOfferingError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RenewOfferingError {
-    pub fn from_response(res: BufferedHttpResponse) -> RenewOfferingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RenewOfferingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8088,48 +6483,35 @@ impl RenewOfferingError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return RenewOfferingError::Argument(String::from(error_message));
+                    return RusotoError::Service(RenewOfferingError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return RenewOfferingError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RenewOfferingError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotEligibleException" => {
-                    return RenewOfferingError::NotEligible(String::from(error_message));
+                    return RusotoError::Service(RenewOfferingError::NotEligible(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return RenewOfferingError::NotFound(String::from(error_message));
+                    return RusotoError::Service(RenewOfferingError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return RenewOfferingError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(RenewOfferingError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RenewOfferingError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RenewOfferingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RenewOfferingError {
-    fn from(err: serde_json::error::Error) -> RenewOfferingError {
-        RenewOfferingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RenewOfferingError {
-    fn from(err: CredentialsError) -> RenewOfferingError {
-        RenewOfferingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RenewOfferingError {
-    fn from(err: HttpDispatchError) -> RenewOfferingError {
-        RenewOfferingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RenewOfferingError {
-    fn from(err: io::Error) -> RenewOfferingError {
-        RenewOfferingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RenewOfferingError {
@@ -8145,11 +6527,6 @@ impl Error for RenewOfferingError {
             RenewOfferingError::NotEligible(ref cause) => cause,
             RenewOfferingError::NotFound(ref cause) => cause,
             RenewOfferingError::ServiceAccount(ref cause) => cause,
-            RenewOfferingError::Validation(ref cause) => cause,
-            RenewOfferingError::Credentials(ref err) => err.description(),
-            RenewOfferingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RenewOfferingError::ParseError(ref cause) => cause,
-            RenewOfferingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8166,20 +6543,10 @@ pub enum ScheduleRunError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ScheduleRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> ScheduleRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScheduleRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8192,48 +6559,35 @@ impl ScheduleRunError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return ScheduleRunError::Argument(String::from(error_message));
+                    return RusotoError::Service(ScheduleRunError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "IdempotencyException" => {
-                    return ScheduleRunError::Idempotency(String::from(error_message));
+                    return RusotoError::Service(ScheduleRunError::Idempotency(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ScheduleRunError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ScheduleRunError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ScheduleRunError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ScheduleRunError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return ScheduleRunError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(ScheduleRunError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ScheduleRunError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ScheduleRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ScheduleRunError {
-    fn from(err: serde_json::error::Error) -> ScheduleRunError {
-        ScheduleRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ScheduleRunError {
-    fn from(err: CredentialsError) -> ScheduleRunError {
-        ScheduleRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ScheduleRunError {
-    fn from(err: HttpDispatchError) -> ScheduleRunError {
-        ScheduleRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ScheduleRunError {
-    fn from(err: io::Error) -> ScheduleRunError {
-        ScheduleRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ScheduleRunError {
@@ -8249,11 +6603,6 @@ impl Error for ScheduleRunError {
             ScheduleRunError::LimitExceeded(ref cause) => cause,
             ScheduleRunError::NotFound(ref cause) => cause,
             ScheduleRunError::ServiceAccount(ref cause) => cause,
-            ScheduleRunError::Validation(ref cause) => cause,
-            ScheduleRunError::Credentials(ref err) => err.description(),
-            ScheduleRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ScheduleRunError::ParseError(ref cause) => cause,
-            ScheduleRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8268,20 +6617,10 @@ pub enum StopJobError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8293,40 +6632,27 @@ impl StopJobError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return StopJobError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(StopJobError::Argument(String::from(error_message)));
+                }
                 "LimitExceededException" => {
-                    return StopJobError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StopJobError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return StopJobError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(StopJobError::NotFound(String::from(error_message)));
+                }
                 "ServiceAccountException" => {
-                    return StopJobError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(StopJobError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return StopJobError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopJobError {
-    fn from(err: serde_json::error::Error) -> StopJobError {
-        StopJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopJobError {
-    fn from(err: CredentialsError) -> StopJobError {
-        StopJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopJobError {
-    fn from(err: HttpDispatchError) -> StopJobError {
-        StopJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopJobError {
-    fn from(err: io::Error) -> StopJobError {
-        StopJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopJobError {
@@ -8341,11 +6667,6 @@ impl Error for StopJobError {
             StopJobError::LimitExceeded(ref cause) => cause,
             StopJobError::NotFound(ref cause) => cause,
             StopJobError::ServiceAccount(ref cause) => cause,
-            StopJobError::Validation(ref cause) => cause,
-            StopJobError::Credentials(ref err) => err.description(),
-            StopJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopJobError::ParseError(ref cause) => cause,
-            StopJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8360,20 +6681,10 @@ pub enum StopRemoteAccessSessionError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopRemoteAccessSessionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopRemoteAccessSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRemoteAccessSessionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8386,45 +6697,30 @@ impl StopRemoteAccessSessionError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return StopRemoteAccessSessionError::Argument(String::from(error_message));
+                    return RusotoError::Service(StopRemoteAccessSessionError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return StopRemoteAccessSessionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StopRemoteAccessSessionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return StopRemoteAccessSessionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(StopRemoteAccessSessionError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAccountException" => {
-                    return StopRemoteAccessSessionError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(StopRemoteAccessSessionError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopRemoteAccessSessionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopRemoteAccessSessionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopRemoteAccessSessionError {
-    fn from(err: serde_json::error::Error) -> StopRemoteAccessSessionError {
-        StopRemoteAccessSessionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopRemoteAccessSessionError {
-    fn from(err: CredentialsError) -> StopRemoteAccessSessionError {
-        StopRemoteAccessSessionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopRemoteAccessSessionError {
-    fn from(err: HttpDispatchError) -> StopRemoteAccessSessionError {
-        StopRemoteAccessSessionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopRemoteAccessSessionError {
-    fn from(err: io::Error) -> StopRemoteAccessSessionError {
-        StopRemoteAccessSessionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopRemoteAccessSessionError {
@@ -8439,13 +6735,6 @@ impl Error for StopRemoteAccessSessionError {
             StopRemoteAccessSessionError::LimitExceeded(ref cause) => cause,
             StopRemoteAccessSessionError::NotFound(ref cause) => cause,
             StopRemoteAccessSessionError::ServiceAccount(ref cause) => cause,
-            StopRemoteAccessSessionError::Validation(ref cause) => cause,
-            StopRemoteAccessSessionError::Credentials(ref err) => err.description(),
-            StopRemoteAccessSessionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopRemoteAccessSessionError::ParseError(ref cause) => cause,
-            StopRemoteAccessSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8460,20 +6749,10 @@ pub enum StopRunError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8485,40 +6764,27 @@ impl StopRunError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ArgumentException" => return StopRunError::Argument(String::from(error_message)),
+                "ArgumentException" => {
+                    return RusotoError::Service(StopRunError::Argument(String::from(error_message)));
+                }
                 "LimitExceededException" => {
-                    return StopRunError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StopRunError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return StopRunError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(StopRunError::NotFound(String::from(error_message)));
+                }
                 "ServiceAccountException" => {
-                    return StopRunError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(StopRunError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return StopRunError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopRunError {
-    fn from(err: serde_json::error::Error) -> StopRunError {
-        StopRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopRunError {
-    fn from(err: CredentialsError) -> StopRunError {
-        StopRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopRunError {
-    fn from(err: HttpDispatchError) -> StopRunError {
-        StopRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopRunError {
-    fn from(err: io::Error) -> StopRunError {
-        StopRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopRunError {
@@ -8533,11 +6799,6 @@ impl Error for StopRunError {
             StopRunError::LimitExceeded(ref cause) => cause,
             StopRunError::NotFound(ref cause) => cause,
             StopRunError::ServiceAccount(ref cause) => cause,
-            StopRunError::Validation(ref cause) => cause,
-            StopRunError::Credentials(ref err) => err.description(),
-            StopRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopRunError::ParseError(ref cause) => cause,
-            StopRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8552,20 +6813,10 @@ pub enum UpdateDeviceInstanceError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDeviceInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDeviceInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceInstanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8578,45 +6829,30 @@ impl UpdateDeviceInstanceError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateDeviceInstanceError::Argument(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceInstanceError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateDeviceInstanceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceInstanceError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateDeviceInstanceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceInstanceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return UpdateDeviceInstanceError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceInstanceError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDeviceInstanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDeviceInstanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDeviceInstanceError {
-    fn from(err: serde_json::error::Error) -> UpdateDeviceInstanceError {
-        UpdateDeviceInstanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDeviceInstanceError {
-    fn from(err: CredentialsError) -> UpdateDeviceInstanceError {
-        UpdateDeviceInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDeviceInstanceError {
-    fn from(err: HttpDispatchError) -> UpdateDeviceInstanceError {
-        UpdateDeviceInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDeviceInstanceError {
-    fn from(err: io::Error) -> UpdateDeviceInstanceError {
-        UpdateDeviceInstanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDeviceInstanceError {
@@ -8631,13 +6867,6 @@ impl Error for UpdateDeviceInstanceError {
             UpdateDeviceInstanceError::LimitExceeded(ref cause) => cause,
             UpdateDeviceInstanceError::NotFound(ref cause) => cause,
             UpdateDeviceInstanceError::ServiceAccount(ref cause) => cause,
-            UpdateDeviceInstanceError::Validation(ref cause) => cause,
-            UpdateDeviceInstanceError::Credentials(ref err) => err.description(),
-            UpdateDeviceInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDeviceInstanceError::ParseError(ref cause) => cause,
-            UpdateDeviceInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8652,20 +6881,10 @@ pub enum UpdateDevicePoolError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDevicePoolError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDevicePoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevicePoolError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8678,45 +6897,30 @@ impl UpdateDevicePoolError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateDevicePoolError::Argument(String::from(error_message));
+                    return RusotoError::Service(UpdateDevicePoolError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateDevicePoolError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateDevicePoolError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateDevicePoolError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDevicePoolError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return UpdateDevicePoolError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateDevicePoolError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDevicePoolError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDevicePoolError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDevicePoolError {
-    fn from(err: serde_json::error::Error) -> UpdateDevicePoolError {
-        UpdateDevicePoolError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDevicePoolError {
-    fn from(err: CredentialsError) -> UpdateDevicePoolError {
-        UpdateDevicePoolError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDevicePoolError {
-    fn from(err: HttpDispatchError) -> UpdateDevicePoolError {
-        UpdateDevicePoolError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDevicePoolError {
-    fn from(err: io::Error) -> UpdateDevicePoolError {
-        UpdateDevicePoolError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDevicePoolError {
@@ -8731,11 +6935,6 @@ impl Error for UpdateDevicePoolError {
             UpdateDevicePoolError::LimitExceeded(ref cause) => cause,
             UpdateDevicePoolError::NotFound(ref cause) => cause,
             UpdateDevicePoolError::ServiceAccount(ref cause) => cause,
-            UpdateDevicePoolError::Validation(ref cause) => cause,
-            UpdateDevicePoolError::Credentials(ref err) => err.description(),
-            UpdateDevicePoolError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateDevicePoolError::ParseError(ref cause) => cause,
-            UpdateDevicePoolError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8750,20 +6949,10 @@ pub enum UpdateInstanceProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateInstanceProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8776,45 +6965,30 @@ impl UpdateInstanceProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateInstanceProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(UpdateInstanceProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateInstanceProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateInstanceProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateInstanceProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateInstanceProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return UpdateInstanceProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateInstanceProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateInstanceProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateInstanceProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateInstanceProfileError {
-    fn from(err: serde_json::error::Error) -> UpdateInstanceProfileError {
-        UpdateInstanceProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateInstanceProfileError {
-    fn from(err: CredentialsError) -> UpdateInstanceProfileError {
-        UpdateInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateInstanceProfileError {
-    fn from(err: HttpDispatchError) -> UpdateInstanceProfileError {
-        UpdateInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateInstanceProfileError {
-    fn from(err: io::Error) -> UpdateInstanceProfileError {
-        UpdateInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateInstanceProfileError {
@@ -8829,13 +7003,6 @@ impl Error for UpdateInstanceProfileError {
             UpdateInstanceProfileError::LimitExceeded(ref cause) => cause,
             UpdateInstanceProfileError::NotFound(ref cause) => cause,
             UpdateInstanceProfileError::ServiceAccount(ref cause) => cause,
-            UpdateInstanceProfileError::Validation(ref cause) => cause,
-            UpdateInstanceProfileError::Credentials(ref err) => err.description(),
-            UpdateInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateInstanceProfileError::ParseError(ref cause) => cause,
-            UpdateInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8850,20 +7017,10 @@ pub enum UpdateNetworkProfileError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateNetworkProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNetworkProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8876,45 +7033,30 @@ impl UpdateNetworkProfileError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateNetworkProfileError::Argument(String::from(error_message));
+                    return RusotoError::Service(UpdateNetworkProfileError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateNetworkProfileError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateNetworkProfileError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateNetworkProfileError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateNetworkProfileError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return UpdateNetworkProfileError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateNetworkProfileError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateNetworkProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateNetworkProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateNetworkProfileError {
-    fn from(err: serde_json::error::Error) -> UpdateNetworkProfileError {
-        UpdateNetworkProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateNetworkProfileError {
-    fn from(err: CredentialsError) -> UpdateNetworkProfileError {
-        UpdateNetworkProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateNetworkProfileError {
-    fn from(err: HttpDispatchError) -> UpdateNetworkProfileError {
-        UpdateNetworkProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateNetworkProfileError {
-    fn from(err: io::Error) -> UpdateNetworkProfileError {
-        UpdateNetworkProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateNetworkProfileError {
@@ -8929,13 +7071,6 @@ impl Error for UpdateNetworkProfileError {
             UpdateNetworkProfileError::LimitExceeded(ref cause) => cause,
             UpdateNetworkProfileError::NotFound(ref cause) => cause,
             UpdateNetworkProfileError::ServiceAccount(ref cause) => cause,
-            UpdateNetworkProfileError::Validation(ref cause) => cause,
-            UpdateNetworkProfileError::Credentials(ref err) => err.description(),
-            UpdateNetworkProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateNetworkProfileError::ParseError(ref cause) => cause,
-            UpdateNetworkProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8950,20 +7085,10 @@ pub enum UpdateProjectError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8976,45 +7101,30 @@ impl UpdateProjectError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateProjectError::Argument(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return UpdateProjectError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateProjectError {
-    fn from(err: serde_json::error::Error) -> UpdateProjectError {
-        UpdateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateProjectError {
-    fn from(err: CredentialsError) -> UpdateProjectError {
-        UpdateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateProjectError {
-    fn from(err: HttpDispatchError) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateProjectError {
-    fn from(err: io::Error) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -9029,11 +7139,6 @@ impl Error for UpdateProjectError {
             UpdateProjectError::LimitExceeded(ref cause) => cause,
             UpdateProjectError::NotFound(ref cause) => cause,
             UpdateProjectError::ServiceAccount(ref cause) => cause,
-            UpdateProjectError::Validation(ref cause) => cause,
-            UpdateProjectError::Credentials(ref err) => err.description(),
-            UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProjectError::ParseError(ref cause) => cause,
-            UpdateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9048,20 +7153,10 @@ pub enum UpdateUploadError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9074,45 +7169,30 @@ impl UpdateUploadError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateUploadError::Argument(String::from(error_message));
+                    return RusotoError::Service(UpdateUploadError::Argument(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateUploadError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateUploadError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateUploadError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateUploadError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceAccountException" => {
-                    return UpdateUploadError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateUploadError::ServiceAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUploadError {
-    fn from(err: serde_json::error::Error) -> UpdateUploadError {
-        UpdateUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUploadError {
-    fn from(err: CredentialsError) -> UpdateUploadError {
-        UpdateUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUploadError {
-    fn from(err: HttpDispatchError) -> UpdateUploadError {
-        UpdateUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUploadError {
-    fn from(err: io::Error) -> UpdateUploadError {
-        UpdateUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUploadError {
@@ -9127,11 +7207,6 @@ impl Error for UpdateUploadError {
             UpdateUploadError::LimitExceeded(ref cause) => cause,
             UpdateUploadError::NotFound(ref cause) => cause,
             UpdateUploadError::ServiceAccount(ref cause) => cause,
-            UpdateUploadError::Validation(ref cause) => cause,
-            UpdateUploadError::Credentials(ref err) => err.description(),
-            UpdateUploadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateUploadError::ParseError(ref cause) => cause,
-            UpdateUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9146,20 +7221,10 @@ pub enum UpdateVPCEConfigurationError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateVPCEConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateVPCEConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVPCEConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9172,47 +7237,30 @@ impl UpdateVPCEConfigurationError {
 
             match *error_type {
                 "ArgumentException" => {
-                    return UpdateVPCEConfigurationError::Argument(String::from(error_message));
+                    return RusotoError::Service(UpdateVPCEConfigurationError::Argument(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOperationException" => {
-                    return UpdateVPCEConfigurationError::InvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateVPCEConfigurationError::InvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return UpdateVPCEConfigurationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateVPCEConfigurationError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceAccountException" => {
-                    return UpdateVPCEConfigurationError::ServiceAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateVPCEConfigurationError::ServiceAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateVPCEConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateVPCEConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateVPCEConfigurationError {
-    fn from(err: serde_json::error::Error) -> UpdateVPCEConfigurationError {
-        UpdateVPCEConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateVPCEConfigurationError {
-    fn from(err: CredentialsError) -> UpdateVPCEConfigurationError {
-        UpdateVPCEConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateVPCEConfigurationError {
-    fn from(err: HttpDispatchError) -> UpdateVPCEConfigurationError {
-        UpdateVPCEConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateVPCEConfigurationError {
-    fn from(err: io::Error) -> UpdateVPCEConfigurationError {
-        UpdateVPCEConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateVPCEConfigurationError {
@@ -9227,13 +7275,6 @@ impl Error for UpdateVPCEConfigurationError {
             UpdateVPCEConfigurationError::InvalidOperation(ref cause) => cause,
             UpdateVPCEConfigurationError::NotFound(ref cause) => cause,
             UpdateVPCEConfigurationError::ServiceAccount(ref cause) => cause,
-            UpdateVPCEConfigurationError::Validation(ref cause) => cause,
-            UpdateVPCEConfigurationError::Credentials(ref err) => err.description(),
-            UpdateVPCEConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateVPCEConfigurationError::ParseError(ref cause) => cause,
-            UpdateVPCEConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }

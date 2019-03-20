@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -86,22 +83,12 @@ pub enum GetMediaError {
     NotAuthorized(String),
     /// <p>Status Code: 404, The stream with the given name does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetMediaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetMediaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMediaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -126,51 +113,40 @@ impl GetMediaError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return GetMediaError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetMediaError::ClientLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ConnectionLimitExceededException" => {
-                    return GetMediaError::ConnectionLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetMediaError::ConnectionLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return GetMediaError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(GetMediaError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidEndpointException" => {
-                    return GetMediaError::InvalidEndpoint(String::from(error_message));
+                    return RusotoError::Service(GetMediaError::InvalidEndpoint(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return GetMediaError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(GetMediaError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetMediaError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetMediaError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetMediaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetMediaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetMediaError {
-    fn from(err: serde_json::error::Error) -> GetMediaError {
-        GetMediaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetMediaError {
-    fn from(err: CredentialsError) -> GetMediaError {
-        GetMediaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetMediaError {
-    fn from(err: HttpDispatchError) -> GetMediaError {
-        GetMediaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetMediaError {
-    fn from(err: io::Error) -> GetMediaError {
-        GetMediaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetMediaError {
@@ -187,11 +163,6 @@ impl Error for GetMediaError {
             GetMediaError::InvalidEndpoint(ref cause) => cause,
             GetMediaError::NotAuthorized(ref cause) => cause,
             GetMediaError::ResourceNotFound(ref cause) => cause,
-            GetMediaError::Validation(ref cause) => cause,
-            GetMediaError::Credentials(ref err) => err.description(),
-            GetMediaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetMediaError::ParseError(ref cause) => cause,
-            GetMediaError::Unknown(_) => "unknown error",
         }
     }
 }

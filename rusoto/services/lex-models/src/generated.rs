@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1853,22 +1850,12 @@ pub enum CreateBotVersionError {
     NotFound(String),
     /// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
     PreconditionFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBotVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateBotVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBotVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1893,51 +1880,40 @@ impl CreateBotVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateBotVersionError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateBotVersionError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return CreateBotVersionError::Conflict(String::from(error_message));
+                    return RusotoError::Service(CreateBotVersionError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return CreateBotVersionError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreateBotVersionError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateBotVersionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateBotVersionError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateBotVersionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateBotVersionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "PreconditionFailedException" => {
-                    return CreateBotVersionError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(CreateBotVersionError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateBotVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateBotVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateBotVersionError {
-    fn from(err: serde_json::error::Error) -> CreateBotVersionError {
-        CreateBotVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateBotVersionError {
-    fn from(err: CredentialsError) -> CreateBotVersionError {
-        CreateBotVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateBotVersionError {
-    fn from(err: HttpDispatchError) -> CreateBotVersionError {
-        CreateBotVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateBotVersionError {
-    fn from(err: io::Error) -> CreateBotVersionError {
-        CreateBotVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateBotVersionError {
@@ -1954,11 +1930,6 @@ impl Error for CreateBotVersionError {
             CreateBotVersionError::LimitExceeded(ref cause) => cause,
             CreateBotVersionError::NotFound(ref cause) => cause,
             CreateBotVersionError::PreconditionFailed(ref cause) => cause,
-            CreateBotVersionError::Validation(ref cause) => cause,
-            CreateBotVersionError::Credentials(ref err) => err.description(),
-            CreateBotVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBotVersionError::ParseError(ref cause) => cause,
-            CreateBotVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1977,22 +1948,12 @@ pub enum CreateIntentVersionError {
     NotFound(String),
     /// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
     PreconditionFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIntentVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateIntentVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIntentVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2017,51 +1978,40 @@ impl CreateIntentVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateIntentVersionError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateIntentVersionError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return CreateIntentVersionError::Conflict(String::from(error_message));
+                    return RusotoError::Service(CreateIntentVersionError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return CreateIntentVersionError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreateIntentVersionError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateIntentVersionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateIntentVersionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateIntentVersionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateIntentVersionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "PreconditionFailedException" => {
-                    return CreateIntentVersionError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(CreateIntentVersionError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateIntentVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateIntentVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateIntentVersionError {
-    fn from(err: serde_json::error::Error) -> CreateIntentVersionError {
-        CreateIntentVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateIntentVersionError {
-    fn from(err: CredentialsError) -> CreateIntentVersionError {
-        CreateIntentVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateIntentVersionError {
-    fn from(err: HttpDispatchError) -> CreateIntentVersionError {
-        CreateIntentVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateIntentVersionError {
-    fn from(err: io::Error) -> CreateIntentVersionError {
-        CreateIntentVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateIntentVersionError {
@@ -2078,13 +2028,6 @@ impl Error for CreateIntentVersionError {
             CreateIntentVersionError::LimitExceeded(ref cause) => cause,
             CreateIntentVersionError::NotFound(ref cause) => cause,
             CreateIntentVersionError::PreconditionFailed(ref cause) => cause,
-            CreateIntentVersionError::Validation(ref cause) => cause,
-            CreateIntentVersionError::Credentials(ref err) => err.description(),
-            CreateIntentVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateIntentVersionError::ParseError(ref cause) => cause,
-            CreateIntentVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2103,22 +2046,12 @@ pub enum CreateSlotTypeVersionError {
     NotFound(String),
     /// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
     PreconditionFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSlotTypeVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSlotTypeVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSlotTypeVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2143,53 +2076,40 @@ impl CreateSlotTypeVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateSlotTypeVersionError::BadRequest(String::from(error_message));
-                }
-                "ConflictException" => {
-                    return CreateSlotTypeVersionError::Conflict(String::from(error_message));
-                }
-                "InternalFailureException" => {
-                    return CreateSlotTypeVersionError::InternalFailure(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return CreateSlotTypeVersionError::LimitExceeded(String::from(error_message));
-                }
-                "NotFoundException" => {
-                    return CreateSlotTypeVersionError::NotFound(String::from(error_message));
-                }
-                "PreconditionFailedException" => {
-                    return CreateSlotTypeVersionError::PreconditionFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSlotTypeVersionError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateSlotTypeVersionError::Validation(error_message.to_string());
+                "ConflictException" => {
+                    return RusotoError::Service(CreateSlotTypeVersionError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateSlotTypeVersionError::InternalFailure(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateSlotTypeVersionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateSlotTypeVersionError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
+                "PreconditionFailedException" => {
+                    return RusotoError::Service(CreateSlotTypeVersionError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSlotTypeVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSlotTypeVersionError {
-    fn from(err: serde_json::error::Error) -> CreateSlotTypeVersionError {
-        CreateSlotTypeVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSlotTypeVersionError {
-    fn from(err: CredentialsError) -> CreateSlotTypeVersionError {
-        CreateSlotTypeVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSlotTypeVersionError {
-    fn from(err: HttpDispatchError) -> CreateSlotTypeVersionError {
-        CreateSlotTypeVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSlotTypeVersionError {
-    fn from(err: io::Error) -> CreateSlotTypeVersionError {
-        CreateSlotTypeVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSlotTypeVersionError {
@@ -2206,13 +2126,6 @@ impl Error for CreateSlotTypeVersionError {
             CreateSlotTypeVersionError::LimitExceeded(ref cause) => cause,
             CreateSlotTypeVersionError::NotFound(ref cause) => cause,
             CreateSlotTypeVersionError::PreconditionFailed(ref cause) => cause,
-            CreateSlotTypeVersionError::Validation(ref cause) => cause,
-            CreateSlotTypeVersionError::Credentials(ref err) => err.description(),
-            CreateSlotTypeVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSlotTypeVersionError::ParseError(ref cause) => cause,
-            CreateSlotTypeVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2231,22 +2144,12 @@ pub enum DeleteBotError {
     NotFound(String),
     /// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2271,47 +2174,40 @@ impl DeleteBotError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteBotError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ConflictException" => return DeleteBotError::Conflict(String::from(error_message)),
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteBotError::Conflict(String::from(
+                        error_message,
+                    )));
+                }
                 "InternalFailureException" => {
-                    return DeleteBotError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteBotError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteBotError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteBotError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return DeleteBotError::NotFound(String::from(error_message)),
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteBotError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
                 "ResourceInUseException" => {
-                    return DeleteBotError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteBotError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteBotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBotError {
-    fn from(err: serde_json::error::Error) -> DeleteBotError {
-        DeleteBotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBotError {
-    fn from(err: CredentialsError) -> DeleteBotError {
-        DeleteBotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBotError {
-    fn from(err: HttpDispatchError) -> DeleteBotError {
-        DeleteBotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBotError {
-    fn from(err: io::Error) -> DeleteBotError {
-        DeleteBotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBotError {
@@ -2328,11 +2224,6 @@ impl Error for DeleteBotError {
             DeleteBotError::LimitExceeded(ref cause) => cause,
             DeleteBotError::NotFound(ref cause) => cause,
             DeleteBotError::ResourceInUse(ref cause) => cause,
-            DeleteBotError::Validation(ref cause) => cause,
-            DeleteBotError::Credentials(ref err) => err.description(),
-            DeleteBotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBotError::ParseError(ref cause) => cause,
-            DeleteBotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2351,22 +2242,12 @@ pub enum DeleteBotAliasError {
     NotFound(String),
     /// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotAliasError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBotAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2391,51 +2272,40 @@ impl DeleteBotAliasError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotAliasError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteBotAliasError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return DeleteBotAliasError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteBotAliasError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteBotAliasError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteBotAliasError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteBotAliasError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteBotAliasError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteBotAliasError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteBotAliasError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteBotAliasError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteBotAliasError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteBotAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBotAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBotAliasError {
-    fn from(err: serde_json::error::Error) -> DeleteBotAliasError {
-        DeleteBotAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBotAliasError {
-    fn from(err: CredentialsError) -> DeleteBotAliasError {
-        DeleteBotAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBotAliasError {
-    fn from(err: HttpDispatchError) -> DeleteBotAliasError {
-        DeleteBotAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBotAliasError {
-    fn from(err: io::Error) -> DeleteBotAliasError {
-        DeleteBotAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBotAliasError {
@@ -2452,11 +2322,6 @@ impl Error for DeleteBotAliasError {
             DeleteBotAliasError::LimitExceeded(ref cause) => cause,
             DeleteBotAliasError::NotFound(ref cause) => cause,
             DeleteBotAliasError::ResourceInUse(ref cause) => cause,
-            DeleteBotAliasError::Validation(ref cause) => cause,
-            DeleteBotAliasError::Credentials(ref err) => err.description(),
-            DeleteBotAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBotAliasError::ParseError(ref cause) => cause,
-            DeleteBotAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2473,22 +2338,14 @@ pub enum DeleteBotChannelAssociationError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotChannelAssociationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotChannelAssociationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteBotChannelAssociationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2513,52 +2370,35 @@ impl DeleteBotChannelAssociationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotChannelAssociationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteBotChannelAssociationError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ConflictException" => {
-                    return DeleteBotChannelAssociationError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteBotChannelAssociationError::Conflict(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalFailureException" => {
-                    return DeleteBotChannelAssociationError::InternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteBotChannelAssociationError::InternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return DeleteBotChannelAssociationError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteBotChannelAssociationError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DeleteBotChannelAssociationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteBotChannelAssociationError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteBotChannelAssociationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBotChannelAssociationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBotChannelAssociationError {
-    fn from(err: serde_json::error::Error) -> DeleteBotChannelAssociationError {
-        DeleteBotChannelAssociationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBotChannelAssociationError {
-    fn from(err: CredentialsError) -> DeleteBotChannelAssociationError {
-        DeleteBotChannelAssociationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBotChannelAssociationError {
-    fn from(err: HttpDispatchError) -> DeleteBotChannelAssociationError {
-        DeleteBotChannelAssociationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBotChannelAssociationError {
-    fn from(err: io::Error) -> DeleteBotChannelAssociationError {
-        DeleteBotChannelAssociationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBotChannelAssociationError {
@@ -2574,13 +2414,6 @@ impl Error for DeleteBotChannelAssociationError {
             DeleteBotChannelAssociationError::InternalFailure(ref cause) => cause,
             DeleteBotChannelAssociationError::LimitExceeded(ref cause) => cause,
             DeleteBotChannelAssociationError::NotFound(ref cause) => cause,
-            DeleteBotChannelAssociationError::Validation(ref cause) => cause,
-            DeleteBotChannelAssociationError::Credentials(ref err) => err.description(),
-            DeleteBotChannelAssociationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBotChannelAssociationError::ParseError(ref cause) => cause,
-            DeleteBotChannelAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2599,22 +2432,12 @@ pub enum DeleteBotVersionError {
     NotFound(String),
     /// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBotVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBotVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBotVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2639,51 +2462,40 @@ impl DeleteBotVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteBotVersionError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteBotVersionError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return DeleteBotVersionError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteBotVersionError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteBotVersionError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteBotVersionError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteBotVersionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteBotVersionError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteBotVersionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteBotVersionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteBotVersionError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteBotVersionError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteBotVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBotVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBotVersionError {
-    fn from(err: serde_json::error::Error) -> DeleteBotVersionError {
-        DeleteBotVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBotVersionError {
-    fn from(err: CredentialsError) -> DeleteBotVersionError {
-        DeleteBotVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBotVersionError {
-    fn from(err: HttpDispatchError) -> DeleteBotVersionError {
-        DeleteBotVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBotVersionError {
-    fn from(err: io::Error) -> DeleteBotVersionError {
-        DeleteBotVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBotVersionError {
@@ -2700,11 +2512,6 @@ impl Error for DeleteBotVersionError {
             DeleteBotVersionError::LimitExceeded(ref cause) => cause,
             DeleteBotVersionError::NotFound(ref cause) => cause,
             DeleteBotVersionError::ResourceInUse(ref cause) => cause,
-            DeleteBotVersionError::Validation(ref cause) => cause,
-            DeleteBotVersionError::Credentials(ref err) => err.description(),
-            DeleteBotVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBotVersionError::ParseError(ref cause) => cause,
-            DeleteBotVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2723,22 +2530,12 @@ pub enum DeleteIntentError {
     NotFound(String),
     /// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIntentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIntentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIntentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2763,51 +2560,40 @@ impl DeleteIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteIntentError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return DeleteIntentError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteIntentError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteIntentError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteIntentError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteIntentError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteIntentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteIntentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteIntentError {
-    fn from(err: serde_json::error::Error) -> DeleteIntentError {
-        DeleteIntentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIntentError {
-    fn from(err: CredentialsError) -> DeleteIntentError {
-        DeleteIntentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIntentError {
-    fn from(err: HttpDispatchError) -> DeleteIntentError {
-        DeleteIntentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIntentError {
-    fn from(err: io::Error) -> DeleteIntentError {
-        DeleteIntentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteIntentError {
@@ -2824,11 +2610,6 @@ impl Error for DeleteIntentError {
             DeleteIntentError::LimitExceeded(ref cause) => cause,
             DeleteIntentError::NotFound(ref cause) => cause,
             DeleteIntentError::ResourceInUse(ref cause) => cause,
-            DeleteIntentError::Validation(ref cause) => cause,
-            DeleteIntentError::Credentials(ref err) => err.description(),
-            DeleteIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIntentError::ParseError(ref cause) => cause,
-            DeleteIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2847,22 +2628,12 @@ pub enum DeleteIntentVersionError {
     NotFound(String),
     /// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIntentVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIntentVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIntentVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2887,51 +2658,40 @@ impl DeleteIntentVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteIntentVersionError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentVersionError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return DeleteIntentVersionError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentVersionError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteIntentVersionError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentVersionError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteIntentVersionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentVersionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteIntentVersionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentVersionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteIntentVersionError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteIntentVersionError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteIntentVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteIntentVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteIntentVersionError {
-    fn from(err: serde_json::error::Error) -> DeleteIntentVersionError {
-        DeleteIntentVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIntentVersionError {
-    fn from(err: CredentialsError) -> DeleteIntentVersionError {
-        DeleteIntentVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIntentVersionError {
-    fn from(err: HttpDispatchError) -> DeleteIntentVersionError {
-        DeleteIntentVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIntentVersionError {
-    fn from(err: io::Error) -> DeleteIntentVersionError {
-        DeleteIntentVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteIntentVersionError {
@@ -2948,13 +2708,6 @@ impl Error for DeleteIntentVersionError {
             DeleteIntentVersionError::LimitExceeded(ref cause) => cause,
             DeleteIntentVersionError::NotFound(ref cause) => cause,
             DeleteIntentVersionError::ResourceInUse(ref cause) => cause,
-            DeleteIntentVersionError::Validation(ref cause) => cause,
-            DeleteIntentVersionError::Credentials(ref err) => err.description(),
-            DeleteIntentVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteIntentVersionError::ParseError(ref cause) => cause,
-            DeleteIntentVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2973,22 +2726,12 @@ pub enum DeleteSlotTypeError {
     NotFound(String),
     /// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSlotTypeError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSlotTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSlotTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3013,51 +2756,40 @@ impl DeleteSlotTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteSlotTypeError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return DeleteSlotTypeError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteSlotTypeError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteSlotTypeError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteSlotTypeError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteSlotTypeError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteSlotTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSlotTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSlotTypeError {
-    fn from(err: serde_json::error::Error) -> DeleteSlotTypeError {
-        DeleteSlotTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSlotTypeError {
-    fn from(err: CredentialsError) -> DeleteSlotTypeError {
-        DeleteSlotTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSlotTypeError {
-    fn from(err: HttpDispatchError) -> DeleteSlotTypeError {
-        DeleteSlotTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSlotTypeError {
-    fn from(err: io::Error) -> DeleteSlotTypeError {
-        DeleteSlotTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSlotTypeError {
@@ -3074,11 +2806,6 @@ impl Error for DeleteSlotTypeError {
             DeleteSlotTypeError::LimitExceeded(ref cause) => cause,
             DeleteSlotTypeError::NotFound(ref cause) => cause,
             DeleteSlotTypeError::ResourceInUse(ref cause) => cause,
-            DeleteSlotTypeError::Validation(ref cause) => cause,
-            DeleteSlotTypeError::Credentials(ref err) => err.description(),
-            DeleteSlotTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSlotTypeError::ParseError(ref cause) => cause,
-            DeleteSlotTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3097,22 +2824,12 @@ pub enum DeleteSlotTypeVersionError {
     NotFound(String),
     /// <p>The resource that you are attempting to delete is referred to by another resource. Use this information to remove references to the resource that you are trying to delete.</p> <p>The body of the exception contains a JSON object that describes the resource.</p> <p> <code>{ "resourceType": BOT | BOTALIAS | BOTCHANNEL | INTENT,</code> </p> <p> <code>"resourceReference": {</code> </p> <p> <code>"name": <i>string</i>, "version": <i>string</i> } }</code> </p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSlotTypeVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSlotTypeVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSlotTypeVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3137,51 +2854,40 @@ impl DeleteSlotTypeVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteSlotTypeVersionError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ConflictException" => {
-                    return DeleteSlotTypeVersionError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteSlotTypeVersionError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteSlotTypeVersionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteSlotTypeVersionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteSlotTypeVersionError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteSlotTypeVersionError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteSlotTypeVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSlotTypeVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSlotTypeVersionError {
-    fn from(err: serde_json::error::Error) -> DeleteSlotTypeVersionError {
-        DeleteSlotTypeVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSlotTypeVersionError {
-    fn from(err: CredentialsError) -> DeleteSlotTypeVersionError {
-        DeleteSlotTypeVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSlotTypeVersionError {
-    fn from(err: HttpDispatchError) -> DeleteSlotTypeVersionError {
-        DeleteSlotTypeVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSlotTypeVersionError {
-    fn from(err: io::Error) -> DeleteSlotTypeVersionError {
-        DeleteSlotTypeVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSlotTypeVersionError {
@@ -3198,13 +2904,6 @@ impl Error for DeleteSlotTypeVersionError {
             DeleteSlotTypeVersionError::LimitExceeded(ref cause) => cause,
             DeleteSlotTypeVersionError::NotFound(ref cause) => cause,
             DeleteSlotTypeVersionError::ResourceInUse(ref cause) => cause,
-            DeleteSlotTypeVersionError::Validation(ref cause) => cause,
-            DeleteSlotTypeVersionError::Credentials(ref err) => err.description(),
-            DeleteSlotTypeVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSlotTypeVersionError::ParseError(ref cause) => cause,
-            DeleteSlotTypeVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3219,22 +2918,12 @@ pub enum DeleteUtterancesError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUtterancesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUtterancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUtterancesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3259,45 +2948,30 @@ impl DeleteUtterancesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteUtterancesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteUtterancesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteUtterancesError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteUtterancesError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteUtterancesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteUtterancesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteUtterancesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUtterancesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteUtterancesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUtterancesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUtterancesError {
-    fn from(err: serde_json::error::Error) -> DeleteUtterancesError {
-        DeleteUtterancesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUtterancesError {
-    fn from(err: CredentialsError) -> DeleteUtterancesError {
-        DeleteUtterancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUtterancesError {
-    fn from(err: HttpDispatchError) -> DeleteUtterancesError {
-        DeleteUtterancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUtterancesError {
-    fn from(err: io::Error) -> DeleteUtterancesError {
-        DeleteUtterancesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUtterancesError {
@@ -3312,11 +2986,6 @@ impl Error for DeleteUtterancesError {
             DeleteUtterancesError::InternalFailure(ref cause) => cause,
             DeleteUtterancesError::LimitExceeded(ref cause) => cause,
             DeleteUtterancesError::NotFound(ref cause) => cause,
-            DeleteUtterancesError::Validation(ref cause) => cause,
-            DeleteUtterancesError::Credentials(ref err) => err.description(),
-            DeleteUtterancesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUtterancesError::ParseError(ref cause) => cause,
-            DeleteUtterancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3331,22 +3000,12 @@ pub enum GetBotError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3371,41 +3030,28 @@ impl GetBotError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBotError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBotError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBotError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetBotError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBotError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetBotError::NotFound(String::from(error_message)),
-                "ValidationException" => return GetBotError::Validation(error_message.to_string()),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetBotError::NotFound(String::from(error_message)));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBotError {
-    fn from(err: serde_json::error::Error) -> GetBotError {
-        GetBotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBotError {
-    fn from(err: CredentialsError) -> GetBotError {
-        GetBotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBotError {
-    fn from(err: HttpDispatchError) -> GetBotError {
-        GetBotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBotError {
-    fn from(err: io::Error) -> GetBotError {
-        GetBotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBotError {
@@ -3420,11 +3066,6 @@ impl Error for GetBotError {
             GetBotError::InternalFailure(ref cause) => cause,
             GetBotError::LimitExceeded(ref cause) => cause,
             GetBotError::NotFound(ref cause) => cause,
-            GetBotError::Validation(ref cause) => cause,
-            GetBotError::Credentials(ref err) => err.description(),
-            GetBotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotError::ParseError(ref cause) => cause,
-            GetBotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3439,22 +3080,12 @@ pub enum GetBotAliasError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotAliasError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBotAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3479,45 +3110,30 @@ impl GetBotAliasError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotAliasError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBotAliasError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBotAliasError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBotAliasError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetBotAliasError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBotAliasError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetBotAliasError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetBotAliasError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetBotAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBotAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBotAliasError {
-    fn from(err: serde_json::error::Error) -> GetBotAliasError {
-        GetBotAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBotAliasError {
-    fn from(err: CredentialsError) -> GetBotAliasError {
-        GetBotAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBotAliasError {
-    fn from(err: HttpDispatchError) -> GetBotAliasError {
-        GetBotAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBotAliasError {
-    fn from(err: io::Error) -> GetBotAliasError {
-        GetBotAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBotAliasError {
@@ -3532,11 +3148,6 @@ impl Error for GetBotAliasError {
             GetBotAliasError::InternalFailure(ref cause) => cause,
             GetBotAliasError::LimitExceeded(ref cause) => cause,
             GetBotAliasError::NotFound(ref cause) => cause,
-            GetBotAliasError::Validation(ref cause) => cause,
-            GetBotAliasError::Credentials(ref err) => err.description(),
-            GetBotAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotAliasError::ParseError(ref cause) => cause,
-            GetBotAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3549,22 +3160,12 @@ pub enum GetBotAliasesError {
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotAliasesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBotAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotAliasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3589,42 +3190,25 @@ impl GetBotAliasesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotAliasesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBotAliasesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBotAliasesError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBotAliasesError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetBotAliasesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBotAliasesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetBotAliasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBotAliasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBotAliasesError {
-    fn from(err: serde_json::error::Error) -> GetBotAliasesError {
-        GetBotAliasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBotAliasesError {
-    fn from(err: CredentialsError) -> GetBotAliasesError {
-        GetBotAliasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBotAliasesError {
-    fn from(err: HttpDispatchError) -> GetBotAliasesError {
-        GetBotAliasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBotAliasesError {
-    fn from(err: io::Error) -> GetBotAliasesError {
-        GetBotAliasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBotAliasesError {
@@ -3638,11 +3222,6 @@ impl Error for GetBotAliasesError {
             GetBotAliasesError::BadRequest(ref cause) => cause,
             GetBotAliasesError::InternalFailure(ref cause) => cause,
             GetBotAliasesError::LimitExceeded(ref cause) => cause,
-            GetBotAliasesError::Validation(ref cause) => cause,
-            GetBotAliasesError::Credentials(ref err) => err.description(),
-            GetBotAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotAliasesError::ParseError(ref cause) => cause,
-            GetBotAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3657,22 +3236,12 @@ pub enum GetBotChannelAssociationError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotChannelAssociationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBotChannelAssociationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotChannelAssociationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3697,47 +3266,30 @@ impl GetBotChannelAssociationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotChannelAssociationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBotChannelAssociationError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalFailureException" => {
-                    return GetBotChannelAssociationError::InternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetBotChannelAssociationError::InternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return GetBotChannelAssociationError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBotChannelAssociationError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetBotChannelAssociationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetBotChannelAssociationError::NotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetBotChannelAssociationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBotChannelAssociationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBotChannelAssociationError {
-    fn from(err: serde_json::error::Error) -> GetBotChannelAssociationError {
-        GetBotChannelAssociationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBotChannelAssociationError {
-    fn from(err: CredentialsError) -> GetBotChannelAssociationError {
-        GetBotChannelAssociationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBotChannelAssociationError {
-    fn from(err: HttpDispatchError) -> GetBotChannelAssociationError {
-        GetBotChannelAssociationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBotChannelAssociationError {
-    fn from(err: io::Error) -> GetBotChannelAssociationError {
-        GetBotChannelAssociationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBotChannelAssociationError {
@@ -3752,13 +3304,6 @@ impl Error for GetBotChannelAssociationError {
             GetBotChannelAssociationError::InternalFailure(ref cause) => cause,
             GetBotChannelAssociationError::LimitExceeded(ref cause) => cause,
             GetBotChannelAssociationError::NotFound(ref cause) => cause,
-            GetBotChannelAssociationError::Validation(ref cause) => cause,
-            GetBotChannelAssociationError::Credentials(ref err) => err.description(),
-            GetBotChannelAssociationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBotChannelAssociationError::ParseError(ref cause) => cause,
-            GetBotChannelAssociationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3771,22 +3316,12 @@ pub enum GetBotChannelAssociationsError {
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotChannelAssociationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBotChannelAssociationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotChannelAssociationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3811,46 +3346,25 @@ impl GetBotChannelAssociationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotChannelAssociationsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBotChannelAssociationsError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalFailureException" => {
-                    return GetBotChannelAssociationsError::InternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(GetBotChannelAssociationsError::InternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return GetBotChannelAssociationsError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetBotChannelAssociationsError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetBotChannelAssociationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBotChannelAssociationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBotChannelAssociationsError {
-    fn from(err: serde_json::error::Error) -> GetBotChannelAssociationsError {
-        GetBotChannelAssociationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBotChannelAssociationsError {
-    fn from(err: CredentialsError) -> GetBotChannelAssociationsError {
-        GetBotChannelAssociationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBotChannelAssociationsError {
-    fn from(err: HttpDispatchError) -> GetBotChannelAssociationsError {
-        GetBotChannelAssociationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBotChannelAssociationsError {
-    fn from(err: io::Error) -> GetBotChannelAssociationsError {
-        GetBotChannelAssociationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBotChannelAssociationsError {
@@ -3864,13 +3378,6 @@ impl Error for GetBotChannelAssociationsError {
             GetBotChannelAssociationsError::BadRequest(ref cause) => cause,
             GetBotChannelAssociationsError::InternalFailure(ref cause) => cause,
             GetBotChannelAssociationsError::LimitExceeded(ref cause) => cause,
-            GetBotChannelAssociationsError::Validation(ref cause) => cause,
-            GetBotChannelAssociationsError::Credentials(ref err) => err.description(),
-            GetBotChannelAssociationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBotChannelAssociationsError::ParseError(ref cause) => cause,
-            GetBotChannelAssociationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3885,22 +3392,12 @@ pub enum GetBotVersionsError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotVersionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBotVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotVersionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3925,45 +3422,30 @@ impl GetBotVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotVersionsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBotVersionsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBotVersionsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBotVersionsError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetBotVersionsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBotVersionsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetBotVersionsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetBotVersionsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetBotVersionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBotVersionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBotVersionsError {
-    fn from(err: serde_json::error::Error) -> GetBotVersionsError {
-        GetBotVersionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBotVersionsError {
-    fn from(err: CredentialsError) -> GetBotVersionsError {
-        GetBotVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBotVersionsError {
-    fn from(err: HttpDispatchError) -> GetBotVersionsError {
-        GetBotVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBotVersionsError {
-    fn from(err: io::Error) -> GetBotVersionsError {
-        GetBotVersionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBotVersionsError {
@@ -3978,11 +3460,6 @@ impl Error for GetBotVersionsError {
             GetBotVersionsError::InternalFailure(ref cause) => cause,
             GetBotVersionsError::LimitExceeded(ref cause) => cause,
             GetBotVersionsError::NotFound(ref cause) => cause,
-            GetBotVersionsError::Validation(ref cause) => cause,
-            GetBotVersionsError::Credentials(ref err) => err.description(),
-            GetBotVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotVersionsError::ParseError(ref cause) => cause,
-            GetBotVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3997,22 +3474,12 @@ pub enum GetBotsError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBotsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBotsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4037,41 +3504,28 @@ impl GetBotsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBotsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBotsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBotsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBotsError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetBotsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBotsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetBotsError::NotFound(String::from(error_message)),
-                "ValidationException" => return GetBotsError::Validation(error_message.to_string()),
+                "NotFoundException" => {
+                    return RusotoError::Service(GetBotsError::NotFound(String::from(error_message)));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBotsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBotsError {
-    fn from(err: serde_json::error::Error) -> GetBotsError {
-        GetBotsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBotsError {
-    fn from(err: CredentialsError) -> GetBotsError {
-        GetBotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBotsError {
-    fn from(err: HttpDispatchError) -> GetBotsError {
-        GetBotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBotsError {
-    fn from(err: io::Error) -> GetBotsError {
-        GetBotsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBotsError {
@@ -4086,11 +3540,6 @@ impl Error for GetBotsError {
             GetBotsError::InternalFailure(ref cause) => cause,
             GetBotsError::LimitExceeded(ref cause) => cause,
             GetBotsError::NotFound(ref cause) => cause,
-            GetBotsError::Validation(ref cause) => cause,
-            GetBotsError::Credentials(ref err) => err.description(),
-            GetBotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBotsError::ParseError(ref cause) => cause,
-            GetBotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4105,22 +3554,12 @@ pub enum GetBuiltinIntentError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBuiltinIntentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBuiltinIntentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBuiltinIntentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4145,45 +3584,30 @@ impl GetBuiltinIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBuiltinIntentError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinIntentError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBuiltinIntentError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinIntentError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetBuiltinIntentError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinIntentError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetBuiltinIntentError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinIntentError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetBuiltinIntentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBuiltinIntentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBuiltinIntentError {
-    fn from(err: serde_json::error::Error) -> GetBuiltinIntentError {
-        GetBuiltinIntentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBuiltinIntentError {
-    fn from(err: CredentialsError) -> GetBuiltinIntentError {
-        GetBuiltinIntentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBuiltinIntentError {
-    fn from(err: HttpDispatchError) -> GetBuiltinIntentError {
-        GetBuiltinIntentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBuiltinIntentError {
-    fn from(err: io::Error) -> GetBuiltinIntentError {
-        GetBuiltinIntentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBuiltinIntentError {
@@ -4198,11 +3622,6 @@ impl Error for GetBuiltinIntentError {
             GetBuiltinIntentError::InternalFailure(ref cause) => cause,
             GetBuiltinIntentError::LimitExceeded(ref cause) => cause,
             GetBuiltinIntentError::NotFound(ref cause) => cause,
-            GetBuiltinIntentError::Validation(ref cause) => cause,
-            GetBuiltinIntentError::Credentials(ref err) => err.description(),
-            GetBuiltinIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBuiltinIntentError::ParseError(ref cause) => cause,
-            GetBuiltinIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4215,22 +3634,12 @@ pub enum GetBuiltinIntentsError {
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBuiltinIntentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBuiltinIntentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBuiltinIntentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4255,42 +3664,25 @@ impl GetBuiltinIntentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBuiltinIntentsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinIntentsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBuiltinIntentsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinIntentsError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetBuiltinIntentsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinIntentsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetBuiltinIntentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBuiltinIntentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBuiltinIntentsError {
-    fn from(err: serde_json::error::Error) -> GetBuiltinIntentsError {
-        GetBuiltinIntentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBuiltinIntentsError {
-    fn from(err: CredentialsError) -> GetBuiltinIntentsError {
-        GetBuiltinIntentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBuiltinIntentsError {
-    fn from(err: HttpDispatchError) -> GetBuiltinIntentsError {
-        GetBuiltinIntentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBuiltinIntentsError {
-    fn from(err: io::Error) -> GetBuiltinIntentsError {
-        GetBuiltinIntentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBuiltinIntentsError {
@@ -4304,13 +3696,6 @@ impl Error for GetBuiltinIntentsError {
             GetBuiltinIntentsError::BadRequest(ref cause) => cause,
             GetBuiltinIntentsError::InternalFailure(ref cause) => cause,
             GetBuiltinIntentsError::LimitExceeded(ref cause) => cause,
-            GetBuiltinIntentsError::Validation(ref cause) => cause,
-            GetBuiltinIntentsError::Credentials(ref err) => err.description(),
-            GetBuiltinIntentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBuiltinIntentsError::ParseError(ref cause) => cause,
-            GetBuiltinIntentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4323,22 +3708,12 @@ pub enum GetBuiltinSlotTypesError {
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBuiltinSlotTypesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetBuiltinSlotTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBuiltinSlotTypesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4363,42 +3738,25 @@ impl GetBuiltinSlotTypesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetBuiltinSlotTypesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinSlotTypesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetBuiltinSlotTypesError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinSlotTypesError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetBuiltinSlotTypesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetBuiltinSlotTypesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetBuiltinSlotTypesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBuiltinSlotTypesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBuiltinSlotTypesError {
-    fn from(err: serde_json::error::Error) -> GetBuiltinSlotTypesError {
-        GetBuiltinSlotTypesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBuiltinSlotTypesError {
-    fn from(err: CredentialsError) -> GetBuiltinSlotTypesError {
-        GetBuiltinSlotTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBuiltinSlotTypesError {
-    fn from(err: HttpDispatchError) -> GetBuiltinSlotTypesError {
-        GetBuiltinSlotTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBuiltinSlotTypesError {
-    fn from(err: io::Error) -> GetBuiltinSlotTypesError {
-        GetBuiltinSlotTypesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBuiltinSlotTypesError {
@@ -4412,13 +3770,6 @@ impl Error for GetBuiltinSlotTypesError {
             GetBuiltinSlotTypesError::BadRequest(ref cause) => cause,
             GetBuiltinSlotTypesError::InternalFailure(ref cause) => cause,
             GetBuiltinSlotTypesError::LimitExceeded(ref cause) => cause,
-            GetBuiltinSlotTypesError::Validation(ref cause) => cause,
-            GetBuiltinSlotTypesError::Credentials(ref err) => err.description(),
-            GetBuiltinSlotTypesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBuiltinSlotTypesError::ParseError(ref cause) => cause,
-            GetBuiltinSlotTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4433,22 +3784,12 @@ pub enum GetExportError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetExportError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetExportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetExportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4473,43 +3814,30 @@ impl GetExportError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetExportError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetExportError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetExportError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetExportError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetExportError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetExportError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetExportError::NotFound(String::from(error_message)),
-                "ValidationException" => {
-                    return GetExportError::Validation(error_message.to_string());
+                "NotFoundException" => {
+                    return RusotoError::Service(GetExportError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetExportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetExportError {
-    fn from(err: serde_json::error::Error) -> GetExportError {
-        GetExportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetExportError {
-    fn from(err: CredentialsError) -> GetExportError {
-        GetExportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetExportError {
-    fn from(err: HttpDispatchError) -> GetExportError {
-        GetExportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetExportError {
-    fn from(err: io::Error) -> GetExportError {
-        GetExportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetExportError {
@@ -4524,11 +3852,6 @@ impl Error for GetExportError {
             GetExportError::InternalFailure(ref cause) => cause,
             GetExportError::LimitExceeded(ref cause) => cause,
             GetExportError::NotFound(ref cause) => cause,
-            GetExportError::Validation(ref cause) => cause,
-            GetExportError::Credentials(ref err) => err.description(),
-            GetExportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetExportError::ParseError(ref cause) => cause,
-            GetExportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4543,22 +3866,12 @@ pub enum GetImportError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetImportError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetImportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetImportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4583,43 +3896,30 @@ impl GetImportError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetImportError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetImportError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetImportError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetImportError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetImportError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetImportError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetImportError::NotFound(String::from(error_message)),
-                "ValidationException" => {
-                    return GetImportError::Validation(error_message.to_string());
+                "NotFoundException" => {
+                    return RusotoError::Service(GetImportError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetImportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetImportError {
-    fn from(err: serde_json::error::Error) -> GetImportError {
-        GetImportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetImportError {
-    fn from(err: CredentialsError) -> GetImportError {
-        GetImportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetImportError {
-    fn from(err: HttpDispatchError) -> GetImportError {
-        GetImportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetImportError {
-    fn from(err: io::Error) -> GetImportError {
-        GetImportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetImportError {
@@ -4634,11 +3934,6 @@ impl Error for GetImportError {
             GetImportError::InternalFailure(ref cause) => cause,
             GetImportError::LimitExceeded(ref cause) => cause,
             GetImportError::NotFound(ref cause) => cause,
-            GetImportError::Validation(ref cause) => cause,
-            GetImportError::Credentials(ref err) => err.description(),
-            GetImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetImportError::ParseError(ref cause) => cause,
-            GetImportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4653,22 +3948,12 @@ pub enum GetIntentError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIntentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetIntentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4693,43 +3978,30 @@ impl GetIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIntentError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetIntentError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetIntentError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetIntentError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetIntentError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetIntentError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return GetIntentError::NotFound(String::from(error_message)),
-                "ValidationException" => {
-                    return GetIntentError::Validation(error_message.to_string());
+                "NotFoundException" => {
+                    return RusotoError::Service(GetIntentError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIntentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIntentError {
-    fn from(err: serde_json::error::Error) -> GetIntentError {
-        GetIntentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIntentError {
-    fn from(err: CredentialsError) -> GetIntentError {
-        GetIntentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIntentError {
-    fn from(err: HttpDispatchError) -> GetIntentError {
-        GetIntentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIntentError {
-    fn from(err: io::Error) -> GetIntentError {
-        GetIntentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIntentError {
@@ -4744,11 +4016,6 @@ impl Error for GetIntentError {
             GetIntentError::InternalFailure(ref cause) => cause,
             GetIntentError::LimitExceeded(ref cause) => cause,
             GetIntentError::NotFound(ref cause) => cause,
-            GetIntentError::Validation(ref cause) => cause,
-            GetIntentError::Credentials(ref err) => err.description(),
-            GetIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIntentError::ParseError(ref cause) => cause,
-            GetIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4763,22 +4030,12 @@ pub enum GetIntentVersionsError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIntentVersionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetIntentVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntentVersionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4803,45 +4060,30 @@ impl GetIntentVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIntentVersionsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetIntentVersionsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetIntentVersionsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetIntentVersionsError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetIntentVersionsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetIntentVersionsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetIntentVersionsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetIntentVersionsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetIntentVersionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIntentVersionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIntentVersionsError {
-    fn from(err: serde_json::error::Error) -> GetIntentVersionsError {
-        GetIntentVersionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIntentVersionsError {
-    fn from(err: CredentialsError) -> GetIntentVersionsError {
-        GetIntentVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIntentVersionsError {
-    fn from(err: HttpDispatchError) -> GetIntentVersionsError {
-        GetIntentVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIntentVersionsError {
-    fn from(err: io::Error) -> GetIntentVersionsError {
-        GetIntentVersionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIntentVersionsError {
@@ -4856,13 +4098,6 @@ impl Error for GetIntentVersionsError {
             GetIntentVersionsError::InternalFailure(ref cause) => cause,
             GetIntentVersionsError::LimitExceeded(ref cause) => cause,
             GetIntentVersionsError::NotFound(ref cause) => cause,
-            GetIntentVersionsError::Validation(ref cause) => cause,
-            GetIntentVersionsError::Credentials(ref err) => err.description(),
-            GetIntentVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIntentVersionsError::ParseError(ref cause) => cause,
-            GetIntentVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4877,22 +4112,12 @@ pub enum GetIntentsError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIntentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetIntentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIntentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4917,45 +4142,30 @@ impl GetIntentsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIntentsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetIntentsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetIntentsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetIntentsError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetIntentsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetIntentsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetIntentsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetIntentsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetIntentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIntentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIntentsError {
-    fn from(err: serde_json::error::Error) -> GetIntentsError {
-        GetIntentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIntentsError {
-    fn from(err: CredentialsError) -> GetIntentsError {
-        GetIntentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIntentsError {
-    fn from(err: HttpDispatchError) -> GetIntentsError {
-        GetIntentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIntentsError {
-    fn from(err: io::Error) -> GetIntentsError {
-        GetIntentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIntentsError {
@@ -4970,11 +4180,6 @@ impl Error for GetIntentsError {
             GetIntentsError::InternalFailure(ref cause) => cause,
             GetIntentsError::LimitExceeded(ref cause) => cause,
             GetIntentsError::NotFound(ref cause) => cause,
-            GetIntentsError::Validation(ref cause) => cause,
-            GetIntentsError::Credentials(ref err) => err.description(),
-            GetIntentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIntentsError::ParseError(ref cause) => cause,
-            GetIntentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4989,22 +4194,12 @@ pub enum GetSlotTypeError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSlotTypeError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetSlotTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSlotTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5029,45 +4224,30 @@ impl GetSlotTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSlotTypeError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetSlotTypeError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetSlotTypeError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetSlotTypeError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetSlotTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSlotTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSlotTypeError {
-    fn from(err: serde_json::error::Error) -> GetSlotTypeError {
-        GetSlotTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSlotTypeError {
-    fn from(err: CredentialsError) -> GetSlotTypeError {
-        GetSlotTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSlotTypeError {
-    fn from(err: HttpDispatchError) -> GetSlotTypeError {
-        GetSlotTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSlotTypeError {
-    fn from(err: io::Error) -> GetSlotTypeError {
-        GetSlotTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSlotTypeError {
@@ -5082,11 +4262,6 @@ impl Error for GetSlotTypeError {
             GetSlotTypeError::InternalFailure(ref cause) => cause,
             GetSlotTypeError::LimitExceeded(ref cause) => cause,
             GetSlotTypeError::NotFound(ref cause) => cause,
-            GetSlotTypeError::Validation(ref cause) => cause,
-            GetSlotTypeError::Credentials(ref err) => err.description(),
-            GetSlotTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSlotTypeError::ParseError(ref cause) => cause,
-            GetSlotTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5101,22 +4276,12 @@ pub enum GetSlotTypeVersionsError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSlotTypeVersionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetSlotTypeVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSlotTypeVersionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5141,45 +4306,30 @@ impl GetSlotTypeVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSlotTypeVersionsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeVersionsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetSlotTypeVersionsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeVersionsError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetSlotTypeVersionsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeVersionsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetSlotTypeVersionsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypeVersionsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetSlotTypeVersionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSlotTypeVersionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSlotTypeVersionsError {
-    fn from(err: serde_json::error::Error) -> GetSlotTypeVersionsError {
-        GetSlotTypeVersionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSlotTypeVersionsError {
-    fn from(err: CredentialsError) -> GetSlotTypeVersionsError {
-        GetSlotTypeVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSlotTypeVersionsError {
-    fn from(err: HttpDispatchError) -> GetSlotTypeVersionsError {
-        GetSlotTypeVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSlotTypeVersionsError {
-    fn from(err: io::Error) -> GetSlotTypeVersionsError {
-        GetSlotTypeVersionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSlotTypeVersionsError {
@@ -5194,13 +4344,6 @@ impl Error for GetSlotTypeVersionsError {
             GetSlotTypeVersionsError::InternalFailure(ref cause) => cause,
             GetSlotTypeVersionsError::LimitExceeded(ref cause) => cause,
             GetSlotTypeVersionsError::NotFound(ref cause) => cause,
-            GetSlotTypeVersionsError::Validation(ref cause) => cause,
-            GetSlotTypeVersionsError::Credentials(ref err) => err.description(),
-            GetSlotTypeVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSlotTypeVersionsError::ParseError(ref cause) => cause,
-            GetSlotTypeVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5215,22 +4358,12 @@ pub enum GetSlotTypesError {
     LimitExceeded(String),
     /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSlotTypesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetSlotTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSlotTypesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5255,45 +4388,30 @@ impl GetSlotTypesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetSlotTypesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetSlotTypesError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypesError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetSlotTypesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetSlotTypesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetSlotTypesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetSlotTypesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSlotTypesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSlotTypesError {
-    fn from(err: serde_json::error::Error) -> GetSlotTypesError {
-        GetSlotTypesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSlotTypesError {
-    fn from(err: CredentialsError) -> GetSlotTypesError {
-        GetSlotTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSlotTypesError {
-    fn from(err: HttpDispatchError) -> GetSlotTypesError {
-        GetSlotTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSlotTypesError {
-    fn from(err: io::Error) -> GetSlotTypesError {
-        GetSlotTypesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSlotTypesError {
@@ -5308,11 +4426,6 @@ impl Error for GetSlotTypesError {
             GetSlotTypesError::InternalFailure(ref cause) => cause,
             GetSlotTypesError::LimitExceeded(ref cause) => cause,
             GetSlotTypesError::NotFound(ref cause) => cause,
-            GetSlotTypesError::Validation(ref cause) => cause,
-            GetSlotTypesError::Credentials(ref err) => err.description(),
-            GetSlotTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSlotTypesError::ParseError(ref cause) => cause,
-            GetSlotTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5325,22 +4438,12 @@ pub enum GetUtterancesViewError {
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUtterancesViewError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetUtterancesViewError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUtterancesViewError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5365,42 +4468,25 @@ impl GetUtterancesViewError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetUtterancesViewError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetUtterancesViewError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetUtterancesViewError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetUtterancesViewError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetUtterancesViewError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetUtterancesViewError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetUtterancesViewError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUtterancesViewError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUtterancesViewError {
-    fn from(err: serde_json::error::Error) -> GetUtterancesViewError {
-        GetUtterancesViewError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUtterancesViewError {
-    fn from(err: CredentialsError) -> GetUtterancesViewError {
-        GetUtterancesViewError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUtterancesViewError {
-    fn from(err: HttpDispatchError) -> GetUtterancesViewError {
-        GetUtterancesViewError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUtterancesViewError {
-    fn from(err: io::Error) -> GetUtterancesViewError {
-        GetUtterancesViewError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUtterancesViewError {
@@ -5414,13 +4500,6 @@ impl Error for GetUtterancesViewError {
             GetUtterancesViewError::BadRequest(ref cause) => cause,
             GetUtterancesViewError::InternalFailure(ref cause) => cause,
             GetUtterancesViewError::LimitExceeded(ref cause) => cause,
-            GetUtterancesViewError::Validation(ref cause) => cause,
-            GetUtterancesViewError::Credentials(ref err) => err.description(),
-            GetUtterancesViewError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetUtterancesViewError::ParseError(ref cause) => cause,
-            GetUtterancesViewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5437,22 +4516,12 @@ pub enum PutBotError {
     LimitExceeded(String),
     /// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
     PreconditionFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutBotError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutBotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5477,44 +4546,33 @@ impl PutBotError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutBotError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PutBotError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ConflictException" => return PutBotError::Conflict(String::from(error_message)),
+                "ConflictException" => {
+                    return RusotoError::Service(PutBotError::Conflict(String::from(error_message)));
+                }
                 "InternalFailureException" => {
-                    return PutBotError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(PutBotError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PutBotError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutBotError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "PreconditionFailedException" => {
-                    return PutBotError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(PutBotError::PreconditionFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return PutBotError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutBotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutBotError {
-    fn from(err: serde_json::error::Error) -> PutBotError {
-        PutBotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutBotError {
-    fn from(err: CredentialsError) -> PutBotError {
-        PutBotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBotError {
-    fn from(err: HttpDispatchError) -> PutBotError {
-        PutBotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBotError {
-    fn from(err: io::Error) -> PutBotError {
-        PutBotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutBotError {
@@ -5530,11 +4588,6 @@ impl Error for PutBotError {
             PutBotError::InternalFailure(ref cause) => cause,
             PutBotError::LimitExceeded(ref cause) => cause,
             PutBotError::PreconditionFailed(ref cause) => cause,
-            PutBotError::Validation(ref cause) => cause,
-            PutBotError::Credentials(ref err) => err.description(),
-            PutBotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBotError::ParseError(ref cause) => cause,
-            PutBotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5551,22 +4604,12 @@ pub enum PutBotAliasError {
     LimitExceeded(String),
     /// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
     PreconditionFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutBotAliasError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutBotAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBotAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5591,48 +4634,35 @@ impl PutBotAliasError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutBotAliasError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PutBotAliasError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return PutBotAliasError::Conflict(String::from(error_message));
+                    return RusotoError::Service(PutBotAliasError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return PutBotAliasError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(PutBotAliasError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PutBotAliasError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutBotAliasError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "PreconditionFailedException" => {
-                    return PutBotAliasError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(PutBotAliasError::PreconditionFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutBotAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutBotAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutBotAliasError {
-    fn from(err: serde_json::error::Error) -> PutBotAliasError {
-        PutBotAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutBotAliasError {
-    fn from(err: CredentialsError) -> PutBotAliasError {
-        PutBotAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBotAliasError {
-    fn from(err: HttpDispatchError) -> PutBotAliasError {
-        PutBotAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBotAliasError {
-    fn from(err: io::Error) -> PutBotAliasError {
-        PutBotAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutBotAliasError {
@@ -5648,11 +4678,6 @@ impl Error for PutBotAliasError {
             PutBotAliasError::InternalFailure(ref cause) => cause,
             PutBotAliasError::LimitExceeded(ref cause) => cause,
             PutBotAliasError::PreconditionFailed(ref cause) => cause,
-            PutBotAliasError::Validation(ref cause) => cause,
-            PutBotAliasError::Credentials(ref err) => err.description(),
-            PutBotAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBotAliasError::ParseError(ref cause) => cause,
-            PutBotAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5669,22 +4694,12 @@ pub enum PutIntentError {
     LimitExceeded(String),
     /// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
     PreconditionFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutIntentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutIntentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutIntentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5709,46 +4724,35 @@ impl PutIntentError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutIntentError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PutIntentError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ConflictException" => return PutIntentError::Conflict(String::from(error_message)),
+                "ConflictException" => {
+                    return RusotoError::Service(PutIntentError::Conflict(String::from(
+                        error_message,
+                    )));
+                }
                 "InternalFailureException" => {
-                    return PutIntentError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(PutIntentError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PutIntentError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutIntentError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "PreconditionFailedException" => {
-                    return PutIntentError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(PutIntentError::PreconditionFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutIntentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutIntentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutIntentError {
-    fn from(err: serde_json::error::Error) -> PutIntentError {
-        PutIntentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutIntentError {
-    fn from(err: CredentialsError) -> PutIntentError {
-        PutIntentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutIntentError {
-    fn from(err: HttpDispatchError) -> PutIntentError {
-        PutIntentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutIntentError {
-    fn from(err: io::Error) -> PutIntentError {
-        PutIntentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutIntentError {
@@ -5764,11 +4768,6 @@ impl Error for PutIntentError {
             PutIntentError::InternalFailure(ref cause) => cause,
             PutIntentError::LimitExceeded(ref cause) => cause,
             PutIntentError::PreconditionFailed(ref cause) => cause,
-            PutIntentError::Validation(ref cause) => cause,
-            PutIntentError::Credentials(ref err) => err.description(),
-            PutIntentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutIntentError::ParseError(ref cause) => cause,
-            PutIntentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5785,22 +4784,12 @@ pub enum PutSlotTypeError {
     LimitExceeded(String),
     /// <p> The checksum of the resource that you are trying to change does not match the checksum in the request. Check the resource's checksum and try again.</p>
     PreconditionFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutSlotTypeError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutSlotTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSlotTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5825,48 +4814,35 @@ impl PutSlotTypeError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutSlotTypeError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PutSlotTypeError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return PutSlotTypeError::Conflict(String::from(error_message));
+                    return RusotoError::Service(PutSlotTypeError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return PutSlotTypeError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(PutSlotTypeError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PutSlotTypeError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutSlotTypeError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "PreconditionFailedException" => {
-                    return PutSlotTypeError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(PutSlotTypeError::PreconditionFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutSlotTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutSlotTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutSlotTypeError {
-    fn from(err: serde_json::error::Error) -> PutSlotTypeError {
-        PutSlotTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutSlotTypeError {
-    fn from(err: CredentialsError) -> PutSlotTypeError {
-        PutSlotTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutSlotTypeError {
-    fn from(err: HttpDispatchError) -> PutSlotTypeError {
-        PutSlotTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutSlotTypeError {
-    fn from(err: io::Error) -> PutSlotTypeError {
-        PutSlotTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutSlotTypeError {
@@ -5882,11 +4858,6 @@ impl Error for PutSlotTypeError {
             PutSlotTypeError::InternalFailure(ref cause) => cause,
             PutSlotTypeError::LimitExceeded(ref cause) => cause,
             PutSlotTypeError::PreconditionFailed(ref cause) => cause,
-            PutSlotTypeError::Validation(ref cause) => cause,
-            PutSlotTypeError::Credentials(ref err) => err.description(),
-            PutSlotTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutSlotTypeError::ParseError(ref cause) => cause,
-            PutSlotTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5899,22 +4870,12 @@ pub enum StartImportError {
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartImportError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> StartImportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5939,42 +4900,25 @@ impl StartImportError {
 
             match error_type {
                 "BadRequestException" => {
-                    return StartImportError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(StartImportError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return StartImportError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(StartImportError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return StartImportError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StartImportError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StartImportError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartImportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartImportError {
-    fn from(err: serde_json::error::Error) -> StartImportError {
-        StartImportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartImportError {
-    fn from(err: CredentialsError) -> StartImportError {
-        StartImportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartImportError {
-    fn from(err: HttpDispatchError) -> StartImportError {
-        StartImportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartImportError {
-    fn from(err: io::Error) -> StartImportError {
-        StartImportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartImportError {
@@ -5988,11 +4932,6 @@ impl Error for StartImportError {
             StartImportError::BadRequest(ref cause) => cause,
             StartImportError::InternalFailure(ref cause) => cause,
             StartImportError::LimitExceeded(ref cause) => cause,
-            StartImportError::Validation(ref cause) => cause,
-            StartImportError::Credentials(ref err) => err.description(),
-            StartImportError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartImportError::ParseError(ref cause) => cause,
-            StartImportError::Unknown(_) => "unknown error",
         }
     }
 }
