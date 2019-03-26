@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Add `RusotoError` enum as base error type for all services
+- Improve error messages for BufferedHttpResponse in Unknown error variants.
 - Fix hostname derivation for custom Region endpoints
 
 ## [0.37.0] - 2019-03-12
