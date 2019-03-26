@@ -72,7 +72,7 @@ impl<E: Error + 'static> Error for RusotoError<E> {
             RusotoError::Credentials(ref err) => err.description(),
             RusotoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             RusotoError::ParseError(ref cause) => cause,
-            RusotoError::Unknown(_) => "unknown error",
+            RusotoError::Unknown(ref cause) => cause.body_as_str(),
         }
     }
 

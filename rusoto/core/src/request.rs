@@ -102,7 +102,7 @@ pub struct HttpResponse {
 }
 
 /// Stores the buffered response from a HTTP request.
-#[derive(Debug, PartialEq)]
+#[derive(PartialEq)]
 pub struct BufferedHttpResponse {
     /// Status code of HTTP Request
     pub status: StatusCode,
@@ -110,6 +110,34 @@ pub struct BufferedHttpResponse {
     pub body: Vec<u8>,
     /// Response headers
     pub headers: Headers,
+}
+
+impl BufferedHttpResponse {
+    ///! Best effort to turn response body into more readable &str.
+    pub fn body_as_str(&self) -> &str {
+        match std::str::from_utf8(&self.body) {
+            Ok(msg) => msg,
+            _ => "unknown error",
+        }
+    }
+}
+
+/// Best effort based Debug implementation to make generic error's body more readable.
+impl fmt::Debug for BufferedHttpResponse {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match std::str::from_utf8(&self.body) {
+            Ok(msg) => write!(
+                f,
+                "BufferedHttpResponse {{status: {:?}, body: {:?}, headers: {:?} }}",
+                self.status, msg, self.headers
+            ),
+            _ => write!(
+                f,
+                "BufferedHttpResponse {{ status: {:?}, body: {:?}, headers: {:?} }}",
+                self.status, self.body, self.headers
+            ),
+        }
+    }
 }
 
 /// Future returned from `HttpResponse::buffer`.
