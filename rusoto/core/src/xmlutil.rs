@@ -195,6 +195,43 @@ pub fn find_start_element<T: Peek + Next>(stack: &mut T) {
     }
 }
 
+enum DeserializerNext {
+    Close,
+    Skip,
+    Element(String),
+}
+
+pub fn deserialize_elements<T, S, F>(tag_name: &str, stack: &mut T, mut handle_element: F) -> Result<S, XmlParseError>
+where
+    T: Peek + Next,
+    S: Default,
+    F: FnMut(&str, &mut T, &mut S) -> Result<(), XmlParseError>
+{
+    let mut obj = S::default();
+
+    start_element(tag_name, stack)?;
+
+    loop {
+        let next_event = match stack.peek() {
+            Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+            Some(&Ok(XmlEvent::StartElement { ref name, .. })) => DeserializerNext::Element(name.local_name.to_owned()),
+            _ => DeserializerNext::Skip,
+        };
+
+        match next_event {
+            DeserializerNext::Element(name) => {
+                handle_element(&name[..], stack, &mut obj)?;
+            },
+            DeserializerNext::Close => break,
+            DeserializerNext::Skip => { stack.next(); }
+        }
+    }
+
+    end_element(tag_name, stack)?;
+
+    Ok(obj)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

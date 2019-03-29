@@ -25,20 +25,15 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{
-    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
+    start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
-use xml::reader::XmlEvent;
 use xml::EventReader;
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
 /// <p></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Attribute {
@@ -59,51 +54,30 @@ impl AttributeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Attribute, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Attribute::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Attribute, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AlternateNameEncoding" => {
+                    obj.alternate_name_encoding = Some(StringDeserializer::deserialize(
+                        "AlternateNameEncoding",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AlternateNameEncoding" => {
-                        obj.alternate_name_encoding = Some(StringDeserializer::deserialize(
-                            "AlternateNameEncoding",
-                            stack,
-                        )?);
-                    }
-                    "AlternateValueEncoding" => {
-                        obj.alternate_value_encoding = Some(StringDeserializer::deserialize(
-                            "AlternateValueEncoding",
-                            stack,
-                        )?);
-                    }
-                    "Name" => {
-                        obj.name = StringDeserializer::deserialize("Name", stack)?;
-                    }
-                    "Value" => {
-                        obj.value = StringDeserializer::deserialize("Value", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AlternateValueEncoding" => {
+                    obj.alternate_value_encoding = Some(StringDeserializer::deserialize(
+                        "AlternateValueEncoding",
+                        stack,
+                    )?);
                 }
+                "Name" => {
+                    obj.name = StringDeserializer::deserialize("Name", stack)?;
+                }
+                "Value" => {
+                    obj.value = StringDeserializer::deserialize("Value", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -144,7 +118,9 @@ impl AttributeListDeserializer {
 
         loop {
             let consume_next_tag = match stack.peek() {
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
+                Some(&Ok(xml::reader::XmlEvent::StartElement { ref name, .. })) => {
+                    name.local_name == tag_name
+                }
                 _ => false,
             };
 
@@ -392,68 +368,46 @@ impl DomainMetadataResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainMetadataResult, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DomainMetadataResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, DomainMetadataResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AttributeNameCount" => {
+                    obj.attribute_name_count = Some(IntegerDeserializer::deserialize(
+                        "AttributeNameCount",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AttributeNameCount" => {
-                        obj.attribute_name_count = Some(IntegerDeserializer::deserialize(
-                            "AttributeNameCount",
-                            stack,
-                        )?);
-                    }
-                    "AttributeNamesSizeBytes" => {
-                        obj.attribute_names_size_bytes = Some(LongDeserializer::deserialize(
-                            "AttributeNamesSizeBytes",
-                            stack,
-                        )?);
-                    }
-                    "AttributeValueCount" => {
-                        obj.attribute_value_count = Some(IntegerDeserializer::deserialize(
-                            "AttributeValueCount",
-                            stack,
-                        )?);
-                    }
-                    "AttributeValuesSizeBytes" => {
-                        obj.attribute_values_size_bytes = Some(LongDeserializer::deserialize(
-                            "AttributeValuesSizeBytes",
-                            stack,
-                        )?);
-                    }
-                    "ItemCount" => {
-                        obj.item_count =
-                            Some(IntegerDeserializer::deserialize("ItemCount", stack)?);
-                    }
-                    "ItemNamesSizeBytes" => {
-                        obj.item_names_size_bytes =
-                            Some(LongDeserializer::deserialize("ItemNamesSizeBytes", stack)?);
-                    }
-                    "Timestamp" => {
-                        obj.timestamp = Some(IntegerDeserializer::deserialize("Timestamp", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AttributeNamesSizeBytes" => {
+                    obj.attribute_names_size_bytes = Some(LongDeserializer::deserialize(
+                        "AttributeNamesSizeBytes",
+                        stack,
+                    )?);
                 }
+                "AttributeValueCount" => {
+                    obj.attribute_value_count = Some(IntegerDeserializer::deserialize(
+                        "AttributeValueCount",
+                        stack,
+                    )?);
+                }
+                "AttributeValuesSizeBytes" => {
+                    obj.attribute_values_size_bytes = Some(LongDeserializer::deserialize(
+                        "AttributeValuesSizeBytes",
+                        stack,
+                    )?);
+                }
+                "ItemCount" => {
+                    obj.item_count = Some(IntegerDeserializer::deserialize("ItemCount", stack)?);
+                }
+                "ItemNamesSizeBytes" => {
+                    obj.item_names_size_bytes =
+                        Some(LongDeserializer::deserialize("ItemNamesSizeBytes", stack)?);
+                }
+                "Timestamp" => {
+                    obj.timestamp = Some(IntegerDeserializer::deserialize("Timestamp", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DomainNameListDeserializer;
@@ -467,7 +421,9 @@ impl DomainNameListDeserializer {
 
         loop {
             let consume_next_tag = match stack.peek() {
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
+                Some(&Ok(xml::reader::XmlEvent::StartElement { ref name, .. })) => {
+                    name.local_name == tag_name
+                }
                 _ => false,
             };
 
@@ -533,47 +489,17 @@ impl GetAttributesResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAttributesResult, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetAttributesResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetAttributesResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Attribute" => {
+                    obj.attributes
+                        .get_or_insert(vec![])
+                        .extend(AttributeListDeserializer::deserialize("Attribute", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Attribute" => {
-                        obj.attributes = match obj.attributes {
-                            Some(ref mut existing) => {
-                                existing.extend(AttributeListDeserializer::deserialize(
-                                    "Attribute",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => {
-                                Some(AttributeListDeserializer::deserialize("Attribute", stack)?)
-                            }
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct IntegerDeserializer;
@@ -608,46 +534,25 @@ impl ItemDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Item, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Item::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Item, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AlternateNameEncoding" => {
+                    obj.alternate_name_encoding = Some(StringDeserializer::deserialize(
+                        "AlternateNameEncoding",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AlternateNameEncoding" => {
-                        obj.alternate_name_encoding = Some(StringDeserializer::deserialize(
-                            "AlternateNameEncoding",
-                            stack,
-                        )?);
-                    }
-                    "Attribute" => {
-                        obj.attributes
-                            .extend(AttributeListDeserializer::deserialize("Attribute", stack)?);
-                    }
-                    "Name" => {
-                        obj.name = StringDeserializer::deserialize("Name", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Attribute" => {
+                    obj.attributes
+                        .extend(AttributeListDeserializer::deserialize("Attribute", stack)?);
                 }
+                "Name" => {
+                    obj.name = StringDeserializer::deserialize("Name", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ItemListDeserializer;
@@ -661,7 +566,9 @@ impl ItemListDeserializer {
 
         loop {
             let consume_next_tag = match stack.peek() {
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => name.local_name == tag_name,
+                Some(&Ok(xml::reader::XmlEvent::StartElement { ref name, .. })) => {
+                    name.local_name == tag_name
+                }
                 _ => false,
             };
 
@@ -719,51 +626,20 @@ impl ListDomainsResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDomainsResult, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListDomainsResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListDomainsResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DomainName" => {
+                    obj.domain_names.get_or_insert(vec![]).extend(
+                        DomainNameListDeserializer::deserialize("DomainName", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DomainName" => {
-                        obj.domain_names = match obj.domain_names {
-                            Some(ref mut existing) => {
-                                existing.extend(DomainNameListDeserializer::deserialize(
-                                    "DomainName",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(DomainNameListDeserializer::deserialize(
-                                "DomainName",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "NextToken" => {
-                        obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "NextToken" => {
+                    obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct LongDeserializer;
@@ -948,45 +824,20 @@ impl SelectResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SelectResult, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SelectResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SelectResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Item" => {
+                    obj.items
+                        .get_or_insert(vec![])
+                        .extend(ItemListDeserializer::deserialize("Item", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Item" => {
-                        obj.items = match obj.items {
-                            Some(ref mut existing) => {
-                                existing.extend(ItemListDeserializer::deserialize("Item", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ItemListDeserializer::deserialize("Item", stack)?),
-                        };
-                    }
-                    "NextToken" => {
-                        obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "NextToken" => {
+                    obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct StringDeserializer;

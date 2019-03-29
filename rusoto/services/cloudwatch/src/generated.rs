@@ -25,20 +25,15 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{
-    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
+    start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
-use xml::reader::XmlEvent;
 use xml::EventReader;
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
 struct ActionsEnabledDeserializer;
 impl ActionsEnabledDeserializer {
     #[allow(unused_variables)]
@@ -103,57 +98,34 @@ impl AlarmHistoryItemDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AlarmHistoryItem, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AlarmHistoryItem::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AlarmHistoryItem, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AlarmName" => {
+                    obj.alarm_name = Some(AlarmNameDeserializer::deserialize("AlarmName", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AlarmName" => {
-                        obj.alarm_name =
-                            Some(AlarmNameDeserializer::deserialize("AlarmName", stack)?);
-                    }
-                    "HistoryData" => {
-                        obj.history_data =
-                            Some(HistoryDataDeserializer::deserialize("HistoryData", stack)?);
-                    }
-                    "HistoryItemType" => {
-                        obj.history_item_type = Some(HistoryItemTypeDeserializer::deserialize(
-                            "HistoryItemType",
-                            stack,
-                        )?);
-                    }
-                    "HistorySummary" => {
-                        obj.history_summary = Some(HistorySummaryDeserializer::deserialize(
-                            "HistorySummary",
-                            stack,
-                        )?);
-                    }
-                    "Timestamp" => {
-                        obj.timestamp =
-                            Some(TimestampDeserializer::deserialize("Timestamp", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "HistoryData" => {
+                    obj.history_data =
+                        Some(HistoryDataDeserializer::deserialize("HistoryData", stack)?);
                 }
+                "HistoryItemType" => {
+                    obj.history_item_type = Some(HistoryItemTypeDeserializer::deserialize(
+                        "HistoryItemType",
+                        stack,
+                    )?);
+                }
+                "HistorySummary" => {
+                    obj.history_summary = Some(HistorySummaryDeserializer::deserialize(
+                        "HistorySummary",
+                        stack,
+                    )?);
+                }
+                "Timestamp" => {
+                    obj.timestamp = Some(TimestampDeserializer::deserialize("Timestamp", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AlarmHistoryItemsDeserializer;
@@ -163,37 +135,14 @@ impl AlarmHistoryItemsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AlarmHistoryItem>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(AlarmHistoryItemDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(AlarmHistoryItemDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AlarmNameDeserializer;
@@ -283,37 +232,14 @@ impl DashboardEntriesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DashboardEntry>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(DashboardEntryDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(DashboardEntryDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a specific dashboard.</p>
@@ -336,54 +262,33 @@ impl DashboardEntryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DashboardEntry, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DashboardEntry::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, DashboardEntry, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DashboardArn" => {
+                    obj.dashboard_arn = Some(DashboardArnDeserializer::deserialize(
+                        "DashboardArn",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DashboardArn" => {
-                        obj.dashboard_arn = Some(DashboardArnDeserializer::deserialize(
-                            "DashboardArn",
-                            stack,
-                        )?);
-                    }
-                    "DashboardName" => {
-                        obj.dashboard_name = Some(DashboardNameDeserializer::deserialize(
-                            "DashboardName",
-                            stack,
-                        )?);
-                    }
-                    "LastModified" => {
-                        obj.last_modified = Some(LastModifiedDeserializer::deserialize(
-                            "LastModified",
-                            stack,
-                        )?);
-                    }
-                    "Size" => {
-                        obj.size = Some(SizeDeserializer::deserialize("Size", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "DashboardName" => {
+                    obj.dashboard_name = Some(DashboardNameDeserializer::deserialize(
+                        "DashboardName",
+                        stack,
+                    )?);
                 }
+                "LastModified" => {
+                    obj.last_modified = Some(LastModifiedDeserializer::deserialize(
+                        "LastModified",
+                        stack,
+                    )?);
+                }
+                "Size" => {
+                    obj.size = Some(SizeDeserializer::deserialize("Size", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DashboardNameDeserializer;
@@ -428,21 +333,11 @@ impl DashboardValidationMessageDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DashboardValidationMessage, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DashboardValidationMessage::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DashboardValidationMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "DataPath" => {
                         obj.data_path = Some(DataPathDeserializer::deserialize("DataPath", stack)?);
                     }
@@ -450,17 +345,10 @@ impl DashboardValidationMessageDeserializer {
                         obj.message = Some(MessageDeserializer::deserialize("Message", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct DashboardValidationMessagesDeserializer;
@@ -470,39 +358,16 @@ impl DashboardValidationMessagesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DashboardValidationMessage>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(DashboardValidationMessageDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(DashboardValidationMessageDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DataPathDeserializer;
@@ -547,67 +412,42 @@ impl DatapointDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Datapoint, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Datapoint::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Datapoint, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Average" => {
+                    obj.average = Some(DatapointValueDeserializer::deserialize("Average", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Average" => {
-                        obj.average =
-                            Some(DatapointValueDeserializer::deserialize("Average", stack)?);
-                    }
-                    "ExtendedStatistics" => {
-                        obj.extended_statistics = Some(DatapointValueMapDeserializer::deserialize(
-                            "ExtendedStatistics",
-                            stack,
-                        )?);
-                    }
-                    "Maximum" => {
-                        obj.maximum =
-                            Some(DatapointValueDeserializer::deserialize("Maximum", stack)?);
-                    }
-                    "Minimum" => {
-                        obj.minimum =
-                            Some(DatapointValueDeserializer::deserialize("Minimum", stack)?);
-                    }
-                    "SampleCount" => {
-                        obj.sample_count = Some(DatapointValueDeserializer::deserialize(
-                            "SampleCount",
-                            stack,
-                        )?);
-                    }
-                    "Sum" => {
-                        obj.sum = Some(DatapointValueDeserializer::deserialize("Sum", stack)?);
-                    }
-                    "Timestamp" => {
-                        obj.timestamp =
-                            Some(TimestampDeserializer::deserialize("Timestamp", stack)?);
-                    }
-                    "Unit" => {
-                        obj.unit = Some(StandardUnitDeserializer::deserialize("Unit", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "ExtendedStatistics" => {
+                    obj.extended_statistics = Some(DatapointValueMapDeserializer::deserialize(
+                        "ExtendedStatistics",
+                        stack,
+                    )?);
                 }
+                "Maximum" => {
+                    obj.maximum = Some(DatapointValueDeserializer::deserialize("Maximum", stack)?);
+                }
+                "Minimum" => {
+                    obj.minimum = Some(DatapointValueDeserializer::deserialize("Minimum", stack)?);
+                }
+                "SampleCount" => {
+                    obj.sample_count = Some(DatapointValueDeserializer::deserialize(
+                        "SampleCount",
+                        stack,
+                    )?);
+                }
+                "Sum" => {
+                    obj.sum = Some(DatapointValueDeserializer::deserialize("Sum", stack)?);
+                }
+                "Timestamp" => {
+                    obj.timestamp = Some(TimestampDeserializer::deserialize("Timestamp", stack)?);
+                }
+                "Unit" => {
+                    obj.unit = Some(StandardUnitDeserializer::deserialize("Unit", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DatapointValueDeserializer;
@@ -654,37 +494,14 @@ impl DatapointValuesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<f64>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(DatapointValueDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(DatapointValueDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DatapointsDeserializer;
@@ -694,37 +511,14 @@ impl DatapointsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Datapoint>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(DatapointDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(DatapointDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DatapointsToAlarmDeserializer;
@@ -870,52 +664,25 @@ impl DescribeAlarmHistoryOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAlarmHistoryOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DescribeAlarmHistoryOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DescribeAlarmHistoryOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AlarmHistoryItems" => {
-                        obj.alarm_history_items = match obj.alarm_history_items {
-                            Some(ref mut existing) => {
-                                existing.extend(AlarmHistoryItemsDeserializer::deserialize(
-                                    "AlarmHistoryItems",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AlarmHistoryItemsDeserializer::deserialize(
-                                "AlarmHistoryItems",
-                                stack,
-                            )?),
-                        };
+                        obj.alarm_history_items.get_or_insert(vec![]).extend(
+                            AlarmHistoryItemsDeserializer::deserialize("AlarmHistoryItems", stack)?,
+                        );
                     }
                     "NextToken" => {
                         obj.next_token =
                             Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -982,48 +749,21 @@ impl DescribeAlarmsForMetricOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAlarmsForMetricOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DescribeAlarmsForMetricOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DescribeAlarmsForMetricOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "MetricAlarms" => {
-                        obj.metric_alarms = match obj.metric_alarms {
-                            Some(ref mut existing) => {
-                                existing.extend(MetricAlarmsDeserializer::deserialize(
-                                    "MetricAlarms",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(MetricAlarmsDeserializer::deserialize(
-                                "MetricAlarms",
-                                stack,
-                            )?),
-                        };
+                        obj.metric_alarms.get_or_insert(vec![]).extend(
+                            MetricAlarmsDeserializer::deserialize("MetricAlarms", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1094,52 +834,20 @@ impl DescribeAlarmsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAlarmsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DescribeAlarmsOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, DescribeAlarmsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MetricAlarms" => {
+                    obj.metric_alarms.get_or_insert(vec![]).extend(
+                        MetricAlarmsDeserializer::deserialize("MetricAlarms", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "MetricAlarms" => {
-                        obj.metric_alarms = match obj.metric_alarms {
-                            Some(ref mut existing) => {
-                                existing.extend(MetricAlarmsDeserializer::deserialize(
-                                    "MetricAlarms",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(MetricAlarmsDeserializer::deserialize(
-                                "MetricAlarms",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "NextToken" => {
+                    obj.next_token = Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Expands the identity of a metric.</p>
@@ -1158,39 +866,18 @@ impl DimensionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Dimension, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Dimension::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Dimension, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Name" => {
+                    obj.name = DimensionNameDeserializer::deserialize("Name", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Name" => {
-                        obj.name = DimensionNameDeserializer::deserialize("Name", stack)?;
-                    }
-                    "Value" => {
-                        obj.value = DimensionValueDeserializer::deserialize("Value", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Value" => {
+                    obj.value = DimensionValueDeserializer::deserialize("Value", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -1279,37 +966,14 @@ impl DimensionsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Dimension>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(DimensionDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(DimensionDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -1463,51 +1127,30 @@ impl GetDashboardOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDashboardOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetDashboardOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetDashboardOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DashboardArn" => {
+                    obj.dashboard_arn = Some(DashboardArnDeserializer::deserialize(
+                        "DashboardArn",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DashboardArn" => {
-                        obj.dashboard_arn = Some(DashboardArnDeserializer::deserialize(
-                            "DashboardArn",
-                            stack,
-                        )?);
-                    }
-                    "DashboardBody" => {
-                        obj.dashboard_body = Some(DashboardBodyDeserializer::deserialize(
-                            "DashboardBody",
-                            stack,
-                        )?);
-                    }
-                    "DashboardName" => {
-                        obj.dashboard_name = Some(DashboardNameDeserializer::deserialize(
-                            "DashboardName",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "DashboardBody" => {
+                    obj.dashboard_body = Some(DashboardBodyDeserializer::deserialize(
+                        "DashboardBody",
+                        stack,
+                    )?);
                 }
+                "DashboardName" => {
+                    obj.dashboard_name = Some(DashboardNameDeserializer::deserialize(
+                        "DashboardName",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1572,52 +1215,20 @@ impl GetMetricDataOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetMetricDataOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetMetricDataOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetMetricDataOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MetricDataResults" => {
+                    obj.metric_data_results.get_or_insert(vec![]).extend(
+                        MetricDataResultsDeserializer::deserialize("MetricDataResults", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "MetricDataResults" => {
-                        obj.metric_data_results = match obj.metric_data_results {
-                            Some(ref mut existing) => {
-                                existing.extend(MetricDataResultsDeserializer::deserialize(
-                                    "MetricDataResults",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(MetricDataResultsDeserializer::deserialize(
-                                "MetricDataResults",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "NextToken" => {
+                    obj.next_token = Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1698,48 +1309,24 @@ impl GetMetricStatisticsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetMetricStatisticsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetMetricStatisticsOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetMetricStatisticsOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Datapoints" => {
-                        obj.datapoints = match obj.datapoints {
-                            Some(ref mut existing) => {
-                                existing.extend(DatapointsDeserializer::deserialize(
-                                    "Datapoints",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(DatapointsDeserializer::deserialize("Datapoints", stack)?),
-                        };
+                        obj.datapoints
+                            .get_or_insert(vec![])
+                            .extend(DatapointsDeserializer::deserialize("Datapoints", stack)?);
                     }
                     "Label" => {
                         obj.label = Some(MetricLabelDeserializer::deserialize("Label", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1779,21 +1366,11 @@ impl GetMetricWidgetImageOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetMetricWidgetImageOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetMetricWidgetImageOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetMetricWidgetImageOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "MetricWidgetImage" => {
                         obj.metric_widget_image = Some(MetricWidgetImageDeserializer::deserialize(
                             "MetricWidgetImage",
@@ -1801,17 +1378,10 @@ impl GetMetricWidgetImageOutputDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct HistoryDataDeserializer;
@@ -1914,52 +1484,20 @@ impl ListDashboardsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDashboardsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListDashboardsOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListDashboardsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DashboardEntries" => {
+                    obj.dashboard_entries.get_or_insert(vec![]).extend(
+                        DashboardEntriesDeserializer::deserialize("DashboardEntries", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DashboardEntries" => {
-                        obj.dashboard_entries = match obj.dashboard_entries {
-                            Some(ref mut existing) => {
-                                existing.extend(DashboardEntriesDeserializer::deserialize(
-                                    "DashboardEntries",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(DashboardEntriesDeserializer::deserialize(
-                                "DashboardEntries",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "NextToken" => {
+                    obj.next_token = Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2017,47 +1555,20 @@ impl ListMetricsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListMetricsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListMetricsOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListMetricsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Metrics" => {
+                    obj.metrics
+                        .get_or_insert(vec![])
+                        .extend(MetricsDeserializer::deserialize("Metrics", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Metrics" => {
-                        obj.metrics = match obj.metrics {
-                            Some(ref mut existing) => {
-                                existing
-                                    .extend(MetricsDeserializer::deserialize("Metrics", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(MetricsDeserializer::deserialize("Metrics", stack)?),
-                        };
-                    }
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "NextToken" => {
+                    obj.next_token = Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MessageDeserializer;
@@ -2090,40 +1601,18 @@ impl MessageDataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MessageData, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = MessageData::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, MessageData, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Code" => {
+                    obj.code = Some(MessageDataCodeDeserializer::deserialize("Code", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Code" => {
-                        obj.code = Some(MessageDataCodeDeserializer::deserialize("Code", stack)?);
-                    }
-                    "Value" => {
-                        obj.value =
-                            Some(MessageDataValueDeserializer::deserialize("Value", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Value" => {
+                    obj.value = Some(MessageDataValueDeserializer::deserialize("Value", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MessageDataCodeDeserializer;
@@ -2172,53 +1661,24 @@ impl MetricDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Metric, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Metric::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Metric, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Dimensions" => {
+                    obj.dimensions
+                        .get_or_insert(vec![])
+                        .extend(DimensionsDeserializer::deserialize("Dimensions", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Dimensions" => {
-                        obj.dimensions = match obj.dimensions {
-                            Some(ref mut existing) => {
-                                existing.extend(DimensionsDeserializer::deserialize(
-                                    "Dimensions",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(DimensionsDeserializer::deserialize("Dimensions", stack)?),
-                        };
-                    }
-                    "MetricName" => {
-                        obj.metric_name =
-                            Some(MetricNameDeserializer::deserialize("MetricName", stack)?);
-                    }
-                    "Namespace" => {
-                        obj.namespace =
-                            Some(NamespaceDeserializer::deserialize("Namespace", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "MetricName" => {
+                    obj.metric_name =
+                        Some(MetricNameDeserializer::deserialize("MetricName", stack)?);
                 }
+                "Namespace" => {
+                    obj.namespace = Some(NamespaceDeserializer::deserialize("Namespace", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -2311,208 +1771,138 @@ impl MetricAlarmDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricAlarm, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = MetricAlarm::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, MetricAlarm, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ActionsEnabled" => {
+                    obj.actions_enabled = Some(ActionsEnabledDeserializer::deserialize(
+                        "ActionsEnabled",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "ActionsEnabled" => {
-                        obj.actions_enabled = Some(ActionsEnabledDeserializer::deserialize(
-                            "ActionsEnabled",
-                            stack,
-                        )?);
-                    }
-                    "AlarmActions" => {
-                        obj.alarm_actions = match obj.alarm_actions {
-                            Some(ref mut existing) => {
-                                existing.extend(ResourceListDeserializer::deserialize(
-                                    "AlarmActions",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ResourceListDeserializer::deserialize(
-                                "AlarmActions",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "AlarmArn" => {
-                        obj.alarm_arn = Some(AlarmArnDeserializer::deserialize("AlarmArn", stack)?);
-                    }
-                    "AlarmConfigurationUpdatedTimestamp" => {
-                        obj.alarm_configuration_updated_timestamp =
-                            Some(TimestampDeserializer::deserialize(
-                                "AlarmConfigurationUpdatedTimestamp",
-                                stack,
-                            )?);
-                    }
-                    "AlarmDescription" => {
-                        obj.alarm_description = Some(AlarmDescriptionDeserializer::deserialize(
-                            "AlarmDescription",
-                            stack,
-                        )?);
-                    }
-                    "AlarmName" => {
-                        obj.alarm_name =
-                            Some(AlarmNameDeserializer::deserialize("AlarmName", stack)?);
-                    }
-                    "ComparisonOperator" => {
-                        obj.comparison_operator =
-                            Some(ComparisonOperatorDeserializer::deserialize(
-                                "ComparisonOperator",
-                                stack,
-                            )?);
-                    }
-                    "DatapointsToAlarm" => {
-                        obj.datapoints_to_alarm = Some(DatapointsToAlarmDeserializer::deserialize(
-                            "DatapointsToAlarm",
-                            stack,
-                        )?);
-                    }
-                    "Dimensions" => {
-                        obj.dimensions = match obj.dimensions {
-                            Some(ref mut existing) => {
-                                existing.extend(DimensionsDeserializer::deserialize(
-                                    "Dimensions",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(DimensionsDeserializer::deserialize("Dimensions", stack)?),
-                        };
-                    }
-                    "EvaluateLowSampleCountPercentile" => {
-                        obj.evaluate_low_sample_count_percentile =
-                            Some(EvaluateLowSampleCountPercentileDeserializer::deserialize(
-                                "EvaluateLowSampleCountPercentile",
-                                stack,
-                            )?);
-                    }
-                    "EvaluationPeriods" => {
-                        obj.evaluation_periods = Some(EvaluationPeriodsDeserializer::deserialize(
-                            "EvaluationPeriods",
-                            stack,
-                        )?);
-                    }
-                    "ExtendedStatistic" => {
-                        obj.extended_statistic = Some(ExtendedStatisticDeserializer::deserialize(
-                            "ExtendedStatistic",
-                            stack,
-                        )?);
-                    }
-                    "InsufficientDataActions" => {
-                        obj.insufficient_data_actions = match obj.insufficient_data_actions {
-                            Some(ref mut existing) => {
-                                existing.extend(ResourceListDeserializer::deserialize(
-                                    "InsufficientDataActions",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ResourceListDeserializer::deserialize(
-                                "InsufficientDataActions",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "MetricName" => {
-                        obj.metric_name =
-                            Some(MetricNameDeserializer::deserialize("MetricName", stack)?);
-                    }
-                    "Metrics" => {
-                        obj.metrics = match obj.metrics {
-                            Some(ref mut existing) => {
-                                existing.extend(MetricDataQueriesDeserializer::deserialize(
-                                    "Metrics", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(MetricDataQueriesDeserializer::deserialize(
-                                "Metrics", stack,
-                            )?),
-                        };
-                    }
-                    "Namespace" => {
-                        obj.namespace =
-                            Some(NamespaceDeserializer::deserialize("Namespace", stack)?);
-                    }
-                    "OKActions" => {
-                        obj.ok_actions = match obj.ok_actions {
-                            Some(ref mut existing) => {
-                                existing.extend(ResourceListDeserializer::deserialize(
-                                    "OKActions",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => {
-                                Some(ResourceListDeserializer::deserialize("OKActions", stack)?)
-                            }
-                        };
-                    }
-                    "Period" => {
-                        obj.period = Some(PeriodDeserializer::deserialize("Period", stack)?);
-                    }
-                    "StateReason" => {
-                        obj.state_reason =
-                            Some(StateReasonDeserializer::deserialize("StateReason", stack)?);
-                    }
-                    "StateReasonData" => {
-                        obj.state_reason_data = Some(StateReasonDataDeserializer::deserialize(
-                            "StateReasonData",
-                            stack,
-                        )?);
-                    }
-                    "StateUpdatedTimestamp" => {
-                        obj.state_updated_timestamp = Some(TimestampDeserializer::deserialize(
-                            "StateUpdatedTimestamp",
-                            stack,
-                        )?);
-                    }
-                    "StateValue" => {
-                        obj.state_value =
-                            Some(StateValueDeserializer::deserialize("StateValue", stack)?);
-                    }
-                    "Statistic" => {
-                        obj.statistic =
-                            Some(StatisticDeserializer::deserialize("Statistic", stack)?);
-                    }
-                    "Threshold" => {
-                        obj.threshold =
-                            Some(ThresholdDeserializer::deserialize("Threshold", stack)?);
-                    }
-                    "TreatMissingData" => {
-                        obj.treat_missing_data = Some(TreatMissingDataDeserializer::deserialize(
-                            "TreatMissingData",
-                            stack,
-                        )?);
-                    }
-                    "Unit" => {
-                        obj.unit = Some(StandardUnitDeserializer::deserialize("Unit", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AlarmActions" => {
+                    obj.alarm_actions.get_or_insert(vec![]).extend(
+                        ResourceListDeserializer::deserialize("AlarmActions", stack)?,
+                    );
                 }
+                "AlarmArn" => {
+                    obj.alarm_arn = Some(AlarmArnDeserializer::deserialize("AlarmArn", stack)?);
+                }
+                "AlarmConfigurationUpdatedTimestamp" => {
+                    obj.alarm_configuration_updated_timestamp =
+                        Some(TimestampDeserializer::deserialize(
+                            "AlarmConfigurationUpdatedTimestamp",
+                            stack,
+                        )?);
+                }
+                "AlarmDescription" => {
+                    obj.alarm_description = Some(AlarmDescriptionDeserializer::deserialize(
+                        "AlarmDescription",
+                        stack,
+                    )?);
+                }
+                "AlarmName" => {
+                    obj.alarm_name = Some(AlarmNameDeserializer::deserialize("AlarmName", stack)?);
+                }
+                "ComparisonOperator" => {
+                    obj.comparison_operator = Some(ComparisonOperatorDeserializer::deserialize(
+                        "ComparisonOperator",
+                        stack,
+                    )?);
+                }
+                "DatapointsToAlarm" => {
+                    obj.datapoints_to_alarm = Some(DatapointsToAlarmDeserializer::deserialize(
+                        "DatapointsToAlarm",
+                        stack,
+                    )?);
+                }
+                "Dimensions" => {
+                    obj.dimensions
+                        .get_or_insert(vec![])
+                        .extend(DimensionsDeserializer::deserialize("Dimensions", stack)?);
+                }
+                "EvaluateLowSampleCountPercentile" => {
+                    obj.evaluate_low_sample_count_percentile =
+                        Some(EvaluateLowSampleCountPercentileDeserializer::deserialize(
+                            "EvaluateLowSampleCountPercentile",
+                            stack,
+                        )?);
+                }
+                "EvaluationPeriods" => {
+                    obj.evaluation_periods = Some(EvaluationPeriodsDeserializer::deserialize(
+                        "EvaluationPeriods",
+                        stack,
+                    )?);
+                }
+                "ExtendedStatistic" => {
+                    obj.extended_statistic = Some(ExtendedStatisticDeserializer::deserialize(
+                        "ExtendedStatistic",
+                        stack,
+                    )?);
+                }
+                "InsufficientDataActions" => {
+                    obj.insufficient_data_actions.get_or_insert(vec![]).extend(
+                        ResourceListDeserializer::deserialize("InsufficientDataActions", stack)?,
+                    );
+                }
+                "MetricName" => {
+                    obj.metric_name =
+                        Some(MetricNameDeserializer::deserialize("MetricName", stack)?);
+                }
+                "Metrics" => {
+                    obj.metrics.get_or_insert(vec![]).extend(
+                        MetricDataQueriesDeserializer::deserialize("Metrics", stack)?,
+                    );
+                }
+                "Namespace" => {
+                    obj.namespace = Some(NamespaceDeserializer::deserialize("Namespace", stack)?);
+                }
+                "OKActions" => {
+                    obj.ok_actions
+                        .get_or_insert(vec![])
+                        .extend(ResourceListDeserializer::deserialize("OKActions", stack)?);
+                }
+                "Period" => {
+                    obj.period = Some(PeriodDeserializer::deserialize("Period", stack)?);
+                }
+                "StateReason" => {
+                    obj.state_reason =
+                        Some(StateReasonDeserializer::deserialize("StateReason", stack)?);
+                }
+                "StateReasonData" => {
+                    obj.state_reason_data = Some(StateReasonDataDeserializer::deserialize(
+                        "StateReasonData",
+                        stack,
+                    )?);
+                }
+                "StateUpdatedTimestamp" => {
+                    obj.state_updated_timestamp = Some(TimestampDeserializer::deserialize(
+                        "StateUpdatedTimestamp",
+                        stack,
+                    )?);
+                }
+                "StateValue" => {
+                    obj.state_value =
+                        Some(StateValueDeserializer::deserialize("StateValue", stack)?);
+                }
+                "Statistic" => {
+                    obj.statistic = Some(StatisticDeserializer::deserialize("Statistic", stack)?);
+                }
+                "Threshold" => {
+                    obj.threshold = Some(ThresholdDeserializer::deserialize("Threshold", stack)?);
+                }
+                "TreatMissingData" => {
+                    obj.treat_missing_data = Some(TreatMissingDataDeserializer::deserialize(
+                        "TreatMissingData",
+                        stack,
+                    )?);
+                }
+                "Unit" => {
+                    obj.unit = Some(StandardUnitDeserializer::deserialize("Unit", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MetricAlarmsDeserializer;
@@ -2522,37 +1912,14 @@ impl MetricAlarmsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MetricAlarm>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(MetricAlarmDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MetricAlarmDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -2574,37 +1941,14 @@ impl MetricDataQueriesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MetricDataQuery>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(MetricDataQueryDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MetricDataQueryDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -2641,53 +1985,32 @@ impl MetricDataQueryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricDataQuery, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = MetricDataQuery::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, MetricDataQuery, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Expression" => {
+                    obj.expression = Some(MetricExpressionDeserializer::deserialize(
+                        "Expression",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Expression" => {
-                        obj.expression = Some(MetricExpressionDeserializer::deserialize(
-                            "Expression",
-                            stack,
-                        )?);
-                    }
-                    "Id" => {
-                        obj.id = MetricIdDeserializer::deserialize("Id", stack)?;
-                    }
-                    "Label" => {
-                        obj.label = Some(MetricLabelDeserializer::deserialize("Label", stack)?);
-                    }
-                    "MetricStat" => {
-                        obj.metric_stat =
-                            Some(MetricStatDeserializer::deserialize("MetricStat", stack)?);
-                    }
-                    "ReturnData" => {
-                        obj.return_data =
-                            Some(ReturnDataDeserializer::deserialize("ReturnData", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Id" => {
+                    obj.id = MetricIdDeserializer::deserialize("Id", stack)?;
                 }
+                "Label" => {
+                    obj.label = Some(MetricLabelDeserializer::deserialize("Label", stack)?);
+                }
+                "MetricStat" => {
+                    obj.metric_stat =
+                        Some(MetricStatDeserializer::deserialize("MetricStat", stack)?);
+                }
+                "ReturnData" => {
+                    obj.return_data =
+                        Some(ReturnDataDeserializer::deserialize("ReturnData", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -2747,81 +2070,37 @@ impl MetricDataResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricDataResult, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = MetricDataResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, MetricDataResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Id" => {
+                    obj.id = Some(MetricIdDeserializer::deserialize("Id", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Id" => {
-                        obj.id = Some(MetricIdDeserializer::deserialize("Id", stack)?);
-                    }
-                    "Label" => {
-                        obj.label = Some(MetricLabelDeserializer::deserialize("Label", stack)?);
-                    }
-                    "Messages" => {
-                        obj.messages = match obj.messages {
-                            Some(ref mut existing) => {
-                                existing.extend(MetricDataResultMessagesDeserializer::deserialize(
-                                    "Messages", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(MetricDataResultMessagesDeserializer::deserialize(
-                                "Messages", stack,
-                            )?),
-                        };
-                    }
-                    "StatusCode" => {
-                        obj.status_code =
-                            Some(StatusCodeDeserializer::deserialize("StatusCode", stack)?);
-                    }
-                    "Timestamps" => {
-                        obj.timestamps = match obj.timestamps {
-                            Some(ref mut existing) => {
-                                existing.extend(TimestampsDeserializer::deserialize(
-                                    "Timestamps",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(TimestampsDeserializer::deserialize("Timestamps", stack)?),
-                        };
-                    }
-                    "Values" => {
-                        obj.values = match obj.values {
-                            Some(ref mut existing) => {
-                                existing.extend(DatapointValuesDeserializer::deserialize(
-                                    "Values", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => {
-                                Some(DatapointValuesDeserializer::deserialize("Values", stack)?)
-                            }
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Label" => {
+                    obj.label = Some(MetricLabelDeserializer::deserialize("Label", stack)?);
                 }
+                "Messages" => {
+                    obj.messages.get_or_insert(vec![]).extend(
+                        MetricDataResultMessagesDeserializer::deserialize("Messages", stack)?,
+                    );
+                }
+                "StatusCode" => {
+                    obj.status_code =
+                        Some(StatusCodeDeserializer::deserialize("StatusCode", stack)?);
+                }
+                "Timestamps" => {
+                    obj.timestamps
+                        .get_or_insert(vec![])
+                        .extend(TimestampsDeserializer::deserialize("Timestamps", stack)?);
+                }
+                "Values" => {
+                    obj.values
+                        .get_or_insert(vec![])
+                        .extend(DatapointValuesDeserializer::deserialize("Values", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MetricDataResultMessagesDeserializer;
@@ -2831,37 +2110,14 @@ impl MetricDataResultMessagesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MessageData>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(MessageDataDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MessageDataDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MetricDataResultsDeserializer;
@@ -2871,37 +2127,14 @@ impl MetricDataResultsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MetricDataResult>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(MetricDataResultDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MetricDataResultDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Encapsulates the information sent to either create a metric or add new values to be aggregated into an existing metric.</p>
@@ -3051,45 +2284,24 @@ impl MetricStatDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MetricStat, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = MetricStat::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, MetricStat, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Metric" => {
+                    obj.metric = MetricDeserializer::deserialize("Metric", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Metric" => {
-                        obj.metric = MetricDeserializer::deserialize("Metric", stack)?;
-                    }
-                    "Period" => {
-                        obj.period = PeriodDeserializer::deserialize("Period", stack)?;
-                    }
-                    "Stat" => {
-                        obj.stat = StatDeserializer::deserialize("Stat", stack)?;
-                    }
-                    "Unit" => {
-                        obj.unit = Some(StandardUnitDeserializer::deserialize("Unit", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Period" => {
+                    obj.period = PeriodDeserializer::deserialize("Period", stack)?;
                 }
+                "Stat" => {
+                    obj.stat = StatDeserializer::deserialize("Stat", stack)?;
+                }
+                "Unit" => {
+                    obj.unit = Some(StandardUnitDeserializer::deserialize("Unit", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -3132,37 +2344,14 @@ impl MetricsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Metric>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(MetricDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MetricDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct NamespaceDeserializer;
@@ -3248,51 +2437,20 @@ impl PutDashboardOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutDashboardOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PutDashboardOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PutDashboardOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DashboardValidationMessages" => {
+                    obj.dashboard_validation_messages
+                        .get_or_insert(vec![])
+                        .extend(DashboardValidationMessagesDeserializer::deserialize(
+                            "DashboardValidationMessages",
+                            stack,
+                        )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DashboardValidationMessages" => {
-                        obj.dashboard_validation_messages = match obj.dashboard_validation_messages
-                        {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    DashboardValidationMessagesDeserializer::deserialize(
-                                        "DashboardValidationMessages",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(DashboardValidationMessagesDeserializer::deserialize(
-                                "DashboardValidationMessages",
-                                stack,
-                            )?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3474,37 +2632,14 @@ impl ResourceListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ResourceNameDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ResourceNameDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -3773,37 +2908,14 @@ impl TimestampsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(TimestampDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(TimestampDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct TreatMissingDataDeserializer;
