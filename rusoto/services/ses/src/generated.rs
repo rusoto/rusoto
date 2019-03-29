@@ -25,20 +25,15 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{
-    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
+    start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
-use xml::reader::XmlEvent;
 use xml::EventReader;
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
 /// <p>When included in a receipt rule, this action adds a header to the received email.</p> <p>For information about adding a header using a receipt rule, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-add-header.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddHeaderAction {
@@ -55,40 +50,18 @@ impl AddHeaderActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddHeaderAction, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AddHeaderAction::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AddHeaderAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "HeaderName" => {
+                    obj.header_name = HeaderNameDeserializer::deserialize("HeaderName", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "HeaderName" => {
-                        obj.header_name = HeaderNameDeserializer::deserialize("HeaderName", stack)?;
-                    }
-                    "HeaderValue" => {
-                        obj.header_value =
-                            HeaderValueDeserializer::deserialize("HeaderValue", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "HeaderValue" => {
+                    obj.header_value = HeaderValueDeserializer::deserialize("HeaderValue", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -127,37 +100,14 @@ impl AddressListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(AddressDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(AddressDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -249,54 +199,33 @@ impl BounceActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BounceAction, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = BounceAction::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, BounceAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Message" => {
+                    obj.message = BounceMessageDeserializer::deserialize("Message", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Message" => {
-                        obj.message = BounceMessageDeserializer::deserialize("Message", stack)?;
-                    }
-                    "Sender" => {
-                        obj.sender = AddressDeserializer::deserialize("Sender", stack)?;
-                    }
-                    "SmtpReplyCode" => {
-                        obj.smtp_reply_code =
-                            BounceSmtpReplyCodeDeserializer::deserialize("SmtpReplyCode", stack)?;
-                    }
-                    "StatusCode" => {
-                        obj.status_code = Some(BounceStatusCodeDeserializer::deserialize(
-                            "StatusCode",
-                            stack,
-                        )?);
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Sender" => {
+                    obj.sender = AddressDeserializer::deserialize("Sender", stack)?;
                 }
+                "SmtpReplyCode" => {
+                    obj.smtp_reply_code =
+                        BounceSmtpReplyCodeDeserializer::deserialize("SmtpReplyCode", stack)?;
+                }
+                "StatusCode" => {
+                    obj.status_code = Some(BounceStatusCodeDeserializer::deserialize(
+                        "StatusCode",
+                        stack,
+                    )?);
+                }
+                "TopicArn" => {
+                    obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "TopicArn", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -485,21 +414,11 @@ impl BulkEmailDestinationStatusDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BulkEmailDestinationStatus, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = BulkEmailDestinationStatus::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, BulkEmailDestinationStatus, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Error" => {
                         obj.error = Some(SesErrorDeserializer::deserialize("Error", stack)?);
                     }
@@ -512,17 +431,10 @@ impl BulkEmailDestinationStatusDeserializer {
                             Some(BulkEmailStatusDeserializer::deserialize("Status", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct BulkEmailDestinationStatusListDeserializer;
@@ -532,39 +444,16 @@ impl BulkEmailDestinationStatusListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BulkEmailDestinationStatus>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(BulkEmailDestinationStatusDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(BulkEmailDestinationStatusDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct BulkEmailStatusDeserializer;
@@ -655,41 +544,20 @@ impl CloudWatchDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDestination, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CloudWatchDestination::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CloudWatchDestination, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DimensionConfigurations" => {
+                    obj.dimension_configurations.extend(
+                        CloudWatchDimensionConfigurationsDeserializer::deserialize(
+                            "DimensionConfigurations",
+                            stack,
+                        )?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DimensionConfigurations" => {
-                        obj.dimension_configurations.extend(
-                            CloudWatchDimensionConfigurationsDeserializer::deserialize(
-                                "DimensionConfigurations",
-                                stack,
-                            )?,
-                        );
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -728,21 +596,11 @@ impl CloudWatchDimensionConfigurationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDimensionConfiguration, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CloudWatchDimensionConfiguration::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CloudWatchDimensionConfiguration, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "DefaultDimensionValue" => {
                         obj.default_dimension_value =
                             DefaultDimensionValueDeserializer::deserialize(
@@ -761,17 +619,10 @@ impl CloudWatchDimensionConfigurationDeserializer {
                         )?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 
@@ -806,39 +657,16 @@ impl CloudWatchDimensionConfigurationsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CloudWatchDimensionConfiguration>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(CloudWatchDimensionConfigurationDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(CloudWatchDimensionConfigurationDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -867,36 +695,15 @@ impl ConfigurationSetDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConfigurationSet, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ConfigurationSet::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ConfigurationSet, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Name" => {
+                    obj.name = ConfigurationSetNameDeserializer::deserialize("Name", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Name" => {
-                        obj.name = ConfigurationSetNameDeserializer::deserialize("Name", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -945,37 +752,14 @@ impl ConfigurationSetsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ConfigurationSet>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ConfigurationSetDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ConfigurationSetDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents textual data, plus an optional character set specification.</p> <p>By default, the text must be 7-bit ASCII, due to the constraints of the SMTP protocol. If the text must contain any other characters, then you must also specify a character set. Examples include UTF-8, ISO-8859-1, and Shift_JIS.</p>
@@ -1439,21 +1223,11 @@ impl CustomVerificationEmailTemplateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomVerificationEmailTemplate, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CustomVerificationEmailTemplate::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CustomVerificationEmailTemplate, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "FailureRedirectionURL" => {
                         obj.failure_redirection_url =
                             Some(FailureRedirectionURLDeserializer::deserialize(
@@ -1485,17 +1259,10 @@ impl CustomVerificationEmailTemplateDeserializer {
                             Some(SubjectDeserializer::deserialize("TemplateSubject", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct CustomVerificationEmailTemplatesDeserializer;
@@ -1505,39 +1272,16 @@ impl CustomVerificationEmailTemplatesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CustomVerificationEmailTemplate>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(CustomVerificationEmailTemplateDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(CustomVerificationEmailTemplateDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DefaultDimensionValueDeserializer;
@@ -2017,51 +1761,26 @@ impl DescribeActiveReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeActiveReceiptRuleSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DescribeActiveReceiptRuleSetResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DescribeActiveReceiptRuleSetResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Metadata" => {
                         obj.metadata = Some(ReceiptRuleSetMetadataDeserializer::deserialize(
                             "Metadata", stack,
                         )?);
                     }
                     "Rules" => {
-                        obj.rules = match obj.rules {
-                            Some(ref mut existing) => {
-                                existing.extend(ReceiptRulesListDeserializer::deserialize(
-                                    "Rules", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => {
-                                Some(ReceiptRulesListDeserializer::deserialize("Rules", stack)?)
-                            }
-                        };
+                        obj.rules
+                            .get_or_insert(vec![])
+                            .extend(ReceiptRulesListDeserializer::deserialize("Rules", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return the details of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
@@ -2116,21 +1835,11 @@ impl DescribeConfigurationSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeConfigurationSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DescribeConfigurationSetResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DescribeConfigurationSetResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ConfigurationSet" => {
                         obj.configuration_set = Some(ConfigurationSetDeserializer::deserialize(
                             "ConfigurationSet",
@@ -2138,19 +1847,9 @@ impl DescribeConfigurationSetResponseDeserializer {
                         )?);
                     }
                     "EventDestinations" => {
-                        obj.event_destinations = match obj.event_destinations {
-                            Some(ref mut existing) => {
-                                existing.extend(EventDestinationsDeserializer::deserialize(
-                                    "EventDestinations",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(EventDestinationsDeserializer::deserialize(
-                                "EventDestinations",
-                                stack,
-                            )?),
-                        };
+                        obj.event_destinations.get_or_insert(vec![]).extend(
+                            EventDestinationsDeserializer::deserialize("EventDestinations", stack)?,
+                        );
                     }
                     "ReputationOptions" => {
                         obj.reputation_options = Some(ReputationOptionsDeserializer::deserialize(
@@ -2165,17 +1864,10 @@ impl DescribeConfigurationSetResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return the details of a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
@@ -2215,36 +1907,19 @@ impl DescribeReceiptRuleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DescribeReceiptRuleResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DescribeReceiptRuleResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Rule" => {
                         obj.rule = Some(ReceiptRuleDeserializer::deserialize("Rule", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return the details of a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
@@ -2283,51 +1958,26 @@ impl DescribeReceiptRuleSetResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleSetResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DescribeReceiptRuleSetResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DescribeReceiptRuleSetResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Metadata" => {
                         obj.metadata = Some(ReceiptRuleSetMetadataDeserializer::deserialize(
                             "Metadata", stack,
                         )?);
                     }
                     "Rules" => {
-                        obj.rules = match obj.rules {
-                            Some(ref mut existing) => {
-                                existing.extend(ReceiptRulesListDeserializer::deserialize(
-                                    "Rules", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => {
-                                Some(ReceiptRulesListDeserializer::deserialize("Rules", stack)?)
-                            }
-                        };
+                        obj.rules
+                            .get_or_insert(vec![])
+                            .extend(ReceiptRulesListDeserializer::deserialize("Rules", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p>Represents the destination of the message, consisting of To:, CC:, and BCC: fields.</p> <note> <p>Amazon SES does not support the SMTPUTF8 extension, as described in <a href="https://tools.ietf.org/html/rfc6531">RFC6531</a>. For this reason, the <i>local part</i> of a destination email address (the part of the email address that precedes the @ sign) may only contain <a href="https://en.wikipedia.org/wiki/Email_address#Local-part">7-bit ASCII characters</a>. If the <i>domain part</i> of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in <a href="https://tools.ietf.org/html/rfc3492.html">RFC3492</a>.</p> </note></p>
@@ -2477,66 +2127,45 @@ impl EventDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventDestination, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = EventDestination::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CloudWatchDestination" => {
-                        obj.cloud_watch_destination =
-                            Some(CloudWatchDestinationDeserializer::deserialize(
-                                "CloudWatchDestination",
-                                stack,
-                            )?);
-                    }
-                    "Enabled" => {
-                        obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
-                    }
-                    "KinesisFirehoseDestination" => {
-                        obj.kinesis_firehose_destination =
-                            Some(KinesisFirehoseDestinationDeserializer::deserialize(
-                                "KinesisFirehoseDestination",
-                                stack,
-                            )?);
-                    }
-                    "MatchingEventTypes" => {
-                        obj.matching_event_types
-                            .extend(EventTypesDeserializer::deserialize(
-                                "MatchingEventTypes",
-                                stack,
-                            )?);
-                    }
-                    "Name" => {
-                        obj.name = EventDestinationNameDeserializer::deserialize("Name", stack)?;
-                    }
-                    "SNSDestination" => {
-                        obj.sns_destination = Some(SNSDestinationDeserializer::deserialize(
-                            "SNSDestination",
+        deserialize_elements::<_, EventDestination, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CloudWatchDestination" => {
+                    obj.cloud_watch_destination =
+                        Some(CloudWatchDestinationDeserializer::deserialize(
+                            "CloudWatchDestination",
                             stack,
                         )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
+                "Enabled" => {
+                    obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
+                }
+                "KinesisFirehoseDestination" => {
+                    obj.kinesis_firehose_destination =
+                        Some(KinesisFirehoseDestinationDeserializer::deserialize(
+                            "KinesisFirehoseDestination",
+                            stack,
+                        )?);
+                }
+                "MatchingEventTypes" => {
+                    obj.matching_event_types
+                        .extend(EventTypesDeserializer::deserialize(
+                            "MatchingEventTypes",
+                            stack,
+                        )?);
+                }
+                "Name" => {
+                    obj.name = EventDestinationNameDeserializer::deserialize("Name", stack)?;
+                }
+                "SNSDestination" => {
+                    obj.sns_destination = Some(SNSDestinationDeserializer::deserialize(
+                        "SNSDestination",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -2606,37 +2235,14 @@ impl EventDestinationsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EventDestination>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(EventDestinationDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EventDestinationDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct EventTypeDeserializer;
@@ -2660,37 +2266,14 @@ impl EventTypesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(EventTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EventTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -2781,36 +2364,19 @@ impl GetAccountSendingEnabledResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountSendingEnabledResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetAccountSendingEnabledResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetAccountSendingEnabledResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Enabled" => {
                         obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to retrieve an existing custom verification email template.</p>
@@ -2857,21 +2423,11 @@ impl GetCustomVerificationEmailTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCustomVerificationEmailTemplateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetCustomVerificationEmailTemplateResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetCustomVerificationEmailTemplateResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "FailureRedirectionURL" => {
                         obj.failure_redirection_url =
                             Some(FailureRedirectionURLDeserializer::deserialize(
@@ -2909,17 +2465,10 @@ impl GetCustomVerificationEmailTemplateResponseDeserializer {
                             Some(SubjectDeserializer::deserialize("TemplateSubject", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request for the status of Amazon SES Easy DKIM signing for an identity. For domain identities, this request also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES successfully verified that these tokens were published. For more information about Easy DKIM, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
@@ -2960,37 +2509,20 @@ impl GetIdentityDkimAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityDkimAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetIdentityDkimAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetIdentityDkimAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "DkimAttributes" => {
                         obj.dkim_attributes =
                             DkimAttributesDeserializer::deserialize("DkimAttributes", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return the Amazon SES custom MAIL FROM attributes for a list of identities. For information about using a custom MAIL FROM domain, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from.html">Amazon SES Developer Guide</a>.</p>
@@ -3036,21 +2568,11 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityMailFromDomainAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetIdentityMailFromDomainAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetIdentityMailFromDomainAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "MailFromDomainAttributes" => {
                         obj.mail_from_domain_attributes =
                             MailFromDomainAttributesDeserializer::deserialize(
@@ -3059,17 +2581,10 @@ impl GetIdentityMailFromDomainAttributesResponseDeserializer {
                             )?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return the notification attributes for a list of identities you verified with Amazon SES. For information about Amazon SES notifications, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
@@ -3111,21 +2626,11 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityNotificationAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetIdentityNotificationAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetIdentityNotificationAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "NotificationAttributes" => {
                         obj.notification_attributes =
                             NotificationAttributesDeserializer::deserialize(
@@ -3134,17 +2639,10 @@ impl GetIdentityNotificationAttributesResponseDeserializer {
                             )?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return the requested sending authorization policies for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
@@ -3188,36 +2686,19 @@ impl GetIdentityPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityPoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetIdentityPoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetIdentityPoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Policies" => {
                         obj.policies = PolicyMapDeserializer::deserialize("Policies", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return the Amazon SES verification status of a list of identities. For domain identities, this request also returns the verification token. For information about verifying identities with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p>
@@ -3259,21 +2740,11 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityVerificationAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetIdentityVerificationAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetIdentityVerificationAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "VerificationAttributes" => {
                         obj.verification_attributes =
                             VerificationAttributesDeserializer::deserialize(
@@ -3282,17 +2753,10 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
                             )?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents your Amazon SES daily sending quota, maximum send rate, and the number of emails you have sent in the last 24 hours.</p>
@@ -3313,49 +2777,28 @@ impl GetSendQuotaResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendQuotaResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetSendQuotaResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetSendQuotaResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Max24HourSend" => {
+                    obj.max_24_hour_send = Some(Max24HourSendDeserializer::deserialize(
+                        "Max24HourSend",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Max24HourSend" => {
-                        obj.max_24_hour_send = Some(Max24HourSendDeserializer::deserialize(
-                            "Max24HourSend",
-                            stack,
-                        )?);
-                    }
-                    "MaxSendRate" => {
-                        obj.max_send_rate =
-                            Some(MaxSendRateDeserializer::deserialize("MaxSendRate", stack)?);
-                    }
-                    "SentLast24Hours" => {
-                        obj.sent_last_24_hours = Some(SentLast24HoursDeserializer::deserialize(
-                            "SentLast24Hours",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "MaxSendRate" => {
+                    obj.max_send_rate =
+                        Some(MaxSendRateDeserializer::deserialize("MaxSendRate", stack)?);
                 }
+                "SentLast24Hours" => {
+                    obj.sent_last_24_hours = Some(SentLast24HoursDeserializer::deserialize(
+                        "SentLast24Hours",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a list of data points. This list contains aggregated data from the previous two weeks of your sending activity with Amazon SES.</p>
@@ -3372,48 +2815,21 @@ impl GetSendStatisticsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendStatisticsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetSendStatisticsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetSendStatisticsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SendDataPoints" => {
-                        obj.send_data_points = match obj.send_data_points {
-                            Some(ref mut existing) => {
-                                existing.extend(SendDataPointListDeserializer::deserialize(
-                                    "SendDataPoints",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(SendDataPointListDeserializer::deserialize(
-                                "SendDataPoints",
-                                stack,
-                            )?),
-                        };
+                        obj.send_data_points.get_or_insert(vec![]).extend(
+                            SendDataPointListDeserializer::deserialize("SendDataPoints", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3447,36 +2863,15 @@ impl GetTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetTemplateResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetTemplateResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Template" => {
+                    obj.template = Some(TemplateDeserializer::deserialize("Template", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Template" => {
-                        obj.template = Some(TemplateDeserializer::deserialize("Template", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct HeaderNameDeserializer;
@@ -3553,57 +2948,26 @@ impl IdentityDkimAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityDkimAttributes, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = IdentityDkimAttributes::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, IdentityDkimAttributes, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DkimEnabled" => {
+                    obj.dkim_enabled = EnabledDeserializer::deserialize("DkimEnabled", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "DkimEnabled" => {
-                        obj.dkim_enabled = EnabledDeserializer::deserialize("DkimEnabled", stack)?;
-                    }
-                    "DkimTokens" => {
-                        obj.dkim_tokens = match obj.dkim_tokens {
-                            Some(ref mut existing) => {
-                                existing.extend(VerificationTokenListDeserializer::deserialize(
-                                    "DkimTokens",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(VerificationTokenListDeserializer::deserialize(
-                                "DkimTokens",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "DkimVerificationStatus" => {
-                        obj.dkim_verification_status = VerificationStatusDeserializer::deserialize(
-                            "DkimVerificationStatus",
-                            stack,
-                        )?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "DkimTokens" => {
+                    obj.dkim_tokens.get_or_insert(vec![]).extend(
+                        VerificationTokenListDeserializer::deserialize("DkimTokens", stack)?,
+                    );
                 }
+                "DkimVerificationStatus" => {
+                    obj.dkim_verification_status = VerificationStatusDeserializer::deserialize(
+                        "DkimVerificationStatus",
+                        stack,
+                    )?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct IdentityListDeserializer;
@@ -3613,37 +2977,14 @@ impl IdentityListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(IdentityDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(IdentityDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -3676,21 +3017,11 @@ impl IdentityMailFromDomainAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityMailFromDomainAttributes, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = IdentityMailFromDomainAttributes::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, IdentityMailFromDomainAttributes, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "BehaviorOnMXFailure" => {
                         obj.behavior_on_mx_failure = BehaviorOnMXFailureDeserializer::deserialize(
                             "BehaviorOnMXFailure",
@@ -3709,17 +3040,10 @@ impl IdentityMailFromDomainAttributesDeserializer {
                             )?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the notification attributes of an identity, including whether an identity has Amazon Simple Notification Service (Amazon SNS) topics set for bounce, complaint, and/or delivery notifications, and whether feedback forwarding is enabled for bounce and complaint notifications.</p>
@@ -3748,21 +3072,11 @@ impl IdentityNotificationAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityNotificationAttributes, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = IdentityNotificationAttributes::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, IdentityNotificationAttributes, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "BounceTopic" => {
                         obj.bounce_topic =
                             NotificationTopicDeserializer::deserialize("BounceTopic", stack)?;
@@ -3801,17 +3115,10 @@ impl IdentityNotificationAttributesDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the verification attributes of a single identity.</p>
@@ -3830,21 +3137,11 @@ impl IdentityVerificationAttributesDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityVerificationAttributes, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = IdentityVerificationAttributes::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, IdentityVerificationAttributes, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "VerificationStatus" => {
                         obj.verification_status = VerificationStatusDeserializer::deserialize(
                             "VerificationStatus",
@@ -3858,17 +3155,10 @@ impl IdentityVerificationAttributesDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct InvocationTypeDeserializer;
@@ -3901,21 +3191,11 @@ impl KinesisFirehoseDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KinesisFirehoseDestination, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = KinesisFirehoseDestination::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, KinesisFirehoseDestination, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "DeliveryStreamARN" => {
                         obj.delivery_stream_arn = AmazonResourceNameDeserializer::deserialize(
                             "DeliveryStreamARN",
@@ -3927,17 +3207,10 @@ impl KinesisFirehoseDestinationDeserializer {
                             AmazonResourceNameDeserializer::deserialize("IAMRoleARN", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 
@@ -3976,48 +3249,27 @@ impl LambdaActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaAction, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = LambdaAction::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, LambdaAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "FunctionArn" => {
+                    obj.function_arn =
+                        AmazonResourceNameDeserializer::deserialize("FunctionArn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "FunctionArn" => {
-                        obj.function_arn =
-                            AmazonResourceNameDeserializer::deserialize("FunctionArn", stack)?;
-                    }
-                    "InvocationType" => {
-                        obj.invocation_type = Some(InvocationTypeDeserializer::deserialize(
-                            "InvocationType",
-                            stack,
-                        )?);
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "InvocationType" => {
+                    obj.invocation_type = Some(InvocationTypeDeserializer::deserialize(
+                        "InvocationType",
+                        stack,
+                    )?);
                 }
+                "TopicArn" => {
+                    obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "TopicArn", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -4100,52 +3352,25 @@ impl ListConfigurationSetsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListConfigurationSetsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListConfigurationSetsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListConfigurationSetsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ConfigurationSets" => {
-                        obj.configuration_sets = match obj.configuration_sets {
-                            Some(ref mut existing) => {
-                                existing.extend(ConfigurationSetsDeserializer::deserialize(
-                                    "ConfigurationSets",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ConfigurationSetsDeserializer::deserialize(
-                                "ConfigurationSets",
-                                stack,
-                            )?),
-                        };
+                        obj.configuration_sets.get_or_insert(vec![]).extend(
+                            ConfigurationSetsDeserializer::deserialize("ConfigurationSets", stack)?,
+                        );
                     }
                     "NextToken" => {
                         obj.next_token =
                             Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to list the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p>
@@ -4198,57 +3423,28 @@ impl ListCustomVerificationEmailTemplatesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCustomVerificationEmailTemplatesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListCustomVerificationEmailTemplatesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListCustomVerificationEmailTemplatesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "CustomVerificationEmailTemplates" => {
-                        obj.custom_verification_email_templates =
-                            match obj.custom_verification_email_templates {
-                                Some(ref mut existing) => {
-                                    existing.extend(
-                                        CustomVerificationEmailTemplatesDeserializer::deserialize(
-                                            "CustomVerificationEmailTemplates",
-                                            stack,
-                                        )?,
-                                    );
-                                    Some(existing.to_vec())
-                                }
-                                None => {
-                                    Some(CustomVerificationEmailTemplatesDeserializer::deserialize(
-                                        "CustomVerificationEmailTemplates",
-                                        stack,
-                                    )?)
-                                }
-                            };
+                        obj.custom_verification_email_templates
+                            .get_or_insert(vec![])
+                            .extend(CustomVerificationEmailTemplatesDeserializer::deserialize(
+                                "CustomVerificationEmailTemplates",
+                                stack,
+                            )?);
                     }
                     "NextToken" => {
                         obj.next_token =
                             Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to return a list of all identities (email addresses and domains) that you have attempted to verify under your AWS account, regardless of verification status.</p>
@@ -4302,41 +3498,19 @@ impl ListIdentitiesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentitiesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListIdentitiesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListIdentitiesResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Identities" => {
+                    obj.identities
+                        .extend(IdentityListDeserializer::deserialize("Identities", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Identities" => {
-                        obj.identities
-                            .extend(IdentityListDeserializer::deserialize("Identities", stack)?);
-                    }
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "NextToken" => {
+                    obj.next_token = Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a request to return a list of sending authorization policies that are attached to an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
@@ -4373,21 +3547,11 @@ impl ListIdentityPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentityPoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListIdentityPoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListIdentityPoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "PolicyNames" => {
                         obj.policy_names
                             .extend(PolicyNameListDeserializer::deserialize(
@@ -4396,17 +3560,10 @@ impl ListIdentityPoliciesResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to list the IP address filters that exist under your AWS account. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
@@ -4438,46 +3595,21 @@ impl ListReceiptFiltersResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptFiltersResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListReceiptFiltersResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListReceiptFiltersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Filters" => {
-                        obj.filters = match obj.filters {
-                            Some(ref mut existing) => {
-                                existing.extend(ReceiptFilterListDeserializer::deserialize(
-                                    "Filters", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ReceiptFilterListDeserializer::deserialize(
-                                "Filters", stack,
-                            )?),
-                        };
+                        obj.filters.get_or_insert(vec![]).extend(
+                            ReceiptFilterListDeserializer::deserialize("Filters", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to list the receipt rule sets that exist under your AWS account. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
@@ -4518,50 +3650,25 @@ impl ListReceiptRuleSetsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptRuleSetsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListReceiptRuleSetsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListReceiptRuleSetsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "NextToken" => {
                         obj.next_token =
                             Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "RuleSets" => {
-                        obj.rule_sets = match obj.rule_sets {
-                            Some(ref mut existing) => {
-                                existing.extend(ReceiptRuleSetsListsDeserializer::deserialize(
-                                    "RuleSets", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ReceiptRuleSetsListsDeserializer::deserialize(
-                                "RuleSets", stack,
-                            )?),
-                        };
+                        obj.rule_sets.get_or_insert(vec![]).extend(
+                            ReceiptRuleSetsListsDeserializer::deserialize("RuleSets", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4608,52 +3715,20 @@ impl ListTemplatesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTemplatesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListTemplatesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListTemplatesResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "NextToken" => {
+                    obj.next_token = Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    "TemplatesMetadata" => {
-                        obj.templates_metadata = match obj.templates_metadata {
-                            Some(ref mut existing) => {
-                                existing.extend(TemplateMetadataListDeserializer::deserialize(
-                                    "TemplatesMetadata",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(TemplateMetadataListDeserializer::deserialize(
-                                "TemplatesMetadata",
-                                stack,
-                            )?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "TemplatesMetadata" => {
+                    obj.templates_metadata.get_or_insert(vec![]).extend(
+                        TemplateMetadataListDeserializer::deserialize("TemplatesMetadata", stack)?,
+                    );
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>A list of email addresses that you have verified with Amazon SES under your AWS account.</p>
@@ -4670,48 +3745,21 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVerifiedEmailAddressesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListVerifiedEmailAddressesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListVerifiedEmailAddressesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "VerifiedEmailAddresses" => {
-                        obj.verified_email_addresses = match obj.verified_email_addresses {
-                            Some(ref mut existing) => {
-                                existing.extend(AddressListDeserializer::deserialize(
-                                    "VerifiedEmailAddresses",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AddressListDeserializer::deserialize(
-                                "VerifiedEmailAddresses",
-                                stack,
-                            )?),
-                        };
+                        obj.verified_email_addresses.get_or_insert(vec![]).extend(
+                            AddressListDeserializer::deserialize("VerifiedEmailAddresses", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct MailFromDomainAttributesDeserializer;
@@ -4995,37 +4043,14 @@ impl PolicyNameListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyNameDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyNameDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -5135,68 +4160,46 @@ impl ReceiptActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptAction, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ReceiptAction::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ReceiptAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AddHeaderAction" => {
+                    obj.add_header_action = Some(AddHeaderActionDeserializer::deserialize(
+                        "AddHeaderAction",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AddHeaderAction" => {
-                        obj.add_header_action = Some(AddHeaderActionDeserializer::deserialize(
-                            "AddHeaderAction",
-                            stack,
-                        )?);
-                    }
-                    "BounceAction" => {
-                        obj.bounce_action = Some(BounceActionDeserializer::deserialize(
-                            "BounceAction",
-                            stack,
-                        )?);
-                    }
-                    "LambdaAction" => {
-                        obj.lambda_action = Some(LambdaActionDeserializer::deserialize(
-                            "LambdaAction",
-                            stack,
-                        )?);
-                    }
-                    "S3Action" => {
-                        obj.s3_action = Some(S3ActionDeserializer::deserialize("S3Action", stack)?);
-                    }
-                    "SNSAction" => {
-                        obj.sns_action =
-                            Some(SNSActionDeserializer::deserialize("SNSAction", stack)?);
-                    }
-                    "StopAction" => {
-                        obj.stop_action =
-                            Some(StopActionDeserializer::deserialize("StopAction", stack)?);
-                    }
-                    "WorkmailAction" => {
-                        obj.workmail_action = Some(WorkmailActionDeserializer::deserialize(
-                            "WorkmailAction",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "BounceAction" => {
+                    obj.bounce_action = Some(BounceActionDeserializer::deserialize(
+                        "BounceAction",
+                        stack,
+                    )?);
                 }
+                "LambdaAction" => {
+                    obj.lambda_action = Some(LambdaActionDeserializer::deserialize(
+                        "LambdaAction",
+                        stack,
+                    )?);
+                }
+                "S3Action" => {
+                    obj.s3_action = Some(S3ActionDeserializer::deserialize("S3Action", stack)?);
+                }
+                "SNSAction" => {
+                    obj.sns_action = Some(SNSActionDeserializer::deserialize("SNSAction", stack)?);
+                }
+                "StopAction" => {
+                    obj.stop_action =
+                        Some(StopActionDeserializer::deserialize("StopAction", stack)?);
+                }
+                "WorkmailAction" => {
+                    obj.workmail_action = Some(WorkmailActionDeserializer::deserialize(
+                        "WorkmailAction",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -5268,37 +4271,14 @@ impl ReceiptActionsListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptAction>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ReceiptActionDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ReceiptActionDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -5329,40 +4309,18 @@ impl ReceiptFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptFilter, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ReceiptFilter::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ReceiptFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IpFilter" => {
+                    obj.ip_filter = ReceiptIpFilterDeserializer::deserialize("IpFilter", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IpFilter" => {
-                        obj.ip_filter =
-                            ReceiptIpFilterDeserializer::deserialize("IpFilter", stack)?;
-                    }
-                    "Name" => {
-                        obj.name = ReceiptFilterNameDeserializer::deserialize("Name", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Name" => {
+                    obj.name = ReceiptFilterNameDeserializer::deserialize("Name", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -5391,37 +4349,14 @@ impl ReceiptFilterListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptFilter>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ReceiptFilterDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ReceiptFilterDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ReceiptFilterNameDeserializer;
@@ -5468,39 +4403,18 @@ impl ReceiptIpFilterDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptIpFilter, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ReceiptIpFilter::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ReceiptIpFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Cidr" => {
+                    obj.cidr = CidrDeserializer::deserialize("Cidr", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Cidr" => {
-                        obj.cidr = CidrDeserializer::deserialize("Cidr", stack)?;
-                    }
-                    "Policy" => {
-                        obj.policy = ReceiptFilterPolicyDeserializer::deserialize("Policy", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Policy" => {
+                    obj.policy = ReceiptFilterPolicyDeserializer::deserialize("Policy", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -5542,75 +4456,35 @@ impl ReceiptRuleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRule, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ReceiptRule::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ReceiptRule, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Actions" => {
+                    obj.actions.get_or_insert(vec![]).extend(
+                        ReceiptActionsListDeserializer::deserialize("Actions", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Actions" => {
-                        obj.actions = match obj.actions {
-                            Some(ref mut existing) => {
-                                existing.extend(ReceiptActionsListDeserializer::deserialize(
-                                    "Actions", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ReceiptActionsListDeserializer::deserialize(
-                                "Actions", stack,
-                            )?),
-                        };
-                    }
-                    "Enabled" => {
-                        obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
-                    }
-                    "Name" => {
-                        obj.name = ReceiptRuleNameDeserializer::deserialize("Name", stack)?;
-                    }
-                    "Recipients" => {
-                        obj.recipients = match obj.recipients {
-                            Some(ref mut existing) => {
-                                existing.extend(RecipientsListDeserializer::deserialize(
-                                    "Recipients",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(RecipientsListDeserializer::deserialize(
-                                "Recipients",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "ScanEnabled" => {
-                        obj.scan_enabled =
-                            Some(EnabledDeserializer::deserialize("ScanEnabled", stack)?);
-                    }
-                    "TlsPolicy" => {
-                        obj.tls_policy =
-                            Some(TlsPolicyDeserializer::deserialize("TlsPolicy", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Enabled" => {
+                    obj.enabled = Some(EnabledDeserializer::deserialize("Enabled", stack)?);
                 }
+                "Name" => {
+                    obj.name = ReceiptRuleNameDeserializer::deserialize("Name", stack)?;
+                }
+                "Recipients" => {
+                    obj.recipients.get_or_insert(vec![]).extend(
+                        RecipientsListDeserializer::deserialize("Recipients", stack)?,
+                    );
+                }
+                "ScanEnabled" => {
+                    obj.scan_enabled =
+                        Some(EnabledDeserializer::deserialize("ScanEnabled", stack)?);
+                }
+                "TlsPolicy" => {
+                    obj.tls_policy = Some(TlsPolicyDeserializer::deserialize("TlsPolicy", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -5698,43 +4572,21 @@ impl ReceiptRuleSetMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRuleSetMetadata, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ReceiptRuleSetMetadata::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ReceiptRuleSetMetadata, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreatedTimestamp" => {
+                    obj.created_timestamp = Some(TimestampDeserializer::deserialize(
+                        "CreatedTimestamp",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CreatedTimestamp" => {
-                        obj.created_timestamp = Some(TimestampDeserializer::deserialize(
-                            "CreatedTimestamp",
-                            stack,
-                        )?);
-                    }
-                    "Name" => {
-                        obj.name =
-                            Some(ReceiptRuleSetNameDeserializer::deserialize("Name", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Name" => {
+                    obj.name = Some(ReceiptRuleSetNameDeserializer::deserialize("Name", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ReceiptRuleSetNameDeserializer;
@@ -5758,39 +4610,16 @@ impl ReceiptRuleSetsListsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptRuleSetMetadata>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ReceiptRuleSetMetadataDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ReceiptRuleSetMetadataDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ReceiptRulesListDeserializer;
@@ -5800,37 +4629,14 @@ impl ReceiptRulesListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptRule>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ReceiptRuleDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ReceiptRuleDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct RecipientDeserializer;
@@ -5906,37 +4712,14 @@ impl RecipientsListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(RecipientDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(RecipientDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -6030,49 +4813,28 @@ impl ReputationOptionsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReputationOptions, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ReputationOptions::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ReputationOptions, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "LastFreshStart" => {
+                    obj.last_fresh_start = Some(LastFreshStartDeserializer::deserialize(
+                        "LastFreshStart",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "LastFreshStart" => {
-                        obj.last_fresh_start = Some(LastFreshStartDeserializer::deserialize(
-                            "LastFreshStart",
-                            stack,
-                        )?);
-                    }
-                    "ReputationMetricsEnabled" => {
-                        obj.reputation_metrics_enabled = Some(EnabledDeserializer::deserialize(
-                            "ReputationMetricsEnabled",
-                            stack,
-                        )?);
-                    }
-                    "SendingEnabled" => {
-                        obj.sending_enabled =
-                            Some(EnabledDeserializer::deserialize("SendingEnabled", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "ReputationMetricsEnabled" => {
+                    obj.reputation_metrics_enabled = Some(EnabledDeserializer::deserialize(
+                        "ReputationMetricsEnabled",
+                        stack,
+                    )?);
                 }
+                "SendingEnabled" => {
+                    obj.sending_enabled =
+                        Some(EnabledDeserializer::deserialize("SendingEnabled", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>When included in a receipt rule, this action saves the received message to an Amazon Simple Storage Service (Amazon S3) bucket and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>To enable Amazon SES to write emails to your Amazon S3 bucket, use an AWS KMS key to encrypt your emails, or publish to an Amazon SNS topic of another account, Amazon SES must have permission to access those resources. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> <note> <p>When you save your emails to an Amazon S3 bucket, the maximum email size (including headers) is 30 MB. Emails larger than that will bounce.</p> </note> <p>For information about specifying Amazon S3 actions in receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-s3.html">Amazon SES Developer Guide</a>.</p>
@@ -6095,54 +4857,32 @@ impl S3ActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Action, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = S3Action::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, S3Action, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "BucketName" => {
+                    obj.bucket_name = S3BucketNameDeserializer::deserialize("BucketName", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "BucketName" => {
-                        obj.bucket_name =
-                            S3BucketNameDeserializer::deserialize("BucketName", stack)?;
-                    }
-                    "KmsKeyArn" => {
-                        obj.kms_key_arn = Some(AmazonResourceNameDeserializer::deserialize(
-                            "KmsKeyArn",
-                            stack,
-                        )?);
-                    }
-                    "ObjectKeyPrefix" => {
-                        obj.object_key_prefix = Some(S3KeyPrefixDeserializer::deserialize(
-                            "ObjectKeyPrefix",
-                            stack,
-                        )?);
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "KmsKeyArn" => {
+                    obj.kms_key_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "KmsKeyArn",
+                        stack,
+                    )?);
                 }
+                "ObjectKeyPrefix" => {
+                    obj.object_key_prefix = Some(S3KeyPrefixDeserializer::deserialize(
+                        "ObjectKeyPrefix",
+                        stack,
+                    )?);
+                }
+                "TopicArn" => {
+                    obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "TopicArn", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -6212,42 +4952,20 @@ impl SNSActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSAction, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SNSAction::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SNSAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Encoding" => {
+                    obj.encoding = Some(SNSActionEncodingDeserializer::deserialize(
+                        "Encoding", stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Encoding" => {
-                        obj.encoding = Some(SNSActionEncodingDeserializer::deserialize(
-                            "Encoding", stack,
-                        )?);
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn =
-                            AmazonResourceNameDeserializer::deserialize("TopicArn", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "TopicArn" => {
+                    obj.topic_arn = AmazonResourceNameDeserializer::deserialize("TopicArn", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -6295,37 +5013,15 @@ impl SNSDestinationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSDestination, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SNSDestination::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SNSDestination, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "TopicARN" => {
+                    obj.topic_arn = AmazonResourceNameDeserializer::deserialize("TopicARN", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "TopicARN" => {
-                        obj.topic_arn =
-                            AmazonResourceNameDeserializer::deserialize("TopicARN", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -6408,37 +5104,15 @@ impl SendBounceResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBounceResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SendBounceResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SendBounceResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MessageId" => {
+                    obj.message_id = Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "MessageId" => {
-                        obj.message_id =
-                            Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a request to send a templated email to multiple destinations using Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
@@ -6538,21 +5212,11 @@ impl SendBulkTemplatedEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBulkTemplatedEmailResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SendBulkTemplatedEmailResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, SendBulkTemplatedEmailResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Status" => {
                         obj.status
                             .extend(BulkEmailDestinationStatusListDeserializer::deserialize(
@@ -6560,17 +5224,10 @@ impl SendBulkTemplatedEmailResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to send a custom verification email to a specified recipient.</p>
@@ -6618,37 +5275,20 @@ impl SendCustomVerificationEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendCustomVerificationEmailResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SendCustomVerificationEmailResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, SendCustomVerificationEmailResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "MessageId" => {
                         obj.message_id =
                             Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents sending statistics data. Each <code>SendDataPoint</code> contains statistics for a 15-minute period of sending activity. </p>
@@ -6673,51 +5313,28 @@ impl SendDataPointDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendDataPoint, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SendDataPoint::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SendDataPoint, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Bounces" => {
+                    obj.bounces = Some(CounterDeserializer::deserialize("Bounces", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Bounces" => {
-                        obj.bounces = Some(CounterDeserializer::deserialize("Bounces", stack)?);
-                    }
-                    "Complaints" => {
-                        obj.complaints =
-                            Some(CounterDeserializer::deserialize("Complaints", stack)?);
-                    }
-                    "DeliveryAttempts" => {
-                        obj.delivery_attempts =
-                            Some(CounterDeserializer::deserialize("DeliveryAttempts", stack)?);
-                    }
-                    "Rejects" => {
-                        obj.rejects = Some(CounterDeserializer::deserialize("Rejects", stack)?);
-                    }
-                    "Timestamp" => {
-                        obj.timestamp =
-                            Some(TimestampDeserializer::deserialize("Timestamp", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Complaints" => {
+                    obj.complaints = Some(CounterDeserializer::deserialize("Complaints", stack)?);
                 }
+                "DeliveryAttempts" => {
+                    obj.delivery_attempts =
+                        Some(CounterDeserializer::deserialize("DeliveryAttempts", stack)?);
+                }
+                "Rejects" => {
+                    obj.rejects = Some(CounterDeserializer::deserialize("Rejects", stack)?);
+                }
+                "Timestamp" => {
+                    obj.timestamp = Some(TimestampDeserializer::deserialize("Timestamp", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct SendDataPointListDeserializer;
@@ -6727,37 +5344,14 @@ impl SendDataPointListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SendDataPoint>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(SendDataPointDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(SendDataPointDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a request to send a single formatted email using Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-formatted.html">Amazon SES Developer Guide</a>.</p>
@@ -6845,36 +5439,15 @@ impl SendEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendEmailResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SendEmailResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SendEmailResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MessageId" => {
+                    obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "MessageId" => {
-                        obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a request to send a single raw email using Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html">Amazon SES Developer Guide</a>.</p>
@@ -6961,36 +5534,15 @@ impl SendRawEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendRawEmailResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SendRawEmailResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SendRawEmailResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MessageId" => {
+                    obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "MessageId" => {
-                        obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a request to send a templated email using Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
@@ -7085,36 +5637,19 @@ impl SendTemplatedEmailResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendTemplatedEmailResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SendTemplatedEmailResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, SendTemplatedEmailResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "MessageId" => {
                         obj.message_id = MessageIdDeserializer::deserialize("MessageId", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct SentLast24HoursDeserializer;
@@ -7493,41 +6028,20 @@ impl StopActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopAction, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = StopAction::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, StopAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Scope" => {
+                    obj.scope = StopScopeDeserializer::deserialize("Scope", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Scope" => {
-                        obj.scope = StopScopeDeserializer::deserialize("Scope", stack)?;
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "TopicArn" => {
+                    obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "TopicArn", stack,
+                    )?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -7623,47 +6137,26 @@ impl TemplateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Template, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Template::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Template, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "HtmlPart" => {
+                    obj.html_part = Some(HtmlPartDeserializer::deserialize("HtmlPart", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "HtmlPart" => {
-                        obj.html_part = Some(HtmlPartDeserializer::deserialize("HtmlPart", stack)?);
-                    }
-                    "SubjectPart" => {
-                        obj.subject_part =
-                            Some(SubjectPartDeserializer::deserialize("SubjectPart", stack)?);
-                    }
-                    "TemplateName" => {
-                        obj.template_name =
-                            TemplateNameDeserializer::deserialize("TemplateName", stack)?;
-                    }
-                    "TextPart" => {
-                        obj.text_part = Some(TextPartDeserializer::deserialize("TextPart", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "SubjectPart" => {
+                    obj.subject_part =
+                        Some(SubjectPartDeserializer::deserialize("SubjectPart", stack)?);
                 }
+                "TemplateName" => {
+                    obj.template_name =
+                        TemplateNameDeserializer::deserialize("TemplateName", stack)?;
+                }
+                "TextPart" => {
+                    obj.text_part = Some(TextPartDeserializer::deserialize("TextPart", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -7719,42 +6212,21 @@ impl TemplateMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TemplateMetadata, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = TemplateMetadata::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, TemplateMetadata, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreatedTimestamp" => {
+                    obj.created_timestamp = Some(TimestampDeserializer::deserialize(
+                        "CreatedTimestamp",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CreatedTimestamp" => {
-                        obj.created_timestamp = Some(TimestampDeserializer::deserialize(
-                            "CreatedTimestamp",
-                            stack,
-                        )?);
-                    }
-                    "Name" => {
-                        obj.name = Some(TemplateNameDeserializer::deserialize("Name", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Name" => {
+                    obj.name = Some(TemplateNameDeserializer::deserialize("Name", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct TemplateMetadataListDeserializer;
@@ -7764,37 +6236,14 @@ impl TemplateMetadataListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TemplateMetadata>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(TemplateMetadataDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(TemplateMetadataDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct TemplateNameDeserializer;
@@ -7846,21 +6295,11 @@ impl TestRenderTemplateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestRenderTemplateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = TestRenderTemplateResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, TestRenderTemplateResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "RenderedTemplate" => {
                         obj.rendered_template = Some(RenderedTemplateDeserializer::deserialize(
                             "RenderedTemplate",
@@ -7868,17 +6307,10 @@ impl TestRenderTemplateResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct TextPartDeserializer;
@@ -7937,40 +6369,19 @@ impl TrackingOptionsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrackingOptions, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = TrackingOptions::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, TrackingOptions, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CustomRedirectDomain" => {
+                    obj.custom_redirect_domain =
+                        Some(CustomRedirectDomainDeserializer::deserialize(
+                            "CustomRedirectDomain",
+                            stack,
+                        )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CustomRedirectDomain" => {
-                        obj.custom_redirect_domain =
-                            Some(CustomRedirectDomainDeserializer::deserialize(
-                                "CustomRedirectDomain",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -8384,37 +6795,14 @@ impl VerificationTokenListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(VerificationTokenDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(VerificationTokenDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Represents a request to generate the CNAME records needed to set up Easy DKIM with Amazon SES. For more information about setting up Easy DKIM, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
@@ -8451,21 +6839,11 @@ impl VerifyDomainDkimResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainDkimResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = VerifyDomainDkimResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, VerifyDomainDkimResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "DkimTokens" => {
                         obj.dkim_tokens
                             .extend(VerificationTokenListDeserializer::deserialize(
@@ -8474,17 +6852,10 @@ impl VerifyDomainDkimResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to begin Amazon SES domain verification and to generate the TXT records that you must publish to the DNS server of your domain to complete the verification. For information about domain verification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-domains.html">Amazon SES Developer Guide</a>.</p>
@@ -8521,37 +6892,20 @@ impl VerifyDomainIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainIdentityResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = VerifyDomainIdentityResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, VerifyDomainIdentityResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "VerificationToken" => {
                         obj.verification_token =
                             VerificationTokenDeserializer::deserialize("VerificationToken", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents a request to begin email address verification with Amazon SES. For information about email address verification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-email-addresses.html">Amazon SES Developer Guide</a>.</p>
@@ -8630,42 +6984,21 @@ impl WorkmailActionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<WorkmailAction, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = WorkmailAction::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, WorkmailAction, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "OrganizationArn" => {
+                    obj.organization_arn =
+                        AmazonResourceNameDeserializer::deserialize("OrganizationArn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "OrganizationArn" => {
-                        obj.organization_arn =
-                            AmazonResourceNameDeserializer::deserialize("OrganizationArn", stack)?;
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
-                            "TopicArn", stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "TopicArn" => {
+                    obj.topic_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "TopicArn", stack,
+                    )?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 

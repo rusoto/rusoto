@@ -25,20 +25,15 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{
-    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
+    start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
-use xml::reader::XmlEvent;
 use xml::EventReader;
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
 /// <p>A discrete item that contains the description and URL of an artifact (such as a PDF).</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Artifact {
@@ -53,40 +48,19 @@ impl ArtifactDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Artifact, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Artifact::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Artifact, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Description" => {
+                    obj.description =
+                        Some(DescriptionDeserializer::deserialize("Description", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Description" => {
-                        obj.description =
-                            Some(DescriptionDeserializer::deserialize("Description", stack)?);
-                    }
-                    "URL" => {
-                        obj.url = Some(URLDeserializer::deserialize("URL", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "URL" => {
+                    obj.url = Some(URLDeserializer::deserialize("URL", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ArtifactListDeserializer;
@@ -96,37 +70,14 @@ impl ArtifactListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Artifact>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ArtifactDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ArtifactDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Input structure for the CancelJob operation.</p>
@@ -165,36 +116,15 @@ impl CancelJobOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelJobOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CancelJobOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CancelJobOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Success" => {
+                    obj.success = Some(SuccessDeserializer::deserialize("Success", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Success" => {
-                        obj.success = Some(SuccessDeserializer::deserialize("Success", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct CarrierDeserializer;
@@ -263,71 +193,39 @@ impl CreateJobOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateJobOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateJobOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CreateJobOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ArtifactList" => {
+                    obj.artifact_list.get_or_insert(vec![]).extend(
+                        ArtifactListDeserializer::deserialize("ArtifactList", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "ArtifactList" => {
-                        obj.artifact_list = match obj.artifact_list {
-                            Some(ref mut existing) => {
-                                existing.extend(ArtifactListDeserializer::deserialize(
-                                    "ArtifactList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ArtifactListDeserializer::deserialize(
-                                "ArtifactList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "JobId" => {
-                        obj.job_id = Some(JobIdDeserializer::deserialize("JobId", stack)?);
-                    }
-                    "JobType" => {
-                        obj.job_type = Some(JobTypeDeserializer::deserialize("JobType", stack)?);
-                    }
-                    "Signature" => {
-                        obj.signature =
-                            Some(SignatureDeserializer::deserialize("Signature", stack)?);
-                    }
-                    "SignatureFileContents" => {
-                        obj.signature_file_contents =
-                            Some(SignatureFileContentsDeserializer::deserialize(
-                                "SignatureFileContents",
-                                stack,
-                            )?);
-                    }
-                    "WarningMessage" => {
-                        obj.warning_message = Some(WarningMessageDeserializer::deserialize(
-                            "WarningMessage",
+                "JobId" => {
+                    obj.job_id = Some(JobIdDeserializer::deserialize("JobId", stack)?);
+                }
+                "JobType" => {
+                    obj.job_type = Some(JobTypeDeserializer::deserialize("JobType", stack)?);
+                }
+                "Signature" => {
+                    obj.signature = Some(SignatureDeserializer::deserialize("Signature", stack)?);
+                }
+                "SignatureFileContents" => {
+                    obj.signature_file_contents =
+                        Some(SignatureFileContentsDeserializer::deserialize(
+                            "SignatureFileContents",
                             stack,
                         )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
+                "WarningMessage" => {
+                    obj.warning_message = Some(WarningMessageDeserializer::deserialize(
+                        "WarningMessage",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct CreationDateDeserializer;
@@ -475,43 +373,21 @@ impl GetShippingLabelOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetShippingLabelOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetShippingLabelOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetShippingLabelOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ShippingLabelURL" => {
+                    obj.shipping_label_url = Some(GenericStringDeserializer::deserialize(
+                        "ShippingLabelURL",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "ShippingLabelURL" => {
-                        obj.shipping_label_url = Some(GenericStringDeserializer::deserialize(
-                            "ShippingLabelURL",
-                            stack,
-                        )?);
-                    }
-                    "Warning" => {
-                        obj.warning =
-                            Some(GenericStringDeserializer::deserialize("Warning", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Warning" => {
+                    obj.warning = Some(GenericStringDeserializer::deserialize("Warning", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Input structure for the GetStatus operation.</p>
@@ -565,120 +441,87 @@ impl GetStatusOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStatusOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetStatusOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetStatusOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ArtifactList" => {
+                    obj.artifact_list.get_or_insert(vec![]).extend(
+                        ArtifactListDeserializer::deserialize("ArtifactList", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "ArtifactList" => {
-                        obj.artifact_list = match obj.artifact_list {
-                            Some(ref mut existing) => {
-                                existing.extend(ArtifactListDeserializer::deserialize(
-                                    "ArtifactList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ArtifactListDeserializer::deserialize(
-                                "ArtifactList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "Carrier" => {
-                        obj.carrier = Some(CarrierDeserializer::deserialize("Carrier", stack)?);
-                    }
-                    "CreationDate" => {
-                        obj.creation_date = Some(CreationDateDeserializer::deserialize(
-                            "CreationDate",
-                            stack,
-                        )?);
-                    }
-                    "CurrentManifest" => {
-                        obj.current_manifest = Some(CurrentManifestDeserializer::deserialize(
-                            "CurrentManifest",
-                            stack,
-                        )?);
-                    }
-                    "ErrorCount" => {
-                        obj.error_count =
-                            Some(ErrorCountDeserializer::deserialize("ErrorCount", stack)?);
-                    }
-                    "JobId" => {
-                        obj.job_id = Some(JobIdDeserializer::deserialize("JobId", stack)?);
-                    }
-                    "JobType" => {
-                        obj.job_type = Some(JobTypeDeserializer::deserialize("JobType", stack)?);
-                    }
-                    "LocationCode" => {
-                        obj.location_code = Some(LocationCodeDeserializer::deserialize(
-                            "LocationCode",
-                            stack,
-                        )?);
-                    }
-                    "LocationMessage" => {
-                        obj.location_message = Some(LocationMessageDeserializer::deserialize(
-                            "LocationMessage",
-                            stack,
-                        )?);
-                    }
-                    "LogBucket" => {
-                        obj.log_bucket =
-                            Some(LogBucketDeserializer::deserialize("LogBucket", stack)?);
-                    }
-                    "LogKey" => {
-                        obj.log_key = Some(LogKeyDeserializer::deserialize("LogKey", stack)?);
-                    }
-                    "ProgressCode" => {
-                        obj.progress_code = Some(ProgressCodeDeserializer::deserialize(
-                            "ProgressCode",
-                            stack,
-                        )?);
-                    }
-                    "ProgressMessage" => {
-                        obj.progress_message = Some(ProgressMessageDeserializer::deserialize(
-                            "ProgressMessage",
-                            stack,
-                        )?);
-                    }
-                    "Signature" => {
-                        obj.signature =
-                            Some(SignatureDeserializer::deserialize("Signature", stack)?);
-                    }
-                    "SignatureFileContents" => {
-                        obj.signature_file_contents = Some(SignatureDeserializer::deserialize(
-                            "SignatureFileContents",
-                            stack,
-                        )?);
-                    }
-                    "TrackingNumber" => {
-                        obj.tracking_number = Some(TrackingNumberDeserializer::deserialize(
-                            "TrackingNumber",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Carrier" => {
+                    obj.carrier = Some(CarrierDeserializer::deserialize("Carrier", stack)?);
                 }
+                "CreationDate" => {
+                    obj.creation_date = Some(CreationDateDeserializer::deserialize(
+                        "CreationDate",
+                        stack,
+                    )?);
+                }
+                "CurrentManifest" => {
+                    obj.current_manifest = Some(CurrentManifestDeserializer::deserialize(
+                        "CurrentManifest",
+                        stack,
+                    )?);
+                }
+                "ErrorCount" => {
+                    obj.error_count =
+                        Some(ErrorCountDeserializer::deserialize("ErrorCount", stack)?);
+                }
+                "JobId" => {
+                    obj.job_id = Some(JobIdDeserializer::deserialize("JobId", stack)?);
+                }
+                "JobType" => {
+                    obj.job_type = Some(JobTypeDeserializer::deserialize("JobType", stack)?);
+                }
+                "LocationCode" => {
+                    obj.location_code = Some(LocationCodeDeserializer::deserialize(
+                        "LocationCode",
+                        stack,
+                    )?);
+                }
+                "LocationMessage" => {
+                    obj.location_message = Some(LocationMessageDeserializer::deserialize(
+                        "LocationMessage",
+                        stack,
+                    )?);
+                }
+                "LogBucket" => {
+                    obj.log_bucket = Some(LogBucketDeserializer::deserialize("LogBucket", stack)?);
+                }
+                "LogKey" => {
+                    obj.log_key = Some(LogKeyDeserializer::deserialize("LogKey", stack)?);
+                }
+                "ProgressCode" => {
+                    obj.progress_code = Some(ProgressCodeDeserializer::deserialize(
+                        "ProgressCode",
+                        stack,
+                    )?);
+                }
+                "ProgressMessage" => {
+                    obj.progress_message = Some(ProgressMessageDeserializer::deserialize(
+                        "ProgressMessage",
+                        stack,
+                    )?);
+                }
+                "Signature" => {
+                    obj.signature = Some(SignatureDeserializer::deserialize("Signature", stack)?);
+                }
+                "SignatureFileContents" => {
+                    obj.signature_file_contents = Some(SignatureDeserializer::deserialize(
+                        "SignatureFileContents",
+                        stack,
+                    )?);
+                }
+                "TrackingNumber" => {
+                    obj.tracking_number = Some(TrackingNumberDeserializer::deserialize(
+                        "TrackingNumber",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct IsCanceledDeserializer;
@@ -725,49 +568,28 @@ impl JobDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Job, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Job::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Job, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreationDate" => {
+                    obj.creation_date = Some(CreationDateDeserializer::deserialize(
+                        "CreationDate",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CreationDate" => {
-                        obj.creation_date = Some(CreationDateDeserializer::deserialize(
-                            "CreationDate",
-                            stack,
-                        )?);
-                    }
-                    "IsCanceled" => {
-                        obj.is_canceled =
-                            Some(IsCanceledDeserializer::deserialize("IsCanceled", stack)?);
-                    }
-                    "JobId" => {
-                        obj.job_id = Some(JobIdDeserializer::deserialize("JobId", stack)?);
-                    }
-                    "JobType" => {
-                        obj.job_type = Some(JobTypeDeserializer::deserialize("JobType", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "IsCanceled" => {
+                    obj.is_canceled =
+                        Some(IsCanceledDeserializer::deserialize("IsCanceled", stack)?);
                 }
+                "JobId" => {
+                    obj.job_id = Some(JobIdDeserializer::deserialize("JobId", stack)?);
+                }
+                "JobType" => {
+                    obj.job_type = Some(JobTypeDeserializer::deserialize("JobType", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct JobIdDeserializer;
@@ -817,37 +639,14 @@ impl JobsListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Job>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(JobDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(JobDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Input structure for the ListJobs operation.</p>
@@ -896,46 +695,21 @@ impl ListJobsOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListJobsOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListJobsOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListJobsOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(IsTruncatedDeserializer::deserialize("IsTruncated", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(IsTruncatedDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Jobs" => {
-                        obj.jobs = match obj.jobs {
-                            Some(ref mut existing) => {
-                                existing.extend(JobsListDeserializer::deserialize("Jobs", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(JobsListDeserializer::deserialize("Jobs", stack)?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Jobs" => {
+                    obj.jobs
+                        .get_or_insert(vec![])
+                        .extend(JobsListDeserializer::deserialize("Jobs", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct LocationCodeDeserializer;
@@ -1139,57 +913,26 @@ impl UpdateJobOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateJobOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = UpdateJobOutput::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, UpdateJobOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ArtifactList" => {
+                    obj.artifact_list.get_or_insert(vec![]).extend(
+                        ArtifactListDeserializer::deserialize("ArtifactList", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "ArtifactList" => {
-                        obj.artifact_list = match obj.artifact_list {
-                            Some(ref mut existing) => {
-                                existing.extend(ArtifactListDeserializer::deserialize(
-                                    "ArtifactList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ArtifactListDeserializer::deserialize(
-                                "ArtifactList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "Success" => {
-                        obj.success = Some(SuccessDeserializer::deserialize("Success", stack)?);
-                    }
-                    "WarningMessage" => {
-                        obj.warning_message = Some(WarningMessageDeserializer::deserialize(
-                            "WarningMessage",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Success" => {
+                    obj.success = Some(SuccessDeserializer::deserialize("Success", stack)?);
                 }
+                "WarningMessage" => {
+                    obj.warning_message = Some(WarningMessageDeserializer::deserialize(
+                        "WarningMessage",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct WarningMessageDeserializer;

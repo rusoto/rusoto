@@ -25,20 +25,15 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{
-    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
+    start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
-use xml::reader::XmlEvent;
 use xml::EventReader;
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
 struct AccessKeyIdTypeDeserializer;
 impl AccessKeyIdTypeDeserializer {
     #[allow(unused_variables)]
@@ -166,50 +161,28 @@ impl AssumeRoleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumeRoleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AssumeRoleResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AssumeRoleResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AssumedRoleUser" => {
+                    obj.assumed_role_user = Some(AssumedRoleUserDeserializer::deserialize(
+                        "AssumedRoleUser",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AssumedRoleUser" => {
-                        obj.assumed_role_user = Some(AssumedRoleUserDeserializer::deserialize(
-                            "AssumedRoleUser",
-                            stack,
-                        )?);
-                    }
-                    "Credentials" => {
-                        obj.credentials =
-                            Some(CredentialsDeserializer::deserialize("Credentials", stack)?);
-                    }
-                    "PackedPolicySize" => {
-                        obj.packed_policy_size =
-                            Some(NonNegativeIntegerTypeDeserializer::deserialize(
-                                "PackedPolicySize",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Credentials" => {
+                    obj.credentials =
+                        Some(CredentialsDeserializer::deserialize("Credentials", stack)?);
                 }
+                "PackedPolicySize" => {
+                    obj.packed_policy_size = Some(NonNegativeIntegerTypeDeserializer::deserialize(
+                        "PackedPolicySize",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -281,21 +254,11 @@ impl AssumeRoleWithSAMLResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumeRoleWithSAMLResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AssumeRoleWithSAMLResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, AssumeRoleWithSAMLResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AssumedRoleUser" => {
                         obj.assumed_role_user = Some(AssumedRoleUserDeserializer::deserialize(
                             "AssumedRoleUser",
@@ -333,17 +296,10 @@ impl AssumeRoleWithSAMLResponseDeserializer {
                             Some(SubjectTypeDeserializer::deserialize("SubjectType", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -419,21 +375,11 @@ impl AssumeRoleWithWebIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumeRoleWithWebIdentityResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AssumeRoleWithWebIdentityResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, AssumeRoleWithWebIdentityResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AssumedRoleUser" => {
                         obj.assumed_role_user = Some(AssumedRoleUserDeserializer::deserialize(
                             "AssumedRoleUser",
@@ -465,17 +411,10 @@ impl AssumeRoleWithWebIdentityResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct AssumedRoleIdTypeDeserializer;
@@ -508,40 +447,19 @@ impl AssumedRoleUserDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssumedRoleUser, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AssumedRoleUser::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AssumedRoleUser, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
-                    }
-                    "AssumedRoleId" => {
-                        obj.assumed_role_id =
-                            AssumedRoleIdTypeDeserializer::deserialize("AssumedRoleId", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AssumedRoleId" => {
+                    obj.assumed_role_id =
+                        AssumedRoleIdTypeDeserializer::deserialize("AssumedRoleId", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AudienceDeserializer;
@@ -578,48 +496,26 @@ impl CredentialsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Credentials, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Credentials::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Credentials, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AccessKeyId" => {
+                    obj.access_key_id =
+                        AccessKeyIdTypeDeserializer::deserialize("AccessKeyId", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AccessKeyId" => {
-                        obj.access_key_id =
-                            AccessKeyIdTypeDeserializer::deserialize("AccessKeyId", stack)?;
-                    }
-                    "Expiration" => {
-                        obj.expiration = DateTypeDeserializer::deserialize("Expiration", stack)?;
-                    }
-                    "SecretAccessKey" => {
-                        obj.secret_access_key =
-                            AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey", stack)?;
-                    }
-                    "SessionToken" => {
-                        obj.session_token =
-                            TokenTypeDeserializer::deserialize("SessionToken", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Expiration" => {
+                    obj.expiration = DateTypeDeserializer::deserialize("Expiration", stack)?;
                 }
+                "SecretAccessKey" => {
+                    obj.secret_access_key =
+                        AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey", stack)?;
+                }
+                "SessionToken" => {
+                    obj.session_token = TokenTypeDeserializer::deserialize("SessionToken", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct DateTypeDeserializer;
@@ -672,21 +568,11 @@ impl DecodeAuthorizationMessageResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DecodeAuthorizationMessageResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DecodeAuthorizationMessageResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DecodeAuthorizationMessageResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "DecodedMessage" => {
                         obj.decoded_message = Some(DecodedMessageTypeDeserializer::deserialize(
                             "DecodedMessage",
@@ -694,17 +580,10 @@ impl DecodeAuthorizationMessageResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct DecodedMessageTypeDeserializer;
@@ -751,40 +630,19 @@ impl FederatedUserDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FederatedUser, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = FederatedUser::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, FederatedUser, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
-                    }
-                    "FederatedUserId" => {
-                        obj.federated_user_id =
-                            FederatedIdTypeDeserializer::deserialize("FederatedUserId", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "FederatedUserId" => {
+                    obj.federated_user_id =
+                        FederatedIdTypeDeserializer::deserialize("FederatedUserId", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -819,21 +677,11 @@ impl GetCallerIdentityResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCallerIdentityResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetCallerIdentityResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetCallerIdentityResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Account" => {
                         obj.account = Some(AccountTypeDeserializer::deserialize("Account", stack)?);
                     }
@@ -844,17 +692,10 @@ impl GetCallerIdentityResponseDeserializer {
                         obj.user_id = Some(UserIdTypeDeserializer::deserialize("UserId", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -907,21 +748,11 @@ impl GetFederationTokenResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetFederationTokenResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetFederationTokenResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetFederationTokenResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Credentials" => {
                         obj.credentials =
                             Some(CredentialsDeserializer::deserialize("Credentials", stack)?);
@@ -940,17 +771,10 @@ impl GetFederationTokenResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1001,37 +825,20 @@ impl GetSessionTokenResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSessionTokenResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetSessionTokenResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetSessionTokenResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Credentials" => {
                         obj.credentials =
                             Some(CredentialsDeserializer::deserialize("Credentials", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct IssuerDeserializer;
