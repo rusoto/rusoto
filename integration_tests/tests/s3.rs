@@ -13,6 +13,7 @@ use std::env;
 use std::fs::File;
 use std::io::Read;
 use std::str;
+use std::time::Duration;
 use time::get_time;
 
 use futures::{Future, Stream};
@@ -75,7 +76,7 @@ fn test_all_the_things() {
     list_items_in_bucket(&client, &test_bucket);
 
     // do a multipart upload
-    test_multipart_upload(&client, &test_bucket, &multipart_filename);
+    test_multipart_upload(&client, &region, &credentials, &test_bucket, &multipart_filename);
 
     // modify the bucket's CORS properties
     if cfg!(not(feature = "disable_minio_unsupported")) {
@@ -202,7 +203,7 @@ fn test_all_the_things() {
     test_delete_bucket(&client, &test_bucket);
 }
 
-fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
+fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &AwsCredentials, bucket: &str, filename: &str) {
     let create_multipart_req = CreateMultipartUploadRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
@@ -233,18 +234,39 @@ fn test_multipart_upload(client: &TestClient, bucket: &str, filename: &str) {
     let part_req1 = create_upload_part(vec!['a' as u8; 1024 * 1024 * 5], 1);
     let part_req2 = create_upload_part("foo".as_bytes().to_vec(), 2);
 
-    // upload 2 parts and note the etags generated for them
+    // upload the parts and note the etags generated for them
     let mut completed_parts = Vec::new();
-    for req in vec![part_req1, part_req2].into_iter() {
-        let part_number = req.part_number;
+    {
+        let part_number = part_req1.part_number;
         let response = client
-            .upload_part(req)
+            .upload_part(part_req1)
             .sync()
             .expect("Couldn't upload a file part");
         println!("{:#?}", response);
         completed_parts.push(CompletedPart {
             e_tag: response.e_tag.clone(),
             part_number: Some(part_number),
+        });
+    }
+    // upload the second part via a pre-signed url
+    {
+        let options = PreSignedRequestOption {
+            expires_in: Duration::from_secs(60 * 30),
+        };
+        let presigned_multipart_put = part_req2.get_presigned_url(region, credentials, &options);
+        println!("presigned multipart put: {:#?}", presigned_multipart_put);
+        let client = reqwest::Client::new();
+        let res = client
+            .put(&presigned_multipart_put)
+            .body(String::from("foo"))
+            .send()
+            .expect("Multipart put with presigned url failed");
+        assert_eq!(res.status(), reqwest::StatusCode::Ok);
+        let e_tag = res.headers().get::<reqwest::header::ETag>()
+            .map(|e| e.tag().clone().to_string());
+        completed_parts.push(CompletedPart {
+            e_tag,
+            part_number: Some(part_req2.part_number),
         });
     }
 

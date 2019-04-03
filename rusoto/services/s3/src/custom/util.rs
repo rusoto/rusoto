@@ -3,7 +3,7 @@ use rusoto_core::signature::SignedRequest;
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::region::Region;
 use rusoto_core::credential::AwsCredentials;
-use generated::{GetObjectRequest, PutObjectRequest, DeleteObjectRequest};
+use generated::{GetObjectRequest, PutObjectRequest, DeleteObjectRequest, UploadPartRequest};
 use std::time::Duration;
 /// URL encodes an S3 object key. This is necessary for `copy_object` and `upload_part_copy`,
 /// which require the `copy_source` field to be URL encoded.
@@ -12,7 +12,7 @@ use std::time::Duration;
 ///
 /// ```
 /// use rusoto_s3::CopyObjectRequest;
-/// 
+///
 /// let request = CopyObjectRequest {
 ///     bucket: "my-bucket".to_owned(),
 ///     key: "my-key".to_owned(),
@@ -178,6 +178,29 @@ impl PreSignedRequest for DeleteObjectRequest {
         );
 
         request.set_params(params);
+        request.generate_presigned_url(credentials, &option.expires_in)
+    }
+}
+
+impl PreSignedRequest for UploadPartRequest {
+    /// https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPart.html
+    fn get_presigned_url(&self, region: &Region, credentials: &AwsCredentials, option: &PreSignedRequestOption) -> String {
+        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
+        let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
+
+        request.add_param("partNumber", &self.part_number.to_string());
+        request.add_param("uploadId", &self.upload_id);
+
+        add_headers!(
+            self, request;
+            content_length, "Content-Length";
+            content_md5, "Content-MD5";
+            sse_customer_algorithm, "x-amz-server-side-encryption-customer-algorithm";
+            sse_customer_key, "x-amz-server-side-encryption-customer-key";
+            sse_customer_key_md5, "x-amz-server-side-encryption-customer-key-MD5";
+            request_payer, "x-amz-request-payer";
+        );
+
         request.generate_presigned_url(credentials, &option.expires_in)
     }
 }

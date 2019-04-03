@@ -27,5 +27,5 @@ Dependencies:
 * Python3
 * Python3 library requests (e.g. `apt install python3-requests` or `pip3 install --user requests`)
 
-**Ceph**: Execute `../.semaphoreci/test_20_ceph.sh` while you're in this directory.
-**Minio**: Execute `../.semaphoreci/test_30_minio.sh` while you're in this directory.
+**Ceph**: Execute `../.semaphoreci/test_10_ceph.sh` while you're in this directory.
+**Minio**: Execute `../.semaphoreci/test_20_minio.sh` while you're in this directory
