@@ -20,34 +20,34 @@ script:
         echo "Running Rusoto tests (phase A)" \
          && pip install --user toml \
          && .travis/split_workspace 1 2 \
-         && make unit_test
+         && RUST_VERSION=$TRAVIS_RUST_VERSION make unit_test
       fi
   - |
       if [ "$JOB" = "unit_tests_B" ]; then
         echo "Running Rusoto tests (phase B)" \
          && pip install --user toml \
          && .travis/split_workspace 2 2 \
-         && make unit_test
+         && RUST_VERSION=$TRAVIS_RUST_VERSION make unit_test
       fi
   - |
       if [ "$JOB" = "integration_tests_and_docs" ]; then
         echo "Building integration tests" &&
         ( cd integration_tests && \
-          cargo check --tests --features "all" )
+          RUST_VERSION=$TRAVIS_RUST_VERSION cargo check --tests --features "all" )
       fi
   - |
       if [ "$JOB" = "unit_tests_rustls_A" ]; then
         echo "Running Rusoto tests (rustls phase A)" \
          && pip install --user toml \
          && .travis/split_workspace 1 2 \
-         && cargo test --all -v --no-default-features --features=rustls
+         && RUST_VERSION=$TRAVIS_RUST_VERSION cargo test --all -v --no-default-features --features=rustls
       fi
   - |
       if [ "$JOB" = "unit_tests_rustls_B" ]; then
         echo "Running Rusoto tests (rustls phase B)" \
          && pip install --user toml \
          && .travis/split_workspace 2 2 \
-         && cargo test --all -v --no-default-features --features=rustls
+         && RUST_VERSION=$TRAVIS_RUST_VERSION cargo test --all -v --no-default-features --features=rustls
       fi
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "integration_tests_and_docs" ]]; then
