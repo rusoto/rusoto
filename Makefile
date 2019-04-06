@@ -19,6 +19,26 @@ generate:
 build: generate
 	cargo +$$RUST_VERSION build --features all
 
+.PHONY: docs
+docs:
+	cargo +$$RUST_VERSION doc --all --no-deps
+
 .PHONY: unit_test
 unit_test:
-	cargo +$$RUST_VERSION test2 --all
+	cargo +$$RUST_VERSION test --all
+
+.PHONY: integration_test
+integration_test:
+	(cd integration_tests && cargo +$$RUST_VERSION test --features all)
+
+.PHONY: check_integration_test
+check_integration_test:
+	(cd integration_tests && cargo +$$RUST_VERSION check --tests --features all)
+
+.PHONY: rustls_unit_test
+rustls_unit_test:
+	cargo +$$RUST_VERSION test --all -v --no-default-features --features=rustls
+
+.PHONY: check_service_defintions
+check_service_defintions:
+	(cd service_crategen && cargo +$$RUST_VERSION run -- check -c ./services.json)
