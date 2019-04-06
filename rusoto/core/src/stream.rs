@@ -11,7 +11,7 @@ pub struct ByteStream {
 }
 
 impl ByteStream {
-    /// Create a new `ByteStreamy` by wrapping a `futures` stream.
+    /// Create a new `ByteStream` by wrapping a `futures` stream.
     pub fn new<S>(stream: S) -> ByteStream
     where
         S: Stream<Item = Vec<u8>, Error = io::Error> + Send + 'static,
