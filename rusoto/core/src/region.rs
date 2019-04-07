@@ -86,6 +86,9 @@ pub enum Region {
     /// Region that covers the Western part of the United States
     UsWest2,
 
+    /// Region that covers the Eastern part of the United States for the US Government
+    UsGovEast1,
+
     /// Region that covers the Western part of the United States for the US Government
     UsGovWest1,
 
@@ -135,6 +138,7 @@ impl Region {
             Region::UsEast2 => "us-east-2",
             Region::UsWest1 => "us-west-1",
             Region::UsWest2 => "us-west-2",
+            Region::UsGovEast1 => "us-gov-east-1",
             Region::UsGovWest1 => "us-gov-west-1",
             Region::CnNorth1 => "cn-north-1",
             Region::CnNorthwest1 => "cn-northwest-1",
@@ -231,6 +235,7 @@ impl FromStr for Region {
             "us-east-2" | "useast2" => Ok(Region::UsEast2),
             "us-west-1" | "uswest1" => Ok(Region::UsWest1),
             "us-west-2" | "uswest2" => Ok(Region::UsWest2),
+            "us-gov-east-1" | "usgoveast1" => Ok(Region::UsGovEast1),
             "us-gov-west-1" | "usgovwest1" => Ok(Region::UsGovWest1),
             "cn-north-1" | "cnnorth1" => Ok(Region::CnNorth1),
             "cn-northwest-1" | "cnnorthwest1" => Ok(Region::CnNorthwest1),
@@ -304,6 +309,7 @@ mod tests {
         assert_eq!("us-east-2".parse(), Ok(Region::UsEast2));
         assert_eq!("us-west-1".parse(), Ok(Region::UsWest1));
         assert_eq!("us-west-2".parse(), Ok(Region::UsWest2));
+        assert_eq!("us-gov-east-1".parse(), Ok(Region::UsGovEast1));
         assert_eq!("us-gov-west-1".parse(), Ok(Region::UsGovWest1));
         assert_eq!("cn-north-1".parse(), Ok(Region::CnNorth1));
         assert_eq!("cn-northwest-1".parse(), Ok(Region::CnNorthwest1));
@@ -327,6 +333,7 @@ mod tests {
         assert_tokens(&Region::UsEast2, &tokens_for_region("us-east-2"));
         assert_tokens(&Region::UsWest1, &tokens_for_region("us-west-1"));
         assert_tokens(&Region::UsWest2, &tokens_for_region("us-west-2"));
+        assert_tokens(&Region::UsGovEast1, &tokens_for_region("us-gov-east-1"));
         assert_tokens(&Region::UsGovWest1, &tokens_for_region("us-gov-west-1"));
         assert_tokens(&Region::CnNorth1, &tokens_for_region("cn-north-1"));
         assert_tokens(&Region::CnNorthwest1, &tokens_for_region("cn-northwest-1"))
