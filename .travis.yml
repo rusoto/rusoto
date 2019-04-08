@@ -32,8 +32,7 @@ script:
   - |
       if [ "$JOB" = "integration_tests_and_docs" ]; then
         echo "Building integration tests" &&
-        ( cd integration_tests && \
-          RUST_VERSION=$TRAVIS_RUST_VERSION make check_integration_test )
+        RUST_VERSION=$TRAVIS_RUST_VERSION make check_integration_test
       fi
   - |
       if [ "$JOB" = "unit_tests_rustls_A" ]; then
