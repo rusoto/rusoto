@@ -42,3 +42,7 @@ rustls_unit_test:
 .PHONY: check_service_defintions
 check_service_defintions:
 	(cd service_crategen && cargo +$$RUST_VERSION run -- check -c ./services.json)
+
+.PHONY: time_credentials
+time_credentials:
+	(cd rusoto/credential && cargo clean --package rusoto_credential && touch src/lib.rs && time cargo +$$RUST_VERSION build)
