@@ -6,8 +6,8 @@ use futures::future::{result, FutureResult};
 use futures::{Future, Poll};
 use hyper::Uri;
 
-use request::{HttpClient, HttpClientFuture};
-use {parse_credentials_from_aws_service, AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use crate::request::{HttpClient, HttpClientFuture};
+use crate::{parse_credentials_from_aws_service, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 const AWS_CREDENTIALS_PROVIDER_IP: &str = "169.254.169.254";
 const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-credentials";

@@ -13,7 +13,7 @@ use futures::{Future, Poll};
 use regex::Regex;
 use tokio_process::{CommandExt, OutputAsync};
 
-use {non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 const AWS_CONFIG_FILE: &str = "AWS_CONFIG_FILE";
 const AWS_PROFILE: &str = "AWS_PROFILE";
@@ -432,8 +432,8 @@ mod tests {
     use std::path::Path;
 
     use super::*;
-    use test_utils::{lock, ENV_MUTEX};
-    use {CredentialsError, ProvideAwsCredentials};
+    use crate::test_utils::{lock, ENV_MUTEX};
+    use crate::{CredentialsError, ProvideAwsCredentials};
 
     #[test]
     fn parse_config_file_default_profile() {

@@ -4,7 +4,7 @@
 use chrono::{Duration, Utc};
 use futures::future::{ok, FutureResult};
 
-use {AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use crate::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 /// Provides AWS credentials from statically/programmatically provided strings.
 #[derive(Clone, Debug)]
@@ -84,8 +84,8 @@ mod tests {
     use std::time;
 
     use super::*;
-    use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
-    use ProvideAwsCredentials;
+    use crate::test_utils::{is_secret_hidden_behind_asterisks, SECRET};
+    use crate::ProvideAwsCredentials;
 
     #[test]
     fn test_static_provider_creation() {
@@ -143,7 +143,7 @@ mod tests {
         assert!(creds1.expires_at() < creds2.expires_at());
     }
 
-    #[test]
+    #[cfg(test)]
     quickcheck! {
         fn test_static_provider_secrets_not_in_debug(
             access_key: String,

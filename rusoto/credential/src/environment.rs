@@ -5,7 +5,7 @@ use chrono::{DateTime, FixedOffset, Utc};
 use futures::future::{result, FutureResult};
 use futures::{Future, Poll};
 
-use {non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
+use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 /// Provides AWS credentials from environment variables.
 ///
@@ -193,7 +193,7 @@ mod tests {
     use super::*;
     use chrono::Utc;
     use std::env;
-    use test_utils::{lock, ENV_MUTEX};
+    use crate::test_utils::{lock, ENV_MUTEX};
 
     static AWS_ACCESS_KEY_ID: &str = "AWS_ACCESS_KEY_ID";
     static AWS_SECRET_ACCESS_KEY: &str = "AWS_SECRET_ACCESS_KEY";
