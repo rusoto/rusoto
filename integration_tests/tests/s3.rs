@@ -4,6 +4,7 @@ extern crate futures;
 extern crate futures_fs;
 extern crate log;
 extern crate reqwest;
+extern crate http;
 extern crate rusoto_core;
 extern crate rusoto_s3;
 extern crate time;
@@ -261,11 +262,10 @@ fn test_multipart_upload(client: &TestClient, region: &Region, credentials: &Aws
             .body(String::from("foo"))
             .send()
             .expect("Multipart put with presigned url failed");
-        assert_eq!(res.status(), reqwest::StatusCode::Ok);
-        let e_tag = res.headers().get::<reqwest::header::ETag>()
-            .map(|e| e.tag().clone().to_string());
+        assert_eq!(res.status(), http::StatusCode::OK);
+        let e_tag = res.headers().get("ETAG").unwrap().to_str().unwrap();
         completed_parts.push(CompletedPart {
-            e_tag,
+            e_tag: Some(e_tag.to_string()),
             part_number: Some(part_req2.part_number),
         });
     }
@@ -755,11 +755,8 @@ fn test_get_object_with_presigned_url(
     let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
     println!("get object presigned url: {:#?}", presigned_url);
     let mut res = reqwest::get(&presigned_url).expect("Couldn't get object via presigned url");
-    assert_eq!(res.status(), reqwest::StatusCode::Ok);
-    let size = res
-        .headers()
-        .get::<reqwest::header::ContentLength>()
-        .map(|ct_len| **ct_len)
+    assert_eq!(res.status(), http::StatusCode::OK);
+    let size = res.content_length()
         .unwrap_or(0);
     assert!(size > 0);
     let mut buf: Vec<u8> = vec![];
@@ -785,7 +782,7 @@ fn test_get_object_with_expired_presigned_url(
     ::std::thread::sleep(::std::time::Duration::from_secs(2));
     println!("get object presigned url: {:#?}", presigned_url);
     let res = reqwest::get(&presigned_url).expect("Presigned url failure");
-    assert_eq!(res.status(), reqwest::StatusCode::Forbidden);
+    assert_eq!(res.status(), http::StatusCode::FORBIDDEN);
 }
 
 fn test_put_object_with_presigned_url(
@@ -809,7 +806,7 @@ fn test_put_object_with_presigned_url(
         .json(&map)
         .send()
         .expect("Put obj with presigned url failed");
-    assert_eq!(res.status(), reqwest::StatusCode::Ok);
+    assert_eq!(res.status(), http::StatusCode::OK);
 }
 
 fn test_delete_object_with_presigned_url(
@@ -830,5 +827,5 @@ fn test_delete_object_with_presigned_url(
         .delete(&presigned_url)
         .send()
         .expect("Delete of presigned url obj failed");
-    assert_eq!(res.status(), reqwest::StatusCode::NoContent);
+    assert_eq!(res.status(), http::StatusCode::NO_CONTENT);
 }

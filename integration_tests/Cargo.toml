@@ -599,6 +599,7 @@ log = "0.4.1"
 rand = "^0.3.14"
 time = "0.1.37"
 reqwest = "0.9"
+http = "0.1.17"
 
 [features]
 all = [
