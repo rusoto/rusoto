@@ -197,37 +197,37 @@ impl BatchMeterUsageError {
                 "DisabledApiException" => {
                     return RusotoError::Service(BatchMeterUsageError::DisabledApi(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(BatchMeterUsageError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCustomerIdentifierException" => {
                     return RusotoError::Service(BatchMeterUsageError::InvalidCustomerIdentifier(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidProductCodeException" => {
                     return RusotoError::Service(BatchMeterUsageError::InvalidProductCode(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUsageDimensionException" => {
                     return RusotoError::Service(BatchMeterUsageError::InvalidUsageDimension(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(BatchMeterUsageError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TimestampOutOfBoundsException" => {
                     return RusotoError::Service(BatchMeterUsageError::TimestampOutOfBounds(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -289,37 +289,37 @@ impl MeterUsageError {
                 "DuplicateRequestException" => {
                     return RusotoError::Service(MeterUsageError::DuplicateRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(MeterUsageError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidEndpointRegionException" => {
                     return RusotoError::Service(MeterUsageError::InvalidEndpointRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidProductCodeException" => {
                     return RusotoError::Service(MeterUsageError::InvalidProductCode(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidUsageDimensionException" => {
                     return RusotoError::Service(MeterUsageError::InvalidUsageDimension(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(MeterUsageError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TimestampOutOfBoundsException" => {
                     return RusotoError::Service(MeterUsageError::TimestampOutOfBounds(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -383,42 +383,42 @@ impl RegisterUsageError {
                 "CustomerNotEntitledException" => {
                     return RusotoError::Service(RegisterUsageError::CustomerNotEntitled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DisabledApiException" => {
                     return RusotoError::Service(RegisterUsageError::DisabledApi(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(RegisterUsageError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidProductCodeException" => {
                     return RusotoError::Service(RegisterUsageError::InvalidProductCode(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPublicKeyVersionException" => {
                     return RusotoError::Service(RegisterUsageError::InvalidPublicKeyVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRegionException" => {
                     return RusotoError::Service(RegisterUsageError::InvalidRegion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PlatformNotSupportedException" => {
                     return RusotoError::Service(RegisterUsageError::PlatformNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(RegisterUsageError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -477,27 +477,27 @@ impl ResolveCustomerError {
                 "DisabledApiException" => {
                     return RusotoError::Service(ResolveCustomerError::DisabledApi(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ExpiredTokenException" => {
                     return RusotoError::Service(ResolveCustomerError::ExpiredToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceErrorException" => {
                     return RusotoError::Service(ResolveCustomerError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTokenException" => {
                     return RusotoError::Service(ResolveCustomerError::InvalidToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ResolveCustomerError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

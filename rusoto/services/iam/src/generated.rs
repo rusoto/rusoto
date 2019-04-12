@@ -10906,28 +10906,28 @@ impl AddClientIDToOpenIDConnectProviderError {
                             AddClientIDToOpenIDConnectProviderError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             AddClientIDToOpenIDConnectProviderError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             AddClientIDToOpenIDConnectProviderError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             AddClientIDToOpenIDConnectProviderError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10987,29 +10987,29 @@ impl AddRoleToInstanceProfileError {
                             AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(AddRoleToInstanceProfileError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(AddRoleToInstanceProfileError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(AddRoleToInstanceProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(
                             AddRoleToInstanceProfileError::UnmodifiableEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11064,17 +11064,17 @@ impl AddUserToGroupError {
                     "LimitExceeded" => {
                         return RusotoError::Service(AddUserToGroupError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(AddUserToGroupError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(AddUserToGroupError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11131,27 +11131,27 @@ impl AttachGroupPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(AttachGroupPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(AttachGroupPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(AttachGroupPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PolicyNotAttachable" => {
                         return RusotoError::Service(AttachGroupPolicyError::PolicyNotAttachable(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(AttachGroupPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11212,32 +11212,32 @@ impl AttachRolePolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(AttachRolePolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(AttachRolePolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(AttachRolePolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PolicyNotAttachable" => {
                         return RusotoError::Service(AttachRolePolicyError::PolicyNotAttachable(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(AttachRolePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(AttachRolePolicyError::UnmodifiableEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11297,27 +11297,27 @@ impl AttachUserPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(AttachUserPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(AttachUserPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(AttachUserPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PolicyNotAttachable" => {
                         return RusotoError::Service(AttachUserPolicyError::PolicyNotAttachable(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(AttachUserPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11380,32 +11380,32 @@ impl ChangePasswordError {
                             ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidUserType" => {
                         return RusotoError::Service(ChangePasswordError::InvalidUserType(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(ChangePasswordError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(ChangePasswordError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PasswordPolicyViolation" => {
                         return RusotoError::Service(ChangePasswordError::PasswordPolicyViolation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ChangePasswordError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11461,17 +11461,17 @@ impl CreateAccessKeyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateAccessKeyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(CreateAccessKeyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateAccessKeyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11524,17 +11524,17 @@ impl CreateAccountAliasError {
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(CreateAccountAliasError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateAccountAliasError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateAccountAliasError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11589,22 +11589,22 @@ impl CreateGroupError {
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(CreateGroupError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateGroupError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(CreateGroupError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
-                        return RusotoError::Service(CreateGroupError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(CreateGroupError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -11660,17 +11660,17 @@ impl CreateInstanceProfileError {
                             CreateInstanceProfileError::EntityAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateInstanceProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11727,29 +11727,29 @@ impl CreateLoginProfileError {
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(CreateLoginProfileError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateLoginProfileError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(CreateLoginProfileError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PasswordPolicyViolation" => {
                         return RusotoError::Service(
                             CreateLoginProfileError::PasswordPolicyViolation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateLoginProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11810,26 +11810,28 @@ impl CreateOpenIDConnectProviderError {
                             CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidInput" => {
-                        return RusotoError::Service(CreateOpenIDConnectProviderError::InvalidInput(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateOpenIDConnectProviderError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             CreateOpenIDConnectProviderError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             CreateOpenIDConnectProviderError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -11887,27 +11889,27 @@ impl CreatePolicyError {
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(CreatePolicyError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreatePolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
-                        return RusotoError::Service(CreatePolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(CreatePolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(CreatePolicyError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreatePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -11966,29 +11968,29 @@ impl CreatePolicyVersionError {
                     "InvalidInput" => {
                         return RusotoError::Service(CreatePolicyVersionError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreatePolicyVersionError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(
                             CreatePolicyVersionError::MalformedPolicyDocument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(CreatePolicyVersionError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreatePolicyVersionError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12049,32 +12051,32 @@ impl CreateRoleError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(CreateRoleError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(CreateRoleError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateRoleError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateRoleError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(CreateRoleError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -12132,22 +12134,22 @@ impl CreateSAMLProviderError {
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(CreateSAMLProviderError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateSAMLProviderError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateSAMLProviderError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateSAMLProviderError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12203,22 +12205,22 @@ impl CreateServiceLinkedRoleError {
                     "InvalidInput" => {
                         return RusotoError::Service(CreateServiceLinkedRoleError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateServiceLinkedRoleError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(CreateServiceLinkedRoleError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateServiceLinkedRoleError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12276,21 +12278,21 @@ impl CreateServiceSpecificCredentialError {
                             CreateServiceSpecificCredentialError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             CreateServiceSpecificCredentialError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotSupportedService" => {
                         return RusotoError::Service(
                             CreateServiceSpecificCredentialError::ServiceNotSupported(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12349,32 +12351,32 @@ impl CreateUserError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(CreateUserError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(CreateUserError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateUserError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateUserError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(CreateUserError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateUserError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -12432,17 +12434,17 @@ impl CreateVirtualMFADeviceError {
                             CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateVirtualMFADeviceError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(CreateVirtualMFADeviceError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12499,22 +12501,22 @@ impl DeactivateMFADeviceError {
                             DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeactivateMFADeviceError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeactivateMFADeviceError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeactivateMFADeviceError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12568,17 +12570,17 @@ impl DeleteAccessKeyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteAccessKeyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteAccessKeyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteAccessKeyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12631,17 +12633,17 @@ impl DeleteAccountAliasError {
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteAccountAliasError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteAccountAliasError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteAccountAliasError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12698,19 +12700,21 @@ impl DeleteAccountPasswordPolicyError {
                             DeleteAccountPasswordPolicyError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteAccountPasswordPolicyError::NoSuchEntity(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             DeleteAccountPasswordPolicyError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -12763,24 +12767,24 @@ impl DeleteGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return RusotoError::Service(DeleteGroupError::DeleteConflict(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(DeleteGroupError::DeleteConflict(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteGroupError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteGroupError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
-                        return RusotoError::Service(DeleteGroupError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(DeleteGroupError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -12834,17 +12838,17 @@ impl DeleteGroupPolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteGroupPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteGroupPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteGroupPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12899,22 +12903,22 @@ impl DeleteInstanceProfileError {
                     "DeleteConflict" => {
                         return RusotoError::Service(DeleteInstanceProfileError::DeleteConflict(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteInstanceProfileError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteInstanceProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12972,22 +12976,22 @@ impl DeleteLoginProfileError {
                             DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteLoginProfileError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteLoginProfileError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteLoginProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13041,21 +13045,25 @@ impl DeleteOpenIDConnectProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return RusotoError::Service(DeleteOpenIDConnectProviderError::InvalidInput(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteOpenIDConnectProviderError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "NoSuchEntity" => {
-                        return RusotoError::Service(DeleteOpenIDConnectProviderError::NoSuchEntity(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             DeleteOpenIDConnectProviderError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13112,27 +13120,27 @@ impl DeletePolicyError {
                     "DeleteConflict" => {
                         return RusotoError::Service(DeletePolicyError::DeleteConflict(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeletePolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
-                        return RusotoError::Service(DeletePolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(DeletePolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeletePolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeletePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13191,27 +13199,27 @@ impl DeletePolicyVersionError {
                     "DeleteConflict" => {
                         return RusotoError::Service(DeletePolicyVersionError::DeleteConflict(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeletePolicyVersionError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeletePolicyVersionError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeletePolicyVersionError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeletePolicyVersionError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13272,32 +13280,32 @@ impl DeleteRoleError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(DeleteRoleError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DeleteConflict" => {
                         return RusotoError::Service(DeleteRoleError::DeleteConflict(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteRoleError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(DeleteRoleError::UnmodifiableEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13357,21 +13365,21 @@ impl DeleteRolePermissionsBoundaryError {
                             DeleteRolePermissionsBoundaryError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             DeleteRolePermissionsBoundaryError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(
                             DeleteRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13426,22 +13434,22 @@ impl DeleteRolePolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteRolePolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteRolePolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteRolePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(DeleteRolePolicyError::UnmodifiableEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13497,22 +13505,22 @@ impl DeleteSAMLProviderError {
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteSAMLProviderError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteSAMLProviderError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteSAMLProviderError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteSAMLProviderError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13562,7 +13570,7 @@ impl DeleteSSHPublicKeyError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteSSHPublicKeyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13615,22 +13623,22 @@ impl DeleteServerCertificateError {
                     "DeleteConflict" => {
                         return RusotoError::Service(DeleteServerCertificateError::DeleteConflict(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteServerCertificateError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteServerCertificateError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteServerCertificateError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13684,17 +13692,17 @@ impl DeleteServiceLinkedRoleError {
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13747,7 +13755,7 @@ impl DeleteServiceSpecificCredentialError {
                             DeleteServiceSpecificCredentialError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -13798,17 +13806,17 @@ impl DeleteSigningCertificateError {
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteSigningCertificateError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteSigningCertificateError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteSigningCertificateError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -13865,27 +13873,27 @@ impl DeleteUserError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(DeleteUserError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DeleteConflict" => {
                         return RusotoError::Service(DeleteUserError::DeleteConflict(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteUserError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteUserError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteUserError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -13942,14 +13950,14 @@ impl DeleteUserPermissionsBoundaryError {
                             DeleteUserPermissionsBoundaryError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             DeleteUserPermissionsBoundaryError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14001,17 +14009,17 @@ impl DeleteUserPolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteUserPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteUserPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteUserPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14066,22 +14074,22 @@ impl DeleteVirtualMFADeviceError {
                     "DeleteConflict" => {
                         return RusotoError::Service(DeleteVirtualMFADeviceError::DeleteConflict(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DeleteVirtualMFADeviceError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DeleteVirtualMFADeviceError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DeleteVirtualMFADeviceError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14137,22 +14145,22 @@ impl DetachGroupPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(DetachGroupPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DetachGroupPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DetachGroupPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DetachGroupPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14210,27 +14218,27 @@ impl DetachRolePolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(DetachRolePolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DetachRolePolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DetachRolePolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DetachRolePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(DetachRolePolicyError::UnmodifiableEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14287,22 +14295,22 @@ impl DetachUserPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(DetachUserPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DetachUserPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(DetachUserPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(DetachUserPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14362,36 +14370,36 @@ impl EnableMFADeviceError {
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(EnableMFADeviceError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "EntityTemporarilyUnmodifiable" => {
                         return RusotoError::Service(
                             EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidAuthenticationCode" => {
                         return RusotoError::Service(
                             EnableMFADeviceError::InvalidAuthenticationCode(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(EnableMFADeviceError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(EnableMFADeviceError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(EnableMFADeviceError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14445,12 +14453,12 @@ impl GenerateCredentialReportError {
                     "LimitExceeded" => {
                         return RusotoError::Service(GenerateCredentialReportError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GenerateCredentialReportError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14504,14 +14512,14 @@ impl GenerateServiceLastAccessedDetailsError {
                             GenerateServiceLastAccessedDetailsError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             GenerateServiceLastAccessedDetailsError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14559,7 +14567,7 @@ impl GetAccessKeyLastUsedError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetAccessKeyLastUsedError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14610,7 +14618,7 @@ impl GetAccountAuthorizationDetailsError {
                             GetAccountAuthorizationDetailsError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14659,12 +14667,12 @@ impl GetAccountPasswordPolicyError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetAccountPasswordPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetAccountPasswordPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14712,7 +14720,7 @@ impl GetAccountSummaryError {
                     "ServiceFailure" => {
                         return RusotoError::Service(GetAccountSummaryError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14763,7 +14771,7 @@ impl GetContextKeysForCustomPolicyError {
                             GetContextKeysForCustomPolicyError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14816,14 +14824,14 @@ impl GetContextKeysForPrincipalPolicyError {
                             GetContextKeysForPrincipalPolicyError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             GetContextKeysForPrincipalPolicyError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -14879,26 +14887,26 @@ impl GetCredentialReportError {
                             GetCredentialReportError::CredentialReportExpired(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ReportNotPresent" => {
                         return RusotoError::Service(
                             GetCredentialReportError::CredentialReportNotPresent(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ReportInProgress" => {
                         return RusotoError::Service(
                             GetCredentialReportError::CredentialReportNotReady(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetCredentialReportError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -14950,12 +14958,12 @@ impl GetGroupError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetGroupError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetGroupError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -15005,12 +15013,12 @@ impl GetGroupPolicyError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetGroupPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetGroupPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15060,12 +15068,12 @@ impl GetInstanceProfileError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetInstanceProfileError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetInstanceProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15115,12 +15123,12 @@ impl GetLoginProfileError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetLoginProfileError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetLoginProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15172,17 +15180,17 @@ impl GetOpenIDConnectProviderError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetOpenIDConnectProviderError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetOpenIDConnectProviderError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetOpenIDConnectProviderError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15235,17 +15243,17 @@ impl GetPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetPolicyError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetPolicyError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetPolicyError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -15298,17 +15306,17 @@ impl GetPolicyVersionError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetPolicyVersionError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetPolicyVersionError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetPolicyVersionError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15359,12 +15367,12 @@ impl GetRoleError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -15412,14 +15420,14 @@ impl GetRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return RusotoError::Service(GetRolePolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(GetRolePolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetRolePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15471,17 +15479,17 @@ impl GetSAMLProviderError {
                     "InvalidInput" => {
                         return RusotoError::Service(GetSAMLProviderError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetSAMLProviderError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetSAMLProviderError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15532,14 +15540,14 @@ impl GetSSHPublicKeyError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetSSHPublicKeyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnrecognizedPublicKeyEncoding" => {
                         return RusotoError::Service(
                             GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15589,12 +15597,12 @@ impl GetServerCertificateError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetServerCertificateError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetServerCertificateError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15648,14 +15656,14 @@ impl GetServiceLastAccessedDetailsError {
                             GetServiceLastAccessedDetailsError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             GetServiceLastAccessedDetailsError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15709,14 +15717,14 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
                             GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15772,21 +15780,21 @@ impl GetServiceLinkedRoleDeletionStatusError {
                             GetServiceLinkedRoleDeletionStatusError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             GetServiceLinkedRoleDeletionStatusError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -15837,12 +15845,12 @@ impl GetUserError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(GetUserError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetUserError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -15890,14 +15898,14 @@ impl GetUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return RusotoError::Service(GetUserPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(GetUserPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(GetUserPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -15947,12 +15955,12 @@ impl ListAccessKeysError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListAccessKeysError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListAccessKeysError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16000,7 +16008,7 @@ impl ListAccountAliasesError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListAccountAliasesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16051,17 +16059,19 @@ impl ListAttachedGroupPoliciesError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListAttachedGroupPoliciesError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListAttachedGroupPoliciesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
-                        return RusotoError::Service(ListAttachedGroupPoliciesError::ServiceFailure(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ListAttachedGroupPoliciesError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -16114,17 +16124,17 @@ impl ListAttachedRolePoliciesError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListAttachedRolePoliciesError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListAttachedRolePoliciesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListAttachedRolePoliciesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16177,17 +16187,17 @@ impl ListAttachedUserPoliciesError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListAttachedUserPoliciesError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListAttachedUserPoliciesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListAttachedUserPoliciesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16240,17 +16250,17 @@ impl ListEntitiesForPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListEntitiesForPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListEntitiesForPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListEntitiesForPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16301,12 +16311,12 @@ impl ListGroupPoliciesError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListGroupPoliciesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListGroupPoliciesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16354,7 +16364,7 @@ impl ListGroupsError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListGroupsError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -16403,12 +16413,12 @@ impl ListGroupsForUserError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListGroupsForUserError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListGroupsForUserError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16456,7 +16466,7 @@ impl ListInstanceProfilesError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListInstanceProfilesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16505,16 +16515,18 @@ impl ListInstanceProfilesForRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return RusotoError::Service(ListInstanceProfilesForRoleError::NoSuchEntity(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ListInstanceProfilesForRoleError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             ListInstanceProfilesForRoleError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16564,12 +16576,12 @@ impl ListMFADevicesError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListMFADevicesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListMFADevicesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16621,7 +16633,7 @@ impl ListOpenIDConnectProvidersError {
                             ListOpenIDConnectProvidersError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16668,7 +16680,7 @@ impl ListPoliciesError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListPoliciesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16721,14 +16733,14 @@ impl ListPoliciesGrantingServiceAccessError {
                             ListPoliciesGrantingServiceAccessError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             ListPoliciesGrantingServiceAccessError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16780,17 +16792,17 @@ impl ListPolicyVersionsError {
                     "InvalidInput" => {
                         return RusotoError::Service(ListPolicyVersionsError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListPolicyVersionsError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListPolicyVersionsError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16841,12 +16853,12 @@ impl ListRolePoliciesError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListRolePoliciesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListRolePoliciesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16896,12 +16908,12 @@ impl ListRoleTagsError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListRoleTagsError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListRoleTagsError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -16949,7 +16961,7 @@ impl ListRolesError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListRolesError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -16996,7 +17008,7 @@ impl ListSAMLProvidersError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListSAMLProvidersError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17043,7 +17055,7 @@ impl ListSSHPublicKeysError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListSSHPublicKeysError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17090,7 +17102,7 @@ impl ListServerCertificatesError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListServerCertificatesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17143,14 +17155,14 @@ impl ListServiceSpecificCredentialsError {
                             ListServiceSpecificCredentialsError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NotSupportedService" => {
                         return RusotoError::Service(
                             ListServiceSpecificCredentialsError::ServiceNotSupported(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17200,12 +17212,12 @@ impl ListSigningCertificatesError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListSigningCertificatesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListSigningCertificatesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17255,12 +17267,12 @@ impl ListUserPoliciesError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListUserPoliciesError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListUserPoliciesError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17310,12 +17322,12 @@ impl ListUserTagsError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(ListUserTagsError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ListUserTagsError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17363,7 +17375,7 @@ impl ListUsersError {
                     "ServiceFailure" => {
                         return RusotoError::Service(ListUsersError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -17453,22 +17465,22 @@ impl PutGroupPolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(PutGroupPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(PutGroupPolicyError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(PutGroupPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(PutGroupPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17528,33 +17540,33 @@ impl PutRolePermissionsBoundaryError {
                     "InvalidInput" => {
                         return RusotoError::Service(PutRolePermissionsBoundaryError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(PutRolePermissionsBoundaryError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PolicyNotAttachable" => {
                         return RusotoError::Service(
                             PutRolePermissionsBoundaryError::PolicyNotAttachable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             PutRolePermissionsBoundaryError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(
                             PutRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17613,27 +17625,27 @@ impl PutRolePolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(PutRolePolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(PutRolePolicyError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
-                        return RusotoError::Service(PutRolePolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(PutRolePolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(PutRolePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(PutRolePolicyError::UnmodifiableEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17692,26 +17704,26 @@ impl PutUserPermissionsBoundaryError {
                     "InvalidInput" => {
                         return RusotoError::Service(PutUserPermissionsBoundaryError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(PutUserPermissionsBoundaryError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PolicyNotAttachable" => {
                         return RusotoError::Service(
                             PutUserPermissionsBoundaryError::PolicyNotAttachable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             PutUserPermissionsBoundaryError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17767,22 +17779,22 @@ impl PutUserPolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(PutUserPolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(PutUserPolicyError::MalformedPolicyDocument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
-                        return RusotoError::Service(PutUserPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(PutUserPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(PutUserPolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -17840,21 +17852,21 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
                             RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17913,28 +17925,28 @@ impl RemoveRoleFromInstanceProfileError {
                             RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             RemoveRoleFromInstanceProfileError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(
                             RemoveRoleFromInstanceProfileError::UnmodifiableEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17988,17 +18000,17 @@ impl RemoveUserFromGroupError {
                     "LimitExceeded" => {
                         return RusotoError::Service(RemoveUserFromGroupError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(RemoveUserFromGroupError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(RemoveUserFromGroupError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -18051,7 +18063,7 @@ impl ResetServiceSpecificCredentialError {
                             ResetServiceSpecificCredentialError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18106,22 +18118,22 @@ impl ResyncMFADeviceError {
                             ResyncMFADeviceError::InvalidAuthenticationCode(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(ResyncMFADeviceError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(ResyncMFADeviceError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(ResyncMFADeviceError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -18177,22 +18189,22 @@ impl SetDefaultPolicyVersionError {
                     "InvalidInput" => {
                         return RusotoError::Service(SetDefaultPolicyVersionError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(SetDefaultPolicyVersionError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(SetDefaultPolicyVersionError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(SetDefaultPolicyVersionError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -18244,12 +18256,12 @@ impl SimulateCustomPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(SimulateCustomPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PolicyEvaluation" => {
                         return RusotoError::Service(SimulateCustomPolicyError::PolicyEvaluation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -18301,17 +18313,19 @@ impl SimulatePrincipalPolicyError {
                     "InvalidInput" => {
                         return RusotoError::Service(SimulatePrincipalPolicyError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(SimulatePrincipalPolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PolicyEvaluation" => {
-                        return RusotoError::Service(SimulatePrincipalPolicyError::PolicyEvaluation(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            SimulatePrincipalPolicyError::PolicyEvaluation(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -18368,27 +18382,27 @@ impl TagRoleError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(TagRoleError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(TagRoleError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(TagRoleError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(TagRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(TagRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -18447,27 +18461,27 @@ impl TagUserError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(TagUserError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(TagUserError::InvalidInput(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(TagUserError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(TagUserError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(TagUserError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -18522,17 +18536,17 @@ impl UntagRoleError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(UntagRoleError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UntagRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UntagRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -18585,17 +18599,17 @@ impl UntagUserError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(UntagUserError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UntagUserError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UntagUserError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -18648,17 +18662,17 @@ impl UpdateAccessKeyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateAccessKeyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateAccessKeyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateAccessKeyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -18717,26 +18731,28 @@ impl UpdateAccountPasswordPolicyError {
                             UpdateAccountPasswordPolicyError::LimitExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(
                             UpdateAccountPasswordPolicyError::MalformedPolicyDocument(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
-                        return RusotoError::Service(UpdateAccountPasswordPolicyError::NoSuchEntity(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             UpdateAccountPasswordPolicyError::ServiceFailure(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18794,31 +18810,31 @@ impl UpdateAssumeRolePolicyError {
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateAssumeRolePolicyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedPolicyDocument" => {
                         return RusotoError::Service(
                             UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateAssumeRolePolicyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateAssumeRolePolicyError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(
                             UpdateAssumeRolePolicyError::UnmodifiableEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18875,22 +18891,22 @@ impl UpdateGroupError {
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(UpdateGroupError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateGroupError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateGroupError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
-                        return RusotoError::Service(UpdateGroupError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(UpdateGroupError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -18950,29 +18966,29 @@ impl UpdateLoginProfileError {
                             UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateLoginProfileError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateLoginProfileError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PasswordPolicyViolation" => {
                         return RusotoError::Service(
                             UpdateLoginProfileError::PasswordPolicyViolation(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateLoginProfileError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -19031,21 +19047,21 @@ impl UpdateOpenIDConnectProviderThumbprintError {
                             UpdateOpenIDConnectProviderThumbprintError::InvalidInput(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(
                             UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(
                             UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19098,17 +19114,17 @@ impl UpdateRoleError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateRoleError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateRoleError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "UnmodifiableEntity" => {
                         return RusotoError::Service(UpdateRoleError::UnmodifiableEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -19161,17 +19177,19 @@ impl UpdateRoleDescriptionError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateRoleDescriptionError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateRoleDescriptionError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnmodifiableEntity" => {
-                        return RusotoError::Service(UpdateRoleDescriptionError::UnmodifiableEntity(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateRoleDescriptionError::UnmodifiableEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -19226,22 +19244,22 @@ impl UpdateSAMLProviderError {
                     "InvalidInput" => {
                         return RusotoError::Service(UpdateSAMLProviderError::InvalidInput(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateSAMLProviderError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateSAMLProviderError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateSAMLProviderError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -19291,7 +19309,7 @@ impl UpdateSSHPublicKeyError {
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateSSHPublicKeyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -19346,22 +19364,22 @@ impl UpdateServerCertificateError {
                             UpdateServerCertificateError::EntityAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateServerCertificateError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateServerCertificateError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateServerCertificateError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -19415,7 +19433,7 @@ impl UpdateServiceSpecificCredentialError {
                             UpdateServiceSpecificCredentialError::NoSuchEntity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19466,17 +19484,17 @@ impl UpdateSigningCertificateError {
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateSigningCertificateError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateSigningCertificateError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateSigningCertificateError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -19535,32 +19553,34 @@ impl UpdateUserError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(UpdateUserError::ConcurrentModification(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(UpdateUserError::EntityAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "EntityTemporarilyUnmodifiable" => {
-                        return RusotoError::Service(UpdateUserError::EntityTemporarilyUnmodifiable(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateUserError::EntityTemporarilyUnmodifiable(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateUserError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UpdateUserError::NoSuchEntity(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UpdateUserError::ServiceFailure(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -19618,31 +19638,33 @@ impl UploadSSHPublicKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DuplicateSSHPublicKey" => {
-                        return RusotoError::Service(UploadSSHPublicKeyError::DuplicateSSHPublicKey(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UploadSSHPublicKeyError::DuplicateSSHPublicKey(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidPublicKey" => {
                         return RusotoError::Service(UploadSSHPublicKeyError::InvalidPublicKey(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UploadSSHPublicKeyError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UploadSSHPublicKeyError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnrecognizedPublicKeyEncoding" => {
                         return RusotoError::Service(
                             UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19703,29 +19725,29 @@ impl UploadServerCertificateError {
                             UploadServerCertificateError::EntityAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "KeyPairMismatch" => {
                         return RusotoError::Service(UploadServerCertificateError::KeyPairMismatch(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UploadServerCertificateError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedCertificate" => {
                         return RusotoError::Service(
                             UploadServerCertificateError::MalformedCertificate(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UploadServerCertificateError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -19790,43 +19812,43 @@ impl UploadSigningCertificateError {
                             UploadSigningCertificateError::DuplicateCertificate(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "EntityAlreadyExists" => {
                         return RusotoError::Service(
                             UploadSigningCertificateError::EntityAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidCertificate" => {
                         return RusotoError::Service(
                             UploadSigningCertificateError::InvalidCertificate(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UploadSigningCertificateError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MalformedCertificate" => {
                         return RusotoError::Service(
                             UploadSigningCertificateError::MalformedCertificate(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchEntity" => {
                         return RusotoError::Service(UploadSigningCertificateError::NoSuchEntity(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ServiceFailure" => {
                         return RusotoError::Service(UploadSigningCertificateError::ServiceFailure(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -21042,11 +21064,9 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateInstanceProfileError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateInstanceProfileError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -21784,11 +21804,9 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteInstanceProfileError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteInstanceProfileError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -24034,11 +24052,9 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListEntitiesForPolicyError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListEntitiesForPolicyError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -25182,11 +25198,9 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListVirtualMFADevicesError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListVirtualMFADevicesError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26002,11 +26016,9 @@ impl Iam for IamClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateRoleDescriptionError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateRoleDescriptionError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

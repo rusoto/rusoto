@@ -2763,17 +2763,17 @@ impl CreateClusterError {
                 "ClientException" => {
                     return RusotoError::Service(CreateClusterError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateClusterError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateClusterError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(CreateClusterError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2833,44 +2833,44 @@ impl CreateServiceError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateServiceError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClientException" => {
                     return RusotoError::Service(CreateServiceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(CreateServiceError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(CreateServiceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateServiceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return RusotoError::Service(
                         CreateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PlatformUnknownException" => {
                     return RusotoError::Service(CreateServiceError::PlatformUnknown(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(CreateServiceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedFeatureException" => {
                     return RusotoError::Service(CreateServiceError::UnsupportedFeature(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2925,17 +2925,17 @@ impl DeleteAccountSettingError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteAccountSettingError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteAccountSettingError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteAccountSettingError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2985,17 +2985,17 @@ impl DeleteAttributesError {
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DeleteAttributesError::ClusterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TargetNotFoundException" => {
                     return RusotoError::Service(DeleteAttributesError::TargetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3053,39 +3053,39 @@ impl DeleteClusterError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteClusterError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterContainsContainerInstancesException" => {
                     return RusotoError::Service(
                         DeleteClusterError::ClusterContainsContainerInstances(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ClusterContainsServicesException" => {
                     return RusotoError::Service(DeleteClusterError::ClusterContainsServices(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClusterContainsTasksException" => {
                     return RusotoError::Service(DeleteClusterError::ClusterContainsTasks(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DeleteClusterError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteClusterError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteClusterError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteClusterError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3143,27 +3143,27 @@ impl DeleteServiceError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteServiceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DeleteServiceError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeleteServiceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteServiceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteServiceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceNotFoundException" => {
                     return RusotoError::Service(DeleteServiceError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3219,22 +3219,24 @@ impl DeregisterContainerInstanceError {
                 "ClientException" => {
                     return RusotoError::Service(DeregisterContainerInstanceError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DeregisterContainerInstanceError::ClusterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DeregisterContainerInstanceError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeregisterContainerInstanceError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeregisterContainerInstanceError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3285,17 +3287,17 @@ impl DeregisterTaskDefinitionError {
                 "ClientException" => {
                     return RusotoError::Service(DeregisterTaskDefinitionError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeregisterTaskDefinitionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeregisterTaskDefinitionError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3345,17 +3347,17 @@ impl DescribeClustersError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeClustersError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeClustersError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeClustersError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3409,22 +3411,22 @@ impl DescribeContainerInstancesError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeContainerInstancesError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DescribeContainerInstancesError::ClusterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeContainerInstancesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeContainerInstancesError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3477,22 +3479,22 @@ impl DescribeServicesError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeServicesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DescribeServicesError::ClusterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeServicesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeServicesError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3543,17 +3545,17 @@ impl DescribeTaskDefinitionError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeTaskDefinitionError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeTaskDefinitionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeTaskDefinitionError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3605,22 +3607,22 @@ impl DescribeTasksError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeTasksError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(DescribeTasksError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(DescribeTasksError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeTasksError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeTasksError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3669,12 +3671,12 @@ impl DiscoverPollEndpointError {
                 "ClientException" => {
                     return RusotoError::Service(DiscoverPollEndpointError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DiscoverPollEndpointError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3723,17 +3725,17 @@ impl ListAccountSettingsError {
                 "ClientException" => {
                     return RusotoError::Service(ListAccountSettingsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListAccountSettingsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListAccountSettingsError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3779,14 +3781,14 @@ impl ListAttributesError {
 
             match *error_type {
                 "ClusterNotFoundException" => {
-                    return RusotoError::Service(ListAttributesError::ClusterNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListAttributesError::ClusterNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3835,17 +3837,17 @@ impl ListClustersError {
                 "ClientException" => {
                     return RusotoError::Service(ListClustersError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListClustersError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListClustersError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3897,22 +3899,22 @@ impl ListContainerInstancesError {
                 "ClientException" => {
                     return RusotoError::Service(ListContainerInstancesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(ListContainerInstancesError::ClusterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListContainerInstancesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListContainerInstancesError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3965,22 +3967,22 @@ impl ListServicesError {
                 "ClientException" => {
                     return RusotoError::Service(ListServicesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(ListServicesError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListServicesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListServicesError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4033,22 +4035,22 @@ impl ListTagsForResourceError {
                 "ClientException" => {
                     return RusotoError::Service(ListTagsForResourceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ClusterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4101,17 +4103,17 @@ impl ListTaskDefinitionFamiliesError {
                 "ClientException" => {
                     return RusotoError::Service(ListTaskDefinitionFamiliesError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTaskDefinitionFamiliesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListTaskDefinitionFamiliesError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4161,17 +4163,17 @@ impl ListTaskDefinitionsError {
                 "ClientException" => {
                     return RusotoError::Service(ListTaskDefinitionsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTaskDefinitionsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListTaskDefinitionsError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4223,25 +4225,29 @@ impl ListTasksError {
 
             match *error_type {
                 "ClientException" => {
-                    return RusotoError::Service(ListTasksError::Client(String::from(error_message)));
+                    return RusotoError::Service(ListTasksError::Client(String::from(
+                        error_message,
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(ListTasksError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTasksError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListTasksError::Server(String::from(error_message)));
+                    return RusotoError::Service(ListTasksError::Server(String::from(
+                        error_message,
+                    )))
                 }
                 "ServiceNotFoundException" => {
                     return RusotoError::Service(ListTasksError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4293,17 +4299,17 @@ impl PutAccountSettingError {
                 "ClientException" => {
                     return RusotoError::Service(PutAccountSettingError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutAccountSettingError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(PutAccountSettingError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4353,17 +4359,17 @@ impl PutAccountSettingDefaultError {
                 "ClientException" => {
                     return RusotoError::Service(PutAccountSettingDefaultError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutAccountSettingDefaultError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(PutAccountSettingDefaultError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4415,22 +4421,22 @@ impl PutAttributesError {
                 "AttributeLimitExceededException" => {
                     return RusotoError::Service(PutAttributesError::AttributeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(PutAttributesError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(PutAttributesError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutAttributesError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "TargetNotFoundException" => {
                     return RusotoError::Service(PutAttributesError::TargetNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4481,17 +4487,17 @@ impl RegisterContainerInstanceError {
                 "ClientException" => {
                     return RusotoError::Service(RegisterContainerInstanceError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RegisterContainerInstanceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(RegisterContainerInstanceError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4541,17 +4547,17 @@ impl RegisterTaskDefinitionError {
                 "ClientException" => {
                     return RusotoError::Service(RegisterTaskDefinitionError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RegisterTaskDefinitionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(RegisterTaskDefinitionError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4613,43 +4619,43 @@ impl RunTaskError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RunTaskError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BlockedException" => {
-                    return RusotoError::Service(RunTaskError::Blocked(String::from(error_message)));
+                    return RusotoError::Service(RunTaskError::Blocked(String::from(error_message)))
                 }
                 "ClientException" => {
-                    return RusotoError::Service(RunTaskError::Client(String::from(error_message)));
+                    return RusotoError::Service(RunTaskError::Client(String::from(error_message)))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(RunTaskError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RunTaskError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return RusotoError::Service(
                         RunTaskError::PlatformTaskDefinitionIncompatibility(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PlatformUnknownException" => {
                     return RusotoError::Service(RunTaskError::PlatformUnknown(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(RunTaskError::Server(String::from(error_message)));
+                    return RusotoError::Service(RunTaskError::Server(String::from(error_message)))
                 }
                 "UnsupportedFeatureException" => {
                     return RusotoError::Service(RunTaskError::UnsupportedFeature(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4705,20 +4711,24 @@ impl StartTaskError {
 
             match *error_type {
                 "ClientException" => {
-                    return RusotoError::Service(StartTaskError::Client(String::from(error_message)));
+                    return RusotoError::Service(StartTaskError::Client(String::from(
+                        error_message,
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(StartTaskError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartTaskError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(StartTaskError::Server(String::from(error_message)));
+                    return RusotoError::Service(StartTaskError::Server(String::from(
+                        error_message,
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4769,20 +4779,20 @@ impl StopTaskError {
 
             match *error_type {
                 "ClientException" => {
-                    return RusotoError::Service(StopTaskError::Client(String::from(error_message)));
+                    return RusotoError::Service(StopTaskError::Client(String::from(error_message)))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(StopTaskError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StopTaskError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(StopTaskError::Server(String::from(error_message)));
+                    return RusotoError::Service(StopTaskError::Server(String::from(error_message)))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4835,17 +4845,17 @@ impl SubmitContainerStateChangeError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubmitContainerStateChangeError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClientException" => {
                     return RusotoError::Service(SubmitContainerStateChangeError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(SubmitContainerStateChangeError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4895,17 +4905,17 @@ impl SubmitTaskStateChangeError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClientException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(SubmitTaskStateChangeError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4959,27 +4969,27 @@ impl TagResourceError {
                 "ClientException" => {
                     return RusotoError::Service(TagResourceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(TagResourceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5035,27 +5045,27 @@ impl UntagResourceError {
                 "ClientException" => {
                     return RusotoError::Service(UntagResourceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(UntagResourceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5115,37 +5125,37 @@ impl UpdateContainerAgentError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateContainerAgentError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(UpdateContainerAgentError::ClusterNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateContainerAgentError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingVersionException" => {
                     return RusotoError::Service(UpdateContainerAgentError::MissingVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoUpdateAvailableException" => {
                     return RusotoError::Service(UpdateContainerAgentError::NoUpdateAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(UpdateContainerAgentError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UpdateInProgressException" => {
                     return RusotoError::Service(UpdateContainerAgentError::UpdateInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5203,26 +5213,26 @@ impl UpdateContainerInstancesStateError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateContainerInstancesStateError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(
                         UpdateContainerInstancesStateError::ClusterNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         UpdateContainerInstancesStateError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerException" => {
                     return RusotoError::Service(UpdateContainerInstancesStateError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5285,49 +5295,49 @@ impl UpdateServiceError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateServiceError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClientException" => {
                     return RusotoError::Service(UpdateServiceError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ClusterNotFoundException" => {
                     return RusotoError::Service(UpdateServiceError::ClusterNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UpdateServiceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateServiceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "PlatformTaskDefinitionIncompatibilityException" => {
                     return RusotoError::Service(
                         UpdateServiceError::PlatformTaskDefinitionIncompatibility(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PlatformUnknownException" => {
                     return RusotoError::Service(UpdateServiceError::PlatformUnknown(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(UpdateServiceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceNotActiveException" => {
-                    return RusotoError::Service(UpdateServiceError::ServiceNotActive(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateServiceError::ServiceNotActive(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceNotFoundException" => {
                     return RusotoError::Service(UpdateServiceError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

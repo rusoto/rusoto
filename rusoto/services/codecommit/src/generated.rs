@@ -1892,48 +1892,50 @@ impl BatchGetRepositoriesError {
                         BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         BatchGetRepositoriesError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(BatchGetRepositoriesError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(BatchGetRepositoriesError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         BatchGetRepositoriesError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(BatchGetRepositoriesError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaximumRepositoryNamesExceededException" => {
                     return RusotoError::Service(
                         BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNamesRequiredException" => {
-                    return RusotoError::Service(BatchGetRepositoriesError::RepositoryNamesRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        BatchGetRepositoriesError::RepositoryNamesRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2010,72 +2012,74 @@ impl CreateBranchError {
                 "BranchNameExistsException" => {
                     return RusotoError::Service(CreateBranchError::BranchNameExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(CreateBranchError::BranchNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(CreateBranchError::CommitDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommitIdRequiredException" => {
                     return RusotoError::Service(CreateBranchError::CommitIdRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return RusotoError::Service(CreateBranchError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateBranchError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(CreateBranchError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(CreateBranchError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(CreateBranchError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(CreateBranchError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidBranchNameException" => {
-                    return RusotoError::Service(CreateBranchError::InvalidBranchName(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateBranchError::InvalidBranchName(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidCommitIdException" => {
                     return RusotoError::Service(CreateBranchError::InvalidCommitId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(CreateBranchError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(CreateBranchError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(CreateBranchError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2206,200 +2210,202 @@ impl CreateCommitError {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(CreateCommitError::BranchDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BranchNameIsTagNameException" => {
                     return RusotoError::Service(CreateCommitError::BranchNameIsTagName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(CreateCommitError::BranchNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommitMessageLengthExceededException" => {
                     return RusotoError::Service(CreateCommitError::CommitMessageLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNameConflictsWithFileNameException" => {
                     return RusotoError::Service(
                         CreateCommitError::DirectoryNameConflictsWithFileName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return RusotoError::Service(CreateCommitError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateCommitError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(CreateCommitError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(CreateCommitError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(CreateCommitError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(CreateCommitError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileContentAndSourceFileSpecifiedException" => {
                     return RusotoError::Service(
                         CreateCommitError::FileContentAndSourceFileSpecified(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "FileContentSizeLimitExceededException" => {
                     return RusotoError::Service(CreateCommitError::FileContentSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileDoesNotExistException" => {
                     return RusotoError::Service(CreateCommitError::FileDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileEntryRequiredException" => {
-                    return RusotoError::Service(CreateCommitError::FileEntryRequired(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateCommitError::FileEntryRequired(
+                        String::from(error_message),
+                    ))
                 }
                 "FileModeRequiredException" => {
                     return RusotoError::Service(CreateCommitError::FileModeRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileNameConflictsWithDirectoryNameException" => {
                     return RusotoError::Service(
                         CreateCommitError::FileNameConflictsWithDirectoryName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "FilePathConflictsWithSubmodulePathException" => {
                     return RusotoError::Service(
                         CreateCommitError::FilePathConflictsWithSubmodulePath(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "FolderContentSizeLimitExceededException" => {
                     return RusotoError::Service(CreateCommitError::FolderContentSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidBranchNameException" => {
-                    return RusotoError::Service(CreateCommitError::InvalidBranchName(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateCommitError::InvalidBranchName(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidDeletionParameterException" => {
                     return RusotoError::Service(CreateCommitError::InvalidDeletionParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidEmailException" => {
                     return RusotoError::Service(CreateCommitError::InvalidEmail(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidFileModeException" => {
                     return RusotoError::Service(CreateCommitError::InvalidFileMode(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParentCommitIdException" => {
                     return RusotoError::Service(CreateCommitError::InvalidParentCommitId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(CreateCommitError::InvalidPath(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(CreateCommitError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaximumFileEntriesExceededException" => {
                     return RusotoError::Service(CreateCommitError::MaximumFileEntriesExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NameLengthExceededException" => {
                     return RusotoError::Service(CreateCommitError::NameLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoChangeException" => {
                     return RusotoError::Service(CreateCommitError::NoChange(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ParentCommitDoesNotExistException" => {
                     return RusotoError::Service(CreateCommitError::ParentCommitDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParentCommitIdOutdatedException" => {
                     return RusotoError::Service(CreateCommitError::ParentCommitIdOutdated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParentCommitIdRequiredException" => {
                     return RusotoError::Service(CreateCommitError::ParentCommitIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PathRequiredException" => {
                     return RusotoError::Service(CreateCommitError::PathRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PutFileEntryConflictException" => {
                     return RusotoError::Service(CreateCommitError::PutFileEntryConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(CreateCommitError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(CreateCommitError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RestrictedSourceFileException" => {
                     return RusotoError::Service(CreateCommitError::RestrictedSourceFile(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SamePathRequestException" => {
                     return RusotoError::Service(CreateCommitError::SamePathRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "SourceFileOrContentRequiredException" => {
                     return RusotoError::Service(CreateCommitError::SourceFileOrContentRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2526,139 +2532,141 @@ impl CreatePullRequestError {
 
             match *error_type {
                 "ClientRequestTokenRequiredException" => {
-                    return RusotoError::Service(CreatePullRequestError::ClientRequestTokenRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreatePullRequestError::ClientRequestTokenRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         CreatePullRequestError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(CreatePullRequestError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(CreatePullRequestError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(CreatePullRequestError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(CreatePullRequestError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotencyParameterMismatchException" => {
                     return RusotoError::Service(
                         CreatePullRequestError::IdempotencyParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientRequestTokenException" => {
                     return RusotoError::Service(CreatePullRequestError::InvalidClientRequestToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDescriptionException" => {
                     return RusotoError::Service(CreatePullRequestError::InvalidDescription(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidReferenceNameException" => {
                     return RusotoError::Service(CreatePullRequestError::InvalidReferenceName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(CreatePullRequestError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTargetException" => {
                     return RusotoError::Service(CreatePullRequestError::InvalidTarget(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTargetsException" => {
                     return RusotoError::Service(CreatePullRequestError::InvalidTargets(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTitleException" => {
-                    return RusotoError::Service(CreatePullRequestError::InvalidTitle(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreatePullRequestError::InvalidTitle(
+                        String::from(error_message),
+                    ))
                 }
                 "MaximumOpenPullRequestsExceededException" => {
                     return RusotoError::Service(
                         CreatePullRequestError::MaximumOpenPullRequestsExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MultipleRepositoriesInPullRequestException" => {
                     return RusotoError::Service(
                         CreatePullRequestError::MultipleRepositoriesInPullRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ReferenceDoesNotExistException" => {
                     return RusotoError::Service(CreatePullRequestError::ReferenceDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReferenceNameRequiredException" => {
                     return RusotoError::Service(CreatePullRequestError::ReferenceNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReferenceTypeNotSupportedException" => {
                     return RusotoError::Service(CreatePullRequestError::ReferenceTypeNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(CreatePullRequestError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(CreatePullRequestError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SourceAndDestinationAreSameException" => {
                     return RusotoError::Service(
                         CreatePullRequestError::SourceAndDestinationAreSame(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TargetRequiredException" => {
                     return RusotoError::Service(CreatePullRequestError::TargetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TargetsRequiredException" => {
                     return RusotoError::Service(CreatePullRequestError::TargetsRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TitleRequiredException" => {
                     return RusotoError::Service(CreatePullRequestError::TitleRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2746,54 +2754,54 @@ impl CreateRepositoryError {
                         CreateRepositoryError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(CreateRepositoryError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(CreateRepositoryError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(CreateRepositoryError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(CreateRepositoryError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryDescriptionException" => {
                     return RusotoError::Service(
                         CreateRepositoryError::InvalidRepositoryDescription(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(CreateRepositoryError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryLimitExceededException" => {
                     return RusotoError::Service(CreateRepositoryError::RepositoryLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameExistsException" => {
                     return RusotoError::Service(CreateRepositoryError::RepositoryNameExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(CreateRepositoryError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2866,57 +2874,59 @@ impl DeleteBranchError {
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(DeleteBranchError::BranchNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DefaultBranchCannotBeDeletedException" => {
                     return RusotoError::Service(DeleteBranchError::DefaultBranchCannotBeDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return RusotoError::Service(DeleteBranchError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteBranchError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(DeleteBranchError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(DeleteBranchError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(DeleteBranchError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(DeleteBranchError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidBranchNameException" => {
-                    return RusotoError::Service(DeleteBranchError::InvalidBranchName(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteBranchError::InvalidBranchName(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(DeleteBranchError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(DeleteBranchError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(DeleteBranchError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2976,22 +2986,22 @@ impl DeleteCommentContentError {
                 "CommentDeletedException" => {
                     return RusotoError::Service(DeleteCommentContentError::CommentDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentDoesNotExistException" => {
                     return RusotoError::Service(DeleteCommentContentError::CommentDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentIdRequiredException" => {
                     return RusotoError::Service(DeleteCommentContentError::CommentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommentIdException" => {
                     return RusotoError::Service(DeleteCommentContentError::InvalidCommentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3080,112 +3090,112 @@ impl DeleteFileError {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(DeleteFileError::BranchDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BranchNameIsTagNameException" => {
-                    return RusotoError::Service(DeleteFileError::BranchNameIsTagName(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteFileError::BranchNameIsTagName(
+                        String::from(error_message),
+                    ))
                 }
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(DeleteFileError::BranchNameRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CommitMessageLengthExceededException" => {
                     return RusotoError::Service(DeleteFileError::CommitMessageLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(DeleteFileError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(DeleteFileError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(DeleteFileError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(DeleteFileError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(DeleteFileError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileDoesNotExistException" => {
                     return RusotoError::Service(DeleteFileError::FileDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidBranchNameException" => {
                     return RusotoError::Service(DeleteFileError::InvalidBranchName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidEmailException" => {
                     return RusotoError::Service(DeleteFileError::InvalidEmail(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParentCommitIdException" => {
                     return RusotoError::Service(DeleteFileError::InvalidParentCommitId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(DeleteFileError::InvalidPath(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(DeleteFileError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NameLengthExceededException" => {
                     return RusotoError::Service(DeleteFileError::NameLengthExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ParentCommitDoesNotExistException" => {
                     return RusotoError::Service(DeleteFileError::ParentCommitDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParentCommitIdOutdatedException" => {
                     return RusotoError::Service(DeleteFileError::ParentCommitIdOutdated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParentCommitIdRequiredException" => {
                     return RusotoError::Service(DeleteFileError::ParentCommitIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PathRequiredException" => {
                     return RusotoError::Service(DeleteFileError::PathRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(DeleteFileError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(DeleteFileError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3264,37 +3274,37 @@ impl DeleteRepositoryError {
                         DeleteRepositoryError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(DeleteRepositoryError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(DeleteRepositoryError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(DeleteRepositoryError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(DeleteRepositoryError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(DeleteRepositoryError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(DeleteRepositoryError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3368,87 +3378,87 @@ impl DescribePullRequestEventsError {
                 "ActorDoesNotExistException" => {
                     return RusotoError::Service(DescribePullRequestEventsError::ActorDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidActorArnException" => {
                     return RusotoError::Service(DescribePullRequestEventsError::InvalidActorArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::InvalidContinuationToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidMaxResultsException" => {
                     return RusotoError::Service(DescribePullRequestEventsError::InvalidMaxResults(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPullRequestEventTypeException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::InvalidPullRequestEventType(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::InvalidPullRequestId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::PullRequestDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestIdRequiredException" => {
                     return RusotoError::Service(
                         DescribePullRequestEventsError::PullRequestIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3526,62 +3536,62 @@ impl GetBlobError {
                 "BlobIdDoesNotExistException" => {
                     return RusotoError::Service(GetBlobError::BlobIdDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BlobIdRequiredException" => {
                     return RusotoError::Service(GetBlobError::BlobIdRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(GetBlobError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetBlobError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetBlobError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetBlobError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetBlobError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileTooLargeException" => {
                     return RusotoError::Service(GetBlobError::FileTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidBlobIdException" => {
                     return RusotoError::Service(GetBlobError::InvalidBlobId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetBlobError::InvalidRepositoryName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryDoesNotExistException" => {
-                    return RusotoError::Service(GetBlobError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetBlobError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
-                    return RusotoError::Service(GetBlobError::RepositoryNameRequired(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetBlobError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3656,57 +3666,57 @@ impl GetBranchError {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(GetBranchError::BranchDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(GetBranchError::BranchNameRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(GetBranchError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetBranchError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetBranchError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetBranchError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetBranchError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidBranchNameException" => {
                     return RusotoError::Service(GetBranchError::InvalidBranchName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetBranchError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(GetBranchError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(GetBranchError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3766,22 +3776,22 @@ impl GetCommentError {
                 "CommentDeletedException" => {
                     return RusotoError::Service(GetCommentError::CommentDeleted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CommentDoesNotExistException" => {
-                    return RusotoError::Service(GetCommentError::CommentDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetCommentError::CommentDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "CommentIdRequiredException" => {
                     return RusotoError::Service(GetCommentError::CommentIdRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCommentIdException" => {
                     return RusotoError::Service(GetCommentError::InvalidCommentId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3856,89 +3866,91 @@ impl GetCommentsForComparedCommitError {
                         GetCommentsForComparedCommitError::CommitDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CommitIdRequiredException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::CommitIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidCommitIdException" => {
-                    return RusotoError::Service(GetCommentsForComparedCommitError::InvalidCommitId(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::InvalidCommitId(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::InvalidContinuationToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidMaxResultsException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::InvalidMaxResults(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::InvalidRepositoryName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::RepositoryDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(
                         GetCommentsForComparedCommitError::RepositoryNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4024,115 +4036,117 @@ impl GetCommentsForPullRequestError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return RusotoError::Service(GetCommentsForPullRequestError::CommitDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::CommitDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "CommitIdRequiredException" => {
                     return RusotoError::Service(GetCommentsForPullRequestError::CommitIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidCommitIdException" => {
                     return RusotoError::Service(GetCommentsForPullRequestError::InvalidCommitId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::InvalidContinuationToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidMaxResultsException" => {
                     return RusotoError::Service(GetCommentsForPullRequestError::InvalidMaxResults(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::InvalidPullRequestId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::InvalidRepositoryName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::PullRequestDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestIdRequiredException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::PullRequestIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::RepositoryDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::RepositoryNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNotAssociatedWithPullRequestException" => {
                     return RusotoError::Service(
                         GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4212,59 +4226,59 @@ impl GetCommitError {
 
             match *error_type {
                 "CommitIdDoesNotExistException" => {
-                    return RusotoError::Service(GetCommitError::CommitIdDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetCommitError::CommitIdDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "CommitIdRequiredException" => {
                     return RusotoError::Service(GetCommitError::CommitIdRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(GetCommitError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetCommitError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetCommitError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetCommitError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetCommitError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommitIdException" => {
                     return RusotoError::Service(GetCommitError::InvalidCommitId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetCommitError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(GetCommitError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(GetCommitError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4348,84 +4362,84 @@ impl GetDifferencesError {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetDifferencesError::CommitDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommitRequiredException" => {
                     return RusotoError::Service(GetDifferencesError::CommitRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         GetDifferencesError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetDifferencesError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetDifferencesError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetDifferencesError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetDifferencesError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommitException" => {
                     return RusotoError::Service(GetDifferencesError::InvalidCommit(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCommitIdException" => {
-                    return RusotoError::Service(GetDifferencesError::InvalidCommitId(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDifferencesError::InvalidCommitId(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(GetDifferencesError::InvalidContinuationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidMaxResultsException" => {
                     return RusotoError::Service(GetDifferencesError::InvalidMaxResults(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(GetDifferencesError::InvalidPath(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetDifferencesError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PathDoesNotExistException" => {
                     return RusotoError::Service(GetDifferencesError::PathDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(GetDifferencesError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(GetDifferencesError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4510,72 +4524,72 @@ impl GetFileError {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetFileError::CommitDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(GetFileError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetFileError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetFileError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetFileError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetFileError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileDoesNotExistException" => {
                     return RusotoError::Service(GetFileError::FileDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileTooLargeException" => {
                     return RusotoError::Service(GetFileError::FileTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCommitException" => {
                     return RusotoError::Service(GetFileError::InvalidCommit(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(GetFileError::InvalidPath(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetFileError::InvalidRepositoryName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PathRequiredException" => {
                     return RusotoError::Service(GetFileError::PathRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryDoesNotExistException" => {
-                    return RusotoError::Service(GetFileError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetFileError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
-                    return RusotoError::Service(GetFileError::RepositoryNameRequired(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetFileError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4656,67 +4670,67 @@ impl GetFolderError {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetFolderError::CommitDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(GetFolderError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetFolderError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetFolderError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetFolderError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetFolderError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FolderDoesNotExistException" => {
                     return RusotoError::Service(GetFolderError::FolderDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCommitException" => {
                     return RusotoError::Service(GetFolderError::InvalidCommit(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(GetFolderError::InvalidPath(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetFolderError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PathRequiredException" => {
                     return RusotoError::Service(GetFolderError::PathRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(GetFolderError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(GetFolderError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4802,88 +4816,88 @@ impl GetMergeConflictsError {
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(GetMergeConflictsError::CommitDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommitRequiredException" => {
                     return RusotoError::Service(GetMergeConflictsError::CommitRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         GetMergeConflictsError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetMergeConflictsError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetMergeConflictsError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetMergeConflictsError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetMergeConflictsError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommitException" => {
                     return RusotoError::Service(GetMergeConflictsError::InvalidCommit(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDestinationCommitSpecifierException" => {
                     return RusotoError::Service(
                         GetMergeConflictsError::InvalidDestinationCommitSpecifier(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidMergeOptionException" => {
                     return RusotoError::Service(GetMergeConflictsError::InvalidMergeOption(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetMergeConflictsError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSourceCommitSpecifierException" => {
                     return RusotoError::Service(
                         GetMergeConflictsError::InvalidSourceCommitSpecifier(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MergeOptionRequiredException" => {
                     return RusotoError::Service(GetMergeConflictsError::MergeOptionRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(GetMergeConflictsError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(GetMergeConflictsError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TipsDivergenceExceededException" => {
                     return RusotoError::Service(GetMergeConflictsError::TipsDivergenceExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4958,42 +4972,42 @@ impl GetPullRequestError {
                         GetPullRequestError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetPullRequestError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetPullRequestError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetPullRequestError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetPullRequestError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(GetPullRequestError::InvalidPullRequestId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(GetPullRequestError::PullRequestDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PullRequestIdRequiredException" => {
                     return RusotoError::Service(GetPullRequestError::PullRequestIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5060,42 +5074,42 @@ impl GetRepositoryError {
                         GetRepositoryError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(GetRepositoryError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetRepositoryError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetRepositoryError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(GetRepositoryError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetRepositoryError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(GetRepositoryError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(GetRepositoryError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5162,46 +5176,50 @@ impl GetRepositoryTriggersError {
                         GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         GetRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(GetRepositoryTriggersError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(GetRepositoryTriggersError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         GetRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(GetRepositoryTriggersError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
-                    return RusotoError::Service(GetRepositoryTriggersError::RepositoryDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetRepositoryTriggersError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "RepositoryNameRequiredException" => {
-                    return RusotoError::Service(GetRepositoryTriggersError::RepositoryNameRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetRepositoryTriggersError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5266,49 +5284,51 @@ impl ListBranchesError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return RusotoError::Service(ListBranchesError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListBranchesError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(ListBranchesError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(ListBranchesError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(ListBranchesError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(ListBranchesError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(ListBranchesError::InvalidContinuationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(ListBranchesError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(ListBranchesError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(ListBranchesError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5384,69 +5404,69 @@ impl ListPullRequestsError {
                 "AuthorDoesNotExistException" => {
                     return RusotoError::Service(ListPullRequestsError::AuthorDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         ListPullRequestsError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(ListPullRequestsError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(ListPullRequestsError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(ListPullRequestsError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(ListPullRequestsError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAuthorArnException" => {
                     return RusotoError::Service(ListPullRequestsError::InvalidAuthorArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(ListPullRequestsError::InvalidContinuationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidMaxResultsException" => {
                     return RusotoError::Service(ListPullRequestsError::InvalidMaxResults(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPullRequestStatusException" => {
                     return RusotoError::Service(ListPullRequestsError::InvalidPullRequestStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(ListPullRequestsError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(ListPullRequestsError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(ListPullRequestsError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5506,17 +5526,17 @@ impl ListRepositoriesError {
                 "InvalidContinuationTokenException" => {
                     return RusotoError::Service(ListRepositoriesError::InvalidContinuationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOrderException" => {
                     return RusotoError::Service(ListRepositoriesError::InvalidOrder(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidSortByException" => {
-                    return RusotoError::Service(ListRepositoriesError::InvalidSortBy(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListRepositoriesError::InvalidSortBy(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5596,112 +5616,112 @@ impl MergePullRequestByFastForwardError {
                         MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidCommitIdException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::InvalidCommitId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::InvalidPullRequestId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::InvalidRepositoryName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ManualMergeRequiredException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::ManualMergeRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestAlreadyClosedException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::PullRequestAlreadyClosed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::PullRequestDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestIdRequiredException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::PullRequestIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ReferenceDoesNotExistException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::ReferenceDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::RepositoryDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::RepositoryNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TipOfSourceReferenceIsDifferentException" => {
                     return RusotoError::Service(
                         MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5808,155 +5828,157 @@ impl PostCommentForComparedCommitError {
                         PostCommentForComparedCommitError::BeforeCommitIdAndAfterCommitIdAreSame(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ClientRequestTokenRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::ClientRequestTokenRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "CommentContentRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::CommentContentRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "CommitDoesNotExistException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::CommitDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CommitIdRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::CommitIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "IdempotencyParameterMismatchException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::IdempotencyParameterMismatch(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidClientRequestTokenException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::InvalidClientRequestToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidCommitIdException" => {
-                    return RusotoError::Service(PostCommentForComparedCommitError::InvalidCommitId(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::InvalidCommitId(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidFileLocationException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::InvalidFileLocation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilePositionException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::InvalidFilePosition(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(PostCommentForComparedCommitError::InvalidPath(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRelativeFileVersionEnumException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::InvalidRepositoryName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PathDoesNotExistException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::PathDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PathRequiredException" => {
                     return RusotoError::Service(PostCommentForComparedCommitError::PathRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::RepositoryDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForComparedCommitError::RepositoryNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6078,177 +6100,179 @@ impl PostCommentForPullRequestError {
                         PostCommentForPullRequestError::BeforeCommitIdAndAfterCommitIdAreSame(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ClientRequestTokenRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::ClientRequestTokenRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CommentContentRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::CommentContentRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::CommentContentSizeLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "CommitDoesNotExistException" => {
-                    return RusotoError::Service(PostCommentForPullRequestError::CommitDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::CommitDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "CommitIdRequiredException" => {
                     return RusotoError::Service(PostCommentForPullRequestError::CommitIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "IdempotencyParameterMismatchException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::IdempotencyParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientRequestTokenException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::InvalidClientRequestToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidCommitIdException" => {
                     return RusotoError::Service(PostCommentForPullRequestError::InvalidCommitId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFileLocationException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::InvalidFileLocation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilePositionException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::InvalidFilePosition(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(PostCommentForPullRequestError::InvalidPath(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::InvalidPullRequestId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRelativeFileVersionEnumException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::InvalidRepositoryName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PathDoesNotExistException" => {
                     return RusotoError::Service(PostCommentForPullRequestError::PathDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PathRequiredException" => {
                     return RusotoError::Service(PostCommentForPullRequestError::PathRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::PullRequestDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestIdRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::PullRequestIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::RepositoryDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::RepositoryNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNotAssociatedWithPullRequestException" => {
                     return RusotoError::Service(
                         PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6336,46 +6360,46 @@ impl PostCommentReplyError {
                 "ClientRequestTokenRequiredException" => {
                     return RusotoError::Service(PostCommentReplyError::ClientRequestTokenRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentContentRequiredException" => {
                     return RusotoError::Service(PostCommentReplyError::CommentContentRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return RusotoError::Service(
                         PostCommentReplyError::CommentContentSizeLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CommentDoesNotExistException" => {
                     return RusotoError::Service(PostCommentReplyError::CommentDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentIdRequiredException" => {
                     return RusotoError::Service(PostCommentReplyError::CommentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotencyParameterMismatchException" => {
                     return RusotoError::Service(
                         PostCommentReplyError::IdempotencyParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClientRequestTokenException" => {
                     return RusotoError::Service(PostCommentReplyError::InvalidClientRequestToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommentIdException" => {
                     return RusotoError::Service(PostCommentReplyError::InvalidCommentId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6484,152 +6508,152 @@ impl PutFileError {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(PutFileError::BranchDoesNotExist(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BranchNameIsTagNameException" => {
                     return RusotoError::Service(PutFileError::BranchNameIsTagName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(PutFileError::BranchNameRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CommitMessageLengthExceededException" => {
                     return RusotoError::Service(PutFileError::CommitMessageLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNameConflictsWithFileNameException" => {
                     return RusotoError::Service(PutFileError::DirectoryNameConflictsWithFileName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(PutFileError::EncryptionIntegrityChecksFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(PutFileError::EncryptionKeyAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(PutFileError::EncryptionKeyDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(PutFileError::EncryptionKeyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(PutFileError::EncryptionKeyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileContentRequiredException" => {
                     return RusotoError::Service(PutFileError::FileContentRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FileContentSizeLimitExceededException" => {
                     return RusotoError::Service(PutFileError::FileContentSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FileNameConflictsWithDirectoryNameException" => {
                     return RusotoError::Service(PutFileError::FileNameConflictsWithDirectoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FilePathConflictsWithSubmodulePathException" => {
                     return RusotoError::Service(PutFileError::FilePathConflictsWithSubmodulePath(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FolderContentSizeLimitExceededException" => {
                     return RusotoError::Service(PutFileError::FolderContentSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidBranchNameException" => {
                     return RusotoError::Service(PutFileError::InvalidBranchName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidDeletionParameterException" => {
                     return RusotoError::Service(PutFileError::InvalidDeletionParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidEmailException" => {
                     return RusotoError::Service(PutFileError::InvalidEmail(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidFileModeException" => {
                     return RusotoError::Service(PutFileError::InvalidFileMode(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParentCommitIdException" => {
                     return RusotoError::Service(PutFileError::InvalidParentCommitId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidPathException" => {
                     return RusotoError::Service(PutFileError::InvalidPath(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(PutFileError::InvalidRepositoryName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NameLengthExceededException" => {
                     return RusotoError::Service(PutFileError::NameLengthExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ParentCommitDoesNotExistException" => {
                     return RusotoError::Service(PutFileError::ParentCommitDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParentCommitIdOutdatedException" => {
-                    return RusotoError::Service(PutFileError::ParentCommitIdOutdated(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutFileError::ParentCommitIdOutdated(
+                        String::from(error_message),
+                    ))
                 }
                 "ParentCommitIdRequiredException" => {
-                    return RusotoError::Service(PutFileError::ParentCommitIdRequired(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutFileError::ParentCommitIdRequired(
+                        String::from(error_message),
+                    ))
                 }
                 "PathRequiredException" => {
                     return RusotoError::Service(PutFileError::PathRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryDoesNotExistException" => {
-                    return RusotoError::Service(PutFileError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutFileError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
-                    return RusotoError::Service(PutFileError::RepositoryNameRequired(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutFileError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ))
                 }
                 "SameFileContentException" => {
                     return RusotoError::Service(PutFileError::SameFileContent(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6744,137 +6768,141 @@ impl PutRepositoryTriggersError {
                         PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(PutRepositoryTriggersError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(PutRepositoryTriggersError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(PutRepositoryTriggersError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryTriggerBranchNameException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerCustomDataException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerDestinationArnException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerEventsException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerNameException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerRegionException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MaximumBranchesExceededException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::MaximumBranchesExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MaximumRepositoryTriggersExceededException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryDoesNotExistException" => {
-                    return RusotoError::Service(PutRepositoryTriggersError::RepositoryDoesNotExist(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "RepositoryNameRequiredException" => {
-                    return RusotoError::Service(PutRepositoryTriggersError::RepositoryNameRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "RepositoryTriggerBranchNameListRequiredException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryTriggerDestinationArnRequiredException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryTriggerEventsListRequiredException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryTriggerNameRequiredException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryTriggersListRequiredException" => {
                     return RusotoError::Service(
                         PutRepositoryTriggersError::RepositoryTriggersListRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6980,141 +7008,147 @@ impl TestRepositoryTriggersError {
                         TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
-                    return RusotoError::Service(TestRepositoryTriggersError::EncryptionKeyDisabled(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return RusotoError::Service(TestRepositoryTriggersError::EncryptionKeyNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
-                    return RusotoError::Service(TestRepositoryTriggersError::InvalidRepositoryName(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::InvalidRepositoryName(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRepositoryTriggerBranchNameException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerCustomDataException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerDestinationArnException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerEventsException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerNameException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryTriggerRegionException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MaximumBranchesExceededException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::MaximumBranchesExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MaximumRepositoryTriggersExceededException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::RepositoryDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::RepositoryNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryTriggerBranchNameListRequiredException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryTriggerDestinationArnRequiredException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryTriggerEventsListRequiredException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryTriggerNameRequiredException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryTriggersListRequiredException" => {
                     return RusotoError::Service(
                         TestRepositoryTriggersError::RepositoryTriggersListRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7194,39 +7228,39 @@ impl UpdateCommentError {
                 "CommentContentRequiredException" => {
                     return RusotoError::Service(UpdateCommentError::CommentContentRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentContentSizeLimitExceededException" => {
                     return RusotoError::Service(
                         UpdateCommentError::CommentContentSizeLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CommentDeletedException" => {
                     return RusotoError::Service(UpdateCommentError::CommentDeleted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CommentDoesNotExistException" => {
                     return RusotoError::Service(UpdateCommentError::CommentDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentIdRequiredException" => {
                     return RusotoError::Service(UpdateCommentError::CommentIdRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CommentNotCreatedByCallerException" => {
                     return RusotoError::Service(UpdateCommentError::CommentNotCreatedByCaller(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCommentIdException" => {
-                    return RusotoError::Service(UpdateCommentError::InvalidCommentId(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateCommentError::InvalidCommentId(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7296,61 +7330,63 @@ impl UpdateDefaultBranchError {
                 "BranchDoesNotExistException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::BranchDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BranchNameRequiredException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::BranchNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionIntegrityChecksFailedException" => {
                     return RusotoError::Service(
                         UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         UpdateDefaultBranchError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::EncryptionKeyDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::EncryptionKeyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return RusotoError::Service(UpdateDefaultBranchError::EncryptionKeyUnavailable(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateDefaultBranchError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidBranchNameException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::InvalidBranchName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(UpdateDefaultBranchError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7416,35 +7452,35 @@ impl UpdatePullRequestDescriptionError {
                         UpdatePullRequestDescriptionError::InvalidDescription(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(
                         UpdatePullRequestDescriptionError::InvalidPullRequestId(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestAlreadyClosedException" => {
                     return RusotoError::Service(
                         UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdatePullRequestDescriptionError::PullRequestDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestIdRequiredException" => {
                     return RusotoError::Service(
                         UpdatePullRequestDescriptionError::PullRequestIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7514,75 +7550,77 @@ impl UpdatePullRequestStatusError {
                         UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidPullRequestIdException" => {
-                    return RusotoError::Service(UpdatePullRequestStatusError::InvalidPullRequestId(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::InvalidPullRequestId(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidPullRequestStatusException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::InvalidPullRequestStatus(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidPullRequestStatusUpdateException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::PullRequestDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestIdRequiredException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::PullRequestIdRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestStatusRequiredException" => {
                     return RusotoError::Service(
                         UpdatePullRequestStatusError::PullRequestStatusRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7646,36 +7684,38 @@ impl UpdatePullRequestTitleError {
                 "InvalidPullRequestIdException" => {
                     return RusotoError::Service(UpdatePullRequestTitleError::InvalidPullRequestId(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTitleException" => {
                     return RusotoError::Service(UpdatePullRequestTitleError::InvalidTitle(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PullRequestAlreadyClosedException" => {
                     return RusotoError::Service(
                         UpdatePullRequestTitleError::PullRequestAlreadyClosed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdatePullRequestTitleError::PullRequestDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PullRequestIdRequiredException" => {
-                    return RusotoError::Service(UpdatePullRequestTitleError::PullRequestIdRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestTitleError::PullRequestIdRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TitleRequiredException" => {
                     return RusotoError::Service(UpdatePullRequestTitleError::TitleRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7744,63 +7784,63 @@ impl UpdateRepositoryDescriptionError {
                         UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "EncryptionKeyAccessDeniedException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyDisabledException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::EncryptionKeyDisabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyNotFoundException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::EncryptionKeyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "EncryptionKeyUnavailableException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRepositoryDescriptionException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::InvalidRepositoryDescription(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::InvalidRepositoryName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::RepositoryDoesNotExist(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(
                         UpdateRepositoryDescriptionError::RepositoryNameRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7858,22 +7898,22 @@ impl UpdateRepositoryNameError {
                 "InvalidRepositoryNameException" => {
                     return RusotoError::Service(UpdateRepositoryNameError::InvalidRepositoryName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryDoesNotExistException" => {
                     return RusotoError::Service(UpdateRepositoryNameError::RepositoryDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameExistsException" => {
                     return RusotoError::Service(UpdateRepositoryNameError::RepositoryNameExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNameRequiredException" => {
                     return RusotoError::Service(UpdateRepositoryNameError::RepositoryNameRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

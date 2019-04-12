@@ -1640,12 +1640,12 @@ impl AcknowledgeJobError {
                 "InvalidNonceException" => {
                     return RusotoError::Service(AcknowledgeJobError::InvalidNonce(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(AcknowledgeJobError::JobNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1694,17 +1694,17 @@ impl AcknowledgeThirdPartyJobError {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(AcknowledgeThirdPartyJobError::InvalidClientToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNonceException" => {
                     return RusotoError::Service(AcknowledgeThirdPartyJobError::InvalidNonce(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(AcknowledgeThirdPartyJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1750,7 +1750,7 @@ impl CreateCustomActionTypeError {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateCustomActionTypeError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1804,32 +1804,32 @@ impl CreatePipelineError {
                 "InvalidActionDeclarationException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidActionDeclaration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidBlockerDeclarationException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidBlockerDeclaration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStageDeclarationException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidStageDeclaration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStructureException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidStructure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePipelineError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNameInUseException" => {
                     return RusotoError::Service(CreatePipelineError::PipelineNameInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1984,7 +1984,7 @@ impl DeregisterWebhookWithThirdPartyError {
                         DeregisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2030,12 +2030,12 @@ impl DisableStageTransitionError {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(DisableStageTransitionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StageNotFoundException" => {
                     return RusotoError::Service(DisableStageTransitionError::StageNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2082,12 +2082,12 @@ impl EnableStageTransitionError {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(EnableStageTransitionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StageNotFoundException" => {
                     return RusotoError::Service(EnableStageTransitionError::StageNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2132,7 +2132,7 @@ impl GetJobDetailsError {
                 "JobNotFoundException" => {
                     return RusotoError::Service(GetJobDetailsError::JobNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2178,12 +2178,12 @@ impl GetPipelineError {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineError::PipelineNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineVersionNotFoundException" => {
                     return RusotoError::Service(GetPipelineError::PipelineVersionNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2232,12 +2232,12 @@ impl GetPipelineExecutionError {
                         GetPipelineExecutionError::PipelineExecutionNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineExecutionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2282,7 +2282,7 @@ impl GetPipelineStateError {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineStateError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2330,17 +2330,17 @@ impl GetThirdPartyJobDetailsError {
                 "InvalidClientTokenException" => {
                     return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidClientToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidJobException" => {
                     return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidJob(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(GetThirdPartyJobDetailsError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2386,7 +2386,7 @@ impl ListActionTypesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListActionTypesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2432,12 +2432,12 @@ impl ListPipelineExecutionsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPipelineExecutionsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(ListPipelineExecutionsError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2480,9 +2480,9 @@ impl ListPipelinesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListPipelinesError::InvalidNextToken(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListPipelinesError::InvalidNextToken(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2526,7 +2526,7 @@ impl ListWebhooksError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListWebhooksError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2568,9 +2568,9 @@ impl PollForJobsError {
 
             match *error_type {
                 "ActionTypeNotFoundException" => {
-                    return RusotoError::Service(PollForJobsError::ActionTypeNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PollForJobsError::ActionTypeNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2614,7 +2614,7 @@ impl PollForThirdPartyJobsError {
                 "ActionTypeNotFoundException" => {
                     return RusotoError::Service(PollForThirdPartyJobsError::ActionTypeNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2662,17 +2662,17 @@ impl PutActionRevisionError {
                 "ActionNotFoundException" => {
                     return RusotoError::Service(PutActionRevisionError::ActionNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(PutActionRevisionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StageNotFoundException" => {
                     return RusotoError::Service(PutActionRevisionError::StageNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2726,27 +2726,27 @@ impl PutApprovalResultError {
                 "ActionNotFoundException" => {
                     return RusotoError::Service(PutApprovalResultError::ActionNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApprovalAlreadyCompletedException" => {
                     return RusotoError::Service(PutApprovalResultError::ApprovalAlreadyCompleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidApprovalTokenException" => {
                     return RusotoError::Service(PutApprovalResultError::InvalidApprovalToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(PutApprovalResultError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StageNotFoundException" => {
                     return RusotoError::Service(PutApprovalResultError::StageNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2796,12 +2796,12 @@ impl PutJobFailureResultError {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(PutJobFailureResultError::InvalidJobState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(PutJobFailureResultError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2848,12 +2848,12 @@ impl PutJobSuccessResultError {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(PutJobSuccessResultError::InvalidJobState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(PutJobSuccessResultError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2906,19 +2906,19 @@ impl PutThirdPartyJobFailureResultError {
                         PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidJobStateException" => {
                     return RusotoError::Service(
                         PutThirdPartyJobFailureResultError::InvalidJobState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(PutThirdPartyJobFailureResultError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2972,19 +2972,19 @@ impl PutThirdPartyJobSuccessResultError {
                         PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidJobStateException" => {
                     return RusotoError::Service(
                         PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(PutThirdPartyJobSuccessResultError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3038,22 +3038,22 @@ impl PutWebhookError {
                         PutWebhookError::InvalidWebhookAuthenticationParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidWebhookFilterPatternException" => {
                     return RusotoError::Service(PutWebhookError::InvalidWebhookFilterPattern(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutWebhookError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(PutWebhookError::PipelineNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3104,7 +3104,7 @@ impl RegisterWebhookWithThirdPartyError {
                         RegisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3156,22 +3156,22 @@ impl RetryStageExecutionError {
                         RetryStageExecutionError::NotLatestPipelineExecution(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(RetryStageExecutionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StageNotFoundException" => {
                     return RusotoError::Service(RetryStageExecutionError::StageNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "StageNotRetryableException" => {
                     return RusotoError::Service(RetryStageExecutionError::StageNotRetryable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3218,7 +3218,7 @@ impl StartPipelineExecutionError {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(StartPipelineExecutionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3270,27 +3270,27 @@ impl UpdatePipelineError {
                 "InvalidActionDeclarationException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidActionDeclaration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidBlockerDeclarationException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidBlockerDeclaration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStageDeclarationException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidStageDeclaration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidStructureException" => {
                     return RusotoError::Service(UpdatePipelineError::InvalidStructure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdatePipelineError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

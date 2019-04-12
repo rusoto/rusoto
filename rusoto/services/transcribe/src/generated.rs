@@ -449,22 +449,22 @@ impl CreateVocabularyError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateVocabularyError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateVocabularyError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateVocabularyError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateVocabularyError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateVocabularyError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -515,17 +515,17 @@ impl DeleteTranscriptionJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTranscriptionJobError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteTranscriptionJobError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteTranscriptionJobError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -577,22 +577,22 @@ impl DeleteVocabularyError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteVocabularyError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteVocabularyError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DeleteVocabularyError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteVocabularyError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteVocabularyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -643,24 +643,24 @@ impl GetTranscriptionJobError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(GetTranscriptionJobError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetTranscriptionJobError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetTranscriptionJobError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetTranscriptionJobError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetTranscriptionJobError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -713,22 +713,22 @@ impl GetVocabularyError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetVocabularyError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetVocabularyError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetVocabularyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetVocabularyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -779,17 +779,17 @@ impl ListTranscriptionJobsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTranscriptionJobsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTranscriptionJobsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTranscriptionJobsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -839,17 +839,17 @@ impl ListVocabulariesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListVocabulariesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListVocabulariesError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListVocabulariesError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListVocabulariesError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -901,22 +901,22 @@ impl StartTranscriptionJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(StartTranscriptionJobError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(StartTranscriptionJobError::Conflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartTranscriptionJobError::Conflict(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(StartTranscriptionJobError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartTranscriptionJobError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -971,27 +971,27 @@ impl UpdateVocabularyError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateVocabularyError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateVocabularyError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateVocabularyError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateVocabularyError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateVocabularyError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateVocabularyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

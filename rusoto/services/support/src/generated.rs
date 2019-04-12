@@ -744,29 +744,29 @@ impl AddAttachmentsToSetError {
                 "AttachmentLimitExceeded" => {
                     return RusotoError::Service(AddAttachmentsToSetError::AttachmentLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AttachmentSetExpired" => {
                     return RusotoError::Service(AddAttachmentsToSetError::AttachmentSetExpired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AttachmentSetIdNotFound" => {
                     return RusotoError::Service(AddAttachmentsToSetError::AttachmentSetIdNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AttachmentSetSizeLimitExceeded" => {
                     return RusotoError::Service(
                         AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(AddAttachmentsToSetError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -820,24 +820,24 @@ impl AddCommunicationToCaseError {
                 "AttachmentSetExpired" => {
                     return RusotoError::Service(AddCommunicationToCaseError::AttachmentSetExpired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AttachmentSetIdNotFound" => {
                     return RusotoError::Service(
                         AddCommunicationToCaseError::AttachmentSetIdNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "CaseIdNotFound" => {
                     return RusotoError::Service(AddCommunicationToCaseError::CaseIdNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(AddCommunicationToCaseError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -890,22 +890,22 @@ impl CreateCaseError {
                 "AttachmentSetExpired" => {
                     return RusotoError::Service(CreateCaseError::AttachmentSetExpired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AttachmentSetIdNotFound" => {
                     return RusotoError::Service(CreateCaseError::AttachmentSetIdNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CaseCreationLimitExceeded" => {
                     return RusotoError::Service(CreateCaseError::CaseCreationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(CreateCaseError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateCaseError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -956,19 +956,19 @@ impl DescribeAttachmentError {
                 "AttachmentIdNotFound" => {
                     return RusotoError::Service(DescribeAttachmentError::AttachmentIdNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DescribeAttachmentLimitExceeded" => {
                     return RusotoError::Service(
                         DescribeAttachmentError::DescribeAttachmentLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeAttachmentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1016,12 +1016,12 @@ impl DescribeCasesError {
                 "CaseIdNotFound" => {
                     return RusotoError::Service(DescribeCasesError::CaseIdNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeCasesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1068,12 +1068,12 @@ impl DescribeCommunicationsError {
                 "CaseIdNotFound" => {
                     return RusotoError::Service(DescribeCommunicationsError::CaseIdNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeCommunicationsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1118,7 +1118,7 @@ impl DescribeServicesError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeServicesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1162,7 +1162,7 @@ impl DescribeSeverityLevelsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeSeverityLevelsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1210,7 +1210,7 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
                         DescribeTrustedAdvisorCheckRefreshStatusesError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1260,7 +1260,7 @@ impl DescribeTrustedAdvisorCheckResultError {
                         DescribeTrustedAdvisorCheckResultError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1308,7 +1308,7 @@ impl DescribeTrustedAdvisorCheckSummariesError {
                         DescribeTrustedAdvisorCheckSummariesError::InternalServerError(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1356,7 +1356,7 @@ impl DescribeTrustedAdvisorChecksError {
                         DescribeTrustedAdvisorChecksError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1404,7 +1404,7 @@ impl RefreshTrustedAdvisorCheckError {
                         RefreshTrustedAdvisorCheckError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1450,12 +1450,12 @@ impl ResolveCaseError {
                 "CaseIdNotFound" => {
                     return RusotoError::Service(ResolveCaseError::CaseIdNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ResolveCaseError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

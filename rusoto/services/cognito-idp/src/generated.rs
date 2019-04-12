@@ -3891,32 +3891,32 @@ impl AddCustomAttributesError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AddCustomAttributesError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AddCustomAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AddCustomAttributesError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddCustomAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AddCustomAttributesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserImportInProgressException" => {
                     return RusotoError::Service(AddCustomAttributesError::UserImportInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3975,32 +3975,32 @@ impl AdminAddUserToGroupError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminAddUserToGroupError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4069,57 +4069,57 @@ impl AdminConfirmSignUpError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyFailedAttemptsException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::TooManyFailedAttempts(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminConfirmSignUpError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4203,84 +4203,84 @@ impl AdminCreateUserError {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(AdminCreateUserError::CodeDeliveryFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminCreateUserError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(AdminCreateUserError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminCreateUserError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(AdminCreateUserError::InvalidPassword(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(AdminCreateUserError::InvalidSmsRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         AdminCreateUserError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminCreateUserError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(AdminCreateUserError::PreconditionNotMet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminCreateUserError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminCreateUserError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(AdminCreateUserError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedUserStateException" => {
                     return RusotoError::Service(AdminCreateUserError::UnsupportedUserState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminCreateUserError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminCreateUserError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UsernameExistsException" => {
-                    return RusotoError::Service(AdminCreateUserError::UsernameExists(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminCreateUserError::UsernameExists(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4349,32 +4349,32 @@ impl AdminDeleteUserError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDeleteUserError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminDeleteUserError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminDeleteUserError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminDeleteUserError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminDeleteUserError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminDeleteUserError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4433,32 +4433,32 @@ impl AdminDeleteUserAttributesError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminDeleteUserAttributesError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4521,37 +4521,41 @@ impl AdminDisableProviderForUserError {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::AliasExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminDisableProviderForUserError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminDisableProviderForUserError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminDisableProviderForUserError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminDisableProviderForUserError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminDisableProviderForUserError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4609,34 +4613,34 @@ impl AdminDisableUserError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminDisableUserError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminDisableUserError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminDisableUserError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminDisableUserError::NotAuthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminDisableUserError::NotAuthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminDisableUserError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminDisableUserError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminDisableUserError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4695,32 +4699,32 @@ impl AdminEnableUserError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminEnableUserError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminEnableUserError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminEnableUserError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminEnableUserError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminEnableUserError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminEnableUserError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4781,39 +4785,39 @@ impl AdminForgetDeviceError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminForgetDeviceError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminForgetDeviceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         AdminForgetDeviceError::InvalidUserPoolConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminForgetDeviceError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminForgetDeviceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminForgetDeviceError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminForgetDeviceError::UserNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminForgetDeviceError::UserNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4873,32 +4877,32 @@ impl AdminGetDeviceError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminGetDeviceError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminGetDeviceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(AdminGetDeviceError::InvalidUserPoolConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminGetDeviceError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminGetDeviceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminGetDeviceError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminGetDeviceError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4957,32 +4961,32 @@ impl AdminGetUserError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminGetUserError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminGetUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminGetUserError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminGetUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminGetUserError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminGetUserError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5059,81 +5063,83 @@ impl AdminInitiateAuthError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminInitiateAuthError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(AdminInitiateAuthError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminInitiateAuthError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminInitiateAuthError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         AdminInitiateAuthError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         AdminInitiateAuthError::InvalidUserPoolConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MFAMethodNotFoundException" => {
                     return RusotoError::Service(AdminInitiateAuthError::MFAMethodNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminInitiateAuthError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(AdminInitiateAuthError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminInitiateAuthError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminInitiateAuthError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(AdminInitiateAuthError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminInitiateAuthError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(AdminInitiateAuthError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
-                    return RusotoError::Service(AdminInitiateAuthError::UserNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminInitiateAuthError::UserNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5203,37 +5209,37 @@ impl AdminLinkProviderForUserError {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::AliasExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminLinkProviderForUserError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5291,36 +5297,36 @@ impl AdminListDevicesError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(AdminListDevicesError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminListDevicesError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminListDevicesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         AdminListDevicesError::InvalidUserPoolConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(AdminListDevicesError::NotAuthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AdminListDevicesError::NotAuthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminListDevicesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminListDevicesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5379,32 +5385,32 @@ impl AdminListGroupsForUserError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminListGroupsForUserError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5465,39 +5471,39 @@ impl AdminListUserAuthEventsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminListUserAuthEventsError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
                         AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5557,32 +5563,32 @@ impl AdminRemoveUserFromGroupError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminRemoveUserFromGroupError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5655,73 +5661,75 @@ impl AdminResetUserPasswordError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         AdminResetUserPasswordError::InvalidEmailRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidLambdaResponseException" => {
-                    return RusotoError::Service(AdminResetUserPasswordError::InvalidLambdaResponse(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminResetUserPasswordError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         AdminResetUserPasswordError::InvalidSmsRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         AdminResetUserPasswordError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminResetUserPasswordError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5817,118 +5825,126 @@ impl AdminRespondToAuthChallengeError {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::AliasExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CodeMismatchException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::CodeMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ExpiredCodeException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::ExpiredCode(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::InvalidLambdaResponse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(AdminRespondToAuthChallengeError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::InvalidPassword(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::InvalidUserPoolConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "MFAMethodNotFoundException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::MFAMethodNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::PasswordResetRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AdminRespondToAuthChallengeError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(AdminRespondToAuthChallengeError::UnexpectedLambda(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::UnexpectedLambda(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(
                         AdminRespondToAuthChallengeError::UserLambdaValidation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(AdminRespondToAuthChallengeError::UserNotConfirmed(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminRespondToAuthChallengeError::UserNotConfirmed(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminRespondToAuthChallengeError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6003,39 +6019,39 @@ impl AdminSetUserMFAPreferenceError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(
                         AdminSetUserMFAPreferenceError::PasswordResetRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminSetUserMFAPreferenceError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6093,27 +6109,27 @@ impl AdminSetUserSettingsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminSetUserSettingsError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6175,43 +6191,45 @@ impl AdminUpdateAuthEventFeedbackError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateAuthEventFeedbackError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         AdminUpdateAuthEventFeedbackError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUpdateAuthEventFeedbackError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AdminUpdateAuthEventFeedbackError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(AdminUpdateAuthEventFeedbackError::TooManyRequests(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AdminUpdateAuthEventFeedbackError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminUpdateAuthEventFeedbackError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
                         AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6273,39 +6291,39 @@ impl AdminUpdateDeviceStatusError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         AdminUpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminUpdateDeviceStatusError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6373,56 +6391,56 @@ impl AdminUpdateUserAttributesError {
                 "AliasExistsException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::AliasExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
                         AdminUpdateUserAttributesError::InvalidLambdaResponse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(
                         AdminUpdateUserAttributesError::UserLambdaValidation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6485,32 +6503,32 @@ impl AdminUserGlobalSignOutError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(AdminUserGlobalSignOutError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6567,29 +6585,29 @@ impl AssociateSoftwareTokenError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateSoftwareTokenError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RusotoError::Service(
                         AssociateSoftwareTokenError::SoftwareTokenMFANotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6655,52 +6673,52 @@ impl ChangePasswordError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ChangePasswordError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ChangePasswordError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPasswordException" => {
-                    return RusotoError::Service(ChangePasswordError::InvalidPassword(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ChangePasswordError::InvalidPassword(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ChangePasswordError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ChangePasswordError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(ChangePasswordError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ChangePasswordError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ChangePasswordError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ChangePasswordError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(ChangePasswordError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ChangePasswordError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6775,62 +6793,62 @@ impl ConfirmDeviceError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ConfirmDeviceError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(ConfirmDeviceError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ConfirmDeviceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ConfirmDeviceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(ConfirmDeviceError::InvalidPassword(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(ConfirmDeviceError::InvalidUserPoolConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ConfirmDeviceError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(ConfirmDeviceError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ConfirmDeviceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ConfirmDeviceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ConfirmDeviceError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(ConfirmDeviceError::UserNotConfirmed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ConfirmDeviceError::UserNotConfirmed(
+                        String::from(error_message),
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ConfirmDeviceError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UsernameExistsException" => {
                     return RusotoError::Service(ConfirmDeviceError::UsernameExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6913,77 +6931,77 @@ impl ConfirmForgotPasswordError {
                 "CodeMismatchException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::CodeMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ExpiredCodeException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::ExpiredCode(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::InvalidPassword(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyFailedAttemptsException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::TooManyFailedAttempts(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ConfirmForgotPasswordError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7067,72 +7085,72 @@ impl ConfirmSignUpError {
                 "AliasExistsException" => {
                     return RusotoError::Service(ConfirmSignUpError::AliasExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CodeMismatchException" => {
                     return RusotoError::Service(ConfirmSignUpError::CodeMismatch(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ExpiredCodeException" => {
                     return RusotoError::Service(ConfirmSignUpError::ExpiredCode(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(ConfirmSignUpError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(ConfirmSignUpError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ConfirmSignUpError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ConfirmSignUpError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ConfirmSignUpError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ConfirmSignUpError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ConfirmSignUpError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ConfirmSignUpError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyFailedAttemptsException" => {
                     return RusotoError::Service(ConfirmSignUpError::TooManyFailedAttempts(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ConfirmSignUpError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnexpectedLambdaException" => {
-                    return RusotoError::Service(ConfirmSignUpError::UnexpectedLambda(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ConfirmSignUpError::UnexpectedLambda(
+                        String::from(error_message),
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(ConfirmSignUpError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ConfirmSignUpError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7201,37 +7219,37 @@ impl CreateGroupError {
                 "GroupExistsException" => {
                     return RusotoError::Service(CreateGroupError::GroupExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateGroupError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateGroupError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateGroupError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateGroupError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateGroupError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7293,37 +7311,37 @@ impl CreateIdentityProviderError {
                 "DuplicateProviderException" => {
                     return RusotoError::Service(CreateIdentityProviderError::DuplicateProvider(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateIdentityProviderError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateIdentityProviderError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateIdentityProviderError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateIdentityProviderError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateIdentityProviderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateIdentityProviderError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7383,32 +7401,32 @@ impl CreateResourceServerError {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateResourceServerError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateResourceServerError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateResourceServerError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateResourceServerError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateResourceServerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateResourceServerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7469,37 +7487,37 @@ impl CreateUserImportJobError {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserImportJobError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserImportJobError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUserImportJobError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateUserImportJobError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(CreateUserImportJobError::PreconditionNotMet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateUserImportJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateUserImportJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7565,49 +7583,49 @@ impl CreateUserPoolError {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserPoolError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(CreateUserPoolError::InvalidEmailRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserPoolError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(CreateUserPoolError::InvalidSmsRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         CreateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUserPoolError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateUserPoolError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateUserPoolError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateUserPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "UserPoolTaggingException" => {
-                    return RusotoError::Service(CreateUserPoolError::UserPoolTagging(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateUserPoolError::UserPoolTagging(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7673,42 +7691,42 @@ impl CreateUserPoolClientError {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserPoolClientError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOAuthFlowException" => {
                     return RusotoError::Service(CreateUserPoolClientError::InvalidOAuthFlow(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserPoolClientError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUserPoolClientError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateUserPoolClientError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateUserPoolClientError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ScopeDoesNotExistException" => {
                     return RusotoError::Service(CreateUserPoolClientError::ScopeDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateUserPoolClientError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7767,27 +7785,27 @@ impl CreateUserPoolDomainError {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateUserPoolDomainError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7843,27 +7861,27 @@ impl DeleteGroupError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteGroupError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteGroupError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteGroupError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteGroupError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7921,34 +7939,34 @@ impl DeleteIdentityProviderError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteIdentityProviderError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedIdentityProviderException" => {
                     return RusotoError::Service(
                         DeleteIdentityProviderError::UnsupportedIdentityProvider(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8005,27 +8023,27 @@ impl DeleteResourceServerError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteResourceServerError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteResourceServerError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteResourceServerError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteResourceServerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteResourceServerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8087,42 +8105,42 @@ impl DeleteUserError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteUserError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(DeleteUserError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteUserError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(DeleteUserError::UserNotConfirmed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(DeleteUserError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8187,42 +8205,42 @@ impl DeleteUserAttributesError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserAttributesError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteUserAttributesError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(DeleteUserAttributesError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteUserAttributesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(DeleteUserAttributesError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(DeleteUserAttributesError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8283,32 +8301,32 @@ impl DeleteUserPoolError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserPoolError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserPoolError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteUserPoolError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserPoolError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteUserPoolError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteUserPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "UserImportInProgressException" => {
                     return RusotoError::Service(DeleteUserPoolError::UserImportInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8365,27 +8383,27 @@ impl DeleteUserPoolClientError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteUserPoolClientError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8439,22 +8457,22 @@ impl DeleteUserPoolDomainError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteUserPoolDomainError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteUserPoolDomainError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DeleteUserPoolDomainError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserPoolDomainError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8509,27 +8527,27 @@ impl DescribeIdentityProviderError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeIdentityProviderError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8585,27 +8603,27 @@ impl DescribeResourceServerError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeResourceServerError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeResourceServerError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeResourceServerError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeResourceServerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeResourceServerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8663,34 +8681,34 @@ impl DescribeRiskConfigurationError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeRiskConfigurationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
                         DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8747,27 +8765,27 @@ impl DescribeUserImportJobError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserImportJobError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserImportJobError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeUserImportJobError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserImportJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeUserImportJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8823,34 +8841,34 @@ impl DescribeUserPoolError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeUserPoolError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeUserPoolError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserPoolError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(DescribeUserPoolError::NotAuthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeUserPoolError::NotAuthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserPoolError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeUserPoolError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserPoolTaggingException" => {
                     return RusotoError::Service(DescribeUserPoolError::UserPoolTagging(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8907,27 +8925,27 @@ impl DescribeUserPoolClientError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeUserPoolClientError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8981,22 +8999,22 @@ impl DescribeUserPoolDomainError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeUserPoolDomainError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9059,47 +9077,47 @@ impl ForgetDeviceError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ForgetDeviceError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ForgetDeviceError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(ForgetDeviceError::InvalidUserPoolConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ForgetDeviceError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(ForgetDeviceError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ForgetDeviceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ForgetDeviceError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(ForgetDeviceError::UserNotConfirmed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ForgetDeviceError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9179,79 +9197,79 @@ impl ForgotPasswordError {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(ForgotPasswordError::CodeDeliveryFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(ForgotPasswordError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(ForgotPasswordError::InvalidEmailRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(ForgotPasswordError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ForgotPasswordError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(ForgotPasswordError::InvalidSmsRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         ForgotPasswordError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ForgotPasswordError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ForgotPasswordError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ForgotPasswordError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(ForgotPasswordError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ForgotPasswordError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(ForgotPasswordError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(ForgotPasswordError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(ForgotPasswordError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ForgotPasswordError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9317,27 +9335,27 @@ impl GetCSVHeaderError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetCSVHeaderError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetCSVHeaderError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetCSVHeaderError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetCSVHeaderError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetCSVHeaderError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9401,47 +9419,47 @@ impl GetDeviceError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetDeviceError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetDeviceError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(GetDeviceError::InvalidUserPoolConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetDeviceError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(GetDeviceError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetDeviceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetDeviceError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(GetDeviceError::UserNotConfirmed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(GetDeviceError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9501,27 +9519,27 @@ impl GetGroupError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetGroupError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetGroupError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetGroupError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetGroupError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9581,35 +9599,35 @@ impl GetIdentityProviderByIdentifierError {
                         GetIdentityProviderByIdentifierError::InternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         GetIdentityProviderByIdentifierError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(
                         GetIdentityProviderByIdentifierError::NotAuthorized(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         GetIdentityProviderByIdentifierError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         GetIdentityProviderByIdentifierError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9659,12 +9677,12 @@ impl GetSigningCertificateError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetSigningCertificateError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetSigningCertificateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9717,27 +9735,27 @@ impl GetUICustomizationError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetUICustomizationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetUICustomizationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetUICustomizationError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetUICustomizationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetUICustomizationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9799,42 +9817,42 @@ impl GetUserError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetUserError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetUserError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetUserError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(GetUserError::PasswordResetRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetUserError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(GetUserError::UserNotConfirmed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(GetUserError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9919,112 +9937,112 @@ impl GetUserAttributeVerificationCodeError {
                         GetUserAttributeVerificationCodeError::CodeDeliveryFailure(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InvalidEmailRoleAccessPolicy(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InvalidLambdaResponse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InvalidSmsRoleAccessPolicy(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::InvalidSmsRoleTrustRelationship(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::LimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::NotAuthorized(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::PasswordResetRequired(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::UnexpectedLambda(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::UserLambdaValidation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::UserNotConfirmed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(
                         GetUserAttributeVerificationCodeError::UserNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10093,27 +10111,27 @@ impl GetUserPoolMfaConfigError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetUserPoolMfaConfigError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10173,37 +10191,37 @@ impl GlobalSignOutError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GlobalSignOutError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GlobalSignOutError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GlobalSignOutError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GlobalSignOutError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(GlobalSignOutError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GlobalSignOutError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GlobalSignOutError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GlobalSignOutError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotConfirmedException" => {
-                    return RusotoError::Service(GlobalSignOutError::UserNotConfirmed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GlobalSignOutError::UserNotConfirmed(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10275,62 +10293,62 @@ impl InitiateAuthError {
                 "InternalErrorException" => {
                     return RusotoError::Service(InitiateAuthError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(InitiateAuthError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(InitiateAuthError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(InitiateAuthError::InvalidUserPoolConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(InitiateAuthError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(InitiateAuthError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InitiateAuthError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(InitiateAuthError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(InitiateAuthError::UnexpectedLambda(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(InitiateAuthError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(InitiateAuthError::UserNotConfirmed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(InitiateAuthError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10401,47 +10419,47 @@ impl ListDevicesError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListDevicesError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListDevicesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(ListDevicesError::InvalidUserPoolConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListDevicesError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(ListDevicesError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListDevicesError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListDevicesError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(ListDevicesError::UserNotConfirmed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ListDevicesError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10501,27 +10519,27 @@ impl ListGroupsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListGroupsError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListGroupsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListGroupsError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListGroupsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListGroupsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10577,27 +10595,27 @@ impl ListIdentityProvidersError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListIdentityProvidersError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListIdentityProvidersError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListIdentityProvidersError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListIdentityProvidersError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListIdentityProvidersError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10653,27 +10671,27 @@ impl ListResourceServersError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListResourceServersError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListResourceServersError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListResourceServersError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListResourceServersError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListResourceServersError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10729,27 +10747,27 @@ impl ListUserImportJobsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUserImportJobsError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUserImportJobsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListUserImportJobsError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUserImportJobsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListUserImportJobsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10805,27 +10823,27 @@ impl ListUserPoolClientsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUserPoolClientsError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUserPoolClientsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListUserPoolClientsError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUserPoolClientsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListUserPoolClientsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10879,22 +10897,22 @@ impl ListUserPoolsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUserPoolsError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(ListUserPoolsError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListUserPoolsError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListUserPoolsError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListUserPoolsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10949,27 +10967,27 @@ impl ListUsersError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListUsersError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUsersError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ListUsersError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUsersError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListUsersError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11023,29 +11041,29 @@ impl ListUsersInGroupError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(ListUsersInGroupError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListUsersInGroupError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListUsersInGroupError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
-                    return RusotoError::Service(ListUsersInGroupError::NotAuthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListUsersInGroupError::NotAuthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListUsersInGroupError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListUsersInGroupError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11119,78 +11137,80 @@ impl ResendConfirmationCodeError {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::CodeDeliveryFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         ResendConfirmationCodeError::InvalidEmailRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidLambdaResponseException" => {
-                    return RusotoError::Service(ResendConfirmationCodeError::InvalidLambdaResponse(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ResendConfirmationCodeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         ResendConfirmationCodeError::InvalidSmsRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         ResendConfirmationCodeError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(ResendConfirmationCodeError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11285,110 +11305,114 @@ impl RespondToAuthChallengeError {
                 "AliasExistsException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::AliasExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CodeMismatchException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::CodeMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ExpiredCodeException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::ExpiredCode(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
-                    return RusotoError::Service(RespondToAuthChallengeError::InvalidLambdaResponse(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RespondToAuthChallengeError::InvalidLambdaResponse(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::InvalidPassword(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         RespondToAuthChallengeError::InvalidSmsRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         RespondToAuthChallengeError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         RespondToAuthChallengeError::InvalidUserPoolConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MFAMethodNotFoundException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::MFAMethodNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
-                    return RusotoError::Service(RespondToAuthChallengeError::PasswordResetRequired(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RespondToAuthChallengeError::PasswordResetRequired(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SoftwareTokenMFANotFoundException" => {
                     return RusotoError::Service(
                         RespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(RespondToAuthChallengeError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11465,44 +11489,46 @@ impl SetRiskConfigurationError {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(SetRiskConfigurationError::CodeDeliveryFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(SetRiskConfigurationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetRiskConfigurationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(SetRiskConfigurationError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetRiskConfigurationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(SetRiskConfigurationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
-                    return RusotoError::Service(SetRiskConfigurationError::UserPoolAddOnNotEnabled(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        SetRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11561,27 +11587,27 @@ impl SetUICustomizationError {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUICustomizationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetUICustomizationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(SetUICustomizationError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetUICustomizationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(SetUICustomizationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11641,37 +11667,37 @@ impl SetUserMFAPreferenceError {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(SetUserMFAPreferenceError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11733,41 +11759,41 @@ impl SetUserPoolMfaConfigError {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(SetUserPoolMfaConfigError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11829,37 +11855,37 @@ impl SetUserSettingsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(SetUserSettingsError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetUserSettingsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(SetUserSettingsError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(SetUserSettingsError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SetUserSettingsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(SetUserSettingsError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(SetUserSettingsError::UserNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -11935,72 +11961,72 @@ impl SignUpError {
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(SignUpError::CodeDeliveryFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(SignUpError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(SignUpError::InvalidEmailRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(SignUpError::InvalidLambdaResponse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SignUpError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidPasswordException" => {
                     return RusotoError::Service(SignUpError::InvalidPassword(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(SignUpError::InvalidSmsRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(SignUpError::InvalidSmsRoleTrustRelationship(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(SignUpError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SignUpError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(SignUpError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(SignUpError::UnexpectedLambda(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(SignUpError::UserLambdaValidation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UsernameExistsException" => {
                     return RusotoError::Service(SignUpError::UsernameExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12067,32 +12093,32 @@ impl StartUserImportJobError {
                 "InternalErrorException" => {
                     return RusotoError::Service(StartUserImportJobError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartUserImportJobError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(StartUserImportJobError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(StartUserImportJobError::PreconditionNotMet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartUserImportJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartUserImportJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12151,32 +12177,32 @@ impl StopUserImportJobError {
                 "InternalErrorException" => {
                     return RusotoError::Service(StopUserImportJobError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StopUserImportJobError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(StopUserImportJobError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(StopUserImportJobError::PreconditionNotMet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopUserImportJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StopUserImportJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12237,39 +12263,39 @@ impl UpdateAuthEventFeedbackError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(UpdateAuthEventFeedbackError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserPoolAddOnNotEnabledException" => {
                     return RusotoError::Service(
                         UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12335,49 +12361,49 @@ impl UpdateDeviceStatusError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         UpdateDeviceStatusError::InvalidUserPoolConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(UpdateDeviceStatusError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12437,27 +12463,27 @@ impl UpdateGroupError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateGroupError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateGroupError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateGroupError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateGroupError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateGroupError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12515,34 +12541,34 @@ impl UpdateIdentityProviderError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateIdentityProviderError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedIdentityProviderException" => {
                     return RusotoError::Service(
                         UpdateIdentityProviderError::UnsupportedIdentityProvider(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12599,27 +12625,27 @@ impl UpdateResourceServerError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateResourceServerError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateResourceServerError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateResourceServerError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateResourceServerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateResourceServerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12701,98 +12727,98 @@ impl UpdateUserAttributesError {
                 "AliasExistsException" => {
                     return RusotoError::Service(UpdateUserAttributesError::AliasExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CodeDeliveryFailureException" => {
                     return RusotoError::Service(UpdateUserAttributesError::CodeDeliveryFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CodeMismatchException" => {
                     return RusotoError::Service(UpdateUserAttributesError::CodeMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ExpiredCodeException" => {
                     return RusotoError::Service(UpdateUserAttributesError::ExpiredCode(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateUserAttributesError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         UpdateUserAttributesError::InvalidEmailRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(UpdateUserAttributesError::InvalidLambdaResponse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserAttributesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(
                         UpdateUserAttributesError::InvalidSmsRoleAccessPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         UpdateUserAttributesError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateUserAttributesError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(UpdateUserAttributesError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateUserAttributesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnexpectedLambdaException" => {
                     return RusotoError::Service(UpdateUserAttributesError::UnexpectedLambda(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserLambdaValidationException" => {
                     return RusotoError::Service(UpdateUserAttributesError::UserLambdaValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(UpdateUserAttributesError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(UpdateUserAttributesError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12873,59 +12899,59 @@ impl UpdateUserPoolError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateUserPoolError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateUserPoolError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidEmailRoleAccessPolicyException" => {
                     return RusotoError::Service(UpdateUserPoolError::InvalidEmailRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserPoolError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleAccessPolicyException" => {
                     return RusotoError::Service(UpdateUserPoolError::InvalidSmsRoleAccessPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSmsRoleTrustRelationshipException" => {
                     return RusotoError::Service(
                         UpdateUserPoolError::InvalidSmsRoleTrustRelationship(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateUserPoolError::NotAuthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserPoolError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(UpdateUserPoolError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateUserPoolError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "UserImportInProgressException" => {
                     return RusotoError::Service(UpdateUserPoolError::UserImportInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserPoolTaggingException" => {
-                    return RusotoError::Service(UpdateUserPoolError::UserPoolTagging(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateUserPoolError::UserPoolTagging(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -12993,42 +13019,42 @@ impl UpdateUserPoolClientError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOAuthFlowException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::InvalidOAuthFlow(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ScopeDoesNotExistException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::ScopeDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateUserPoolClientError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13087,27 +13113,27 @@ impl UpdateUserPoolDomainError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateUserPoolDomainError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13177,64 +13203,66 @@ impl VerifySoftwareTokenError {
                 "CodeMismatchException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::CodeMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "EnableSoftwareTokenMFAException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::EnableSoftwareTokenMFA(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUserPoolConfigurationException" => {
                     return RusotoError::Service(
                         VerifySoftwareTokenError::InvalidUserPoolConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SoftwareTokenMFANotFoundException" => {
-                    return RusotoError::Service(VerifySoftwareTokenError::SoftwareTokenMFANotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        VerifySoftwareTokenError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(VerifySoftwareTokenError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -13309,57 +13337,57 @@ impl VerifyUserAttributeError {
                 "CodeMismatchException" => {
                     return RusotoError::Service(VerifyUserAttributeError::CodeMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ExpiredCodeException" => {
                     return RusotoError::Service(VerifyUserAttributeError::ExpiredCode(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(VerifyUserAttributeError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(VerifyUserAttributeError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(VerifyUserAttributeError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(VerifyUserAttributeError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PasswordResetRequiredException" => {
                     return RusotoError::Service(VerifyUserAttributeError::PasswordResetRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(VerifyUserAttributeError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(VerifyUserAttributeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotConfirmedException" => {
                     return RusotoError::Service(VerifyUserAttributeError::UserNotConfirmed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UserNotFoundException" => {
                     return RusotoError::Service(VerifyUserAttributeError::UserNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

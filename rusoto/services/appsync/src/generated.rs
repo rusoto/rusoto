@@ -1313,37 +1313,37 @@ impl CreateApiKeyError {
                 "ApiKeyLimitExceededException" => {
                     return RusotoError::Service(CreateApiKeyError::ApiKeyLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ApiKeyValidityOutOfBoundsException" => {
                     return RusotoError::Service(CreateApiKeyError::ApiKeyValidityOutOfBounds(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApiKeyError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateApiKeyError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateApiKeyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateApiKeyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateApiKeyError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1415,27 +1415,27 @@ impl CreateDataSourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDataSourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateDataSourceError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateDataSourceError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateDataSourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateDataSourceError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1503,22 +1503,22 @@ impl CreateFunctionError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateFunctionError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(CreateFunctionError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateFunctionError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateFunctionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateFunctionError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1589,32 +1589,32 @@ impl CreateGraphqlApiError {
                 "ApiLimitExceededException" => {
                     return RusotoError::Service(CreateGraphqlApiError::ApiLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(CreateGraphqlApiError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateGraphqlApiError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateGraphqlApiError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateGraphqlApiError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateGraphqlApiError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateGraphqlApiError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1683,22 +1683,22 @@ impl CreateResolverError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateResolverError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(CreateResolverError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateResolverError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateResolverError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateResolverError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1767,27 +1767,27 @@ impl CreateTypeError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateTypeError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateTypeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(CreateTypeError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateTypeError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(CreateTypeError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1855,22 +1855,22 @@ impl DeleteApiKeyError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteApiKeyError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteApiKeyError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteApiKeyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteApiKeyError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1939,27 +1939,27 @@ impl DeleteDataSourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteDataSourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteDataSourceError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteDataSourceError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDataSourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteDataSourceError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2027,22 +2027,22 @@ impl DeleteFunctionError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteFunctionError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(DeleteFunctionError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteFunctionError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteFunctionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteFunctionError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2111,27 +2111,27 @@ impl DeleteGraphqlApiError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGraphqlApiError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteGraphqlApiError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteGraphqlApiError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteGraphqlApiError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteGraphqlApiError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2199,22 +2199,22 @@ impl DeleteResolverError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteResolverError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(DeleteResolverError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteResolverError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteResolverError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteResolverError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2283,27 +2283,27 @@ impl DeleteTypeError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTypeError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteTypeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteTypeError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteTypeError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(DeleteTypeError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2373,27 +2373,27 @@ impl GetDataSourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDataSourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(GetDataSourceError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDataSourceError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDataSourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetDataSourceError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2459,17 +2459,17 @@ impl GetFunctionError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(GetFunctionError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetFunctionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetFunctionError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2535,22 +2535,22 @@ impl GetGraphqlApiError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetGraphqlApiError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetGraphqlApiError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetGraphqlApiError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetGraphqlApiError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2617,22 +2617,22 @@ impl GetIntrospectionSchemaError {
                 "GraphQLSchemaException" => {
                     return RusotoError::Service(GetIntrospectionSchemaError::GraphQLSchema(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetIntrospectionSchemaError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntrospectionSchemaError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetIntrospectionSchemaError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2697,17 +2697,17 @@ impl GetResolverError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(GetResolverError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetResolverError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetResolverError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2773,22 +2773,22 @@ impl GetSchemaCreationStatusError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetSchemaCreationStatusError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetSchemaCreationStatusError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetSchemaCreationStatusError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetSchemaCreationStatusError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2857,25 +2857,27 @@ impl GetTypeError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetTypeError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(GetTypeError::ConcurrentModification(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetTypeError::ConcurrentModification(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(GetTypeError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetTypeError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetTypeError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetTypeError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2943,22 +2945,22 @@ impl ListApiKeysError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListApiKeysError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListApiKeysError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListApiKeysError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListApiKeysError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3025,22 +3027,22 @@ impl ListDataSourcesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListDataSourcesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDataSourcesError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListDataSourcesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListDataSourcesError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3107,22 +3109,22 @@ impl ListFunctionsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListFunctionsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListFunctionsError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListFunctionsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListFunctionsError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3187,17 +3189,17 @@ impl ListGraphqlApisError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListGraphqlApisError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListGraphqlApisError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListGraphqlApisError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3263,22 +3265,22 @@ impl ListResolversError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListResolversError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListResolversError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListResolversError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListResolversError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3345,22 +3347,22 @@ impl ListResolversByFunctionError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListResolversByFunctionError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListResolversByFunctionError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListResolversByFunctionError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListResolversByFunctionError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3429,27 +3431,27 @@ impl ListTypesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListTypesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(ListTypesError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ListTypesError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListTypesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(ListTypesError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3517,29 +3519,29 @@ impl StartSchemaCreationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(StartSchemaCreationError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartSchemaCreationError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StartSchemaCreationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(StartSchemaCreationError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StartSchemaCreationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(StartSchemaCreationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3611,32 +3613,32 @@ impl UpdateApiKeyError {
                 "ApiKeyValidityOutOfBoundsException" => {
                     return RusotoError::Service(UpdateApiKeyError::ApiKeyValidityOutOfBounds(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateApiKeyError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateApiKeyError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateApiKeyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateApiKeyError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateApiKeyError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3707,27 +3709,27 @@ impl UpdateDataSourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDataSourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateDataSourceError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDataSourceError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateDataSourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateDataSourceError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3795,22 +3797,22 @@ impl UpdateFunctionError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateFunctionError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(UpdateFunctionError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateFunctionError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateFunctionError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateFunctionError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3879,27 +3881,27 @@ impl UpdateGraphqlApiError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGraphqlApiError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateGraphqlApiError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateGraphqlApiError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateGraphqlApiError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateGraphqlApiError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3967,22 +3969,22 @@ impl UpdateResolverError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateResolverError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
-                    return RusotoError::Service(UpdateResolverError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateResolverError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateResolverError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateResolverError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4051,27 +4053,27 @@ impl UpdateTypeError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateTypeError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTypeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateTypeError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateTypeError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(UpdateTypeError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

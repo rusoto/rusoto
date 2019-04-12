@@ -1291,10 +1291,14 @@ impl CancelJobError {
 
             match error_type {
                 "ClientException" => {
-                    return RusotoError::Service(CancelJobError::Client(String::from(error_message)));
+                    return RusotoError::Service(CancelJobError::Client(String::from(
+                        error_message,
+                    )))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(CancelJobError::Server(String::from(error_message)));
+                    return RusotoError::Service(CancelJobError::Server(String::from(
+                        error_message,
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1355,12 +1359,12 @@ impl CreateComputeEnvironmentError {
                 "ClientException" => {
                     return RusotoError::Service(CreateComputeEnvironmentError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(CreateComputeEnvironmentError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1421,12 +1425,12 @@ impl CreateJobQueueError {
                 "ClientException" => {
                     return RusotoError::Service(CreateJobQueueError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(CreateJobQueueError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1487,12 +1491,12 @@ impl DeleteComputeEnvironmentError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteComputeEnvironmentError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteComputeEnvironmentError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1553,12 +1557,12 @@ impl DeleteJobQueueError {
                 "ClientException" => {
                     return RusotoError::Service(DeleteJobQueueError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteJobQueueError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1617,14 +1621,14 @@ impl DeregisterJobDefinitionError {
 
             match error_type {
                 "ClientException" => {
-                    return RusotoError::Service(DeregisterJobDefinitionError::Client(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeregisterJobDefinitionError::Client(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(DeregisterJobDefinitionError::Server(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeregisterJobDefinitionError::Server(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1687,12 +1691,12 @@ impl DescribeComputeEnvironmentsError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeComputeEnvironmentsError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeComputeEnvironmentsError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1753,12 +1757,12 @@ impl DescribeJobDefinitionsError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeJobDefinitionsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeJobDefinitionsError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1819,12 +1823,12 @@ impl DescribeJobQueuesError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeJobQueuesError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeJobQueuesError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1885,12 +1889,12 @@ impl DescribeJobsError {
                 "ClientException" => {
                     return RusotoError::Service(DescribeJobsError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeJobsError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1949,10 +1953,10 @@ impl ListJobsError {
 
             match error_type {
                 "ClientException" => {
-                    return RusotoError::Service(ListJobsError::Client(String::from(error_message)));
+                    return RusotoError::Service(ListJobsError::Client(String::from(error_message)))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(ListJobsError::Server(String::from(error_message)));
+                    return RusotoError::Service(ListJobsError::Server(String::from(error_message)))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2013,12 +2017,12 @@ impl RegisterJobDefinitionError {
                 "ClientException" => {
                     return RusotoError::Service(RegisterJobDefinitionError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(RegisterJobDefinitionError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2077,10 +2081,14 @@ impl SubmitJobError {
 
             match error_type {
                 "ClientException" => {
-                    return RusotoError::Service(SubmitJobError::Client(String::from(error_message)));
+                    return RusotoError::Service(SubmitJobError::Client(String::from(
+                        error_message,
+                    )))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(SubmitJobError::Server(String::from(error_message)));
+                    return RusotoError::Service(SubmitJobError::Server(String::from(
+                        error_message,
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2141,12 +2149,12 @@ impl TerminateJobError {
                 "ClientException" => {
                     return RusotoError::Service(TerminateJobError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(TerminateJobError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2207,12 +2215,12 @@ impl UpdateComputeEnvironmentError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateComputeEnvironmentError::Client(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(UpdateComputeEnvironmentError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2273,12 +2281,12 @@ impl UpdateJobQueueError {
                 "ClientException" => {
                     return RusotoError::Service(UpdateJobQueueError::Client(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(UpdateJobQueueError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

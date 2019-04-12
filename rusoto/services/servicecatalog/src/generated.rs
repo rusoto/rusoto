@@ -3405,17 +3405,17 @@ impl AcceptPortfolioShareError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(AcceptPortfolioShareError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AcceptPortfolioShareError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AcceptPortfolioShareError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3469,21 +3469,21 @@ impl AssociatePrincipalWithPortfolioError {
                         AssociatePrincipalWithPortfolioError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(
                         AssociatePrincipalWithPortfolioError::LimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AssociatePrincipalWithPortfolioError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3537,19 +3537,19 @@ impl AssociateProductWithPortfolioError {
                         AssociateProductWithPortfolioError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateProductWithPortfolioError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AssociateProductWithPortfolioError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3603,21 +3603,21 @@ impl AssociateServiceActionWithProvisioningArtifactError {
                         AssociateServiceActionWithProvisioningArtifactError::DuplicateResource(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(
                         AssociateServiceActionWithProvisioningArtifactError::LimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AssociateServiceActionWithProvisioningArtifactError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3681,38 +3681,40 @@ impl AssociateTagOptionWithResourceError {
                         AssociateTagOptionWithResourceError::DuplicateResource(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParametersException" => {
                     return RusotoError::Service(
                         AssociateTagOptionWithResourceError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(AssociateTagOptionWithResourceError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(AssociateTagOptionWithResourceError::LimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AssociateTagOptionWithResourceError::LimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AssociateTagOptionWithResourceError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(
                         AssociateTagOptionWithResourceError::TagOptionNotMigrated(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3765,7 +3767,7 @@ impl BatchAssociateServiceActionWithProvisioningArtifactError {
                         BatchAssociateServiceActionWithProvisioningArtifactError::InvalidParameters(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3861,12 +3863,12 @@ impl CopyProductError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CopyProductError::InvalidParameters(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CopyProductError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3917,22 +3919,22 @@ impl CreateConstraintError {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateConstraintError::DuplicateResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreateConstraintError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateConstraintError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateConstraintError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateConstraintError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3983,17 +3985,17 @@ impl CreatePortfolioError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreatePortfolioError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePortfolioError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(CreatePortfolioError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4045,22 +4047,22 @@ impl CreatePortfolioShareError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreatePortfolioShareError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePortfolioShareError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(CreatePortfolioShareError::OperationNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreatePortfolioShareError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4111,17 +4113,17 @@ impl CreateProductError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreateProductError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateProductError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(CreateProductError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4175,19 +4177,19 @@ impl CreateProvisionedProductPlanError {
                         CreateProvisionedProductPlanError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(CreateProvisionedProductPlanError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         CreateProvisionedProductPlanError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4237,19 +4239,21 @@ impl CreateProvisioningArtifactError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return RusotoError::Service(CreateProvisioningArtifactError::InvalidParameters(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateProvisioningArtifactError::InvalidParameters(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateProvisioningArtifactError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateProvisioningArtifactError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4297,12 +4301,12 @@ impl CreateServiceActionError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(CreateServiceActionError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateServiceActionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4351,17 +4355,17 @@ impl CreateTagOptionError {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(CreateTagOptionError::DuplicateResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateTagOptionError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(CreateTagOptionError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4409,12 +4413,12 @@ impl DeleteConstraintError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeleteConstraintError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteConstraintError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4465,22 +4469,22 @@ impl DeletePortfolioError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeletePortfolioError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeletePortfolioError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePortfolioError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(DeletePortfolioError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4531,17 +4535,17 @@ impl DeletePortfolioShareError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeletePortfolioShareError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(DeletePortfolioShareError::OperationNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePortfolioShareError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4593,22 +4597,22 @@ impl DeleteProductError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DeleteProductError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteProductError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DeleteProductError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteProductError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(DeleteProductError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4661,14 +4665,14 @@ impl DeleteProvisionedProductPlanError {
                         DeleteProvisionedProductPlanError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DeleteProvisionedProductPlanError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4717,19 +4721,21 @@ impl DeleteProvisioningArtifactError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return RusotoError::Service(DeleteProvisioningArtifactError::InvalidParameters(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteProvisioningArtifactError::InvalidParameters(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteProvisioningArtifactError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteProvisioningArtifactError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4777,12 +4783,12 @@ impl DeleteServiceActionError {
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteServiceActionError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteServiceActionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4831,17 +4837,17 @@ impl DeleteTagOptionError {
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteTagOptionError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTagOptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(DeleteTagOptionError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4887,7 +4893,7 @@ impl DescribeConstraintError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeConstraintError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4931,7 +4937,7 @@ impl DescribeCopyProductStatusError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeCopyProductStatusError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4975,7 +4981,7 @@ impl DescribePortfolioError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribePortfolioError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5027,21 +5033,21 @@ impl DescribePortfolioShareStatusError {
                         DescribePortfolioShareStatusError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
                         DescribePortfolioShareStatusError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DescribePortfolioShareStatusError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5089,12 +5095,12 @@ impl DescribeProductError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DescribeProductError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProductError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5139,7 +5145,7 @@ impl DescribeProductAsAdminError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProductAsAdminError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5185,12 +5191,12 @@ impl DescribeProductViewError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(DescribeProductViewError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProductViewError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5237,7 +5243,7 @@ impl DescribeProvisionedProductError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProvisionedProductError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5287,14 +5293,14 @@ impl DescribeProvisionedProductPlanError {
                         DescribeProvisionedProductPlanError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DescribeProvisionedProductPlanError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5343,7 +5349,7 @@ impl DescribeProvisioningArtifactError {
                         DescribeProvisioningArtifactError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5393,14 +5399,14 @@ impl DescribeProvisioningParametersError {
                         DescribeProvisioningParametersError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DescribeProvisioningParametersError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5445,7 +5451,7 @@ impl DescribeRecordError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeRecordError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5489,7 +5495,7 @@ impl DescribeServiceActionError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeServiceActionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5535,12 +5541,12 @@ impl DescribeTagOptionError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTagOptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(DescribeTagOptionError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5591,21 +5597,21 @@ impl DisableAWSOrganizationsAccessError {
                 "InvalidStateException" => {
                     return RusotoError::Service(DisableAWSOrganizationsAccessError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
                         DisableAWSOrganizationsAccessError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DisableAWSOrganizationsAccessError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5657,14 +5663,14 @@ impl DisassociatePrincipalFromPortfolioError {
                         DisassociatePrincipalFromPortfolioError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DisassociatePrincipalFromPortfolioError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5717,21 +5723,21 @@ impl DisassociateProductFromPortfolioError {
                         DisassociateProductFromPortfolioError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(
                         DisassociateProductFromPortfolioError::ResourceInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DisassociateProductFromPortfolioError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5781,7 +5787,7 @@ impl DisassociateServiceActionFromProvisioningArtifactError {
                         DisassociateServiceActionFromProvisioningArtifactError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5833,14 +5839,14 @@ impl DisassociateTagOptionFromResourceError {
                         DisassociateTagOptionFromResourceError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(
                         DisassociateTagOptionFromResourceError::TagOptionNotMigrated(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5891,21 +5897,21 @@ impl EnableAWSOrganizationsAccessError {
                 "InvalidStateException" => {
                     return RusotoError::Service(EnableAWSOrganizationsAccessError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
                         EnableAWSOrganizationsAccessError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         EnableAWSOrganizationsAccessError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5959,19 +5965,19 @@ impl ExecuteProvisionedProductPlanError {
                         ExecuteProvisionedProductPlanError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(ExecuteProvisionedProductPlanError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         ExecuteProvisionedProductPlanError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6025,21 +6031,21 @@ impl ExecuteProvisionedProductServiceActionError {
                         ExecuteProvisionedProductServiceActionError::InvalidParameters(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidStateException" => {
                     return RusotoError::Service(
                         ExecuteProvisionedProductServiceActionError::InvalidState(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         ExecuteProvisionedProductServiceActionError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6091,14 +6097,14 @@ impl GetAWSOrganizationsAccessStatusError {
                         GetAWSOrganizationsAccessStatusError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         GetAWSOrganizationsAccessStatusError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6149,14 +6155,14 @@ impl ListAcceptedPortfolioSharesError {
                         ListAcceptedPortfolioSharesError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
                         ListAcceptedPortfolioSharesError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6207,12 +6213,14 @@ impl ListConstraintsForPortfolioError {
                         ListConstraintsForPortfolioError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListConstraintsForPortfolioError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListConstraintsForPortfolioError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6259,12 +6267,12 @@ impl ListLaunchPathsError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListLaunchPathsError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListLaunchPathsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6317,21 +6325,21 @@ impl ListOrganizationPortfolioAccessError {
                         ListOrganizationPortfolioAccessError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(
                         ListOrganizationPortfolioAccessError::OperationNotSupported(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         ListOrganizationPortfolioAccessError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6377,7 +6385,7 @@ impl ListPortfolioAccessError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPortfolioAccessError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6421,7 +6429,7 @@ impl ListPortfoliosError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListPortfoliosError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6467,12 +6475,12 @@ impl ListPortfoliosForProductError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListPortfoliosForProductError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPortfoliosForProductError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6519,14 +6527,16 @@ impl ListPrincipalsForPortfolioError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return RusotoError::Service(ListPrincipalsForPortfolioError::InvalidParameters(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListPrincipalsForPortfolioError::InvalidParameters(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPrincipalsForPortfolioError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6577,12 +6587,14 @@ impl ListProvisionedProductPlansError {
                         ListProvisionedProductPlansError::InvalidParameters(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ListProvisionedProductPlansError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListProvisionedProductPlansError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6629,12 +6641,12 @@ impl ListProvisioningArtifactsError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListProvisioningArtifactsError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListProvisioningArtifactsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6685,14 +6697,14 @@ impl ListProvisioningArtifactsForServiceActionError {
                         ListProvisioningArtifactsForServiceActionError::InvalidParameters(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         ListProvisioningArtifactsForServiceActionError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6737,7 +6749,7 @@ impl ListRecordHistoryError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListRecordHistoryError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6785,19 +6797,19 @@ impl ListResourcesForTagOptionError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListResourcesForTagOptionError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListResourcesForTagOptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(
                         ListResourcesForTagOptionError::TagOptionNotMigrated(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6843,7 +6855,7 @@ impl ListServiceActionsError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListServiceActionsError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6893,14 +6905,14 @@ impl ListServiceActionsForProvisioningArtifactError {
                         ListServiceActionsForProvisioningArtifactError::InvalidParameters(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         ListServiceActionsForProvisioningArtifactError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6947,12 +6959,12 @@ impl ListTagOptionsError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ListTagOptionsError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(ListTagOptionsError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7001,17 +7013,17 @@ impl ProvisionProductError {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(ProvisionProductError::DuplicateResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParametersException" => {
                     return RusotoError::Service(ProvisionProductError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ProvisionProductError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7057,7 +7069,7 @@ impl RejectPortfolioShareError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RejectPortfolioShareError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7101,7 +7113,7 @@ impl ScanProvisionedProductsError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(ScanProvisionedProductsError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7145,7 +7157,7 @@ impl SearchProductsError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(SearchProductsError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7191,12 +7203,12 @@ impl SearchProductsAsAdminError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(SearchProductsAsAdminError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SearchProductsAsAdminError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7241,7 +7253,7 @@ impl SearchProvisionedProductsError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(SearchProvisionedProductsError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7285,9 +7297,11 @@ impl TerminateProvisionedProductError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(TerminateProvisionedProductError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        TerminateProvisionedProductError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7333,12 +7347,12 @@ impl UpdateConstraintError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateConstraintError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateConstraintError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7389,22 +7403,22 @@ impl UpdatePortfolioError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdatePortfolioError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdatePortfolioError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdatePortfolioError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(UpdatePortfolioError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7455,17 +7469,17 @@ impl UpdateProductError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateProductError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateProductError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateProductError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(UpdateProductError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7513,12 +7527,12 @@ impl UpdateProvisionedProductError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateProvisionedProductError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateProvisionedProductError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7565,14 +7579,16 @@ impl UpdateProvisioningArtifactError {
 
             match *error_type {
                 "InvalidParametersException" => {
-                    return RusotoError::Service(UpdateProvisioningArtifactError::InvalidParameters(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateProvisioningArtifactError::InvalidParameters(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateProvisioningArtifactError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7619,12 +7635,12 @@ impl UpdateServiceActionError {
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateServiceActionError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateServiceActionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7675,22 +7691,22 @@ impl UpdateTagOptionError {
                 "DuplicateResourceException" => {
                     return RusotoError::Service(UpdateTagOptionError::DuplicateResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParametersException" => {
                     return RusotoError::Service(UpdateTagOptionError::InvalidParameters(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateTagOptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagOptionNotMigratedException" => {
                     return RusotoError::Service(UpdateTagOptionError::TagOptionNotMigrated(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

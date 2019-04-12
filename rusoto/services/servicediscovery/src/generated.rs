@@ -945,22 +945,22 @@ impl CreateHttpNamespaceError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(CreateHttpNamespaceError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(CreateHttpNamespaceError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NamespaceAlreadyExists" => {
                     return RusotoError::Service(CreateHttpNamespaceError::NamespaceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateHttpNamespaceError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1013,26 +1013,26 @@ impl CreatePrivateDnsNamespaceError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(CreatePrivateDnsNamespaceError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(CreatePrivateDnsNamespaceError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NamespaceAlreadyExists" => {
                     return RusotoError::Service(
                         CreatePrivateDnsNamespaceError::NamespaceAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
                         CreatePrivateDnsNamespaceError::ResourceLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1085,26 +1085,26 @@ impl CreatePublicDnsNamespaceError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(CreatePublicDnsNamespaceError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(CreatePublicDnsNamespaceError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NamespaceAlreadyExists" => {
                     return RusotoError::Service(
                         CreatePublicDnsNamespaceError::NamespaceAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(
                         CreatePublicDnsNamespaceError::ResourceLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1157,22 +1157,22 @@ impl CreateServiceError {
                 "InvalidInput" => {
                     return RusotoError::Service(CreateServiceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NamespaceNotFound" => {
                     return RusotoError::Service(CreateServiceError::NamespaceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(CreateServiceError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceAlreadyExists" => {
                     return RusotoError::Service(CreateServiceError::ServiceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1225,22 +1225,22 @@ impl DeleteNamespaceError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(DeleteNamespaceError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(DeleteNamespaceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NamespaceNotFound" => {
                     return RusotoError::Service(DeleteNamespaceError::NamespaceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteNamespaceError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1291,17 +1291,17 @@ impl DeleteServiceError {
                 "InvalidInput" => {
                     return RusotoError::Service(DeleteServiceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUse" => {
                     return RusotoError::Service(DeleteServiceError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(DeleteServiceError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1355,27 +1355,27 @@ impl DeregisterInstanceError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(DeregisterInstanceError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InstanceNotFound" => {
                     return RusotoError::Service(DeregisterInstanceError::InstanceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(DeregisterInstanceError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUse" => {
                     return RusotoError::Service(DeregisterInstanceError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(DeregisterInstanceError::ServiceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1425,19 +1425,19 @@ impl DiscoverInstancesError {
 
             match *error_type {
                 "InvalidInput" => {
-                    return RusotoError::Service(DiscoverInstancesError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DiscoverInstancesError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "NamespaceNotFound" => {
                     return RusotoError::Service(DiscoverInstancesError::NamespaceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(DiscoverInstancesError::ServiceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1487,17 +1487,17 @@ impl GetInstanceError {
                 "InstanceNotFound" => {
                     return RusotoError::Service(GetInstanceError::InstanceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(GetInstanceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(GetInstanceError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1547,17 +1547,17 @@ impl GetInstancesHealthStatusError {
                 "InstanceNotFound" => {
                     return RusotoError::Service(GetInstancesHealthStatusError::InstanceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(GetInstancesHealthStatusError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(GetInstancesHealthStatusError::ServiceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1605,12 +1605,12 @@ impl GetNamespaceError {
                 "InvalidInput" => {
                     return RusotoError::Service(GetNamespaceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NamespaceNotFound" => {
-                    return RusotoError::Service(GetNamespaceError::NamespaceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetNamespaceError::NamespaceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1657,12 +1657,12 @@ impl GetOperationError {
                 "InvalidInput" => {
                     return RusotoError::Service(GetOperationError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotFound" => {
-                    return RusotoError::Service(GetOperationError::OperationNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetOperationError::OperationNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1709,12 +1709,12 @@ impl GetServiceError {
                 "InvalidInput" => {
                     return RusotoError::Service(GetServiceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(GetServiceError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1761,12 +1761,12 @@ impl ListInstancesError {
                 "InvalidInput" => {
                     return RusotoError::Service(ListInstancesError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(ListInstancesError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1811,7 +1811,7 @@ impl ListNamespacesError {
                 "InvalidInput" => {
                     return RusotoError::Service(ListNamespacesError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1855,7 +1855,7 @@ impl ListOperationsError {
                 "InvalidInput" => {
                     return RusotoError::Service(ListOperationsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1899,7 +1899,7 @@ impl ListServicesError {
                 "InvalidInput" => {
                     return RusotoError::Service(ListServicesError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1951,27 +1951,27 @@ impl RegisterInstanceError {
                 "DuplicateRequest" => {
                     return RusotoError::Service(RegisterInstanceError::DuplicateRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(RegisterInstanceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUse" => {
-                    return RusotoError::Service(RegisterInstanceError::ResourceInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RegisterInstanceError::ResourceInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceLimitExceeded" => {
                     return RusotoError::Service(RegisterInstanceError::ResourceLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(RegisterInstanceError::ServiceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2029,28 +2029,28 @@ impl UpdateInstanceCustomHealthStatusError {
                         UpdateInstanceCustomHealthStatusError::CustomHealthNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InstanceNotFound" => {
                     return RusotoError::Service(
                         UpdateInstanceCustomHealthStatusError::InstanceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(
                         UpdateInstanceCustomHealthStatusError::InvalidInput(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(
                         UpdateInstanceCustomHealthStatusError::ServiceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2099,19 +2099,19 @@ impl UpdateServiceError {
 
             match *error_type {
                 "DuplicateRequest" => {
-                    return RusotoError::Service(UpdateServiceError::DuplicateRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateServiceError::DuplicateRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInput" => {
                     return RusotoError::Service(UpdateServiceError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceNotFound" => {
                     return RusotoError::Service(UpdateServiceError::ServiceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

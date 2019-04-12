@@ -1071,22 +1071,22 @@ impl AddTagsToStreamError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(AddTagsToStreamError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AddTagsToStreamError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(AddTagsToStreamError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddTagsToStreamError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1137,17 +1137,17 @@ impl CreateStreamError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(CreateStreamError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateStreamError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateStreamError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1203,24 +1203,24 @@ impl DecreaseStreamRetentionPeriodError {
                         DecreaseStreamRetentionPeriodError::InvalidArgument(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DecreaseStreamRetentionPeriodError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DecreaseStreamRetentionPeriodError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DecreaseStreamRetentionPeriodError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1271,17 +1271,17 @@ impl DeleteStreamError {
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteStreamError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteStreamError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteStreamError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1331,17 +1331,17 @@ impl DeregisterStreamConsumerError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DeregisterStreamConsumerError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeregisterStreamConsumerError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeregisterStreamConsumerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1387,7 +1387,7 @@ impl DescribeLimitsError {
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeLimitsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1433,12 +1433,12 @@ impl DescribeStreamError {
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeStreamError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStreamError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1487,17 +1487,17 @@ impl DescribeStreamConsumerError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DescribeStreamConsumerError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeStreamConsumerError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStreamConsumerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1545,12 +1545,12 @@ impl DescribeStreamSummaryError {
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeStreamSummaryError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStreamSummaryError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1601,22 +1601,22 @@ impl DisableEnhancedMonitoringError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DisableEnhancedMonitoringError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DisableEnhancedMonitoringError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DisableEnhancedMonitoringError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisableEnhancedMonitoringError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1669,22 +1669,22 @@ impl EnableEnhancedMonitoringError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(EnableEnhancedMonitoringError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(EnableEnhancedMonitoringError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(EnableEnhancedMonitoringError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(EnableEnhancedMonitoringError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1749,52 +1749,52 @@ impl GetRecordsError {
                 "ExpiredIteratorException" => {
                     return RusotoError::Service(GetRecordsError::ExpiredIterator(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetRecordsError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSAccessDeniedException" => {
                     return RusotoError::Service(GetRecordsError::KMSAccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSDisabledException" => {
                     return RusotoError::Service(GetRecordsError::KMSDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(GetRecordsError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSNotFoundException" => {
                     return RusotoError::Service(GetRecordsError::KMSNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSOptInRequired" => {
                     return RusotoError::Service(GetRecordsError::KMSOptInRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSThrottlingException" => {
                     return RusotoError::Service(GetRecordsError::KMSThrottling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(GetRecordsError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetRecordsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1851,19 +1851,19 @@ impl GetShardIteratorError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetShardIteratorError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetShardIteratorError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetShardIteratorError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1919,24 +1919,24 @@ impl IncreaseStreamRetentionPeriodError {
                         IncreaseStreamRetentionPeriodError::InvalidArgument(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(IncreaseStreamRetentionPeriodError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(IncreaseStreamRetentionPeriodError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         IncreaseStreamRetentionPeriodError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1991,27 +1991,27 @@ impl ListShardsError {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(ListShardsError::ExpiredNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(ListShardsError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListShardsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(ListShardsError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListShardsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2067,27 +2067,27 @@ impl ListStreamConsumersError {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(ListStreamConsumersError::ExpiredNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(ListStreamConsumersError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListStreamConsumersError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(ListStreamConsumersError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListStreamConsumersError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2135,7 +2135,7 @@ impl ListStreamsError {
                 "LimitExceededException" => {
                     return RusotoError::Service(ListStreamsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2183,17 +2183,17 @@ impl ListTagsForStreamError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(ListTagsForStreamError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTagsForStreamError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForStreamError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2245,22 +2245,22 @@ impl MergeShardsError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(MergeShardsError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(MergeShardsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(MergeShardsError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(MergeShardsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2323,47 +2323,47 @@ impl PutRecordError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(PutRecordError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSAccessDeniedException" => {
                     return RusotoError::Service(PutRecordError::KMSAccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSDisabledException" => {
                     return RusotoError::Service(PutRecordError::KMSDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(PutRecordError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSNotFoundException" => {
                     return RusotoError::Service(PutRecordError::KMSNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSOptInRequired" => {
                     return RusotoError::Service(PutRecordError::KMSOptInRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSThrottlingException" => {
                     return RusotoError::Service(PutRecordError::KMSThrottling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(PutRecordError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutRecordError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2431,47 +2431,47 @@ impl PutRecordsError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(PutRecordsError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSAccessDeniedException" => {
                     return RusotoError::Service(PutRecordsError::KMSAccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSDisabledException" => {
                     return RusotoError::Service(PutRecordsError::KMSDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(PutRecordsError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSNotFoundException" => {
                     return RusotoError::Service(PutRecordsError::KMSNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSOptInRequired" => {
                     return RusotoError::Service(PutRecordsError::KMSOptInRequired(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSThrottlingException" => {
                     return RusotoError::Service(PutRecordsError::KMSThrottling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(PutRecordsError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutRecordsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2529,22 +2529,22 @@ impl RegisterStreamConsumerError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(RegisterStreamConsumerError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RegisterStreamConsumerError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(RegisterStreamConsumerError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RegisterStreamConsumerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2597,22 +2597,22 @@ impl RemoveTagsFromStreamError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(RemoveTagsFromStreamError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RemoveTagsFromStreamError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(RemoveTagsFromStreamError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemoveTagsFromStreamError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2665,22 +2665,22 @@ impl SplitShardError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(SplitShardError::InvalidArgument(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(SplitShardError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(SplitShardError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SplitShardError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2745,52 +2745,52 @@ impl StartStreamEncryptionError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(StartStreamEncryptionError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSAccessDeniedException" => {
                     return RusotoError::Service(StartStreamEncryptionError::KMSAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSDisabledException" => {
                     return RusotoError::Service(StartStreamEncryptionError::KMSDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(StartStreamEncryptionError::KMSInvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSNotFoundException" => {
                     return RusotoError::Service(StartStreamEncryptionError::KMSNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSOptInRequired" => {
                     return RusotoError::Service(StartStreamEncryptionError::KMSOptInRequired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSThrottlingException" => {
                     return RusotoError::Service(StartStreamEncryptionError::KMSThrottling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartStreamEncryptionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StartStreamEncryptionError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartStreamEncryptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2849,22 +2849,22 @@ impl StopStreamEncryptionError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(StopStreamEncryptionError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StopStreamEncryptionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StopStreamEncryptionError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopStreamEncryptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2917,22 +2917,22 @@ impl SubscribeToShardError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(SubscribeToShardError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(SubscribeToShardError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(SubscribeToShardError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(SubscribeToShardError::ResourceInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(SubscribeToShardError::ResourceInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SubscribeToShardError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2985,22 +2985,22 @@ impl UpdateShardCountError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(UpdateShardCountError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateShardCountError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateShardCountError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(UpdateShardCountError::ResourceInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateShardCountError::ResourceInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateShardCountError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

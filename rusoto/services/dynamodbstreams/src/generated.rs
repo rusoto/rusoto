@@ -398,12 +398,12 @@ impl DescribeStreamError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeStreamError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStreamError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -456,27 +456,27 @@ impl GetRecordsError {
                 "ExpiredIteratorException" => {
                     return RusotoError::Service(GetRecordsError::ExpiredIterator(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(GetRecordsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetRecordsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetRecordsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetRecordsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TrimmedDataAccessException" => {
                     return RusotoError::Service(GetRecordsError::TrimmedDataAccess(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -528,17 +528,17 @@ impl GetShardIteratorError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetShardIteratorError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetShardIteratorError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrimmedDataAccessException" => {
                     return RusotoError::Service(GetShardIteratorError::TrimmedDataAccess(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -586,12 +586,12 @@ impl ListStreamsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListStreamsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListStreamsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

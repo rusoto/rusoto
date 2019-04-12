@@ -1503,39 +1503,41 @@ impl AddLayerVersionPermissionError {
                         AddLayerVersionPermissionError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PolicyLengthExceededException" => {
                     return RusotoError::Service(
                         AddLayerVersionPermissionError::PolicyLengthExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PreconditionFailedException" => {
-                    return RusotoError::Service(AddLayerVersionPermissionError::PreconditionFailed(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AddLayerVersionPermissionError::PreconditionFailed(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(AddLayerVersionPermissionError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddLayerVersionPermissionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AddLayerVersionPermissionError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AddLayerVersionPermissionError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1611,37 +1613,37 @@ impl AddPermissionError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(AddPermissionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyLengthExceededException" => {
                     return RusotoError::Service(AddPermissionError::PolicyLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(AddPermissionError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
-                    return RusotoError::Service(AddPermissionError::ResourceConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AddPermissionError::ResourceConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AddPermissionError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AddPermissionError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AddPermissionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AddPermissionError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1713,27 +1715,27 @@ impl CreateAliasError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateAliasError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(CreateAliasError::ResourceConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateAliasError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateAliasError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateAliasError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1805,27 +1807,27 @@ impl CreateEventSourceMappingError {
                         CreateEventSourceMappingError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(CreateEventSourceMappingError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateEventSourceMappingError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateEventSourceMappingError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEventSourceMappingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1897,32 +1899,32 @@ impl CreateFunctionError {
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(CreateFunctionError::CodeStorageExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateFunctionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(CreateFunctionError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateFunctionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateFunctionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(CreateFunctionError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateFunctionError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1989,17 +1991,17 @@ impl DeleteAliasError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteAliasError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteAliasError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteAliasError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2069,27 +2071,27 @@ impl DeleteEventSourceMappingError {
                         DeleteEventSourceMappingError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteEventSourceMappingError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteEventSourceMappingError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteEventSourceMappingError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteEventSourceMappingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2159,27 +2161,27 @@ impl DeleteFunctionError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteFunctionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(DeleteFunctionError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteFunctionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteFunctionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DeleteFunctionError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteFunctionError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2249,22 +2251,22 @@ impl DeleteFunctionConcurrencyError {
                         DeleteFunctionConcurrencyError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteFunctionConcurrencyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteFunctionConcurrencyError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteFunctionConcurrencyError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2327,12 +2329,12 @@ impl DeleteLayerVersionError {
                 "ServiceException" => {
                     return RusotoError::Service(DeleteLayerVersionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteLayerVersionError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2393,12 +2395,12 @@ impl GetAccountSettingsError {
                 "ServiceException" => {
                     return RusotoError::Service(GetAccountSettingsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetAccountSettingsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2461,22 +2463,24 @@ impl GetAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(GetAliasError::InvalidParameterValue(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetAliasError::InvalidParameterValue(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetAliasError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(GetAliasError::Service(String::from(error_message)));
+                    return RusotoError::Service(GetAliasError::Service(String::from(
+                        error_message,
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetAliasError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2543,22 +2547,22 @@ impl GetEventSourceMappingError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetEventSourceMappingError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetEventSourceMappingError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetEventSourceMappingError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetEventSourceMappingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2625,22 +2629,22 @@ impl GetFunctionError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetFunctionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetFunctionError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetFunctionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetFunctionError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2709,22 +2713,22 @@ impl GetFunctionConfigurationError {
                         GetFunctionConfigurationError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetFunctionConfigurationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetFunctionConfigurationError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetFunctionConfigurationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2791,22 +2795,22 @@ impl GetLayerVersionError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetLayerVersionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetLayerVersionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetLayerVersionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetLayerVersionError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2873,22 +2877,22 @@ impl GetLayerVersionPolicyError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetLayerVersionPolicyError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetLayerVersionPolicyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetLayerVersionPolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetLayerVersionPolicyError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2955,22 +2959,22 @@ impl GetPolicyError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(GetPolicyError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetPolicyError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(GetPolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetPolicyError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3069,100 +3073,100 @@ impl InvokeError {
                 "EC2AccessDeniedException" => {
                     return RusotoError::Service(InvokeError::EC2AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EC2ThrottledException" => {
                     return RusotoError::Service(InvokeError::EC2Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "EC2UnexpectedException" => {
                     return RusotoError::Service(InvokeError::EC2Unexpected(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ENILimitReachedException" => {
                     return RusotoError::Service(InvokeError::ENILimitReached(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(InvokeError::InvalidParameterValue(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestContentException" => {
                     return RusotoError::Service(InvokeError::InvalidRequestContent(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRuntimeException" => {
                     return RusotoError::Service(InvokeError::InvalidRuntime(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidSecurityGroupIDException" => {
                     return RusotoError::Service(InvokeError::InvalidSecurityGroupID(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidSubnetIDException" => {
                     return RusotoError::Service(InvokeError::InvalidSubnetID(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidZipFileException" => {
                     return RusotoError::Service(InvokeError::InvalidZipFile(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSAccessDeniedException" => {
                     return RusotoError::Service(InvokeError::KMSAccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSDisabledException" => {
                     return RusotoError::Service(InvokeError::KMSDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSInvalidStateException" => {
                     return RusotoError::Service(InvokeError::KMSInvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSNotFoundException" => {
                     return RusotoError::Service(InvokeError::KMSNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RequestTooLargeException" => {
                     return RusotoError::Service(InvokeError::RequestTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InvokeError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(InvokeError::Service(String::from(error_message)));
+                    return RusotoError::Service(InvokeError::Service(String::from(error_message)))
                 }
                 "SubnetIPAddressLimitReachedException" => {
                     return RusotoError::Service(InvokeError::SubnetIPAddressLimitReached(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(InvokeError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedMediaTypeException" => {
                     return RusotoError::Service(InvokeError::UnsupportedMediaType(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3245,22 +3249,22 @@ impl InvokeAsyncError {
                 "InvalidRequestContentException" => {
                     return RusotoError::Service(InvokeAsyncError::InvalidRequestContent(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRuntimeException" => {
                     return RusotoError::Service(InvokeAsyncError::InvalidRuntime(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InvokeAsyncError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(InvokeAsyncError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3327,22 +3331,22 @@ impl ListAliasesError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListAliasesError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListAliasesError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListAliasesError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListAliasesError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3411,22 +3415,22 @@ impl ListEventSourceMappingsError {
                         ListEventSourceMappingsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListEventSourceMappingsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListEventSourceMappingsError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListEventSourceMappingsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3491,17 +3495,17 @@ impl ListFunctionsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListFunctionsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListFunctionsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListFunctionsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3567,22 +3571,22 @@ impl ListLayerVersionsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListLayerVersionsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListLayerVersionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListLayerVersionsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListLayerVersionsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3647,17 +3651,17 @@ impl ListLayersError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(ListLayersError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListLayersError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListLayersError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3721,22 +3725,24 @@ impl ListTagsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(ListTagsError::InvalidParameterValue(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListTagsError::Service(String::from(error_message)));
+                    return RusotoError::Service(ListTagsError::Service(String::from(
+                        error_message,
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListTagsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3801,24 +3807,26 @@ impl ListVersionsByFunctionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(ListVersionsByFunctionError::InvalidParameterValue(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListVersionsByFunctionError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListVersionsByFunctionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(ListVersionsByFunctionError::Service(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListVersionsByFunctionError::Service(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListVersionsByFunctionError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3887,27 +3895,27 @@ impl PublishLayerVersionError {
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(PublishLayerVersionError::CodeStorageExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(PublishLayerVersionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PublishLayerVersionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(PublishLayerVersionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(PublishLayerVersionError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3979,32 +3987,32 @@ impl PublishVersionError {
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(PublishVersionError::CodeStorageExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(PublishVersionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(PublishVersionError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PublishVersionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(PublishVersionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(PublishVersionError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PublishVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4071,24 +4079,26 @@ impl PutFunctionConcurrencyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(PutFunctionConcurrencyError::InvalidParameterValue(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutFunctionConcurrencyError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutFunctionConcurrencyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(PutFunctionConcurrencyError::Service(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutFunctionConcurrencyError::Service(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(PutFunctionConcurrencyError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4161,31 +4171,33 @@ impl RemoveLayerVersionPermissionError {
                         RemoveLayerVersionPermissionError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(
                         RemoveLayerVersionPermissionError::PreconditionFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         RemoveLayerVersionPermissionError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RemoveLayerVersionPermissionError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(RemoveLayerVersionPermissionError::TooManyRequests(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RemoveLayerVersionPermissionError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4255,27 +4267,27 @@ impl RemovePermissionError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(RemovePermissionError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(RemovePermissionError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemovePermissionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RemovePermissionError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(RemovePermissionError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4343,22 +4355,22 @@ impl TagResourceError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(TagResourceError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(TagResourceError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4425,22 +4437,22 @@ impl UntagResourceError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UntagResourceError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UntagResourceError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4509,27 +4521,27 @@ impl UpdateAliasError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateAliasError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionFailedException" => {
-                    return RusotoError::Service(UpdateAliasError::PreconditionFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateAliasError::PreconditionFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateAliasError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateAliasError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateAliasError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4603,32 +4615,32 @@ impl UpdateEventSourceMappingError {
                         UpdateEventSourceMappingError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(UpdateEventSourceMappingError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateEventSourceMappingError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateEventSourceMappingError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateEventSourceMappingError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateEventSourceMappingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4701,32 +4713,32 @@ impl UpdateFunctionCodeError {
                 "CodeStorageExceededException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::CodeStorageExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateFunctionCodeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4803,34 +4815,38 @@ impl UpdateFunctionConfigurationError {
                         UpdateFunctionConfigurationError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(
                         UpdateFunctionConfigurationError::PreconditionFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceConflictException" => {
-                    return RusotoError::Service(UpdateFunctionConfigurationError::ResourceConflict(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateFunctionConfigurationError::ResourceConflict(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdateFunctionConfigurationError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateFunctionConfigurationError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateFunctionConfigurationError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateFunctionConfigurationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

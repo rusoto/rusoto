@@ -2586,22 +2586,22 @@ impl BatchGetItemError {
                 "InternalServerError" => {
                     return RusotoError::Service(BatchGetItemError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(BatchGetItemError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(BatchGetItemError::RequestLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(BatchGetItemError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2656,29 +2656,31 @@ impl BatchWriteItemError {
                 "InternalServerError" => {
                     return RusotoError::Service(BatchWriteItemError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return RusotoError::Service(
                         BatchWriteItemError::ItemCollectionSizeLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return RusotoError::Service(BatchWriteItemError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        BatchWriteItemError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(BatchWriteItemError::RequestLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(BatchWriteItemError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2736,32 +2738,32 @@ impl CreateBackupError {
                 "BackupInUseException" => {
                     return RusotoError::Service(CreateBackupError::BackupInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ContinuousBackupsUnavailableException" => {
                     return RusotoError::Service(CreateBackupError::ContinuousBackupsUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateBackupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateBackupError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TableInUseException" => {
                     return RusotoError::Service(CreateBackupError::TableInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TableNotFoundException" => {
                     return RusotoError::Service(CreateBackupError::TableNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2816,22 +2818,22 @@ impl CreateGlobalTableError {
                 "GlobalTableAlreadyExistsException" => {
                     return RusotoError::Service(CreateGlobalTableError::GlobalTableAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateGlobalTableError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateGlobalTableError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TableNotFoundException" => {
                     return RusotoError::Service(CreateGlobalTableError::TableNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2882,17 +2884,17 @@ impl CreateTableError {
                 "InternalServerError" => {
                     return RusotoError::Service(CreateTableError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateTableError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateTableError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2944,22 +2946,22 @@ impl DeleteBackupError {
                 "BackupInUseException" => {
                     return RusotoError::Service(DeleteBackupError::BackupInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BackupNotFoundException" => {
                     return RusotoError::Service(DeleteBackupError::BackupNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteBackupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteBackupError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3018,37 +3020,37 @@ impl DeleteItemError {
                 "ConditionalCheckFailedException" => {
                     return RusotoError::Service(DeleteItemError::ConditionalCheckFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DeleteItemError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteItemError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return RusotoError::Service(DeleteItemError::ItemCollectionSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DeleteItemError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(DeleteItemError::RequestLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteItemError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TransactionConflictException" => {
-                    return RusotoError::Service(DeleteItemError::TransactionConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteItemError::TransactionConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3104,22 +3106,22 @@ impl DeleteTableError {
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteTableError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteTableError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteTableError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTableError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3168,12 +3170,12 @@ impl DescribeBackupError {
                 "BackupNotFoundException" => {
                     return RusotoError::Service(DescribeBackupError::BackupNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeBackupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3222,12 +3224,12 @@ impl DescribeContinuousBackupsError {
                         DescribeContinuousBackupsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TableNotFoundException" => {
                     return RusotoError::Service(DescribeContinuousBackupsError::TableNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3308,12 +3310,12 @@ impl DescribeGlobalTableError {
                 "GlobalTableNotFoundException" => {
                     return RusotoError::Service(DescribeGlobalTableError::GlobalTableNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeGlobalTableError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3364,14 +3366,14 @@ impl DescribeGlobalTableSettingsError {
                         DescribeGlobalTableSettingsError::GlobalTableNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         DescribeGlobalTableSettingsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3416,7 +3418,7 @@ impl DescribeLimitsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeLimitsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3462,12 +3464,12 @@ impl DescribeTableError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTableError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeTableError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeTableError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3514,12 +3516,12 @@ impl DescribeTimeToLiveError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeTimeToLiveError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeTimeToLiveError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3570,22 +3572,22 @@ impl GetItemError {
                 "InternalServerError" => {
                     return RusotoError::Service(GetItemError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(GetItemError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(GetItemError::RequestLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetItemError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3632,7 +3634,7 @@ impl ListBackupsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListBackupsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3676,7 +3678,7 @@ impl ListGlobalTablesError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListGlobalTablesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3718,9 +3720,9 @@ impl ListTablesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(ListTablesError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTablesError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3766,12 +3768,12 @@ impl ListTagsOfResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListTagsOfResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsOfResourceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3826,39 +3828,39 @@ impl PutItemError {
 
             match *error_type {
                 "ConditionalCheckFailedException" => {
-                    return RusotoError::Service(PutItemError::ConditionalCheckFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutItemError::ConditionalCheckFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutItemError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return RusotoError::Service(PutItemError::ItemCollectionSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(PutItemError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(PutItemError::RequestLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutItemError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TransactionConflictException" => {
                     return RusotoError::Service(PutItemError::TransactionConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3914,22 +3916,22 @@ impl QueryError {
                 "InternalServerError" => {
                     return RusotoError::Service(QueryError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(QueryError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(QueryError::RequestLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(QueryError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3986,32 +3988,32 @@ impl RestoreTableFromBackupError {
                 "BackupInUseException" => {
                     return RusotoError::Service(RestoreTableFromBackupError::BackupInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BackupNotFoundException" => {
                     return RusotoError::Service(RestoreTableFromBackupError::BackupNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(RestoreTableFromBackupError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RestoreTableFromBackupError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TableAlreadyExistsException" => {
                     return RusotoError::Service(RestoreTableFromBackupError::TableAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TableInUseException" => {
                     return RusotoError::Service(RestoreTableFromBackupError::TableInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4074,39 +4076,43 @@ impl RestoreTableToPointInTimeError {
                         RestoreTableToPointInTimeError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRestoreTimeException" => {
-                    return RusotoError::Service(RestoreTableToPointInTimeError::InvalidRestoreTime(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RestoreTableToPointInTimeError::InvalidRestoreTime(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RestoreTableToPointInTimeError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PointInTimeRecoveryUnavailableException" => {
                     return RusotoError::Service(
                         RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "TableAlreadyExistsException" => {
-                    return RusotoError::Service(RestoreTableToPointInTimeError::TableAlreadyExists(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RestoreTableToPointInTimeError::TableAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TableInUseException" => {
                     return RusotoError::Service(RestoreTableToPointInTimeError::TableInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TableNotFoundException" => {
                     return RusotoError::Service(RestoreTableToPointInTimeError::TableNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4162,22 +4168,22 @@ impl ScanError {
                 "InternalServerError" => {
                     return RusotoError::Service(ScanError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(ScanError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(ScanError::RequestLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ScanError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4230,22 +4236,22 @@ impl TagResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(TagResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(TagResourceError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4298,24 +4304,24 @@ impl TransactGetItemsError {
                 "InternalServerError" => {
                     return RusotoError::Service(TransactGetItemsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         TransactGetItemsError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TransactGetItemsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TransactionCanceledException" => {
                     return RusotoError::Service(TransactGetItemsError::TransactionCanceled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4374,34 +4380,34 @@ impl TransactWriteItemsError {
                         TransactWriteItemsError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(TransactWriteItemsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         TransactWriteItemsError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TransactWriteItemsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TransactionCanceledException" => {
                     return RusotoError::Service(TransactWriteItemsError::TransactionCanceled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TransactionInProgressException" => {
                     return RusotoError::Service(TransactWriteItemsError::TransactionInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4456,22 +4462,22 @@ impl UntagResourceError {
                 "InternalServerError" => {
                     return RusotoError::Service(UntagResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UntagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UntagResourceError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4524,17 +4530,17 @@ impl UpdateContinuousBackupsError {
                         UpdateContinuousBackupsError::ContinuousBackupsUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateContinuousBackupsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TableNotFoundException" => {
                     return RusotoError::Service(UpdateContinuousBackupsError::TableNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4588,27 +4594,27 @@ impl UpdateGlobalTableError {
                 "GlobalTableNotFoundException" => {
                     return RusotoError::Service(UpdateGlobalTableError::GlobalTableNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateGlobalTableError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicaAlreadyExistsException" => {
                     return RusotoError::Service(UpdateGlobalTableError::ReplicaAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicaNotFoundException" => {
                     return RusotoError::Service(UpdateGlobalTableError::ReplicaNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TableNotFoundException" => {
                     return RusotoError::Service(UpdateGlobalTableError::TableNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4668,34 +4674,34 @@ impl UpdateGlobalTableSettingsError {
                         UpdateGlobalTableSettingsError::GlobalTableNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "IndexNotFoundException" => {
                     return RusotoError::Service(UpdateGlobalTableSettingsError::IndexNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         UpdateGlobalTableSettingsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateGlobalTableSettingsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicaNotFoundException" => {
                     return RusotoError::Service(UpdateGlobalTableSettingsError::ReplicaNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateGlobalTableSettingsError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4756,37 +4762,37 @@ impl UpdateItemError {
                 "ConditionalCheckFailedException" => {
                     return RusotoError::Service(UpdateItemError::ConditionalCheckFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(UpdateItemError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateItemError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "ItemCollectionSizeLimitExceededException" => {
                     return RusotoError::Service(UpdateItemError::ItemCollectionSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(UpdateItemError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestLimitExceeded" => {
                     return RusotoError::Service(UpdateItemError::RequestLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateItemError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TransactionConflictException" => {
-                    return RusotoError::Service(UpdateItemError::TransactionConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateItemError::TransactionConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4842,22 +4848,22 @@ impl UpdateTableError {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateTableError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateTableError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateTableError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateTableError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4910,22 +4916,22 @@ impl UpdateTimeToLiveError {
                 "InternalServerError" => {
                     return RusotoError::Service(UpdateTimeToLiveError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateTimeToLiveError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateTimeToLiveError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(UpdateTimeToLiveError::ResourceInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateTimeToLiveError::ResourceInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateTimeToLiveError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

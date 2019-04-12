@@ -3631,32 +3631,32 @@ impl AssociateCertificateError {
                 "BadRequestException" => {
                     return RusotoError::Service(AssociateCertificateError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(AssociateCertificateError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(AssociateCertificateError::Forbidden(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AssociateCertificateError::Forbidden(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(AssociateCertificateError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(AssociateCertificateError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AssociateCertificateError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3729,32 +3729,32 @@ impl CancelJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(CancelJobError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CancelJobError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CancelJobError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CancelJobError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CancelJobError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CancelJobError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3827,32 +3827,32 @@ impl CreateJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateJobError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateJobError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateJobError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateJobError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateJobError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateJobError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3925,32 +3925,32 @@ impl CreateJobTemplateError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateJobTemplateError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateJobTemplateError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateJobTemplateError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateJobTemplateError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateJobTemplateError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateJobTemplateError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4023,32 +4023,32 @@ impl CreatePresetError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreatePresetError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreatePresetError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreatePresetError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreatePresetError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreatePresetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreatePresetError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4121,32 +4121,32 @@ impl CreateQueueError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateQueueError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateQueueError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateQueueError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateQueueError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateQueueError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateQueueError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4219,32 +4219,32 @@ impl DeleteJobTemplateError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteJobTemplateError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteJobTemplateError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteJobTemplateError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteJobTemplateError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteJobTemplateError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteJobTemplateError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4317,32 +4317,32 @@ impl DeletePresetError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeletePresetError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeletePresetError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeletePresetError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeletePresetError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeletePresetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeletePresetError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4415,32 +4415,32 @@ impl DeleteQueueError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteQueueError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteQueueError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteQueueError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteQueueError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteQueueError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteQueueError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4513,32 +4513,32 @@ impl DescribeEndpointsError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEndpointsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DescribeEndpointsError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeEndpointsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeEndpointsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeEndpointsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeEndpointsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4611,32 +4611,32 @@ impl DisassociateCertificateError {
                 "BadRequestException" => {
                     return RusotoError::Service(DisassociateCertificateError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DisassociateCertificateError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DisassociateCertificateError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DisassociateCertificateError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DisassociateCertificateError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DisassociateCertificateError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4709,26 +4709,28 @@ impl GetJobError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetJobError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
-                    return RusotoError::Service(GetJobError::Conflict(String::from(error_message)));
+                    return RusotoError::Service(GetJobError::Conflict(String::from(error_message)))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(GetJobError::Forbidden(String::from(error_message)));
+                    return RusotoError::Service(GetJobError::Forbidden(String::from(
+                        error_message,
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetJobError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetJobError::NotFound(String::from(error_message)))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetJobError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4801,32 +4803,32 @@ impl GetJobTemplateError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetJobTemplateError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(GetJobTemplateError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(GetJobTemplateError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetJobTemplateError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetJobTemplateError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetJobTemplateError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetJobTemplateError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4899,32 +4901,32 @@ impl GetPresetError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetPresetError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(GetPresetError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(GetPresetError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetPresetError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetPresetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetPresetError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4997,32 +4999,32 @@ impl GetQueueError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetQueueError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(GetQueueError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(GetQueueError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(GetQueueError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetQueueError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetQueueError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5095,32 +5097,32 @@ impl ListJobTemplatesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListJobTemplatesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(ListJobTemplatesError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListJobTemplatesError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListJobTemplatesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListJobTemplatesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListJobTemplatesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5193,32 +5195,32 @@ impl ListJobsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListJobsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(ListJobsError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListJobsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListJobsError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListJobsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListJobsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5291,32 +5293,32 @@ impl ListPresetsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListPresetsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(ListPresetsError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListPresetsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListPresetsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListPresetsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListPresetsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5389,32 +5391,32 @@ impl ListQueuesError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListQueuesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(ListQueuesError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListQueuesError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(ListQueuesError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListQueuesError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListQueuesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListQueuesError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5485,34 +5487,34 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListTagsForResourceError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(ListTagsForResourceError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListTagsForResourceError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListTagsForResourceError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5585,32 +5587,32 @@ impl TagResourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(TagResourceError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(TagResourceError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(TagResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(TagResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(TagResourceError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5683,32 +5685,32 @@ impl UntagResourceError {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UntagResourceError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UntagResourceError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UntagResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UntagResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UntagResourceError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5781,32 +5783,32 @@ impl UpdateJobTemplateError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateJobTemplateError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateJobTemplateError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateJobTemplateError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateJobTemplateError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateJobTemplateError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateJobTemplateError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5879,32 +5881,32 @@ impl UpdatePresetError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdatePresetError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdatePresetError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdatePresetError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdatePresetError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdatePresetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdatePresetError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5977,32 +5979,32 @@ impl UpdateQueueError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateQueueError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateQueueError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateQueueError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateQueueError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateQueueError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateQueueError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

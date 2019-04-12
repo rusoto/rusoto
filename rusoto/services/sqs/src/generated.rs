@@ -1965,7 +1965,7 @@ impl AddPermissionError {
                     "OverLimit" => {
                         return RusotoError::Service(AddPermissionError::OverLimit(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -2016,14 +2016,14 @@ impl ChangeMessageVisibilityError {
                             ChangeMessageVisibilityError::MessageNotInflight(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ReceiptHandleIsInvalid" => {
                         return RusotoError::Service(
                             ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2081,28 +2081,28 @@ impl ChangeMessageVisibilityBatchError {
                             ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return RusotoError::Service(
                             ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return RusotoError::Service(
                             ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return RusotoError::Service(
                             ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2154,12 +2154,12 @@ impl CreateQueueError {
                     "AWS.SimpleQueueService.QueueDeletedRecently" => {
                         return RusotoError::Service(CreateQueueError::QueueDeletedRecently(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "QueueAlreadyExists" => {
                         return RusotoError::Service(CreateQueueError::QueueNameExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2209,12 +2209,12 @@ impl DeleteMessageError {
                     "InvalidIdFormat" => {
                         return RusotoError::Service(DeleteMessageError::InvalidIdFormat(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ReceiptHandleIsInvalid" => {
                         return RusotoError::Service(DeleteMessageError::ReceiptHandleIsInvalid(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2270,24 +2270,24 @@ impl DeleteMessageBatchError {
                             DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return RusotoError::Service(DeleteMessageBatchError::EmptyBatchRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return RusotoError::Service(DeleteMessageBatchError::InvalidBatchEntryId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return RusotoError::Service(
                             DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2374,7 +2374,7 @@ impl GetQueueAttributesError {
                     "InvalidAttributeName" => {
                         return RusotoError::Service(GetQueueAttributesError::InvalidAttributeName(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2421,7 +2421,7 @@ impl GetQueueUrlError {
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return RusotoError::Service(GetQueueUrlError::QueueDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2472,7 +2472,7 @@ impl ListDeadLetterSourceQueuesError {
                             ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -2595,12 +2595,12 @@ impl PurgeQueueError {
                     "AWS.SimpleQueueService.PurgeQueueInProgress" => {
                         return RusotoError::Service(PurgeQueueError::PurgeQueueInProgress(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return RusotoError::Service(PurgeQueueError::QueueDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2648,7 +2648,7 @@ impl ReceiveMessageError {
                     "OverLimit" => {
                         return RusotoError::Service(ReceiveMessageError::OverLimit(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -2734,12 +2734,12 @@ impl SendMessageError {
                     "InvalidMessageContents" => {
                         return RusotoError::Service(SendMessageError::InvalidMessageContents(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
                         return RusotoError::Service(SendMessageError::UnsupportedOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2799,34 +2799,34 @@ impl SendMessageBatchError {
                             SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "AWS.SimpleQueueService.BatchRequestTooLong" => {
                         return RusotoError::Service(SendMessageBatchError::BatchRequestTooLong(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return RusotoError::Service(SendMessageBatchError::EmptyBatchRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return RusotoError::Service(SendMessageBatchError::InvalidBatchEntryId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return RusotoError::Service(
                             SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
                         return RusotoError::Service(SendMessageBatchError::UnsupportedOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -2878,7 +2878,7 @@ impl SetQueueAttributesError {
                     "InvalidAttributeName" => {
                         return RusotoError::Service(SetQueueAttributesError::InvalidAttributeName(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }

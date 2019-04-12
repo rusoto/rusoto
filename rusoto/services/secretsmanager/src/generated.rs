@@ -764,22 +764,22 @@ impl CancelRotateSecretError {
                 "InternalServiceError" => {
                     return RusotoError::Service(CancelRotateSecretError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CancelRotateSecretError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CancelRotateSecretError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CancelRotateSecretError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -840,49 +840,49 @@ impl CreateSecretError {
 
             match *error_type {
                 "EncryptionFailure" => {
-                    return RusotoError::Service(CreateSecretError::EncryptionFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateSecretError::EncryptionFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceError" => {
                     return RusotoError::Service(CreateSecretError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateSecretError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateSecretError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateSecretError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(CreateSecretError::MalformedPolicyDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(CreateSecretError::PreconditionNotMet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceExistsException" => {
                     return RusotoError::Service(CreateSecretError::ResourceExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateSecretError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -938,17 +938,17 @@ impl DeleteResourcePolicyError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeleteResourcePolicyError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteResourcePolicyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1000,22 +1000,22 @@ impl DeleteSecretError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeleteSecretError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteSecretError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteSecretError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteSecretError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1064,12 +1064,12 @@ impl DescribeSecretError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeSecretError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeSecretError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1118,17 +1118,17 @@ impl GetRandomPasswordError {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetRandomPasswordError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetRandomPasswordError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetRandomPasswordError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1178,17 +1178,17 @@ impl GetResourcePolicyError {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetResourcePolicyError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetResourcePolicyError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetResourcePolicyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1242,27 +1242,27 @@ impl GetSecretValueError {
                 "DecryptionFailure" => {
                     return RusotoError::Service(GetSecretValueError::DecryptionFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceError" => {
                     return RusotoError::Service(GetSecretValueError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetSecretValueError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetSecretValueError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetSecretValueError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1314,17 +1314,17 @@ impl ListSecretVersionIdsError {
                 "InternalServiceError" => {
                     return RusotoError::Service(ListSecretVersionIdsError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListSecretVersionIdsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListSecretVersionIdsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1374,17 +1374,17 @@ impl ListSecretsError {
                 "InternalServiceError" => {
                     return RusotoError::Service(ListSecretsError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListSecretsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListSecretsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1438,27 +1438,27 @@ impl PutResourcePolicyError {
                 "InternalServiceError" => {
                     return RusotoError::Service(PutResourcePolicyError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutResourcePolicyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutResourcePolicyError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(PutResourcePolicyError::MalformedPolicyDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutResourcePolicyError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1518,37 +1518,37 @@ impl PutSecretValueError {
                 "EncryptionFailure" => {
                     return RusotoError::Service(PutSecretValueError::EncryptionFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceError" => {
                     return RusotoError::Service(PutSecretValueError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutSecretValueError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutSecretValueError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutSecretValueError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceExistsException" => {
                     return RusotoError::Service(PutSecretValueError::ResourceExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutSecretValueError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1604,22 +1604,22 @@ impl RestoreSecretError {
                 "InternalServiceError" => {
                     return RusotoError::Service(RestoreSecretError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(RestoreSecretError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RestoreSecretError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RestoreSecretError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RestoreSecretError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RestoreSecretError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1672,22 +1672,22 @@ impl RotateSecretError {
                 "InternalServiceError" => {
                     return RusotoError::Service(RotateSecretError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RotateSecretError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RotateSecretError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RotateSecretError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1740,22 +1740,22 @@ impl TagResourceError {
                 "InternalServiceError" => {
                     return RusotoError::Service(TagResourceError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(TagResourceError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1808,22 +1808,22 @@ impl UntagResourceError {
                 "InternalServiceError" => {
                     return RusotoError::Service(UntagResourceError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UntagResourceError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1884,49 +1884,49 @@ impl UpdateSecretError {
 
             match *error_type {
                 "EncryptionFailure" => {
-                    return RusotoError::Service(UpdateSecretError::EncryptionFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateSecretError::EncryptionFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceError" => {
                     return RusotoError::Service(UpdateSecretError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateSecretError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateSecretError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateSecretError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(UpdateSecretError::MalformedPolicyDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionNotMetException" => {
                     return RusotoError::Service(UpdateSecretError::PreconditionNotMet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceExistsException" => {
                     return RusotoError::Service(UpdateSecretError::ResourceExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateSecretError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1988,27 +1988,27 @@ impl UpdateSecretVersionStageError {
                         UpdateSecretVersionStageError::InternalServiceError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateSecretVersionStageError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateSecretVersionStageError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateSecretVersionStageError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateSecretVersionStageError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

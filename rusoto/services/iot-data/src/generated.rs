@@ -151,44 +151,44 @@ impl DeleteThingShadowError {
                 "InternalFailureException" => {
                     return RusotoError::Service(DeleteThingShadowError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteThingShadowError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(DeleteThingShadowError::MethodNotAllowed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteThingShadowError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteThingShadowError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteThingShadowError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(DeleteThingShadowError::Unauthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteThingShadowError::Unauthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "UnsupportedDocumentEncodingException" => {
                     return RusotoError::Service(
                         DeleteThingShadowError::UnsupportedDocumentEncoding(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -265,44 +265,44 @@ impl GetThingShadowError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(GetThingShadowError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetThingShadowError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetThingShadowError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(GetThingShadowError::MethodNotAllowed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetThingShadowError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(GetThingShadowError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetThingShadowError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(GetThingShadowError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedDocumentEncodingException" => {
                     return RusotoError::Service(GetThingShadowError::UnsupportedDocumentEncoding(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -373,22 +373,22 @@ impl PublishError {
                 "InternalFailureException" => {
                     return RusotoError::Service(PublishError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PublishError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(PublishError::MethodNotAllowed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(PublishError::Unauthorized(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -465,49 +465,49 @@ impl UpdateThingShadowError {
                 "ConflictException" => {
                     return RusotoError::Service(UpdateThingShadowError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateThingShadowError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateThingShadowError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MethodNotAllowedException" => {
                     return RusotoError::Service(UpdateThingShadowError::MethodNotAllowed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestEntityTooLargeException" => {
                     return RusotoError::Service(UpdateThingShadowError::RequestEntityTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateThingShadowError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(UpdateThingShadowError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedException" => {
-                    return RusotoError::Service(UpdateThingShadowError::Unauthorized(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateThingShadowError::Unauthorized(
+                        String::from(error_message),
+                    ))
                 }
                 "UnsupportedDocumentEncodingException" => {
                     return RusotoError::Service(
                         UpdateThingShadowError::UnsupportedDocumentEncoding(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

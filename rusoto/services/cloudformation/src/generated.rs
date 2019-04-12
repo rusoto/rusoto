@@ -7664,7 +7664,7 @@ impl CancelUpdateStackError {
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(CancelUpdateStackError::TokenAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7713,7 +7713,7 @@ impl ContinueUpdateRollbackError {
                             ContinueUpdateRollbackError::TokenAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7764,17 +7764,19 @@ impl CreateChangeSetError {
                     "AlreadyExistsException" => {
                         return RusotoError::Service(CreateChangeSetError::AlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InsufficientCapabilitiesException" => {
-                        return RusotoError::Service(CreateChangeSetError::InsufficientCapabilities(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateChangeSetError::InsufficientCapabilities(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "LimitExceededException" => {
                         return RusotoError::Service(CreateChangeSetError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7829,22 +7831,22 @@ impl CreateStackError {
                     "AlreadyExistsException" => {
                         return RusotoError::Service(CreateStackError::AlreadyExists(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InsufficientCapabilitiesException" => {
                         return RusotoError::Service(CreateStackError::InsufficientCapabilities(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceededException" => {
                         return RusotoError::Service(CreateStackError::LimitExceeded(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(CreateStackError::TokenAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7904,34 +7906,36 @@ impl CreateStackInstancesError {
                     "InvalidOperationException" => {
                         return RusotoError::Service(CreateStackInstancesError::InvalidOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceededException" => {
                         return RusotoError::Service(CreateStackInstancesError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(
                             CreateStackInstancesError::OperationIdAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OperationInProgressException" => {
-                        return RusotoError::Service(CreateStackInstancesError::OperationInProgress(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateStackInstancesError::OperationInProgress(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(CreateStackInstancesError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(CreateStackInstancesError::StaleRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7987,17 +7991,17 @@ impl CreateStackSetError {
                     "CreatedButModifiedException" => {
                         return RusotoError::Service(CreateStackSetError::CreatedButModified(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceededException" => {
                         return RusotoError::Service(CreateStackSetError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NameAlreadyExistsException" => {
                         return RusotoError::Service(CreateStackSetError::NameAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8046,7 +8050,7 @@ impl DeleteChangeSetError {
                     "InvalidChangeSetStatus" => {
                         return RusotoError::Service(DeleteChangeSetError::InvalidChangeSetStatus(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8093,7 +8097,7 @@ impl DeleteStackError {
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(DeleteStackError::TokenAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8148,29 +8152,31 @@ impl DeleteStackInstancesError {
                     "InvalidOperationException" => {
                         return RusotoError::Service(DeleteStackInstancesError::InvalidOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(
                             DeleteStackInstancesError::OperationIdAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OperationInProgressException" => {
-                        return RusotoError::Service(DeleteStackInstancesError::OperationInProgress(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteStackInstancesError::OperationInProgress(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(DeleteStackInstancesError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(DeleteStackInstancesError::StaleRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8223,12 +8229,12 @@ impl DeleteStackSetError {
                     "OperationInProgressException" => {
                         return RusotoError::Service(DeleteStackSetError::OperationInProgress(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StackSetNotEmptyException" => {
                         return RusotoError::Service(DeleteStackSetError::StackSetNotEmpty(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8313,7 +8319,7 @@ impl DescribeChangeSetError {
                     "ChangeSetNotFound" => {
                         return RusotoError::Service(DescribeChangeSetError::ChangeSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8440,12 +8446,12 @@ impl DescribeStackInstanceError {
                             DescribeStackInstanceError::StackInstanceNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(DescribeStackInstanceError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8606,7 +8612,7 @@ impl DescribeStackSetError {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(DescribeStackSetError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8657,14 +8663,14 @@ impl DescribeStackSetOperationError {
                             DescribeStackSetOperationError::OperationNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(
                             DescribeStackSetOperationError::StackSetNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8866,24 +8872,24 @@ impl ExecuteChangeSetError {
                     "ChangeSetNotFound" => {
                         return RusotoError::Service(ExecuteChangeSetError::ChangeSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InsufficientCapabilitiesException" => {
                         return RusotoError::Service(
                             ExecuteChangeSetError::InsufficientCapabilities(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidChangeSetStatus" => {
                         return RusotoError::Service(ExecuteChangeSetError::InvalidChangeSetStatus(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(ExecuteChangeSetError::TokenAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8970,7 +8976,7 @@ impl GetTemplateError {
                     "ChangeSetNotFound" => {
                         return RusotoError::Service(GetTemplateError::ChangeSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9017,7 +9023,7 @@ impl GetTemplateSummaryError {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(GetTemplateSummaryError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9175,7 +9181,7 @@ impl ListStackInstancesError {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(ListStackInstancesError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9265,14 +9271,14 @@ impl ListStackSetOperationResultsError {
                             ListStackSetOperationResultsError::OperationNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(
                             ListStackSetOperationResultsError::StackSetNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9320,7 +9326,7 @@ impl ListStackSetOperationsError {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(ListStackSetOperationsError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9519,17 +9525,17 @@ impl StopStackSetOperationError {
                     "InvalidOperationException" => {
                         return RusotoError::Service(StopStackSetOperationError::InvalidOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationNotFoundException" => {
                         return RusotoError::Service(StopStackSetOperationError::OperationNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(StopStackSetOperationError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9580,12 +9586,12 @@ impl UpdateStackError {
                     "InsufficientCapabilitiesException" => {
                         return RusotoError::Service(UpdateStackError::InsufficientCapabilities(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(UpdateStackError::TokenAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9643,36 +9649,38 @@ impl UpdateStackInstancesError {
                     "InvalidOperationException" => {
                         return RusotoError::Service(UpdateStackInstancesError::InvalidOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(
                             UpdateStackInstancesError::OperationIdAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OperationInProgressException" => {
-                        return RusotoError::Service(UpdateStackInstancesError::OperationInProgress(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateStackInstancesError::OperationInProgress(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "StackInstanceNotFoundException" => {
                         return RusotoError::Service(
                             UpdateStackInstancesError::StackInstanceNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(UpdateStackInstancesError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(UpdateStackInstancesError::StaleRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9734,32 +9742,32 @@ impl UpdateStackSetError {
                     "InvalidOperationException" => {
                         return RusotoError::Service(UpdateStackSetError::InvalidOperation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(UpdateStackSetError::OperationIdAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationInProgressException" => {
                         return RusotoError::Service(UpdateStackSetError::OperationInProgress(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StackInstanceNotFoundException" => {
                         return RusotoError::Service(UpdateStackSetError::StackInstanceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(UpdateStackSetError::StackSetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(UpdateStackSetError::StaleRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10664,11 +10672,9 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeAccountLimitsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountLimitsError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10874,11 +10880,9 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeStackInstanceError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeStackInstanceError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10926,11 +10930,9 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeStackResourceError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeStackResourceError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -12127,11 +12129,9 @@ impl CloudFormation for CloudFormationClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(StopStackSetOperationError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StopStackSetOperationError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

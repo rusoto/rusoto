@@ -969,82 +969,84 @@ impl CreateClusterError {
                 "ClusterAlreadyExistsFault" => {
                     return RusotoError::Service(CreateClusterError::ClusterAlreadyExistsFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ClusterQuotaForCustomerExceededFault" => {
                     return RusotoError::Service(
                         CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InsufficientClusterCapacityFault" => {
                     return RusotoError::Service(
                         CreateClusterError::InsufficientClusterCapacityFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(CreateClusterError::InvalidClusterStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(CreateClusterError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
                         CreateClusterError::InvalidParameterGroupStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateClusterError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidVPCNetworkStateFault" => {
                     return RusotoError::Service(CreateClusterError::InvalidVPCNetworkStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NodeQuotaForClusterExceededFault" => {
                     return RusotoError::Service(
                         CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NodeQuotaForCustomerExceededFault" => {
                     return RusotoError::Service(
                         CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(CreateClusterError::ParameterGroupNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return RusotoError::Service(CreateClusterError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(CreateClusterError::SubnetGroupNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagQuotaPerResourceExceeded" => {
                     return RusotoError::Service(CreateClusterError::TagQuotaPerResourceExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1113,40 +1115,40 @@ impl CreateParameterGroupError {
                         CreateParameterGroupError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
                         CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(CreateParameterGroupError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterGroupAlreadyExistsFault" => {
                     return RusotoError::Service(
                         CreateParameterGroupError::ParameterGroupAlreadyExistsFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ParameterGroupQuotaExceededFault" => {
                     return RusotoError::Service(
                         CreateParameterGroupError::ParameterGroupQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1203,33 +1205,33 @@ impl CreateSubnetGroupError {
                 "InvalidSubnet" => {
                     return RusotoError::Service(CreateSubnetGroupError::InvalidSubnet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SubnetGroupAlreadyExistsFault" => {
                     return RusotoError::Service(
                         CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SubnetGroupQuotaExceededFault" => {
                     return RusotoError::Service(
                         CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SubnetQuotaExceededFault" => {
                     return RusotoError::Service(CreateSubnetGroupError::SubnetQuotaExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1289,40 +1291,40 @@ impl DecreaseReplicationFactorError {
                         DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(
                         DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
                         DecreaseReplicationFactorError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DecreaseReplicationFactorError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NodeNotFoundFault" => {
                     return RusotoError::Service(DecreaseReplicationFactorError::NodeNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1379,27 +1381,29 @@ impl DeleteClusterError {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(DeleteClusterError::ClusterNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(DeleteClusterError::InvalidClusterStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DeleteClusterError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteClusterError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return RusotoError::Service(DeleteClusterError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteClusterError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1457,33 +1461,33 @@ impl DeleteParameterGroupError {
                         DeleteParameterGroupError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
                         DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DeleteParameterGroupError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
                         DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1536,17 +1540,17 @@ impl DeleteSubnetGroupError {
                         DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SubnetGroupInUseFault" => {
                     return RusotoError::Service(DeleteSubnetGroupError::SubnetGroupInUseFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(DeleteSubnetGroupError::SubnetGroupNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1598,24 +1602,26 @@ impl DescribeClustersError {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(DescribeClustersError::ClusterNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
-                    return RusotoError::Service(DescribeClustersError::InvalidParameterCombination(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeClustersError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeClustersError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeClustersError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1668,21 +1674,21 @@ impl DescribeDefaultParametersError {
                         DescribeDefaultParametersError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeDefaultParametersError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1732,19 +1738,19 @@ impl DescribeEventsError {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DescribeEventsError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeEventsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeEventsError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1798,28 +1804,28 @@ impl DescribeParameterGroupsError {
                         DescribeParameterGroupsError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeParameterGroupsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1874,26 +1880,26 @@ impl DescribeParametersError {
                         DescribeParametersError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(DescribeParametersError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeParametersError::ParameterGroupNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeParametersError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1943,14 +1949,14 @@ impl DescribeSubnetGroupsError {
                         DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2013,63 +2019,63 @@ impl IncreaseReplicationFactorError {
                         IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InsufficientClusterCapacityFault" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidVPCNetworkStateFault" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NodeQuotaForClusterExceededFault" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "NodeQuotaForCustomerExceededFault" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2131,32 +2137,32 @@ impl ListTagsError {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(ListTagsError::ClusterNotFoundFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidARNFault" => {
                     return RusotoError::Service(ListTagsError::InvalidARNFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(ListTagsError::InvalidClusterStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(ListTagsError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
-                    return RusotoError::Service(ListTagsError::InvalidParameterValue(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(ListTagsError::ServiceLinkedRoleNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2215,32 +2221,32 @@ impl RebootNodeError {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(RebootNodeError::ClusterNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(RebootNodeError::InvalidClusterStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(RebootNodeError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(RebootNodeError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NodeNotFoundFault" => {
                     return RusotoError::Service(RebootNodeError::NodeNotFoundFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(RebootNodeError::ServiceLinkedRoleNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2301,37 +2307,37 @@ impl TagResourceError {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(TagResourceError::ClusterNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidARNFault" => {
                     return RusotoError::Service(TagResourceError::InvalidARNFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(TagResourceError::InvalidClusterStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(TagResourceError::ServiceLinkedRoleNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagQuotaPerResourceExceeded" => {
                     return RusotoError::Service(TagResourceError::TagQuotaPerResourceExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2393,37 +2399,39 @@ impl UntagResourceError {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(UntagResourceError::ClusterNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidARNFault" => {
                     return RusotoError::Service(UntagResourceError::InvalidARNFault(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(UntagResourceError::InvalidClusterStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UntagResourceError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return RusotoError::Service(UntagResourceError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UntagResourceError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TagNotFoundFault" => {
-                    return RusotoError::Service(UntagResourceError::TagNotFoundFault(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::TagNotFoundFault(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2485,39 +2493,41 @@ impl UpdateClusterError {
                 "ClusterNotFoundFault" => {
                     return RusotoError::Service(UpdateClusterError::ClusterNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidClusterStateFault" => {
                     return RusotoError::Service(UpdateClusterError::InvalidClusterStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UpdateClusterError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
                         UpdateClusterError::InvalidParameterGroupStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateClusterError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(UpdateClusterError::ParameterGroupNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return RusotoError::Service(UpdateClusterError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2577,33 +2587,33 @@ impl UpdateParameterGroupError {
                         UpdateParameterGroupError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterGroupStateFault" => {
                     return RusotoError::Service(
                         UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(UpdateParameterGroupError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParameterGroupNotFoundFault" => {
                     return RusotoError::Service(
                         UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2659,29 +2669,29 @@ impl UpdateSubnetGroupError {
                 "InvalidSubnet" => {
                     return RusotoError::Service(UpdateSubnetGroupError::InvalidSubnet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
                     return RusotoError::Service(
                         UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(UpdateSubnetGroupError::SubnetGroupNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SubnetInUse" => {
                     return RusotoError::Service(UpdateSubnetGroupError::SubnetInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "SubnetQuotaExceededFault" => {
                     return RusotoError::Service(UpdateSubnetGroupError::SubnetQuotaExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

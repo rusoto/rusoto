@@ -525,27 +525,27 @@ impl CopyBackupToRegionError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CopyBackupToRegionError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -601,27 +601,27 @@ impl CreateClusterError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CreateClusterError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -675,29 +675,29 @@ impl CreateHsmError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(CreateHsmError::CloudHsmAccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateHsmError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -753,27 +753,27 @@ impl DeleteBackupError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DeleteBackupError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -829,27 +829,27 @@ impl DeleteClusterError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DeleteClusterError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -903,29 +903,29 @@ impl DeleteHsmError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return RusotoError::Service(DeleteHsmError::CloudHsmAccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -981,27 +981,27 @@ impl DescribeBackupsError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DescribeBackupsError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1055,22 +1055,22 @@ impl DescribeClustersError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DescribeClustersError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1125,27 +1125,27 @@ impl InitializeClusterError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(InitializeClusterError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1201,27 +1201,27 @@ impl ListTagsError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(ListTagsError::CloudHsmAccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(ListTagsError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(ListTagsError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ListTagsError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1277,27 +1277,27 @@ impl RestoreBackupError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(RestoreBackupError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1353,27 +1353,27 @@ impl TagResourceError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(TagResourceError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1429,27 +1429,27 @@ impl UntagResourceError {
                 "CloudHsmAccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmAccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInternalFailureException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmInternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmInvalidRequestException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmInvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmResourceNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(UntagResourceError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

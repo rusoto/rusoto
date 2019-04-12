@@ -977,32 +977,32 @@ impl CancelJobError {
                     "CanceledJobIdException" => {
                         return RusotoError::Service(CancelJobError::CanceledJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ExpiredJobIdException" => {
                         return RusotoError::Service(CancelJobError::ExpiredJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(CancelJobError::InvalidAccessKeyId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidJobIdException" => {
                         return RusotoError::Service(CancelJobError::InvalidJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidVersionException" => {
                         return RusotoError::Service(CancelJobError::InvalidVersion(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "UnableToCancelJobIdException" => {
                         return RusotoError::Service(CancelJobError::UnableToCancelJobId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1082,84 +1082,84 @@ impl CreateJobError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BucketPermissionException" => {
-                        return RusotoError::Service(CreateJobError::BucketPermission(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(CreateJobError::BucketPermission(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "CreateJobQuotaExceededException" => {
                         return RusotoError::Service(CreateJobError::CreateJobQuotaExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(CreateJobError::InvalidAccessKeyId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidAddressException" => {
                         return RusotoError::Service(CreateJobError::InvalidAddress(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidCustomsException" => {
                         return RusotoError::Service(CreateJobError::InvalidCustoms(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidFileSystemException" => {
                         return RusotoError::Service(CreateJobError::InvalidFileSystem(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidJobIdException" => {
                         return RusotoError::Service(CreateJobError::InvalidJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidManifestFieldException" => {
                         return RusotoError::Service(CreateJobError::InvalidManifestField(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterException" => {
-                        return RusotoError::Service(CreateJobError::InvalidParameter(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(CreateJobError::InvalidParameter(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "InvalidVersionException" => {
                         return RusotoError::Service(CreateJobError::InvalidVersion(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "MalformedManifestException" => {
                         return RusotoError::Service(CreateJobError::MalformedManifest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingCustomsException" => {
                         return RusotoError::Service(CreateJobError::MissingCustoms(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "MissingManifestFieldException" => {
                         return RusotoError::Service(CreateJobError::MissingManifestField(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameterException" => {
-                        return RusotoError::Service(CreateJobError::MissingParameter(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(CreateJobError::MissingParameter(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "MultipleRegionsException" => {
                         return RusotoError::Service(CreateJobError::MultipleRegions(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchBucketException" => {
                         return RusotoError::Service(CreateJobError::NoSuchBucket(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -1233,37 +1233,37 @@ impl GetShippingLabelError {
                     "CanceledJobIdException" => {
                         return RusotoError::Service(GetShippingLabelError::CanceledJobId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ExpiredJobIdException" => {
                         return RusotoError::Service(GetShippingLabelError::ExpiredJobId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidAccessKeyId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidAddressException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidAddress(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidJobIdException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidJobId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVersionException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidVersion(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1324,27 +1324,27 @@ impl GetStatusError {
                     "CanceledJobIdException" => {
                         return RusotoError::Service(GetStatusError::CanceledJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ExpiredJobIdException" => {
                         return RusotoError::Service(GetStatusError::ExpiredJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(GetStatusError::InvalidAccessKeyId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidJobIdException" => {
                         return RusotoError::Service(GetStatusError::InvalidJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidVersionException" => {
                         return RusotoError::Service(GetStatusError::InvalidVersion(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -1399,17 +1399,17 @@ impl ListJobsError {
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(ListJobsError::InvalidAccessKeyId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterException" => {
                         return RusotoError::Service(ListJobsError::InvalidParameter(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidVersionException" => {
                         return RusotoError::Service(ListJobsError::InvalidVersion(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -1490,94 +1490,94 @@ impl UpdateJobError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BucketPermissionException" => {
-                        return RusotoError::Service(UpdateJobError::BucketPermission(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(UpdateJobError::BucketPermission(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "CanceledJobIdException" => {
                         return RusotoError::Service(UpdateJobError::CanceledJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "ExpiredJobIdException" => {
                         return RusotoError::Service(UpdateJobError::ExpiredJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(UpdateJobError::InvalidAccessKeyId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidAddressException" => {
                         return RusotoError::Service(UpdateJobError::InvalidAddress(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidCustomsException" => {
                         return RusotoError::Service(UpdateJobError::InvalidCustoms(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidFileSystemException" => {
                         return RusotoError::Service(UpdateJobError::InvalidFileSystem(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidJobIdException" => {
                         return RusotoError::Service(UpdateJobError::InvalidJobId(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidManifestFieldException" => {
                         return RusotoError::Service(UpdateJobError::InvalidManifestField(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidParameter(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(UpdateJobError::InvalidParameter(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "InvalidVersionException" => {
                         return RusotoError::Service(UpdateJobError::InvalidVersion(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "MalformedManifestException" => {
                         return RusotoError::Service(UpdateJobError::MalformedManifest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingCustomsException" => {
                         return RusotoError::Service(UpdateJobError::MissingCustoms(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "MissingManifestFieldException" => {
                         return RusotoError::Service(UpdateJobError::MissingManifestField(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameterException" => {
-                        return RusotoError::Service(UpdateJobError::MissingParameter(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(UpdateJobError::MissingParameter(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "MultipleRegionsException" => {
                         return RusotoError::Service(UpdateJobError::MultipleRegions(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchBucketException" => {
                         return RusotoError::Service(UpdateJobError::NoSuchBucket(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "UnableToUpdateJobIdException" => {
                         return RusotoError::Service(UpdateJobError::UnableToUpdateJobId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }

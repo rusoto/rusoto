@@ -1068,29 +1068,29 @@ impl GetCostAndUsageError {
 
             match *error_type {
                 "BillExpirationException" => {
-                    return RusotoError::Service(GetCostAndUsageError::BillExpiration(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetCostAndUsageError::BillExpiration(
+                        String::from(error_message),
+                    ))
                 }
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetCostAndUsageError::DataUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetCostAndUsageError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetCostAndUsageError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RequestChangedException" => {
-                    return RusotoError::Service(GetCostAndUsageError::RequestChanged(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetCostAndUsageError::RequestChanged(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1140,12 +1140,12 @@ impl GetCostForecastError {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetCostForecastError::DataUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetCostForecastError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1198,27 +1198,27 @@ impl GetDimensionValuesError {
                 "BillExpirationException" => {
                     return RusotoError::Service(GetDimensionValuesError::BillExpiration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetDimensionValuesError::DataUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetDimensionValuesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetDimensionValuesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RequestChangedException" => {
                     return RusotoError::Service(GetDimensionValuesError::RequestChanged(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1270,17 +1270,17 @@ impl GetReservationCoverageError {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetReservationCoverageError::DataUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetReservationCoverageError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetReservationCoverageError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1334,21 +1334,21 @@ impl GetReservationPurchaseRecommendationError {
                         GetReservationPurchaseRecommendationError::DataUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         GetReservationPurchaseRecommendationError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(
                         GetReservationPurchaseRecommendationError::LimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1398,17 +1398,17 @@ impl GetReservationUtilizationError {
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetReservationUtilizationError::DataUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetReservationUtilizationError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetReservationUtilizationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1462,27 +1462,27 @@ impl GetTagsError {
                 "BillExpirationException" => {
                     return RusotoError::Service(GetTagsError::BillExpiration(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DataUnavailableException" => {
                     return RusotoError::Service(GetTagsError::DataUnavailable(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetTagsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetTagsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RequestChangedException" => {
                     return RusotoError::Service(GetTagsError::RequestChanged(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -7663,7 +7663,7 @@ impl AbortEnvironmentUpdateError {
                             AbortEnvironmentUpdateError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7716,14 +7716,14 @@ impl ApplyEnvironmentManagedActionError {
                             ApplyEnvironmentManagedActionError::ElasticBeanstalkService(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ManagedActionInvalidStateException" => {
                         return RusotoError::Service(
                             ApplyEnvironmentManagedActionError::ManagedActionInvalidState(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7812,12 +7812,12 @@ impl ComposeEnvironmentsError {
                             ComposeEnvironmentsError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyEnvironmentsException" => {
                         return RusotoError::Service(ComposeEnvironmentsError::TooManyEnvironments(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7865,7 +7865,7 @@ impl CreateApplicationError {
                     "TooManyApplicationsException" => {
                         return RusotoError::Service(CreateApplicationError::TooManyApplications(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7922,35 +7922,35 @@ impl CreateApplicationVersionError {
                             CreateApplicationVersionError::CodeBuildNotInServiceRegion(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientPrivilegesException" => {
                         return RusotoError::Service(
                             CreateApplicationVersionError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "S3LocationNotInServiceRegionException" => {
                         return RusotoError::Service(
                             CreateApplicationVersionError::S3LocationNotInServiceRegion(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyApplicationVersionsException" => {
                         return RusotoError::Service(
                             CreateApplicationVersionError::TooManyApplicationVersions(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyApplicationsException" => {
                         return RusotoError::Service(
                             CreateApplicationVersionError::TooManyApplications(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8009,21 +8009,21 @@ impl CreateConfigurationTemplateError {
                             CreateConfigurationTemplateError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyBucketsException" => {
                         return RusotoError::Service(
                             CreateConfigurationTemplateError::TooManyBuckets(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyConfigurationTemplatesException" => {
                         return RusotoError::Service(
                             CreateConfigurationTemplateError::TooManyConfigurationTemplates(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8072,14 +8072,16 @@ impl CreateEnvironmentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return RusotoError::Service(CreateEnvironmentError::InsufficientPrivileges(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateEnvironmentError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TooManyEnvironmentsException" => {
                         return RusotoError::Service(CreateEnvironmentError::TooManyEnvironments(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8133,19 +8135,19 @@ impl CreatePlatformVersionError {
                             CreatePlatformVersionError::ElasticBeanstalkService(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientPrivilegesException" => {
                         return RusotoError::Service(
                             CreatePlatformVersionError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyPlatformsException" => {
                         return RusotoError::Service(CreatePlatformVersionError::TooManyPlatforms(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8200,19 +8202,19 @@ impl CreateStorageLocationError {
                             CreateStorageLocationError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "S3SubscriptionRequiredException" => {
                         return RusotoError::Service(
                             CreateStorageLocationError::S3SubscriptionRequired(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyBucketsException" => {
                         return RusotoError::Service(CreateStorageLocationError::TooManyBuckets(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8261,7 +8263,7 @@ impl DeleteApplicationError {
                     "OperationInProgressFailure" => {
                         return RusotoError::Service(DeleteApplicationError::OperationInProgress(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8316,28 +8318,28 @@ impl DeleteApplicationVersionError {
                             DeleteApplicationVersionError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OperationInProgressFailure" => {
                         return RusotoError::Service(
                             DeleteApplicationVersionError::OperationInProgress(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "S3LocationNotInServiceRegionException" => {
                         return RusotoError::Service(
                             DeleteApplicationVersionError::S3LocationNotInServiceRegion(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SourceBundleDeletionFailure" => {
                         return RusotoError::Service(
                             DeleteApplicationVersionError::SourceBundleDeletion(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8391,7 +8393,7 @@ impl DeleteConfigurationTemplateError {
                             DeleteConfigurationTemplateError::OperationInProgress(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8485,28 +8487,28 @@ impl DeletePlatformVersionError {
                             DeletePlatformVersionError::ElasticBeanstalkService(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientPrivilegesException" => {
                         return RusotoError::Service(
                             DeletePlatformVersionError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OperationInProgressFailure" => {
                         return RusotoError::Service(
                             DeletePlatformVersionError::OperationInProgress(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "PlatformVersionStillReferencedException" => {
                         return RusotoError::Service(
                             DeletePlatformVersionError::PlatformVersionStillReferenced(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8558,7 +8560,7 @@ impl DescribeAccountAttributesError {
                             DescribeAccountAttributesError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8685,7 +8687,7 @@ impl DescribeConfigurationOptionsError {
                             DescribeConfigurationOptionsError::TooManyBuckets(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8736,7 +8738,7 @@ impl DescribeConfigurationSettingsError {
                             DescribeConfigurationSettingsError::TooManyBuckets(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8787,12 +8789,14 @@ impl DescribeEnvironmentHealthError {
                             DescribeEnvironmentHealthError::ElasticBeanstalkService(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRequestException" => {
-                        return RusotoError::Service(DescribeEnvironmentHealthError::InvalidRequest(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DescribeEnvironmentHealthError::InvalidRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -8844,7 +8848,7 @@ impl DescribeEnvironmentManagedActionHistoryError {
                             DescribeEnvironmentManagedActionHistoryError::ElasticBeanstalkService(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8897,7 +8901,7 @@ impl DescribeEnvironmentManagedActionsError {
                             DescribeEnvironmentManagedActionsError::ElasticBeanstalkService(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8948,7 +8952,7 @@ impl DescribeEnvironmentResourcesError {
                             DescribeEnvironmentResourcesError::InsufficientPrivileges(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9073,12 +9077,12 @@ impl DescribeInstancesHealthError {
                             DescribeInstancesHealthError::ElasticBeanstalkService(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRequestException" => {
                         return RusotoError::Service(DescribeInstancesHealthError::InvalidRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9130,14 +9134,14 @@ impl DescribePlatformVersionError {
                             DescribePlatformVersionError::ElasticBeanstalkService(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientPrivilegesException" => {
                         return RusotoError::Service(
                             DescribePlatformVersionError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9228,14 +9232,14 @@ impl ListPlatformVersionsError {
                             ListPlatformVersionsError::ElasticBeanstalkService(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientPrivilegesException" => {
                         return RusotoError::Service(
                             ListPlatformVersionsError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9289,19 +9293,19 @@ impl ListTagsForResourceError {
                             ListTagsForResourceError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceNotFoundException" => {
                         return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceTypeNotSupportedException" => {
                         return RusotoError::Service(
                             ListTagsForResourceError::ResourceTypeNotSupported(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9352,7 +9356,7 @@ impl RebuildEnvironmentError {
                             RebuildEnvironmentError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9549,7 +9553,7 @@ impl TerminateEnvironmentError {
                             TerminateEnvironmentError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9637,7 +9641,7 @@ impl UpdateApplicationResourceLifecycleError {
                             UpdateApplicationResourceLifecycleError::InsufficientPrivileges(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9727,14 +9731,14 @@ impl UpdateConfigurationTemplateError {
                             UpdateConfigurationTemplateError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyBucketsException" => {
                         return RusotoError::Service(
                             UpdateConfigurationTemplateError::TooManyBuckets(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9782,14 +9786,16 @@ impl UpdateEnvironmentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InsufficientPrivilegesException" => {
-                        return RusotoError::Service(UpdateEnvironmentError::InsufficientPrivileges(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateEnvironmentError::InsufficientPrivileges(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TooManyBucketsException" => {
                         return RusotoError::Service(UpdateEnvironmentError::TooManyBuckets(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9847,31 +9853,31 @@ impl UpdateTagsForResourceError {
                             UpdateTagsForResourceError::InsufficientPrivileges(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OperationInProgressFailure" => {
                         return RusotoError::Service(
                             UpdateTagsForResourceError::OperationInProgress(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ResourceNotFoundException" => {
                         return RusotoError::Service(UpdateTagsForResourceError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceTypeNotSupportedException" => {
                         return RusotoError::Service(
                             UpdateTagsForResourceError::ResourceTypeNotSupported(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTagsException" => {
                         return RusotoError::Service(UpdateTagsForResourceError::TooManyTags(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9928,14 +9934,14 @@ impl ValidateConfigurationSettingsError {
                             ValidateConfigurationSettingsError::InsufficientPrivileges(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyBucketsException" => {
                         return RusotoError::Service(
                             ValidateConfigurationSettingsError::TooManyBuckets(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10676,11 +10682,9 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreatePlatformVersionError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreatePlatformVersionError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10727,11 +10731,9 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateStorageLocationError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateStorageLocationError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -10890,11 +10892,9 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeletePlatformVersionError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePlatformVersionError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -11903,11 +11903,9 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(SwapEnvironmentCNAMEsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(SwapEnvironmentCNAMEsError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -12246,11 +12244,9 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(UpdateTagsForResourceError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateTagsForResourceError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))

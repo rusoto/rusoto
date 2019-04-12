@@ -1529,29 +1529,29 @@ impl AddAttributesToFindingsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AddAttributesToFindingsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(AddAttributesToFindingsError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AddAttributesToFindingsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(AddAttributesToFindingsError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         AddAttributesToFindingsError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1611,41 +1611,41 @@ impl CreateAssessmentTargetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateAssessmentTargetError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(CreateAssessmentTargetError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(
                         CreateAssessmentTargetError::InvalidCrossAccountRole(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateAssessmentTargetError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAssessmentTargetError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(CreateAssessmentTargetError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         CreateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1705,34 +1705,34 @@ impl CreateAssessmentTemplateError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(CreateAssessmentTemplateError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         CreateAssessmentTemplateError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1791,36 +1791,36 @@ impl CreateExclusionsPreviewError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateExclusionsPreviewError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(CreateExclusionsPreviewError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateExclusionsPreviewError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(CreateExclusionsPreviewError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreviewGenerationInProgressException" => {
                     return RusotoError::Service(
                         CreateExclusionsPreviewError::PreviewGenerationInProgress(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         CreateExclusionsPreviewError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1877,29 +1877,29 @@ impl CreateResourceGroupError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateResourceGroupError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(CreateResourceGroupError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateResourceGroupError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateResourceGroupError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         CreateResourceGroupError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1957,34 +1957,34 @@ impl DeleteAssessmentRunError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteAssessmentRunError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(DeleteAssessmentRunError::AssessmentRunInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(DeleteAssessmentRunError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteAssessmentRunError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(DeleteAssessmentRunError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         DeleteAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2043,36 +2043,36 @@ impl DeleteAssessmentTargetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteAssessmentTargetError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(
                         DeleteAssessmentTargetError::AssessmentRunInProgress(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalException" => {
                     return RusotoError::Service(DeleteAssessmentTargetError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteAssessmentTargetError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(DeleteAssessmentTargetError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         DeleteAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2131,36 +2131,36 @@ impl DeleteAssessmentTemplateError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteAssessmentTemplateError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(
                         DeleteAssessmentTemplateError::AssessmentRunInProgress(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalException" => {
                     return RusotoError::Service(DeleteAssessmentTemplateError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteAssessmentTemplateError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(DeleteAssessmentTemplateError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         DeleteAssessmentTemplateError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2211,12 +2211,12 @@ impl DescribeAssessmentRunsError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeAssessmentRunsError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeAssessmentRunsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2263,12 +2263,12 @@ impl DescribeAssessmentTargetsError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeAssessmentTargetsError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeAssessmentTargetsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2317,12 +2317,12 @@ impl DescribeAssessmentTemplatesError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeAssessmentTemplatesError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeAssessmentTemplatesError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2369,7 +2369,7 @@ impl DescribeCrossAccountAccessRoleError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeCrossAccountAccessRoleError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2415,12 +2415,12 @@ impl DescribeExclusionsError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeExclusionsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeExclusionsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2467,12 +2467,12 @@ impl DescribeFindingsError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeFindingsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeFindingsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2519,12 +2519,12 @@ impl DescribeResourceGroupsError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeResourceGroupsError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeResourceGroupsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2569,14 +2569,14 @@ impl DescribeRulesPackagesError {
 
             match *error_type {
                 "InternalException" => {
-                    return RusotoError::Service(DescribeRulesPackagesError::Internal(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeRulesPackagesError::Internal(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeRulesPackagesError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2633,39 +2633,39 @@ impl GetAssessmentReportError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAssessmentReportError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AssessmentRunInProgressException" => {
                     return RusotoError::Service(GetAssessmentReportError::AssessmentRunInProgress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(GetAssessmentReportError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetAssessmentReportError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(GetAssessmentReportError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         GetAssessmentReportError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedFeatureException" => {
                     return RusotoError::Service(GetAssessmentReportError::UnsupportedFeature(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2721,22 +2721,22 @@ impl GetExclusionsPreviewError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetExclusionsPreviewError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(GetExclusionsPreviewError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetExclusionsPreviewError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(GetExclusionsPreviewError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2789,22 +2789,22 @@ impl GetTelemetryMetadataError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetTelemetryMetadataError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(GetTelemetryMetadataError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(GetTelemetryMetadataError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(GetTelemetryMetadataError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2857,22 +2857,22 @@ impl ListAssessmentRunAgentsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAssessmentRunAgentsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListAssessmentRunAgentsError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAssessmentRunAgentsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListAssessmentRunAgentsError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2925,22 +2925,22 @@ impl ListAssessmentRunsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAssessmentRunsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListAssessmentRunsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAssessmentRunsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListAssessmentRunsError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2991,17 +2991,17 @@ impl ListAssessmentTargetsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAssessmentTargetsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(ListAssessmentTargetsError::Internal(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListAssessmentTargetsError::Internal(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAssessmentTargetsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3053,22 +3053,22 @@ impl ListAssessmentTemplatesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAssessmentTemplatesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListAssessmentTemplatesError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAssessmentTemplatesError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListAssessmentTemplatesError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3121,22 +3121,22 @@ impl ListEventSubscriptionsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListEventSubscriptionsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListEventSubscriptionsError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListEventSubscriptionsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListEventSubscriptionsError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3189,22 +3189,22 @@ impl ListExclusionsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListExclusionsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListExclusionsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListExclusionsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListExclusionsError::NoSuchEntity(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3257,22 +3257,22 @@ impl ListFindingsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFindingsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListFindingsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListFindingsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListFindingsError::NoSuchEntity(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3321,19 +3321,19 @@ impl ListRulesPackagesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListRulesPackagesError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListRulesPackagesError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListRulesPackagesError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(ListRulesPackagesError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListRulesPackagesError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3385,22 +3385,22 @@ impl ListTagsForResourceError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(ListTagsForResourceError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(ListTagsForResourceError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3455,27 +3455,27 @@ impl PreviewAgentsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PreviewAgentsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalException" => {
                     return RusotoError::Service(PreviewAgentsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(PreviewAgentsError::InvalidCrossAccountRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(PreviewAgentsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(PreviewAgentsError::NoSuchEntity(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3533,31 +3533,31 @@ impl RegisterCrossAccountAccessRoleError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RegisterCrossAccountAccessRoleError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(RegisterCrossAccountAccessRoleError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(
                         RegisterCrossAccountAccessRoleError::InvalidCrossAccountRole(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(RegisterCrossAccountAccessRoleError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         RegisterCrossAccountAccessRoleError::ServiceTemporarilyUnavailable(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3615,29 +3615,29 @@ impl RemoveAttributesFromFindingsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(RemoveAttributesFromFindingsError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         RemoveAttributesFromFindingsError::ServiceTemporarilyUnavailable(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3693,29 +3693,29 @@ impl SetTagsForResourceError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SetTagsForResourceError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(SetTagsForResourceError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(SetTagsForResourceError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(SetTagsForResourceError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         SetTagsForResourceError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3777,46 +3777,46 @@ impl StartAssessmentRunError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartAssessmentRunError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AgentsAlreadyRunningAssessmentException" => {
                     return RusotoError::Service(
                         StartAssessmentRunError::AgentsAlreadyRunningAssessment(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalException" => {
                     return RusotoError::Service(StartAssessmentRunError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidCrossAccountRoleException" => {
                     return RusotoError::Service(StartAssessmentRunError::InvalidCrossAccountRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(StartAssessmentRunError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartAssessmentRunError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(StartAssessmentRunError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         StartAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3873,31 +3873,31 @@ impl StopAssessmentRunError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(StopAssessmentRunError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StopAssessmentRunError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(StopAssessmentRunError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(StopAssessmentRunError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StopAssessmentRunError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "NoSuchEntityException" => {
-                    return RusotoError::Service(StopAssessmentRunError::NoSuchEntity(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StopAssessmentRunError::NoSuchEntity(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         StopAssessmentRunError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3955,34 +3955,34 @@ impl SubscribeToEventError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SubscribeToEventError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalException" => {
                     return RusotoError::Service(SubscribeToEventError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(SubscribeToEventError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(SubscribeToEventError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(SubscribeToEventError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(SubscribeToEventError::NoSuchEntity(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         SubscribeToEventError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4039,29 +4039,29 @@ impl UnsubscribeFromEventError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UnsubscribeFromEventError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(UnsubscribeFromEventError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UnsubscribeFromEventError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(UnsubscribeFromEventError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         UnsubscribeFromEventError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4117,29 +4117,29 @@ impl UpdateAssessmentTargetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateAssessmentTargetError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(UpdateAssessmentTargetError::Internal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateAssessmentTargetError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchEntityException" => {
                     return RusotoError::Service(UpdateAssessmentTargetError::NoSuchEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceTemporarilyUnavailableException" => {
                     return RusotoError::Service(
                         UpdateAssessmentTargetError::ServiceTemporarilyUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

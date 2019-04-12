@@ -16033,28 +16033,28 @@ impl AddRoleToDBClusterError {
                             AddRoleToDBClusterError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterRoleAlreadyExists" => {
                         return RusotoError::Service(
                             AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterRoleQuotaExceeded" => {
                         return RusotoError::Service(
                             AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             AddRoleToDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16112,28 +16112,28 @@ impl AddRoleToDBInstanceError {
                             AddRoleToDBInstanceError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceRoleAlreadyExists" => {
                         return RusotoError::Service(
                             AddRoleToDBInstanceError::DBInstanceRoleAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBInstanceRoleQuotaExceeded" => {
                         return RusotoError::Service(
                             AddRoleToDBInstanceError::DBInstanceRoleQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             AddRoleToDBInstanceError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16189,14 +16189,14 @@ impl AddSourceIdentifierToSubscriptionError {
                             AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16246,23 +16246,25 @@ impl AddTagsToResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(AddTagsToResourceError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            AddTagsToResourceError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
                             AddTagsToResourceError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
                             AddTagsToResourceError::DBSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16319,21 +16321,21 @@ impl ApplyPendingMaintenanceActionError {
                             ApplyPendingMaintenanceActionError::InvalidDBClusterStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             ApplyPendingMaintenanceActionError::InvalidDBInstanceStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ResourceNotFoundFault" => {
                         return RusotoError::Service(
                             ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16392,28 +16394,28 @@ impl AuthorizeDBSecurityGroupIngressError {
                             AuthorizeDBSecurityGroupIngressError::AuthorizationAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "AuthorizationQuotaExceeded" => {
                         return RusotoError::Service(
                             AuthorizeDBSecurityGroupIngressError::AuthorizationQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             AuthorizeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBSecurityGroupState" => {
                         return RusotoError::Service(
                             AuthorizeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16473,14 +16475,14 @@ impl BacktrackDBClusterError {
                             BacktrackDBClusterError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             BacktrackDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16536,21 +16538,21 @@ impl CopyDBClusterParameterGroupError {
                             CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16615,42 +16617,42 @@ impl CopyDBClusterSnapshotError {
                             CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16708,21 +16710,21 @@ impl CopyDBParameterGroupError {
                             CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CopyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16781,31 +16783,31 @@ impl CopyDBSnapshotError {
                             CopyDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(CopyDBSnapshotError::DBSnapshotNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidDBSnapshotState" => {
                         return RusotoError::Service(
                             CopyDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(CopyDBSnapshotError::KMSKeyNotAccessibleFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             CopyDBSnapshotError::SnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16862,19 +16864,21 @@ impl CopyOptionGroupError {
                             CopyOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
-                        return RusotoError::Service(CopyOptionGroupError::OptionGroupNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CopyOptionGroupError::OptionGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "OptionGroupQuotaExceededFault" => {
                         return RusotoError::Service(
                             CopyOptionGroupError::OptionGroupQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -16957,111 +16961,113 @@ impl CreateDBClusterError {
                             CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(CreateDBClusterError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CreateDBClusterError::DBClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::DBClusterQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(CreateDBClusterError::DBInstanceNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "GlobalClusterNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::GlobalClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientStorageClusterCapacity" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InsufficientStorageClusterCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidGlobalClusterStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InvalidGlobalClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateDBClusterError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(CreateDBClusterError::KMSKeyNotAccessibleFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateDBClusterError::KMSKeyNotAccessibleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBClusterError::StorageQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17136,42 +17142,42 @@ impl CreateDBClusterEndpointError {
                             CreateDBClusterEndpointError::DBClusterEndpointAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterEndpointQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateDBClusterEndpointError::DBClusterEndpointQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBClusterEndpointError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
                             CreateDBClusterEndpointError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterEndpointError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             CreateDBClusterEndpointError::InvalidDBInstanceStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17229,14 +17235,14 @@ impl CreateDBClusterParameterGroupError {
                             CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17298,35 +17304,35 @@ impl CreateDBClusterSnapshotError {
                             CreateDBClusterSnapshotError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
                             CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17415,127 +17421,127 @@ impl CreateDBInstanceError {
                             CreateDBInstanceError::AuthorizationNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "BackupPolicyNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::BackupPolicyNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(CreateDBInstanceError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBInstanceAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DomainNotFoundFault" => {
                         return RusotoError::Service(CreateDBInstanceError::DomainNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InstanceQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::InstanceQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::InsufficientDBInstanceCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateDBInstanceError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::InvalidVPCNetworkStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::KMSKeyNotAccessibleFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::OptionGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::StorageQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17638,126 +17644,126 @@ impl CreateDBInstanceReadReplicaError {
                             CreateDBInstanceReadReplicaError::DBInstanceAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::DBInstanceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::DBSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotAllowedFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::DBSubnetGroupNotAllowedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::DBSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InstanceQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::InstanceQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::InsufficientDBInstanceCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::InvalidDBInstanceStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBSubnetGroupFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::InvalidDBSubnetGroupFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::InvalidSubnet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::InvalidVPCNetworkStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::KMSKeyNotAccessibleFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::OptionGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::ProvisionedIopsNotAvailableInAZFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::StorageQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
                             CreateDBInstanceReadReplicaError::StorageTypeNotSupportedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17831,14 +17837,14 @@ impl CreateDBParameterGroupError {
                             CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17892,21 +17898,21 @@ impl CreateDBSecurityGroupError {
                             CreateDBSecurityGroupError::DBSecurityGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotSupported" => {
                         return RusotoError::Service(
                             CreateDBSecurityGroupError::DBSecurityGroupNotSupportedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "QuotaExceeded.DBSecurityGroup" => {
                         return RusotoError::Service(
                             CreateDBSecurityGroupError::DBSecurityGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -17959,30 +17965,32 @@ impl CreateDBSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return RusotoError::Service(CreateDBSnapshotError::DBInstanceNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateDBSnapshotError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "DBSnapshotAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDBSnapshotError::DBSnapshotAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             CreateDBSnapshotError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBSnapshotError::SnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18042,33 +18050,33 @@ impl CreateDBSubnetGroupError {
                             CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateDBSubnetGroupError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -18133,49 +18141,49 @@ impl CreateEventSubscriptionError {
                             CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SNSInvalidTopic" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSNoAuthorization" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSTopicArnNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SourceNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SourceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SubscriptionAlreadyExist" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionCategoryNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18236,28 +18244,28 @@ impl CreateGlobalClusterError {
                             CreateGlobalClusterError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "GlobalClusterAlreadyExistsFault" => {
                         return RusotoError::Service(
                             CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "GlobalClusterQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateGlobalClusterError::GlobalClusterQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             CreateGlobalClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18311,14 +18319,14 @@ impl CreateOptionGroupError {
                             CreateOptionGroupError::OptionGroupAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OptionGroupQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateOptionGroupError::OptionGroupQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18374,35 +18382,35 @@ impl DeleteDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(DeleteDBClusterError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             DeleteDBClusterError::SnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18459,21 +18467,21 @@ impl DeleteDBClusterEndpointError {
                             DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterEndpointStateFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterEndpointError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18528,14 +18536,14 @@ impl DeleteDBClusterParameterGroupError {
                             DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18589,14 +18597,14 @@ impl DeleteDBClusterSnapshotError {
                             DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18656,40 +18664,42 @@ impl DeleteDBInstanceError {
                             DeleteDBInstanceError::DBInstanceAutomatedBackupQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
-                        return RusotoError::Service(DeleteDBInstanceError::DBInstanceNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBInstanceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "DBSnapshotAlreadyExists" => {
                         return RusotoError::Service(
                             DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             DeleteDBInstanceError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             DeleteDBInstanceError::SnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18796,14 +18806,14 @@ impl DeleteDBParameterGroupError {
                             DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18855,14 +18865,14 @@ impl DeleteDBSecurityGroupError {
                             DeleteDBSecurityGroupError::DBSecurityGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSecurityGroupState" => {
                         return RusotoError::Service(
                             DeleteDBSecurityGroupError::InvalidDBSecurityGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18910,16 +18920,18 @@ impl DeleteDBSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotNotFound" => {
-                        return RusotoError::Service(DeleteDBSnapshotError::DBSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteDBSnapshotError::DBSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidDBSnapshotState" => {
                         return RusotoError::Service(
                             DeleteDBSnapshotError::InvalidDBSnapshotStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -18973,21 +18985,21 @@ impl DeleteDBSubnetGroupError {
                             DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSubnetStateFault" => {
                         return RusotoError::Service(
                             DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19040,14 +19052,14 @@ impl DeleteEventSubscriptionError {
                             DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19099,14 +19111,14 @@ impl DeleteGlobalClusterError {
                             DeleteGlobalClusterError::GlobalClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidGlobalClusterStateFault" => {
                         return RusotoError::Service(
                             DeleteGlobalClusterError::InvalidGlobalClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19158,14 +19170,14 @@ impl DeleteOptionGroupError {
                             DeleteOptionGroupError::InvalidOptionGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             DeleteOptionGroupError::OptionGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19252,7 +19264,7 @@ impl DescribeCertificatesError {
                             DescribeCertificatesError::CertificateNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19305,14 +19317,14 @@ impl DescribeDBClusterBacktracksError {
                             DescribeDBClusterBacktracksError::DBClusterBacktrackNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
                             DescribeDBClusterBacktracksError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19364,7 +19376,7 @@ impl DescribeDBClusterEndpointsError {
                             DescribeDBClusterEndpointsError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19415,7 +19427,7 @@ impl DescribeDBClusterParameterGroupsError {
                             DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19468,7 +19480,7 @@ impl DescribeDBClusterParametersError {
                             DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19570,7 +19582,7 @@ impl DescribeDBClusterSnapshotsError {
                             DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19619,7 +19631,7 @@ impl DescribeDBClustersError {
                             DescribeDBClustersError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19751,7 +19763,7 @@ impl DescribeDBInstancesError {
                             DescribeDBInstancesError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19800,7 +19812,7 @@ impl DescribeDBLogFilesError {
                             DescribeDBLogFilesError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19849,7 +19861,7 @@ impl DescribeDBParameterGroupsError {
                             DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19898,7 +19910,7 @@ impl DescribeDBParametersError {
                             DescribeDBParametersError::DBParameterGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19947,7 +19959,7 @@ impl DescribeDBSecurityGroupsError {
                             DescribeDBSecurityGroupsError::DBSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -19998,7 +20010,7 @@ impl DescribeDBSnapshotAttributesError {
                             DescribeDBSnapshotAttributesError::DBSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20047,7 +20059,7 @@ impl DescribeDBSnapshotsError {
                             DescribeDBSnapshotsError::DBSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20096,7 +20108,7 @@ impl DescribeDBSubnetGroupsError {
                             DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20262,7 +20274,7 @@ impl DescribeEventSubscriptionsError {
                             DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20348,7 +20360,7 @@ impl DescribeGlobalClustersError {
                             DescribeGlobalClustersError::GlobalClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20436,7 +20448,7 @@ impl DescribeOptionGroupsError {
                             DescribeOptionGroupsError::OptionGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20526,7 +20538,7 @@ impl DescribePendingMaintenanceActionsError {
                             DescribePendingMaintenanceActionsError::ResourceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20577,7 +20589,7 @@ impl DescribeReservedDBInstancesError {
                             DescribeReservedDBInstancesError::ReservedDBInstanceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20713,14 +20725,14 @@ impl DescribeValidDBInstanceModificationsError {
                             DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20774,14 +20786,14 @@ impl DownloadDBLogFilePortionError {
                             DownloadDBLogFilePortionError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBLogFileNotFoundFault" => {
                         return RusotoError::Service(
                             DownloadDBLogFilePortionError::DBLogFileNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20831,23 +20843,25 @@ impl FailoverDBClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
-                        return RusotoError::Service(FailoverDBClusterError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            FailoverDBClusterError::DBClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             FailoverDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20902,21 +20916,21 @@ impl ListTagsForResourceError {
                             ListTagsForResourceError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
                             ListTagsForResourceError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
                             ListTagsForResourceError::DBSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -20973,21 +20987,21 @@ impl ModifyCurrentDBClusterCapacityError {
                             ModifyCurrentDBClusterCapacityError::DBClusterNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterCapacityFault" => {
                         return RusotoError::Service(
                             ModifyCurrentDBClusterCapacityError::InvalidDBClusterCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             ModifyCurrentDBClusterCapacityError::InvalidDBClusterStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21058,73 +21072,73 @@ impl ModifyDBClusterError {
                             ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(ModifyDBClusterError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSecurityGroupState" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(ModifyDBClusterError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::StorageQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21191,35 +21205,35 @@ impl ModifyDBClusterEndpointError {
                             ModifyDBClusterEndpointError::DBClusterEndpointNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
                             ModifyDBClusterEndpointError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterEndpointStateFault" => {
                         return RusotoError::Service(
                             ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             ModifyDBClusterEndpointError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21276,14 +21290,14 @@ impl ModifyDBClusterParameterGroupError {
                             ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21341,7 +21355,7 @@ impl ModifyDBClusterSnapshotAttributeError {
                             ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterSnapshotStateFault" => return RusotoError::Service(
                         ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(
@@ -21353,7 +21367,7 @@ impl ModifyDBClusterSnapshotAttributeError {
                             ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21442,115 +21456,117 @@ impl ModifyDBInstanceError {
                             ModifyDBInstanceError::AuthorizationNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "BackupPolicyNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::BackupPolicyNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "CertificateNotFound" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::CertificateNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceAlreadyExists" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
-                        return RusotoError::Service(ModifyDBInstanceError::DBInstanceNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBUpgradeDependencyFailure" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DomainNotFoundFault" => {
                         return RusotoError::Service(ModifyDBInstanceError::DomainNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSecurityGroupState" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::InvalidVPCNetworkStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::OptionGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::StorageQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21617,14 +21633,14 @@ impl ModifyDBParameterGroupError {
                             ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21670,9 +21686,11 @@ impl ModifyDBSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBSnapshotNotFound" => {
-                        return RusotoError::Service(ModifyDBSnapshotError::DBSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ModifyDBSnapshotError::DBSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -21725,21 +21743,21 @@ impl ModifyDBSnapshotAttributeError {
                             ModifyDBSnapshotAttributeError::DBSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSnapshotState" => {
                         return RusotoError::Service(
                             ModifyDBSnapshotAttributeError::InvalidDBSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SharedSnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             ModifyDBSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21798,31 +21816,31 @@ impl ModifyDBSubnetGroupError {
                             ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
                             ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(ModifyDBSubnetGroupError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SubnetAlreadyInUse" => {
                         return RusotoError::Service(ModifyDBSubnetGroupError::SubnetAlreadyInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -21885,42 +21903,42 @@ impl ModifyEventSubscriptionError {
                             ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SNSInvalidTopic" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSNoAuthorization" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SNSTopicArnNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SubscriptionCategoryNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -21976,14 +21994,14 @@ impl ModifyGlobalClusterError {
                             ModifyGlobalClusterError::GlobalClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidGlobalClusterStateFault" => {
                         return RusotoError::Service(
                             ModifyGlobalClusterError::InvalidGlobalClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22035,14 +22053,14 @@ impl ModifyOptionGroupError {
                             ModifyOptionGroupError::InvalidOptionGroupStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyOptionGroupError::OptionGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22094,14 +22112,14 @@ impl PromoteReadReplicaError {
                             PromoteReadReplicaError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             PromoteReadReplicaError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22155,14 +22173,14 @@ impl PromoteReadReplicaDBClusterError {
                             PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22266,16 +22284,18 @@ impl RebootDBInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
-                        return RusotoError::Service(RebootDBInstanceError::DBInstanceNotFoundFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            RebootDBInstanceError::DBInstanceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             RebootDBInstanceError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22329,21 +22349,21 @@ impl RemoveFromGlobalClusterError {
                             RemoveFromGlobalClusterError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "GlobalClusterNotFoundFault" => {
                         return RusotoError::Service(
                             RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidGlobalClusterStateFault" => {
                         return RusotoError::Service(
                             RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22398,21 +22418,21 @@ impl RemoveRoleFromDBClusterError {
                             RemoveRoleFromDBClusterError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterRoleNotFound" => {
                         return RusotoError::Service(
                             RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22467,21 +22487,21 @@ impl RemoveRoleFromDBInstanceError {
                             RemoveRoleFromDBInstanceError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceRoleNotFound" => {
                         return RusotoError::Service(
                             RemoveRoleFromDBInstanceError::DBInstanceRoleNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             RemoveRoleFromDBInstanceError::InvalidDBInstanceStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22536,14 +22556,14 @@ impl RemoveSourceIdentifierFromSubscriptionError {
                             RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22599,21 +22619,21 @@ impl RemoveTagsFromResourceError {
                             RemoveTagsFromResourceError::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
                             RemoveTagsFromResourceError::DBInstanceNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
                             RemoveTagsFromResourceError::DBSnapshotNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22668,14 +22688,14 @@ impl ResetDBClusterParameterGroupError {
                             ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22729,14 +22749,14 @@ impl ResetDBParameterGroupError {
                             ResetDBParameterGroupError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22810,89 +22830,89 @@ impl RestoreDBClusterFromS3Error {
                             RestoreDBClusterFromS3Error::DBClusterAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::DBClusterNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::DBClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterQuotaExceededFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::DBClusterQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientStorageClusterCapacity" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::InsufficientStorageClusterCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::InvalidDBSubnetGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidS3BucketFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::InvalidS3BucketFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(RestoreDBClusterFromS3Error::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::InvalidVPCNetworkStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::KMSKeyNotAccessibleFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromS3Error::StorageQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -22987,49 +23007,49 @@ impl RestoreDBClusterFromSnapshotError {
                             RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterQuotaExceededFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientDBClusterCapacityFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientStorageClusterCapacity" => return RusotoError::Service(
                         RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
@@ -23041,56 +23061,56 @@ impl RestoreDBClusterFromSnapshotError {
                             RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBSnapshotState" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRestoreFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InvalidRestoreFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InvalidSubnet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -23196,14 +23216,14 @@ impl RestoreDBClusterToPointInTimeError {
                             RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterParameterGroupNotFound" => return RusotoError::Service(
                         RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(
@@ -23215,28 +23235,28 @@ impl RestoreDBClusterToPointInTimeError {
                             RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientDBClusterCapacityFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientStorageClusterCapacity" => return RusotoError::Service(
                         RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
@@ -23248,63 +23268,63 @@ impl RestoreDBClusterToPointInTimeError {
                             RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBSnapshotState" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRestoreFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidRestoreFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidSubnet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -23417,42 +23437,42 @@ impl RestoreDBInstanceFromDBSnapshotError {
                             RestoreDBInstanceFromDBSnapshotError::AuthorizationNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "BackupPolicyNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::BackupPolicyNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBInstanceAlreadyExists" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::DBInstanceAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::DBSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::DBSnapshotNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(
                         RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupDoesNotCoverEnoughAZs(
@@ -23464,21 +23484,21 @@ impl RestoreDBInstanceFromDBSnapshotError {
                             RestoreDBInstanceFromDBSnapshotError::DBSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DomainNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::DomainNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InstanceQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::InstanceQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientDBInstanceCapacity" => return RusotoError::Service(
                         RestoreDBInstanceFromDBSnapshotError::InsufficientDBInstanceCapacityFault(
@@ -23490,42 +23510,42 @@ impl RestoreDBInstanceFromDBSnapshotError {
                             RestoreDBInstanceFromDBSnapshotError::InvalidDBSnapshotStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRestoreFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::InvalidRestoreFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::InvalidSubnet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::InvalidVPCNetworkStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::KMSKeyNotAccessibleFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::OptionGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(
                         RestoreDBInstanceFromDBSnapshotError::ProvisionedIopsNotAvailableInAZFault(
@@ -23537,14 +23557,14 @@ impl RestoreDBInstanceFromDBSnapshotError {
                             RestoreDBInstanceFromDBSnapshotError::StorageQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromDBSnapshotError::StorageTypeNotSupportedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -23650,117 +23670,117 @@ impl RestoreDBInstanceFromS3Error {
                             RestoreDBInstanceFromS3Error::AuthorizationNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "BackupPolicyNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::BackupPolicyNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBInstanceAlreadyExists" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::DBInstanceAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::DBSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InstanceQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::InstanceQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::InsufficientDBInstanceCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidS3BucketFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::InvalidS3BucketFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(RestoreDBInstanceFromS3Error::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::InvalidVPCNetworkStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::KMSKeyNotAccessibleFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::OptionGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::ProvisionedIopsNotAvailableInAZFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::StorageQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
                             RestoreDBInstanceFromS3Error::StorageTypeNotSupportedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -23869,21 +23889,21 @@ impl RestoreDBInstanceToPointInTimeError {
                             RestoreDBInstanceToPointInTimeError::AuthorizationNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "BackupPolicyNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::BackupPolicyNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBInstanceAlreadyExists" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::DBInstanceAlreadyExistsFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBInstanceAutomatedBackupNotFound" => return RusotoError::Service(
                         RestoreDBInstanceToPointInTimeError::DBInstanceAutomatedBackupNotFoundFault(
@@ -23895,49 +23915,49 @@ impl RestoreDBInstanceToPointInTimeError {
                             RestoreDBInstanceToPointInTimeError::DBInstanceNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::DBParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::DBSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::DBSubnetGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DomainNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::DomainNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InstanceQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::InstanceQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InsufficientDBInstanceCapacity" => return RusotoError::Service(
                         RestoreDBInstanceToPointInTimeError::InsufficientDBInstanceCapacityFault(
@@ -23949,49 +23969,49 @@ impl RestoreDBInstanceToPointInTimeError {
                             RestoreDBInstanceToPointInTimeError::InvalidDBInstanceStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRestoreFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::InvalidRestoreFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::InvalidSubnet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::InvalidVPCNetworkStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::KMSKeyNotAccessibleFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::OptionGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "PointInTimeRestoreNotEnabled" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::PointInTimeRestoreNotEnabledFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => return RusotoError::Service(
                         RestoreDBInstanceToPointInTimeError::ProvisionedIopsNotAvailableInAZFault(
@@ -24003,14 +24023,14 @@ impl RestoreDBInstanceToPointInTimeError {
                             RestoreDBInstanceToPointInTimeError::StorageQuotaExceededFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
                             RestoreDBInstanceToPointInTimeError::StorageTypeNotSupportedFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -24096,21 +24116,21 @@ impl RevokeDBSecurityGroupIngressError {
                             RevokeDBSecurityGroupIngressError::AuthorizationNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             RevokeDBSecurityGroupIngressError::DBSecurityGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBSecurityGroupState" => {
                         return RusotoError::Service(
                             RevokeDBSecurityGroupIngressError::InvalidDBSecurityGroupStateFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -24163,21 +24183,21 @@ impl StartDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(StartDBClusterError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             StartDBClusterError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             StartDBClusterError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -24248,69 +24268,71 @@ impl StartDBInstanceError {
                             StartDBInstanceError::AuthorizationNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(StartDBInstanceError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(StartDBInstanceError::DBInstanceNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             StartDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             StartDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return RusotoError::Service(
                             StartDBInstanceError::InsufficientDBInstanceCapacityFault(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             StartDBInstanceError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             StartDBInstanceError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(StartDBInstanceError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             StartDBInstanceError::InvalidVPCNetworkStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "KMSKeyNotAccessibleFault" => {
-                        return RusotoError::Service(StartDBInstanceError::KMSKeyNotAccessibleFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            StartDBInstanceError::KMSKeyNotAccessibleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -24371,19 +24393,21 @@ impl StopDBClusterError {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(StopDBClusterError::DBClusterNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidDBClusterStateFault" => {
-                        return RusotoError::Service(StopDBClusterError::InvalidDBClusterStateFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            StopDBClusterError::InvalidDBClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             StopDBClusterError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -24440,35 +24464,35 @@ impl StopDBInstanceError {
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(StopDBInstanceError::DBInstanceNotFoundFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DBSnapshotAlreadyExists" => {
                         return RusotoError::Service(
                             StopDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             StopDBInstanceError::InvalidDBClusterStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             StopDBInstanceError::InvalidDBInstanceStateFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             StopDBInstanceError::SnapshotQuotaExceededFault(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -25575,11 +25599,9 @@ impl Rds for RdsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CopyDBClusterSnapshotError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CopyDBClusterSnapshotError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26141,11 +26163,9 @@ impl Rds for RdsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(CreateDBSecurityGroupError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDBSecurityGroupError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -26766,11 +26786,9 @@ impl Rds for RdsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DeleteDBSecurityGroupError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDBSecurityGroupError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
@@ -28603,11 +28621,9 @@ impl Rds for RdsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeSourceRegionsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSourceRegionsError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -29981,11 +29997,9 @@ impl Rds for RdsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ResetDBParameterGroupError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ResetDBParameterGroupError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

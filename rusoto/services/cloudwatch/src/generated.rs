@@ -2962,7 +2962,7 @@ impl DeleteAlarmsError {
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteAlarmsError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3013,17 +3013,17 @@ impl DeleteDashboardsError {
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteDashboardsError::DashboardNotFoundError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalServiceError" => {
                         return RusotoError::Service(DeleteDashboardsError::InternalServiceFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(DeleteDashboardsError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3072,7 +3072,7 @@ impl DescribeAlarmHistoryError {
                     "InvalidNextToken" => {
                         return RusotoError::Service(DescribeAlarmHistoryError::InvalidNextToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3119,7 +3119,7 @@ impl DescribeAlarmsError {
                     "InvalidNextToken" => {
                         return RusotoError::Service(DescribeAlarmsError::InvalidNextToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3281,17 +3281,17 @@ impl GetDashboardError {
                     "ResourceNotFound" => {
                         return RusotoError::Service(GetDashboardError::DashboardNotFoundError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalServiceError" => {
                         return RusotoError::Service(GetDashboardError::InternalServiceFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(GetDashboardError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3340,7 +3340,7 @@ impl GetMetricDataError {
                     "InvalidNextToken" => {
                         return RusotoError::Service(GetMetricDataError::InvalidNextToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3391,30 +3391,32 @@ impl GetMetricStatisticsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InternalServiceError" => {
-                        return RusotoError::Service(GetMetricStatisticsError::InternalServiceFault(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            GetMetricStatisticsError::InternalServiceFault(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             GetMetricStatisticsError::InvalidParameterCombination(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
                             GetMetricStatisticsError::InvalidParameterValue(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(
                             GetMetricStatisticsError::MissingRequiredParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -3503,12 +3505,12 @@ impl ListDashboardsError {
                     "InternalServiceError" => {
                         return RusotoError::Service(ListDashboardsError::InternalServiceFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(ListDashboardsError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3558,12 +3560,12 @@ impl ListMetricsError {
                     "InternalServiceError" => {
                         return RusotoError::Service(ListMetricsError::InternalServiceFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(ListMetricsError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3613,12 +3615,12 @@ impl PutDashboardError {
                     "InvalidParameterInput" => {
                         return RusotoError::Service(PutDashboardError::DashboardInvalidInputError(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InternalServiceError" => {
                         return RusotoError::Service(PutDashboardError::InternalServiceFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3666,7 +3668,7 @@ impl PutMetricAlarmError {
                     "LimitExceeded" => {
                         return RusotoError::Service(PutMetricAlarmError::LimitExceededFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3719,24 +3721,24 @@ impl PutMetricDataError {
                     "InternalServiceError" => {
                         return RusotoError::Service(PutMetricDataError::InternalServiceFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             PutMetricDataError::InvalidParameterCombination(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(PutMetricDataError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(PutMetricDataError::MissingRequiredParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -3788,12 +3790,12 @@ impl SetAlarmStateError {
                     "InvalidFormat" => {
                         return RusotoError::Service(SetAlarmStateError::InvalidFormatFault(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(SetAlarmStateError::ResourceNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }

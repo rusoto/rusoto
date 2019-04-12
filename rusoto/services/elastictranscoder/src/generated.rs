@@ -1456,27 +1456,27 @@ impl CancelJobError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CancelJobError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(CancelJobError::IncompatibleVersion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CancelJobError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CancelJobError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CancelJobError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1546,27 +1546,27 @@ impl CreateJobError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateJobError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(CreateJobError::IncompatibleVersion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateJobError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateJobError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateJobError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1636,27 +1636,27 @@ impl CreatePipelineError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreatePipelineError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(CreatePipelineError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(CreatePipelineError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreatePipelineError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePipelineError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreatePipelineError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1724,22 +1724,22 @@ impl CreatePresetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreatePresetError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(CreatePresetError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreatePresetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePresetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1808,27 +1808,27 @@ impl DeletePipelineError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeletePipelineError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(DeletePipelineError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(DeletePipelineError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeletePipelineError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeletePipelineError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePipelineError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1896,22 +1896,22 @@ impl DeletePresetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeletePresetError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(DeletePresetError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeletePresetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePresetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1978,22 +1978,22 @@ impl ListJobsByPipelineError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListJobsByPipelineError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(ListJobsByPipelineError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListJobsByPipelineError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListJobsByPipelineError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2060,22 +2060,22 @@ impl ListJobsByStatusError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListJobsByStatusError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(ListJobsByStatusError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListJobsByStatusError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListJobsByStatusError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2140,17 +2140,17 @@ impl ListPipelinesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPipelinesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(ListPipelinesError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListPipelinesError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2214,17 +2214,17 @@ impl ListPresetsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPresetsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(ListPresetsError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListPresetsError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2290,22 +2290,22 @@ impl ReadJobError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ReadJobError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(ReadJobError::IncompatibleVersion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ReadJobError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ReadJobError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2372,22 +2372,22 @@ impl ReadPipelineError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ReadPipelineError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(ReadPipelineError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ReadPipelineError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ReadPipelineError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2454,22 +2454,22 @@ impl ReadPresetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ReadPresetError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
-                    return RusotoError::Service(ReadPresetError::IncompatibleVersion(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ReadPresetError::IncompatibleVersion(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ReadPresetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ReadPresetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2536,22 +2536,22 @@ impl TestRoleError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TestRoleError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(TestRoleError::IncompatibleVersion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(TestRoleError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TestRoleError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2620,27 +2620,27 @@ impl UpdatePipelineError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePipelineError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(UpdatePipelineError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(UpdatePipelineError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdatePipelineError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdatePipelineError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdatePipelineError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2712,29 +2712,31 @@ impl UpdatePipelineNotificationsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePipelineNotificationsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(
                         UpdatePipelineNotificationsError::IncompatibleVersion(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdatePipelineNotificationsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdatePipelineNotificationsError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UpdatePipelineNotificationsError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdatePipelineNotificationsError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2804,27 +2806,27 @@ impl UpdatePipelineStatusError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePipelineStatusError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleVersionException" => {
                     return RusotoError::Service(UpdatePipelineStatusError::IncompatibleVersion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdatePipelineStatusError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdatePipelineStatusError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdatePipelineStatusError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

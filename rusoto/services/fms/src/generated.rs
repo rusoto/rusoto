@@ -455,22 +455,22 @@ impl AssociateAdminAccountError {
                 "InternalErrorException" => {
                     return RusotoError::Service(AssociateAdminAccountError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AssociateAdminAccountError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(AssociateAdminAccountError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateAdminAccountError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -521,17 +521,17 @@ impl DeleteNotificationChannelError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteNotificationChannelError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DeleteNotificationChannelError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteNotificationChannelError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -581,17 +581,17 @@ impl DeletePolicyError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeletePolicyError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DeletePolicyError::InvalidOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeletePolicyError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -641,17 +641,17 @@ impl DisassociateAdminAccountError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DisassociateAdminAccountError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DisassociateAdminAccountError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateAdminAccountError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -701,17 +701,17 @@ impl GetAdminAccountError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetAdminAccountError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(GetAdminAccountError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetAdminAccountError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -759,12 +759,12 @@ impl GetComplianceDetailError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetComplianceDetailError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetComplianceDetailError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -813,17 +813,17 @@ impl GetNotificationChannelError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetNotificationChannelError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(GetNotificationChannelError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetNotificationChannelError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -875,22 +875,22 @@ impl GetPolicyError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetPolicyError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(GetPolicyError::InvalidOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTypeException" => {
                     return RusotoError::Service(GetPolicyError::InvalidType(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetPolicyError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -939,12 +939,12 @@ impl ListComplianceStatusError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListComplianceStatusError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListComplianceStatusError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -991,12 +991,12 @@ impl ListMemberAccountsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListMemberAccountsError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListMemberAccountsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1047,22 +1047,22 @@ impl ListPoliciesError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListPoliciesError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(ListPoliciesError::InvalidOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListPoliciesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPoliciesError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1113,17 +1113,17 @@ impl PutNotificationChannelError {
                 "InternalErrorException" => {
                     return RusotoError::Service(PutNotificationChannelError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(PutNotificationChannelError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutNotificationChannelError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1179,32 +1179,32 @@ impl PutPolicyError {
                 "InternalErrorException" => {
                     return RusotoError::Service(PutPolicyError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(PutPolicyError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(PutPolicyError::InvalidOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTypeException" => {
                     return RusotoError::Service(PutPolicyError::InvalidType(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutPolicyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutPolicyError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -620,17 +620,17 @@ impl AddTagsToResourceError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(AddTagsToResourceError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(AddTagsToResourceError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(AddTagsToResourceError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -680,17 +680,17 @@ impl CreateHapgError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(CreateHapgError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CreateHapgError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateHapgError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -740,17 +740,17 @@ impl CreateHsmError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CreateHsmError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateHsmError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -800,17 +800,17 @@ impl CreateLunaClientError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(CreateLunaClientError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(CreateLunaClientError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateLunaClientError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -860,17 +860,17 @@ impl DeleteHapgError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DeleteHapgError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DeleteHapgError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteHapgError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -920,17 +920,17 @@ impl DeleteHsmError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DeleteHsmError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteHsmError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -980,17 +980,17 @@ impl DeleteLunaClientError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DeleteLunaClientError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DeleteLunaClientError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteLunaClientError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1040,17 +1040,17 @@ impl DescribeHapgError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DescribeHapgError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DescribeHapgError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeHapgError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1100,17 +1100,17 @@ impl DescribeHsmError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DescribeHsmError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DescribeHsmError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeHsmError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1160,17 +1160,17 @@ impl DescribeLunaClientError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(DescribeLunaClientError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(DescribeLunaClientError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeLunaClientError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1220,17 +1220,17 @@ impl GetConfigError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(GetConfigError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(GetConfigError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetConfigError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1280,17 +1280,17 @@ impl ListAvailableZonesError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListAvailableZonesError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ListAvailableZonesError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListAvailableZonesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1340,17 +1340,17 @@ impl ListHapgsError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListHapgsError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ListHapgsError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListHapgsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1400,17 +1400,17 @@ impl ListHsmsError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListHsmsError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ListHsmsError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListHsmsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1460,17 +1460,17 @@ impl ListLunaClientsError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListLunaClientsError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ListLunaClientsError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(ListLunaClientsError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListLunaClientsError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1520,17 +1520,17 @@ impl ListTagsForResourceError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ListTagsForResourceError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ListTagsForResourceError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1580,17 +1580,17 @@ impl ModifyHapgError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ModifyHapgError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ModifyHapgError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ModifyHapgError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1640,17 +1640,17 @@ impl ModifyHsmError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(ModifyHsmError::CloudHsmInternal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ModifyHsmError::CloudHsmService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ModifyHsmError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1696,7 +1696,7 @@ impl ModifyLunaClientError {
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(ModifyLunaClientError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1744,17 +1744,17 @@ impl RemoveTagsFromResourceError {
                 "CloudHsmInternalException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::CloudHsmInternal(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudHsmServiceException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::CloudHsmService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RemoveTagsFromResourceError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

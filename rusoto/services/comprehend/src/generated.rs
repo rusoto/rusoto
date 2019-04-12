@@ -1945,24 +1945,24 @@ impl BatchDetectDominantLanguageError {
                         BatchDetectDominantLanguageError::BatchSizeLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDetectDominantLanguageError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchDetectDominantLanguageError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(
                         BatchDetectDominantLanguageError::TextSizeLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2017,27 +2017,27 @@ impl BatchDetectEntitiesError {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::BatchSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectEntitiesError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2091,29 +2091,31 @@ impl BatchDetectKeyPhrasesError {
 
             match *error_type {
                 "BatchSizeLimitExceededException" => {
-                    return RusotoError::Service(BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectKeyPhrasesError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2169,27 +2171,27 @@ impl BatchDetectSentimentError {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSentimentError::BatchSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDetectSentimentError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchDetectSentimentError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSentimentError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectSentimentError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2245,27 +2247,27 @@ impl BatchDetectSyntaxError {
                 "BatchSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::BatchSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(BatchDetectSyntaxError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2323,34 +2325,36 @@ impl CreateDocumentClassifierError {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
                     return RusotoError::Service(
                         CreateDocumentClassifierError::ResourceLimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
-                    return RusotoError::Service(CreateDocumentClassifierError::UnsupportedLanguage(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateDocumentClassifierError::UnsupportedLanguage(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2409,32 +2413,34 @@ impl CreateEntityRecognizerError {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceLimitExceededException" => {
-                    return RusotoError::Service(CreateEntityRecognizerError::ResourceLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateEntityRecognizerError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2493,32 +2499,34 @@ impl DeleteDocumentClassifierError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceUnavailableException" => {
-                    return RusotoError::Service(DeleteDocumentClassifierError::ResourceUnavailable(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteDocumentClassifierError::ResourceUnavailable(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteDocumentClassifierError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2577,32 +2585,32 @@ impl DeleteEntityRecognizerError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::ResourceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteEntityRecognizerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2661,28 +2669,28 @@ impl DescribeDocumentClassificationJobError {
                         DescribeDocumentClassificationJobError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DescribeDocumentClassificationJobError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(
                         DescribeDocumentClassificationJobError::JobNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         DescribeDocumentClassificationJobError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2737,22 +2745,22 @@ impl DescribeDocumentClassifierError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeDocumentClassifierError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2809,28 +2817,28 @@ impl DescribeDominantLanguageDetectionJobError {
                         DescribeDominantLanguageDetectionJobError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DescribeDominantLanguageDetectionJobError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(
                         DescribeDominantLanguageDetectionJobError::JobNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         DescribeDominantLanguageDetectionJobError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2885,22 +2893,24 @@ impl DescribeEntitiesDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEntitiesDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeEntitiesDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeEntitiesDetectionJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribeEntitiesDetectionJobError::TooManyRequests(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeEntitiesDetectionJobError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2953,22 +2963,22 @@ impl DescribeEntityRecognizerError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeEntityRecognizerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3025,26 +3035,26 @@ impl DescribeKeyPhrasesDetectionJobError {
                         DescribeKeyPhrasesDetectionJobError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         DescribeKeyPhrasesDetectionJobError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeKeyPhrasesDetectionJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         DescribeKeyPhrasesDetectionJobError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3097,26 +3107,30 @@ impl DescribeSentimentDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(DescribeSentimentDetectionJobError::InternalServer(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeSentimentDetectionJobError::InternalServer(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeSentimentDetectionJobError::InvalidRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeSentimentDetectionJobError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeSentimentDetectionJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         DescribeSentimentDetectionJobError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3171,22 +3185,22 @@ impl DescribeTopicsDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeTopicsDetectionJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3237,17 +3251,19 @@ impl DetectDominantLanguageError {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectDominantLanguageError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DetectDominantLanguageError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
-                    return RusotoError::Service(DetectDominantLanguageError::TextSizeLimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DetectDominantLanguageError::TextSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3299,22 +3315,22 @@ impl DetectEntitiesError {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectEntitiesError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DetectEntitiesError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectEntitiesError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(DetectEntitiesError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3367,22 +3383,22 @@ impl DetectKeyPhrasesError {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectKeyPhrasesError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DetectKeyPhrasesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectKeyPhrasesError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(DetectKeyPhrasesError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3433,24 +3449,24 @@ impl DetectSentimentError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(DetectSentimentError::InternalServer(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DetectSentimentError::InternalServer(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DetectSentimentError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DetectSentimentError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectSentimentError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(DetectSentimentError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3503,22 +3519,22 @@ impl DetectSyntaxError {
                 "InternalServerException" => {
                     return RusotoError::Service(DetectSyntaxError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DetectSyntaxError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectSyntaxError::TextSizeLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(DetectSyntaxError::UnsupportedLanguage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3575,26 +3591,28 @@ impl ListDocumentClassificationJobsError {
                         ListDocumentClassificationJobsError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilterException" => {
-                    return RusotoError::Service(ListDocumentClassificationJobsError::InvalidFilter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListDocumentClassificationJobsError::InvalidFilter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         ListDocumentClassificationJobsError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         ListDocumentClassificationJobsError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3647,22 +3665,22 @@ impl ListDocumentClassifiersError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListDocumentClassifiersError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3719,28 +3737,28 @@ impl ListDominantLanguageDetectionJobsError {
                         ListDominantLanguageDetectionJobsError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(
                         ListDominantLanguageDetectionJobsError::InvalidFilter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         ListDominantLanguageDetectionJobsError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         ListDominantLanguageDetectionJobsError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3793,22 +3811,22 @@ impl ListEntitiesDetectionJobsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListEntitiesDetectionJobsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3861,22 +3879,22 @@ impl ListEntityRecognizersError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListEntityRecognizersError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListEntityRecognizersError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListEntityRecognizersError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListEntityRecognizersError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3931,22 +3949,22 @@ impl ListKeyPhrasesDetectionJobsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListKeyPhrasesDetectionJobsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4001,22 +4019,22 @@ impl ListSentimentDetectionJobsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListSentimentDetectionJobsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4069,22 +4087,22 @@ impl ListTopicsDetectionJobsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFilterException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::InvalidFilter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListTopicsDetectionJobsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4143,35 +4161,35 @@ impl StartDocumentClassificationJobError {
                         StartDocumentClassificationJobError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         StartDocumentClassificationJobError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         StartDocumentClassificationJobError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(
                         StartDocumentClassificationJobError::ResourceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         StartDocumentClassificationJobError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4227,21 +4245,21 @@ impl StartDominantLanguageDetectionJobError {
                         StartDominantLanguageDetectionJobError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         StartDominantLanguageDetectionJobError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         StartDominantLanguageDetectionJobError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4295,29 +4313,29 @@ impl StartEntitiesDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceUnavailableException" => {
                     return RusotoError::Service(
                         StartEntitiesDetectionJobError::ResourceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4371,17 +4389,17 @@ impl StartKeyPhrasesDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4433,17 +4451,17 @@ impl StartSentimentDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4493,17 +4511,17 @@ impl StartTopicsDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4557,19 +4575,21 @@ impl StopDominantLanguageDetectionJobError {
                         StopDominantLanguageDetectionJobError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         StopDominantLanguageDetectionJobError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "JobNotFoundException" => {
-                    return RusotoError::Service(StopDominantLanguageDetectionJobError::JobNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StopDominantLanguageDetectionJobError::JobNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4619,17 +4639,17 @@ impl StopEntitiesDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(StopEntitiesDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopEntitiesDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(StopEntitiesDetectionJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4681,17 +4701,17 @@ impl StopKeyPhrasesDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(StopKeyPhrasesDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopKeyPhrasesDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(StopKeyPhrasesDetectionJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4741,17 +4761,17 @@ impl StopSentimentDetectionJobError {
                 "InternalServerException" => {
                     return RusotoError::Service(StopSentimentDetectionJobError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopSentimentDetectionJobError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "JobNotFoundException" => {
                     return RusotoError::Service(StopSentimentDetectionJobError::JobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4807,28 +4827,28 @@ impl StopTrainingDocumentClassifierError {
                         StopTrainingDocumentClassifierError::InternalServer(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         StopTrainingDocumentClassifierError::InvalidRequest(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         StopTrainingDocumentClassifierError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         StopTrainingDocumentClassifierError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4883,24 +4903,26 @@ impl StopTrainingEntityRecognizerError {
                 "InternalServerException" => {
                     return RusotoError::Service(StopTrainingEntityRecognizerError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StopTrainingEntityRecognizerError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         StopTrainingEntityRecognizerError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(StopTrainingEntityRecognizerError::TooManyRequests(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StopTrainingEntityRecognizerError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

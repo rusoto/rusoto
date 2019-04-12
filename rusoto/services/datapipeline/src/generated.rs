@@ -727,22 +727,22 @@ impl ActivatePipelineError {
                 "InternalServiceError" => {
                     return RusotoError::Service(ActivatePipelineError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ActivatePipelineError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(ActivatePipelineError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(ActivatePipelineError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -795,22 +795,22 @@ impl AddTagsError {
                 "InternalServiceError" => {
                     return RusotoError::Service(AddTagsError::InternalServiceError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(AddTagsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(AddTagsError::PipelineDeleted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(AddTagsError::PipelineNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -859,12 +859,12 @@ impl CreatePipelineError {
                 "InternalServiceError" => {
                     return RusotoError::Service(CreatePipelineError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -915,22 +915,22 @@ impl DeactivatePipelineError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeactivatePipelineError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeactivatePipelineError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(DeactivatePipelineError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(DeactivatePipelineError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -981,17 +981,17 @@ impl DeletePipelineError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DeletePipelineError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeletePipelineError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(DeletePipelineError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1043,22 +1043,22 @@ impl DescribeObjectsError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeObjectsError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeObjectsError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeObjectsError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(DescribeObjectsError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(DescribeObjectsError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1111,22 +1111,22 @@ impl DescribePipelinesError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribePipelinesError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribePipelinesError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(DescribePipelinesError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(DescribePipelinesError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1181,27 +1181,27 @@ impl EvaluateExpressionError {
                 "InternalServiceError" => {
                     return RusotoError::Service(EvaluateExpressionError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(EvaluateExpressionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(EvaluateExpressionError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(EvaluateExpressionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TaskNotFoundException" => {
                     return RusotoError::Service(EvaluateExpressionError::TaskNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1255,22 +1255,22 @@ impl GetPipelineDefinitionError {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetPipelineDefinitionError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetPipelineDefinitionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(GetPipelineDefinitionError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(GetPipelineDefinitionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1319,12 +1319,12 @@ impl ListPipelinesError {
                 "InternalServiceError" => {
                     return RusotoError::Service(ListPipelinesError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListPipelinesError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1373,17 +1373,17 @@ impl PollForTaskError {
                 "InternalServiceError" => {
                     return RusotoError::Service(PollForTaskError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PollForTaskError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TaskNotFoundException" => {
                     return RusotoError::Service(PollForTaskError::TaskNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1435,22 +1435,22 @@ impl PutPipelineDefinitionError {
                 "InternalServiceError" => {
                     return RusotoError::Service(PutPipelineDefinitionError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(PutPipelineDefinitionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(PutPipelineDefinitionError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(PutPipelineDefinitionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1503,22 +1503,22 @@ impl QueryObjectsError {
                 "InternalServiceError" => {
                     return RusotoError::Service(QueryObjectsError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(QueryObjectsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(QueryObjectsError::PipelineDeleted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(QueryObjectsError::PipelineNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1571,22 +1571,22 @@ impl RemoveTagsError {
                 "InternalServiceError" => {
                     return RusotoError::Service(RemoveTagsError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RemoveTagsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(RemoveTagsError::PipelineDeleted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(RemoveTagsError::PipelineNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1641,27 +1641,27 @@ impl ReportTaskProgressError {
                 "InternalServiceError" => {
                     return RusotoError::Service(ReportTaskProgressError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ReportTaskProgressError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(ReportTaskProgressError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(ReportTaskProgressError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TaskNotFoundException" => {
                     return RusotoError::Service(ReportTaskProgressError::TaskNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1713,12 +1713,12 @@ impl ReportTaskRunnerHeartbeatError {
                         ReportTaskRunnerHeartbeatError::InternalServiceError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ReportTaskRunnerHeartbeatError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1767,24 +1767,24 @@ impl SetStatusError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return RusotoError::Service(SetStatusError::InternalServiceError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(SetStatusError::InternalServiceError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(SetStatusError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(SetStatusError::PipelineDeleted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(SetStatusError::PipelineNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1839,27 +1839,27 @@ impl SetTaskStatusError {
                 "InternalServiceError" => {
                     return RusotoError::Service(SetTaskStatusError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(SetTaskStatusError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(SetTaskStatusError::PipelineDeleted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PipelineNotFoundException" => {
-                    return RusotoError::Service(SetTaskStatusError::PipelineNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(SetTaskStatusError::PipelineNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "TaskNotFoundException" => {
                     return RusotoError::Service(SetTaskStatusError::TaskNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1917,22 +1917,22 @@ impl ValidatePipelineDefinitionError {
                         ValidatePipelineDefinitionError::InternalServiceError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ValidatePipelineDefinitionError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineDeletedException" => {
                     return RusotoError::Service(ValidatePipelineDefinitionError::PipelineDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(ValidatePipelineDefinitionError::PipelineNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

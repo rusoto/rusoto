@@ -796,47 +796,47 @@ impl AddTagsError {
                 "CloudTrailARNInvalidException" => {
                     return RusotoError::Service(AddTagsError::CloudTrailARNInvalid(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTagParameterException" => {
                     return RusotoError::Service(AddTagsError::InvalidTagParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(AddTagsError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(AddTagsError::NotOrganizationMasterAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(AddTagsError::OperationNotPermitted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceTypeNotSupportedException" => {
                     return RusotoError::Service(AddTagsError::ResourceTypeNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TagsLimitExceededException" => {
                     return RusotoError::Service(AddTagsError::TagsLimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(AddTagsError::UnsupportedOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -938,134 +938,138 @@ impl CreateTrailError {
                 "CloudTrailAccessNotEnabledException" => {
                     return RusotoError::Service(CreateTrailError::CloudTrailAccessNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return RusotoError::Service(
                         CreateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
                         CreateTrailError::InsufficientDependencyServiceAccessPermission(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return RusotoError::Service(CreateTrailError::InsufficientEncryptionPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InsufficientS3BucketPolicyException" => {
                     return RusotoError::Service(CreateTrailError::InsufficientS3BucketPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InsufficientSnsTopicPolicyException" => {
                     return RusotoError::Service(CreateTrailError::InsufficientSnsTopicPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCloudWatchLogsLogGroupArnException" => {
-                    return RusotoError::Service(CreateTrailError::InvalidCloudWatchLogsLogGroupArn(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidCloudWatchLogsRoleArnException" => {
                     return RusotoError::Service(CreateTrailError::InvalidCloudWatchLogsRoleArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidKmsKeyIdException" => {
                     return RusotoError::Service(CreateTrailError::InvalidKmsKeyId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(CreateTrailError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3BucketNameException" => {
                     return RusotoError::Service(CreateTrailError::InvalidS3BucketName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3PrefixException" => {
                     return RusotoError::Service(CreateTrailError::InvalidS3Prefix(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidSnsTopicNameException" => {
                     return RusotoError::Service(CreateTrailError::InvalidSnsTopicName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(CreateTrailError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KmsException" => {
-                    return RusotoError::Service(CreateTrailError::Kms(String::from(error_message)));
+                    return RusotoError::Service(CreateTrailError::Kms(String::from(error_message)))
                 }
                 "KmsKeyDisabledException" => {
                     return RusotoError::Service(CreateTrailError::KmsKeyDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KmsKeyNotFoundException" => {
                     return RusotoError::Service(CreateTrailError::KmsKeyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MaximumNumberOfTrailsExceededException" => {
                     return RusotoError::Service(CreateTrailError::MaximumNumberOfTrailsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(CreateTrailError::NotOrganizationMasterAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateTrailError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotInAllFeaturesModeException" => {
-                    return RusotoError::Service(CreateTrailError::OrganizationNotInAllFeaturesMode(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateTrailError::OrganizationNotInAllFeaturesMode(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OrganizationsNotInUseException" => {
                     return RusotoError::Service(CreateTrailError::OrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "S3BucketDoesNotExistException" => {
                     return RusotoError::Service(CreateTrailError::S3BucketDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailAlreadyExistsException" => {
-                    return RusotoError::Service(CreateTrailError::TrailAlreadyExists(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateTrailError::TrailAlreadyExists(
+                        String::from(error_message),
+                    ))
                 }
                 "TrailNotProvidedException" => {
                     return RusotoError::Service(CreateTrailError::TrailNotProvided(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(CreateTrailError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1148,37 +1152,37 @@ impl DeleteTrailError {
                         DeleteTrailError::InsufficientDependencyServiceAccessPermission(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidHomeRegionException" => {
                     return RusotoError::Service(DeleteTrailError::InvalidHomeRegion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(DeleteTrailError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(DeleteTrailError::NotOrganizationMasterAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteTrailError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(DeleteTrailError::TrailNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DeleteTrailError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1230,12 +1234,12 @@ impl DescribeTrailsError {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DescribeTrailsError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DescribeTrailsError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1286,22 +1290,22 @@ impl GetEventSelectorsError {
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(GetEventSelectorsError::InvalidTrailName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(GetEventSelectorsError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(GetEventSelectorsError::TrailNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(GetEventSelectorsError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1350,12 +1354,12 @@ impl GetTrailStatusError {
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(GetTrailStatusError::InvalidTrailName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(GetTrailStatusError::TrailNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1406,22 +1410,22 @@ impl ListPublicKeysError {
                 "InvalidTimeRangeException" => {
                     return RusotoError::Service(ListPublicKeysError::InvalidTimeRange(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTokenException" => {
                     return RusotoError::Service(ListPublicKeysError::InvalidToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(ListPublicKeysError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ListPublicKeysError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1480,37 +1484,37 @@ impl ListTagsError {
                 "CloudTrailARNInvalidException" => {
                     return RusotoError::Service(ListTagsError::CloudTrailARNInvalid(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTokenException" => {
                     return RusotoError::Service(ListTagsError::InvalidToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(ListTagsError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(ListTagsError::OperationNotPermitted(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsError::OperationNotPermitted(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceTypeNotSupportedException" => {
                     return RusotoError::Service(ListTagsError::ResourceTypeNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(ListTagsError::UnsupportedOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1566,22 +1570,22 @@ impl LookupEventsError {
                 "InvalidLookupAttributesException" => {
                     return RusotoError::Service(LookupEventsError::InvalidLookupAttributes(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidMaxResultsException" => {
-                    return RusotoError::Service(LookupEventsError::InvalidMaxResults(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(LookupEventsError::InvalidMaxResults(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(LookupEventsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTimeRangeException" => {
                     return RusotoError::Service(LookupEventsError::InvalidTimeRange(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1644,44 +1648,44 @@ impl PutEventSelectorsError {
                         PutEventSelectorsError::InsufficientDependencyServiceAccessPermission(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidEventSelectorsException" => {
                     return RusotoError::Service(PutEventSelectorsError::InvalidEventSelectors(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidHomeRegionException" => {
                     return RusotoError::Service(PutEventSelectorsError::InvalidHomeRegion(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(PutEventSelectorsError::InvalidTrailName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(
                         PutEventSelectorsError::NotOrganizationMasterAccount(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(PutEventSelectorsError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(PutEventSelectorsError::TrailNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(PutEventSelectorsError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1748,42 +1752,42 @@ impl RemoveTagsError {
                 "CloudTrailARNInvalidException" => {
                     return RusotoError::Service(RemoveTagsError::CloudTrailARNInvalid(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTagParameterException" => {
-                    return RusotoError::Service(RemoveTagsError::InvalidTagParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RemoveTagsError::InvalidTagParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(RemoveTagsError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(RemoveTagsError::NotOrganizationMasterAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(RemoveTagsError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemoveTagsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceTypeNotSupportedException" => {
                     return RusotoError::Service(RemoveTagsError::ResourceTypeNotSupported(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(RemoveTagsError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1848,37 +1852,37 @@ impl StartLoggingError {
                         StartLoggingError::InsufficientDependencyServiceAccessPermission(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidHomeRegionException" => {
-                    return RusotoError::Service(StartLoggingError::InvalidHomeRegion(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartLoggingError::InvalidHomeRegion(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(StartLoggingError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(StartLoggingError::NotOrganizationMasterAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartLoggingError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(StartLoggingError::TrailNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(StartLoggingError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1942,37 +1946,37 @@ impl StopLoggingError {
                         StopLoggingError::InsufficientDependencyServiceAccessPermission(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidHomeRegionException" => {
                     return RusotoError::Service(StopLoggingError::InvalidHomeRegion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(StopLoggingError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(StopLoggingError::NotOrganizationMasterAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StopLoggingError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(StopLoggingError::TrailNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(StopLoggingError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2072,134 +2076,138 @@ impl UpdateTrailError {
                 "CloudTrailAccessNotEnabledException" => {
                     return RusotoError::Service(UpdateTrailError::CloudTrailAccessNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return RusotoError::Service(
                         UpdateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InsufficientDependencyServiceAccessPermissionException" => {
                     return RusotoError::Service(
                         UpdateTrailError::InsufficientDependencyServiceAccessPermission(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return RusotoError::Service(UpdateTrailError::InsufficientEncryptionPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InsufficientS3BucketPolicyException" => {
                     return RusotoError::Service(UpdateTrailError::InsufficientS3BucketPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InsufficientSnsTopicPolicyException" => {
                     return RusotoError::Service(UpdateTrailError::InsufficientSnsTopicPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCloudWatchLogsLogGroupArnException" => {
-                    return RusotoError::Service(UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateTrailError::InvalidCloudWatchLogsLogGroupArn(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidCloudWatchLogsRoleArnException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidCloudWatchLogsRoleArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidHomeRegionException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidHomeRegion(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidKmsKeyIdException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidKmsKeyId(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3BucketNameException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidS3BucketName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3PrefixException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidS3Prefix(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidSnsTopicNameException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidSnsTopicName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTrailNameException" => {
                     return RusotoError::Service(UpdateTrailError::InvalidTrailName(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KmsException" => {
-                    return RusotoError::Service(UpdateTrailError::Kms(String::from(error_message)));
+                    return RusotoError::Service(UpdateTrailError::Kms(String::from(error_message)))
                 }
                 "KmsKeyDisabledException" => {
                     return RusotoError::Service(UpdateTrailError::KmsKeyDisabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KmsKeyNotFoundException" => {
                     return RusotoError::Service(UpdateTrailError::KmsKeyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotOrganizationMasterAccountException" => {
                     return RusotoError::Service(UpdateTrailError::NotOrganizationMasterAccount(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateTrailError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotInAllFeaturesModeException" => {
-                    return RusotoError::Service(UpdateTrailError::OrganizationNotInAllFeaturesMode(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateTrailError::OrganizationNotInAllFeaturesMode(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OrganizationsNotInUseException" => {
                     return RusotoError::Service(UpdateTrailError::OrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "S3BucketDoesNotExistException" => {
                     return RusotoError::Service(UpdateTrailError::S3BucketDoesNotExist(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TrailNotFoundException" => {
                     return RusotoError::Service(UpdateTrailError::TrailNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TrailNotProvidedException" => {
                     return RusotoError::Service(UpdateTrailError::TrailNotProvided(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(UpdateTrailError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -957,57 +957,59 @@ impl BatchPutAttributesError {
                     "DuplicateItemName" => {
                         return RusotoError::Service(BatchPutAttributesError::DuplicateItemName(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
-                        return RusotoError::Service(BatchPutAttributesError::InvalidParameterValue(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            BatchPutAttributesError::InvalidParameterValue(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(BatchPutAttributesError::MissingParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDomain" => {
                         return RusotoError::Service(BatchPutAttributesError::NoSuchDomain(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NumberDomainAttributesExceeded" => {
                         return RusotoError::Service(
                             BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NumberDomainBytesExceeded" => {
                         return RusotoError::Service(
                             BatchPutAttributesError::NumberDomainBytesExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NumberItemAttributesExceeded" => {
                         return RusotoError::Service(
                             BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NumberSubmittedAttributesExceeded" => {
                         return RusotoError::Service(
                             BatchPutAttributesError::NumberSubmittedAttributesExceeded(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "NumberSubmittedItemsExceeded" => {
                         return RusotoError::Service(
                             BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -1066,17 +1068,17 @@ impl CreateDomainError {
                     "InvalidParameterValue" => {
                         return RusotoError::Service(CreateDomainError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(CreateDomainError::MissingParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NumberDomainsExceeded" => {
                         return RusotoError::Service(CreateDomainError::NumberDomainsExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1131,22 +1133,22 @@ impl DeleteAttributesError {
                     "AttributeDoesNotExist" => {
                         return RusotoError::Service(DeleteAttributesError::AttributeDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(DeleteAttributesError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(DeleteAttributesError::MissingParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDomain" => {
                         return RusotoError::Service(DeleteAttributesError::NoSuchDomain(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1196,7 +1198,7 @@ impl DeleteDomainError {
                     "MissingParameter" => {
                         return RusotoError::Service(DeleteDomainError::MissingParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1245,12 +1247,12 @@ impl DomainMetadataError {
                     "MissingParameter" => {
                         return RusotoError::Service(DomainMetadataError::MissingParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDomain" => {
                         return RusotoError::Service(DomainMetadataError::NoSuchDomain(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1302,17 +1304,17 @@ impl GetAttributesError {
                     "InvalidParameterValue" => {
                         return RusotoError::Service(GetAttributesError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(GetAttributesError::MissingParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDomain" => {
-                        return RusotoError::Service(GetAttributesError::NoSuchDomain(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(GetAttributesError::NoSuchDomain(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -1363,12 +1365,12 @@ impl ListDomainsError {
                     "InvalidNextToken" => {
                         return RusotoError::Service(ListDomainsError::InvalidNextToken(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(ListDomainsError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1428,41 +1430,41 @@ impl PutAttributesError {
                     "AttributeDoesNotExist" => {
                         return RusotoError::Service(PutAttributesError::AttributeDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(PutAttributesError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(PutAttributesError::MissingParameter(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDomain" => {
-                        return RusotoError::Service(PutAttributesError::NoSuchDomain(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(PutAttributesError::NoSuchDomain(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "NumberDomainAttributesExceeded" => {
                         return RusotoError::Service(
                             PutAttributesError::NumberDomainAttributesExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NumberDomainBytesExceeded" => {
                         return RusotoError::Service(PutAttributesError::NumberDomainBytesExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NumberItemAttributesExceeded" => {
                         return RusotoError::Service(
                             PutAttributesError::NumberItemAttributesExceeded(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -1531,47 +1533,47 @@ impl SelectError {
                     "InvalidNextToken" => {
                         return RusotoError::Service(SelectError::InvalidNextToken(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidNumberPredicates" => {
                         return RusotoError::Service(SelectError::InvalidNumberPredicates(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidNumberValueTests" => {
                         return RusotoError::Service(SelectError::InvalidNumberValueTests(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(SelectError::InvalidParameterValue(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidQueryExpression" => {
                         return RusotoError::Service(SelectError::InvalidQueryExpression(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingParameter" => {
                         return RusotoError::Service(SelectError::MissingParameter(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "NoSuchDomain" => {
                         return RusotoError::Service(SelectError::NoSuchDomain(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "RequestTimeout" => {
                         return RusotoError::Service(SelectError::RequestTimeout(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TooManyRequestedAttributes" => {
                         return RusotoError::Service(SelectError::TooManyRequestedAttributes(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -1713,11 +1715,9 @@ impl SimpleDb for SimpleDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(BatchDeleteAttributesError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(BatchDeleteAttributesError::from_response(response))
+                }));
             }
 
             Box::new(future::ok(::std::mem::drop(response)))

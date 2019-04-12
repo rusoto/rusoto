@@ -1052,21 +1052,23 @@ impl BatchCheckLayerAvailabilityError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(BatchCheckLayerAvailabilityError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        BatchCheckLayerAvailabilityError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(
                         BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerException" => {
                     return RusotoError::Service(BatchCheckLayerAvailabilityError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1116,17 +1118,17 @@ impl BatchDeleteImageError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(BatchDeleteImageError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(BatchDeleteImageError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(BatchDeleteImageError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1174,19 +1176,19 @@ impl BatchGetImageError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(BatchGetImageError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(BatchGetImageError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(BatchGetImageError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(BatchGetImageError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1246,42 +1248,42 @@ impl CompleteLayerUploadError {
                 "EmptyUploadException" => {
                     return RusotoError::Service(CompleteLayerUploadError::EmptyUpload(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidLayerException" => {
                     return RusotoError::Service(CompleteLayerUploadError::InvalidLayer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CompleteLayerUploadError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LayerAlreadyExistsException" => {
                     return RusotoError::Service(CompleteLayerUploadError::LayerAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LayerPartTooSmallException" => {
                     return RusotoError::Service(CompleteLayerUploadError::LayerPartTooSmall(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(CompleteLayerUploadError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(CompleteLayerUploadError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UploadNotFoundException" => {
                     return RusotoError::Service(CompleteLayerUploadError::UploadNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1342,32 +1344,32 @@ impl CreateRepositoryError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateRepositoryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTagParameterException" => {
                     return RusotoError::Service(CreateRepositoryError::InvalidTagParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateRepositoryError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateRepositoryError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "RepositoryAlreadyExistsException" => {
                     return RusotoError::Service(CreateRepositoryError::RepositoryAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(CreateRepositoryError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyTagsException" => {
                     return RusotoError::Service(CreateRepositoryError::TooManyTags(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1422,24 +1424,24 @@ impl DeleteLifecyclePolicyError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LifecyclePolicyNotFoundException" => {
                     return RusotoError::Service(
                         DeleteLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1492,22 +1494,22 @@ impl DeleteRepositoryError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRepositoryError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotEmptyException" => {
                     return RusotoError::Service(DeleteRepositoryError::RepositoryNotEmpty(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(DeleteRepositoryError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteRepositoryError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1560,24 +1562,24 @@ impl DeleteRepositoryPolicyError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteRepositoryPolicyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(DeleteRepositoryPolicyError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryPolicyNotFoundException" => {
                     return RusotoError::Service(
                         DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerException" => {
                     return RusotoError::Service(DeleteRepositoryPolicyError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1630,22 +1632,22 @@ impl DescribeImagesError {
                 "ImageNotFoundException" => {
                     return RusotoError::Service(DescribeImagesError::ImageNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeImagesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(DescribeImagesError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeImagesError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1696,17 +1698,17 @@ impl DescribeRepositoriesError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeRepositoriesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(DescribeRepositoriesError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(DescribeRepositoriesError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1754,12 +1756,12 @@ impl GetAuthorizationTokenError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetAuthorizationTokenError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(GetAuthorizationTokenError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1812,27 +1814,27 @@ impl GetDownloadUrlForLayerError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetDownloadUrlForLayerError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LayerInaccessibleException" => {
                     return RusotoError::Service(GetDownloadUrlForLayerError::LayerInaccessible(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LayersNotFoundException" => {
                     return RusotoError::Service(GetDownloadUrlForLayerError::LayersNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(GetDownloadUrlForLayerError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(GetDownloadUrlForLayerError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1886,22 +1888,22 @@ impl GetLifecyclePolicyError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LifecyclePolicyNotFoundException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::LifecyclePolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1954,24 +1956,26 @@ impl GetLifecyclePolicyPreviewError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetLifecyclePolicyPreviewError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LifecyclePolicyPreviewNotFoundException" => {
                     return RusotoError::Service(
                         GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryNotFoundException" => {
-                    return RusotoError::Service(GetLifecyclePolicyPreviewError::RepositoryNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServerException" => {
                     return RusotoError::Service(GetLifecyclePolicyPreviewError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2024,22 +2028,24 @@ impl GetRepositoryPolicyError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetRepositoryPolicyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(GetRepositoryPolicyError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryPolicyNotFoundException" => {
-                    return RusotoError::Service(GetRepositoryPolicyError::RepositoryPolicyNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ServerException" => {
                     return RusotoError::Service(GetRepositoryPolicyError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2090,17 +2096,17 @@ impl InitiateLayerUploadError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(InitiateLayerUploadError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(InitiateLayerUploadError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(InitiateLayerUploadError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2150,17 +2156,17 @@ impl ListImagesError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListImagesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(ListImagesError::RepositoryNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListImagesError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2210,17 +2216,17 @@ impl ListTagsForResourceError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(ListTagsForResourceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2276,30 +2282,30 @@ impl PutImageError {
                 "ImageAlreadyExistsException" => {
                     return RusotoError::Service(PutImageError::ImageAlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutImageError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LayersNotFoundException" => {
                     return RusotoError::Service(PutImageError::LayersNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutImageError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(PutImageError::RepositoryNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServerException" => {
-                    return RusotoError::Service(PutImageError::Server(String::from(error_message)));
+                    return RusotoError::Service(PutImageError::Server(String::from(error_message)))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2352,17 +2358,17 @@ impl PutLifecyclePolicyError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2412,17 +2418,17 @@ impl SetRepositoryPolicyError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(SetRepositoryPolicyError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(SetRepositoryPolicyError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(SetRepositoryPolicyError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2476,35 +2482,37 @@ impl StartLifecyclePolicyPreviewError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StartLifecyclePolicyPreviewError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StartLifecyclePolicyPreviewError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "LifecyclePolicyNotFoundException" => {
                     return RusotoError::Service(
                         StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LifecyclePolicyPreviewInProgressException" => {
                     return RusotoError::Service(
                         StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(
                         StartLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerException" => {
                     return RusotoError::Service(StartLifecyclePolicyPreviewError::Server(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2560,27 +2568,27 @@ impl TagResourceError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTagParameterException" => {
                     return RusotoError::Service(TagResourceError::InvalidTagParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
-                    return RusotoError::Service(TagResourceError::RepositoryNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(TagResourceError::RepositoryNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(TagResourceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyTagsException" => {
                     return RusotoError::Service(TagResourceError::TooManyTags(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2634,29 +2642,29 @@ impl UntagResourceError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(UntagResourceError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidTagParameterException" => {
                     return RusotoError::Service(UntagResourceError::InvalidTagParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(UntagResourceError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(UntagResourceError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyTagsException" => {
                     return RusotoError::Service(UntagResourceError::TooManyTags(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2714,32 +2722,32 @@ impl UploadLayerPartError {
                 "InvalidLayerPartException" => {
                     return RusotoError::Service(UploadLayerPartError::InvalidLayerPart(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UploadLayerPartError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UploadLayerPartError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RepositoryNotFoundException" => {
                     return RusotoError::Service(UploadLayerPartError::RepositoryNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerException" => {
                     return RusotoError::Service(UploadLayerPartError::Server(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UploadNotFoundException" => {
-                    return RusotoError::Service(UploadLayerPartError::UploadNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UploadLayerPartError::UploadNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

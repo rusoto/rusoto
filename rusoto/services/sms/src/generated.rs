@@ -1193,27 +1193,27 @@ impl CreateAppError {
                 "InternalError" => {
                     return RusotoError::Service(CreateAppError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateAppError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(CreateAppError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateAppError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(CreateAppError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1277,53 +1277,53 @@ impl CreateReplicationJobError {
                 "InternalError" => {
                     return RusotoError::Service(CreateReplicationJobError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateReplicationJobError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         CreateReplicationJobError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoConnectorsAvailableException" => {
                     return RusotoError::Service(CreateReplicationJobError::NoConnectorsAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateReplicationJobError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicationJobAlreadyExistsException" => {
                     return RusotoError::Service(
                         CreateReplicationJobError::ReplicationJobAlreadyExists(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServerCannotBeReplicatedException" => {
                     return RusotoError::Service(
                         CreateReplicationJobError::ServerCannotBeReplicated(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TemporarilyUnavailableException" => {
                     return RusotoError::Service(CreateReplicationJobError::TemporarilyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(CreateReplicationJobError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1383,27 +1383,27 @@ impl DeleteAppError {
                 "InternalError" => {
                     return RusotoError::Service(DeleteAppError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteAppError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(DeleteAppError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteAppError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(DeleteAppError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1461,35 +1461,35 @@ impl DeleteAppLaunchConfigurationError {
                 "InternalError" => {
                     return RusotoError::Service(DeleteAppLaunchConfigurationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DeleteAppLaunchConfigurationError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         DeleteAppLaunchConfigurationError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         DeleteAppLaunchConfigurationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
                         DeleteAppLaunchConfigurationError::UnauthorizedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1549,35 +1549,35 @@ impl DeleteAppReplicationConfigurationError {
                         DeleteAppReplicationConfigurationError::InternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DeleteAppReplicationConfigurationError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         DeleteAppReplicationConfigurationError::MissingRequiredParameter(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         DeleteAppReplicationConfigurationError::OperationNotPermitted(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
                         DeleteAppReplicationConfigurationError::UnauthorizedOperation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1633,29 +1633,29 @@ impl DeleteReplicationJobError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteReplicationJobError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         DeleteReplicationJobError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteReplicationJobError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicationJobNotFoundException" => {
                     return RusotoError::Service(DeleteReplicationJobError::ReplicationJobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(DeleteReplicationJobError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1709,22 +1709,24 @@ impl DeleteServerCatalogError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteServerCatalogError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(DeleteServerCatalogError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteServerCatalogError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteServerCatalogError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(DeleteServerCatalogError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1777,24 +1779,24 @@ impl DisassociateConnectorError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(DisassociateConnectorError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         DisassociateConnectorError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DisassociateConnectorError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(DisassociateConnectorError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1849,27 +1851,27 @@ impl GenerateChangeSetError {
                 "InternalError" => {
                     return RusotoError::Service(GenerateChangeSetError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GenerateChangeSetError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GenerateChangeSetError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(GenerateChangeSetError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GenerateChangeSetError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1923,29 +1925,29 @@ impl GenerateTemplateError {
 
             match *error_type {
                 "InternalError" => {
-                    return RusotoError::Service(GenerateTemplateError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GenerateTemplateError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GenerateTemplateError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GenerateTemplateError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(GenerateTemplateError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GenerateTemplateError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2001,27 +2003,27 @@ impl GetAppError {
                 "InternalError" => {
                     return RusotoError::Service(GetAppError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetAppError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GetAppError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(GetAppError::OperationNotPermitted(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetAppError::UnauthorizedOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2077,33 +2079,33 @@ impl GetAppLaunchConfigurationError {
                 "InternalError" => {
                     return RusotoError::Service(GetAppLaunchConfigurationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetAppLaunchConfigurationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         GetAppLaunchConfigurationError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         GetAppLaunchConfigurationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
                         GetAppLaunchConfigurationError::UnauthorizedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2159,37 +2161,39 @@ impl GetAppReplicationConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return RusotoError::Service(GetAppReplicationConfigurationError::InternalError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetAppReplicationConfigurationError::InternalError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         GetAppReplicationConfigurationError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         GetAppReplicationConfigurationError::MissingRequiredParameter(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         GetAppReplicationConfigurationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
                         GetAppReplicationConfigurationError::UnauthorizedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2237,7 +2241,7 @@ impl GetConnectorsError {
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetConnectorsError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2285,17 +2289,17 @@ impl GetReplicationJobsError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetReplicationJobsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GetReplicationJobsError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetReplicationJobsError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2345,17 +2349,17 @@ impl GetReplicationRunsError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetReplicationRunsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(GetReplicationRunsError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetReplicationRunsError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2401,7 +2405,7 @@ impl GetServersError {
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(GetServersError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2453,27 +2457,29 @@ impl ImportServerCatalogError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(ImportServerCatalogError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(ImportServerCatalogError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ImportServerCatalogError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NoConnectorsAvailableException" => {
                     return RusotoError::Service(ImportServerCatalogError::NoConnectorsAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(ImportServerCatalogError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(ImportServerCatalogError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2529,27 +2535,27 @@ impl LaunchAppError {
                 "InternalError" => {
                     return RusotoError::Service(LaunchAppError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(LaunchAppError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(LaunchAppError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(LaunchAppError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(LaunchAppError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2605,27 +2611,27 @@ impl ListAppsError {
                 "InternalError" => {
                     return RusotoError::Service(ListAppsError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListAppsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(ListAppsError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
-                    return RusotoError::Service(ListAppsError::OperationNotPermitted(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListAppsError::OperationNotPermitted(
+                        String::from(error_message),
+                    ))
                 }
                 "UnauthorizedOperationException" => {
-                    return RusotoError::Service(ListAppsError::UnauthorizedOperation(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListAppsError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2681,33 +2687,33 @@ impl PutAppLaunchConfigurationError {
                 "InternalError" => {
                     return RusotoError::Service(PutAppLaunchConfigurationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(PutAppLaunchConfigurationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         PutAppLaunchConfigurationError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         PutAppLaunchConfigurationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
                         PutAppLaunchConfigurationError::UnauthorizedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2763,37 +2769,39 @@ impl PutAppReplicationConfigurationError {
 
             match *error_type {
                 "InternalError" => {
-                    return RusotoError::Service(PutAppReplicationConfigurationError::InternalError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutAppReplicationConfigurationError::InternalError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         PutAppReplicationConfigurationError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         PutAppReplicationConfigurationError::MissingRequiredParameter(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         PutAppReplicationConfigurationError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
                         PutAppReplicationConfigurationError::UnauthorizedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2849,27 +2857,29 @@ impl StartAppReplicationError {
                 "InternalError" => {
                     return RusotoError::Service(StartAppReplicationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartAppReplicationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
-                    return RusotoError::Service(StartAppReplicationError::MissingRequiredParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StartAppReplicationError::MissingRequiredParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartAppReplicationError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(StartAppReplicationError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2925,37 +2935,39 @@ impl StartOnDemandReplicationRunError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return RusotoError::Service(StartOnDemandReplicationRunError::InvalidParameter(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        StartOnDemandReplicationRunError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         StartOnDemandReplicationRunError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         StartOnDemandReplicationRunError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ReplicationRunLimitExceededException" => {
                     return RusotoError::Service(
                         StartOnDemandReplicationRunError::ReplicationRunLimitExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(
                         StartOnDemandReplicationRunError::UnauthorizedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3011,27 +3023,27 @@ impl StopAppReplicationError {
                 "InternalError" => {
                     return RusotoError::Service(StopAppReplicationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StopAppReplicationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(StopAppReplicationError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StopAppReplicationError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(StopAppReplicationError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3087,27 +3099,27 @@ impl TerminateAppError {
                 "InternalError" => {
                     return RusotoError::Service(TerminateAppError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(TerminateAppError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(TerminateAppError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(TerminateAppError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(TerminateAppError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3163,27 +3175,27 @@ impl UpdateAppError {
                 "InternalError" => {
                     return RusotoError::Service(UpdateAppError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateAppError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(UpdateAppError::MissingRequiredParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateAppError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(UpdateAppError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3245,46 +3257,46 @@ impl UpdateReplicationJobError {
                 "InternalError" => {
                     return RusotoError::Service(UpdateReplicationJobError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateReplicationJobError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MissingRequiredParameterException" => {
                     return RusotoError::Service(
                         UpdateReplicationJobError::MissingRequiredParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateReplicationJobError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicationJobNotFoundException" => {
                     return RusotoError::Service(UpdateReplicationJobError::ReplicationJobNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServerCannotBeReplicatedException" => {
                     return RusotoError::Service(
                         UpdateReplicationJobError::ServerCannotBeReplicated(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TemporarilyUnavailableException" => {
                     return RusotoError::Service(UpdateReplicationJobError::TemporarilyUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnauthorizedOperationException" => {
                     return RusotoError::Service(UpdateReplicationJobError::UnauthorizedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

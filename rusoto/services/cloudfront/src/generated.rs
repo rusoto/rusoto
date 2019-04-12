@@ -6035,246 +6035,252 @@ impl CreateDistributionError {
                     "AccessDenied" => {
                         return RusotoError::Service(CreateDistributionError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DistributionAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDistributionError::DistributionAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
                             CreateDistributionError::InconsistentQuantities(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(CreateDistributionError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidDefaultRootObject" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidDefaultRootObject(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidErrorCode" => {
                         return RusotoError::Service(CreateDistributionError::InvalidErrorCode(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidForwardCookies" => {
-                        return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateDistributionError::InvalidForwardCookies(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidGeoRestrictionParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidHeadersForS3Origin" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidHeadersForS3Origin(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidLambdaFunctionAssociation(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidLocationCode" => {
                         return RusotoError::Service(CreateDistributionError::InvalidLocationCode(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidMinimumProtocolVersion(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOrigin" => {
                         return RusotoError::Service(CreateDistributionError::InvalidOrigin(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidOriginAccessIdentity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOriginReadTimeout" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidOriginReadTimeout(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidProtocolSettings" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidProtocolSettings(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidQueryStringParameters" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidQueryStringParameters(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRelativePath" => {
                         return RusotoError::Service(CreateDistributionError::InvalidRelativePath(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidRequiredProtocol" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidRequiredProtocol(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidResponseCode" => {
                         return RusotoError::Service(CreateDistributionError::InvalidResponseCode(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTTLOrder" => {
                         return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidViewerCertificate" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidViewerCertificate(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(CreateDistributionError::InvalidWebACLId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateDistributionError::MissingBody(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchOrigin" => {
                         return RusotoError::Service(CreateDistributionError::NoSuchOrigin(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyCacheBehaviors" => {
-                        return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateDistributionError::TooManyCacheBehaviors(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(CreateDistributionError::TooManyCertificates(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyDistributionCNAMEs" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyDistributionCNAMEs(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyDistributions" => {
                         return RusotoError::Service(CreateDistributionError::TooManyDistributions(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyDistributionsWithLambdaAssociations" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyDistributionsWithLambdaAssociations(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyHeadersInForwardedValues" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyHeadersInForwardedValues(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyLambdaFunctionAssociations(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyOriginCustomHeaders" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyOriginCustomHeaders(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyOrigins" => {
                         return RusotoError::Service(CreateDistributionError::TooManyOrigins(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyQueryStringParameters" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyQueryStringParameters(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTrustedSigners" => {
-                        return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateDistributionError::TooManyTrustedSigners(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             CreateDistributionError::TrustedSignerDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6442,225 +6448,227 @@ impl CreateDistributionWithTagsError {
                     "AccessDenied" => {
                         return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::CNAMEAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DistributionAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::DistributionAlreadyExists(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InconsistentQuantities(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidArgument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidDefaultRootObject" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidDefaultRootObject(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidErrorCode" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidErrorCode(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidForwardCookies" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidForwardCookies(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidHeadersForS3Origin" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidHeadersForS3Origin(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidLocationCode" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidLocationCode(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidOrigin" => {
-                        return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateDistributionWithTagsError::InvalidOrigin(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidOriginAccessIdentity(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidOriginReadTimeout" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidOriginReadTimeout(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidProtocolSettings" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidQueryStringParameters" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidQueryStringParameters(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidRelativePath" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidRelativePath(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRequiredProtocol" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidResponseCode" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidResponseCode(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidTTLOrder" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidTTLOrder(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidTagging" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidTagging(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidViewerCertificate" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidViewerCertificate(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidWebACLId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchOrigin" => {
                         return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyCacheBehaviors" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyCacheBehaviors(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyCertificates(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyDistributionCNAMEs" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyDistributionCNAMEs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyDistributions" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyDistributions(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(
                         CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(
@@ -6672,49 +6680,49 @@ impl CreateDistributionWithTagsError {
                             CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyOriginCustomHeaders" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyOriginCustomHeaders(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyOrigins" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyOrigins(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyQueryStringParameters" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyQueryStringParameters(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyTrustedSigners(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TrustedSignerDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6815,41 +6823,41 @@ impl CreateInvalidationError {
                     "AccessDenied" => {
                         return RusotoError::Service(CreateInvalidationError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "BatchTooLarge" => {
                         return RusotoError::Service(CreateInvalidationError::BatchTooLarge(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
                             CreateInvalidationError::InconsistentQuantities(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(CreateInvalidationError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateInvalidationError::MissingBody(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(CreateInvalidationError::NoSuchDistribution(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyInvalidationsInProgress" => {
                         return RusotoError::Service(
                             CreateInvalidationError::TooManyInvalidationsInProgress(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6924,84 +6932,86 @@ impl CreateStreamingDistributionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
-                        return RusotoError::Service(CreateStreamingDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateStreamingDistributionError::AccessDenied(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::CNAMEAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::InconsistentQuantities(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::InvalidArgument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOrigin" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::InvalidOrigin(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::InvalidOriginAccessIdentity(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateStreamingDistributionError::MissingBody(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "StreamingDistributionAlreadyExists" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::StreamingDistributionAlreadyExists(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyStreamingDistributionCNAMEs" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyStreamingDistributions" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::TooManyStreamingDistributions(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::TooManyTrustedSigners(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::TrustedSignerDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7219,29 +7229,31 @@ impl DeleteDistributionError {
                     "AccessDenied" => {
                         return RusotoError::Service(DeleteDistributionError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DistributionNotDisabled" => {
                         return RusotoError::Service(
                             DeleteDistributionError::DistributionNotDisabled(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(DeleteDistributionError::InvalidIfMatchVersion(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteDistributionError::InvalidIfMatchVersion(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(DeleteDistributionError::NoSuchDistribution(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(DeleteDistributionError::PreconditionFailed(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7298,22 +7310,22 @@ impl DeleteServiceLinkedRoleError {
                     "AccessDenied" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchResource" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::NoSuchResource(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::ResourceInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7371,37 +7383,39 @@ impl DeleteStreamingDistributionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
-                        return RusotoError::Service(DeleteStreamingDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteStreamingDistributionError::AccessDenied(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidIfMatchVersion" => {
                         return RusotoError::Service(
                             DeleteStreamingDistributionError::InvalidIfMatchVersion(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             DeleteStreamingDistributionError::NoSuchStreamingDistribution(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(
                             DeleteStreamingDistributionError::PreconditionFailed(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "StreamingDistributionNotDisabled" => {
                         return RusotoError::Service(
                             DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7552,12 +7566,12 @@ impl GetDistributionError {
                     "AccessDenied" => {
                         return RusotoError::Service(GetDistributionError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(GetDistributionError::NoSuchDistribution(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7607,12 +7621,14 @@ impl GetDistributionConfigError {
                     "AccessDenied" => {
                         return RusotoError::Service(GetDistributionConfigError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDistribution" => {
-                        return RusotoError::Service(GetDistributionConfigError::NoSuchDistribution(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            GetDistributionConfigError::NoSuchDistribution(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -7664,17 +7680,17 @@ impl GetInvalidationError {
                     "AccessDenied" => {
                         return RusotoError::Service(GetInvalidationError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(GetInvalidationError::NoSuchDistribution(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchInvalidation" => {
                         return RusotoError::Service(GetInvalidationError::NoSuchInvalidation(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7725,14 +7741,14 @@ impl GetStreamingDistributionError {
                     "AccessDenied" => {
                         return RusotoError::Service(GetStreamingDistributionError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             GetStreamingDistributionError::NoSuchStreamingDistribution(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7786,14 +7802,14 @@ impl GetStreamingDistributionConfigError {
                             GetStreamingDistributionConfigError::AccessDenied(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             GetStreamingDistributionConfigError::NoSuchStreamingDistribution(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7845,7 +7861,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
                             ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7892,7 +7908,7 @@ impl ListDistributionsError {
                     "InvalidArgument" => {
                         return RusotoError::Service(ListDistributionsError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7945,14 +7961,14 @@ impl ListDistributionsByWebACLIdError {
                             ListDistributionsByWebACLIdError::InvalidArgument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(
                             ListDistributionsByWebACLIdError::InvalidWebACLId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8004,17 +8020,17 @@ impl ListInvalidationsError {
                     "AccessDenied" => {
                         return RusotoError::Service(ListInvalidationsError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(ListInvalidationsError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(ListInvalidationsError::NoSuchDistribution(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8067,7 +8083,7 @@ impl ListStreamingDistributionsError {
                             ListStreamingDistributionsError::InvalidArgument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8120,22 +8136,22 @@ impl ListTagsForResourceError {
                     "AccessDenied" => {
                         return RusotoError::Service(ListTagsForResourceError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTagging" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidTagging(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchResource" => {
                         return RusotoError::Service(ListTagsForResourceError::NoSuchResource(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8191,22 +8207,22 @@ impl TagResourceError {
                     "AccessDenied" => {
                         return RusotoError::Service(TagResourceError::AccessDenied(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(TagResourceError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTagging" => {
-                        return RusotoError::Service(TagResourceError::InvalidTagging(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(TagResourceError::InvalidTagging(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "NoSuchResource" => {
-                        return RusotoError::Service(TagResourceError::NoSuchResource(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(TagResourceError::NoSuchResource(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -8260,24 +8276,24 @@ impl UntagResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
-                        return RusotoError::Service(UntagResourceError::AccessDenied(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(UntagResourceError::AccessDenied(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(UntagResourceError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTagging" => {
                         return RusotoError::Service(UntagResourceError::InvalidTagging(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchResource" => {
                         return RusotoError::Service(UntagResourceError::NoSuchResource(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8472,242 +8488,250 @@ impl UpdateDistributionError {
                     "AccessDenied" => {
                         return RusotoError::Service(UpdateDistributionError::AccessDenied(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "IllegalUpdate" => {
                         return RusotoError::Service(UpdateDistributionError::IllegalUpdate(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InconsistentQuantities(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidArgument(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidDefaultRootObject" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidDefaultRootObject(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidErrorCode" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidForwardCookies" => {
-                        return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateDistributionError::InvalidForwardCookies(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidGeoRestrictionParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidHeadersForS3Origin" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidHeadersForS3Origin(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidIfMatchVersion" => {
-                        return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateDistributionError::InvalidIfMatchVersion(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidLambdaFunctionAssociation(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidLocationCode" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidOriginAccessIdentity(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOriginReadTimeout" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidOriginReadTimeout(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidQueryStringParameters" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidQueryStringParameters(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidRelativePath" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidRequiredProtocol" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidRequiredProtocol(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidResponseCode" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTTLOrder" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidViewerCertificate" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidViewerCertificate(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MissingBody" => {
                         return RusotoError::Service(UpdateDistributionError::MissingBody(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchOrigin" => {
                         return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(UpdateDistributionError::PreconditionFailed(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyCacheBehaviors" => {
-                        return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateDistributionError::TooManyCacheBehaviors(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(UpdateDistributionError::TooManyCertificates(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyDistributionCNAMEs" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyDistributionCNAMEs(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyDistributionsWithLambdaAssociations" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyHeadersInForwardedValues" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyHeadersInForwardedValues(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyLambdaFunctionAssociations(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyOriginCustomHeaders" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyOriginCustomHeaders(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyOrigins" => {
                         return RusotoError::Service(UpdateDistributionError::TooManyOrigins(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyQueryStringParameters" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyQueryStringParameters(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTrustedSigners" => {
-                        return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateDistributionError::TooManyTrustedSigners(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TrustedSignerDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8817,91 +8841,93 @@ impl UpdateStreamingDistributionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
-                        return RusotoError::Service(UpdateStreamingDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateStreamingDistributionError::AccessDenied(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::CNAMEAlreadyExists(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "IllegalUpdate" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::IllegalUpdate(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::InconsistentQuantities(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::InvalidArgument(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidIfMatchVersion" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::InvalidIfMatchVersion(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::InvalidOriginAccessIdentity(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "MissingBody" => {
                         return RusotoError::Service(UpdateStreamingDistributionError::MissingBody(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::NoSuchStreamingDistribution(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::PreconditionFailed(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyStreamingDistributionCNAMEs" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::TooManyTrustedSigners(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::TrustedSignerDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9784,11 +9810,9 @@ impl CloudFront for CloudFrontClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(GetDistributionConfigError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetDistributionConfigError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

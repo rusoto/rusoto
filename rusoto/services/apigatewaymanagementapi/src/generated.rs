@@ -83,22 +83,22 @@ impl PostToConnectionError {
                 "ForbiddenException" => {
                     return RusotoError::Service(PostToConnectionError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GoneException" => {
                     return RusotoError::Service(PostToConnectionError::Gone(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(PostToConnectionError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PostToConnectionError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "PayloadTooLargeException" => {
                     return RusotoError::Service(PostToConnectionError::PayloadTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

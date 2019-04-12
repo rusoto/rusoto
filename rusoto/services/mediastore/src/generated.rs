@@ -286,19 +286,19 @@ impl CreateContainerError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(CreateContainerError::ContainerInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateContainerError::ContainerInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateContainerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateContainerError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -346,19 +346,19 @@ impl DeleteContainerError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return RusotoError::Service(DeleteContainerError::ContainerInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteContainerError::ContainerInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DeleteContainerError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteContainerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -410,22 +410,22 @@ impl DeleteContainerPolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteContainerPolicyError::ContainerInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DeleteContainerPolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteContainerPolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(DeleteContainerPolicyError::PolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -478,22 +478,22 @@ impl DeleteCorsPolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteCorsPolicyError::ContainerInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DeleteCorsPolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CorsPolicyNotFoundException" => {
                     return RusotoError::Service(DeleteCorsPolicyError::CorsPolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteCorsPolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -546,22 +546,22 @@ impl DeleteLifecyclePolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::ContainerInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(DeleteLifecyclePolicyError::PolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -610,12 +610,12 @@ impl DescribeContainerError {
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(DescribeContainerError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeContainerError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -666,22 +666,22 @@ impl GetContainerPolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(GetContainerPolicyError::ContainerInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(GetContainerPolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetContainerPolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(GetContainerPolicyError::PolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -734,22 +734,22 @@ impl GetCorsPolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(GetCorsPolicyError::ContainerInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(GetCorsPolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CorsPolicyNotFoundException" => {
                     return RusotoError::Service(GetCorsPolicyError::CorsPolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetCorsPolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -802,22 +802,22 @@ impl GetLifecyclePolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::ContainerInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetLifecyclePolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(GetLifecyclePolicyError::PolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -864,7 +864,7 @@ impl ListContainersError {
                 "InternalServerError" => {
                     return RusotoError::Service(ListContainersError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -912,17 +912,17 @@ impl PutContainerPolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(PutContainerPolicyError::ContainerInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(PutContainerPolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutContainerPolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -972,17 +972,17 @@ impl PutCorsPolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(PutCorsPolicyError::ContainerInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(PutCorsPolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutCorsPolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1032,17 +1032,17 @@ impl PutLifecyclePolicyError {
                 "ContainerInUseException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::ContainerInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ContainerNotFoundException" => {
                     return RusotoError::Service(PutLifecyclePolicyError::ContainerNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(PutLifecyclePolicyError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

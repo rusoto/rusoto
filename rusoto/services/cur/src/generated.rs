@@ -124,7 +124,7 @@ impl DeleteReportDefinitionError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteReportDefinitionError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -168,7 +168,7 @@ impl DescribeReportDefinitionsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeReportDefinitionsError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -216,17 +216,17 @@ impl PutReportDefinitionError {
                 "DuplicateReportNameException" => {
                     return RusotoError::Service(PutReportDefinitionError::DuplicateReportName(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(PutReportDefinitionError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReportLimitReachedException" => {
                     return RusotoError::Service(PutReportDefinitionError::ReportLimitReached(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

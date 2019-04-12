@@ -763,34 +763,34 @@ impl AssociateTeamMemberError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AssociateTeamMemberError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidServiceRoleException" => {
                     return RusotoError::Service(AssociateTeamMemberError::InvalidServiceRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateTeamMemberError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectConfigurationException" => {
                     return RusotoError::Service(AssociateTeamMemberError::ProjectConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(AssociateTeamMemberError::ProjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TeamMemberAlreadyAssociatedException" => {
                     return RusotoError::Service(
                         AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -849,32 +849,32 @@ impl CreateProjectError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateProjectError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidServiceRoleException" => {
                     return RusotoError::Service(CreateProjectError::InvalidServiceRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProjectAlreadyExistsException" => {
                     return RusotoError::Service(CreateProjectError::ProjectAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectConfigurationException" => {
                     return RusotoError::Service(CreateProjectError::ProjectConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectCreationFailedException" => {
                     return RusotoError::Service(CreateProjectError::ProjectCreationFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -923,7 +923,7 @@ impl CreateUserProfileError {
                 "UserProfileAlreadyExistsException" => {
                     return RusotoError::Service(CreateUserProfileError::UserProfileAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -969,12 +969,12 @@ impl DeleteProjectError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteProjectError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidServiceRoleException" => {
                     return RusotoError::Service(DeleteProjectError::InvalidServiceRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1059,22 +1059,22 @@ impl DescribeProjectError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DescribeProjectError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidServiceRoleException" => {
                     return RusotoError::Service(DescribeProjectError::InvalidServiceRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectConfigurationException" => {
                     return RusotoError::Service(DescribeProjectError::ProjectConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(DescribeProjectError::ProjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1121,7 +1121,7 @@ impl DescribeUserProfileError {
                 "UserProfileNotFoundException" => {
                     return RusotoError::Service(DescribeUserProfileError::UserProfileNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1171,17 +1171,17 @@ impl DisassociateTeamMemberError {
                         DisassociateTeamMemberError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidServiceRoleException" => {
                     return RusotoError::Service(DisassociateTeamMemberError::InvalidServiceRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(DisassociateTeamMemberError::ProjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1227,7 +1227,7 @@ impl ListProjectsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListProjectsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1271,14 +1271,14 @@ impl ListResourcesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(ListResourcesError::InvalidNextToken(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListResourcesError::InvalidNextToken(
+                        String::from(error_message),
+                    ))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(ListResourcesError::ProjectNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1325,12 +1325,12 @@ impl ListTagsForProjectError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTagsForProjectError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(ListTagsForProjectError::ProjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1377,12 +1377,12 @@ impl ListTeamMembersError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTeamMembersError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(ListTeamMembersError::ProjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1427,7 +1427,7 @@ impl ListUserProfilesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListUserProfilesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1475,17 +1475,17 @@ impl TagProjectError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(TagProjectError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(TagProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(TagProjectError::ProjectNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1535,17 +1535,17 @@ impl UntagProjectError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UntagProjectError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UntagProjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(UntagProjectError::ProjectNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1591,7 +1591,7 @@ impl UpdateProjectError {
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(UpdateProjectError::ProjectNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1645,32 +1645,32 @@ impl UpdateTeamMemberError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateTeamMemberError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidServiceRoleException" => {
                     return RusotoError::Service(UpdateTeamMemberError::InvalidServiceRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(UpdateTeamMemberError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateTeamMemberError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ProjectConfigurationException" => {
                     return RusotoError::Service(UpdateTeamMemberError::ProjectConfiguration(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProjectNotFoundException" => {
                     return RusotoError::Service(UpdateTeamMemberError::ProjectNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TeamMemberNotFoundException" => {
                     return RusotoError::Service(UpdateTeamMemberError::TeamMemberNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1719,7 +1719,7 @@ impl UpdateUserProfileError {
                 "UserProfileNotFoundException" => {
                     return RusotoError::Service(UpdateUserProfileError::UserProfileNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

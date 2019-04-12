@@ -938,17 +938,17 @@ impl CancelClusterError {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(CancelClusterError::InvalidJobState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(CancelClusterError::InvalidResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(CancelClusterError::KMSRequestFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CancelClusterError::KMSRequestFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -998,17 +998,17 @@ impl CancelJobError {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(CancelJobError::InvalidJobState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(CancelJobError::InvalidResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSRequestFailedException" => {
                     return RusotoError::Service(CancelJobError::KMSRequestFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1056,12 +1056,12 @@ impl CreateAddressError {
                 "InvalidAddressException" => {
                     return RusotoError::Service(CreateAddressError::InvalidAddress(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedAddressException" => {
                     return RusotoError::Service(CreateAddressError::UnsupportedAddress(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1110,24 +1110,24 @@ impl CreateClusterError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return RusotoError::Service(CreateClusterError::Ec2RequestFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateClusterError::Ec2RequestFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputCombinationException" => {
                     return RusotoError::Service(CreateClusterError::InvalidInputCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(CreateClusterError::InvalidResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(CreateClusterError::KMSRequestFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateClusterError::KMSRequestFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1180,29 +1180,29 @@ impl CreateJobError {
 
             match *error_type {
                 "ClusterLimitExceededException" => {
-                    return RusotoError::Service(CreateJobError::ClusterLimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateJobError::ClusterLimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "Ec2RequestFailedException" => {
                     return RusotoError::Service(CreateJobError::Ec2RequestFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputCombinationException" => {
                     return RusotoError::Service(CreateJobError::InvalidInputCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(CreateJobError::InvalidResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSRequestFailedException" => {
                     return RusotoError::Service(CreateJobError::KMSRequestFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1250,7 +1250,7 @@ impl DescribeAddressError {
                 "InvalidResourceException" => {
                     return RusotoError::Service(DescribeAddressError::InvalidResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1296,12 +1296,12 @@ impl DescribeAddressesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeAddressesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(DescribeAddressesError::InvalidResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1346,7 +1346,7 @@ impl DescribeClusterError {
                 "InvalidResourceException" => {
                     return RusotoError::Service(DescribeClusterError::InvalidResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1390,7 +1390,7 @@ impl DescribeJobError {
                 "InvalidResourceException" => {
                     return RusotoError::Service(DescribeJobError::InvalidResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1434,14 +1434,14 @@ impl GetJobManifestError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return RusotoError::Service(GetJobManifestError::InvalidJobState(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetJobManifestError::InvalidJobState(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidResourceException" => {
-                    return RusotoError::Service(GetJobManifestError::InvalidResource(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetJobManifestError::InvalidResource(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1488,12 +1488,12 @@ impl GetJobUnlockCodeError {
                 "InvalidJobStateException" => {
                     return RusotoError::Service(GetJobUnlockCodeError::InvalidJobState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(GetJobUnlockCodeError::InvalidResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1574,12 +1574,12 @@ impl ListClusterJobsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListClusterJobsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(ListClusterJobsError::InvalidResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1624,7 +1624,7 @@ impl ListClustersError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListClustersError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1670,12 +1670,12 @@ impl ListCompatibleImagesError {
                 "Ec2RequestFailedException" => {
                     return RusotoError::Service(ListCompatibleImagesError::Ec2RequestFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListCompatibleImagesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1720,7 +1720,7 @@ impl ListJobsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListJobsError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1770,29 +1770,29 @@ impl UpdateClusterError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return RusotoError::Service(UpdateClusterError::Ec2RequestFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateClusterError::Ec2RequestFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidInputCombinationException" => {
                     return RusotoError::Service(UpdateClusterError::InvalidInputCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidJobStateException" => {
                     return RusotoError::Service(UpdateClusterError::InvalidJobState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(UpdateClusterError::InvalidResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSRequestFailedException" => {
-                    return RusotoError::Service(UpdateClusterError::KMSRequestFailed(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateClusterError::KMSRequestFailed(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1848,34 +1848,34 @@ impl UpdateJobError {
 
             match *error_type {
                 "ClusterLimitExceededException" => {
-                    return RusotoError::Service(UpdateJobError::ClusterLimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateJobError::ClusterLimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "Ec2RequestFailedException" => {
                     return RusotoError::Service(UpdateJobError::Ec2RequestFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputCombinationException" => {
                     return RusotoError::Service(UpdateJobError::InvalidInputCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidJobStateException" => {
                     return RusotoError::Service(UpdateJobError::InvalidJobState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(UpdateJobError::InvalidResource(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "KMSRequestFailedException" => {
                     return RusotoError::Service(UpdateJobError::KMSRequestFailed(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

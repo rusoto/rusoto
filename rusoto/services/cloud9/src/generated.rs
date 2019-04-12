@@ -341,37 +341,37 @@ impl CreateEnvironmentEC2Error {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(CreateEnvironmentEC2Error::Forbidden(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateEnvironmentEC2Error::Forbidden(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEnvironmentEC2Error::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -435,39 +435,39 @@ impl CreateEnvironmentMembershipError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         CreateEnvironmentMembershipError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEnvironmentMembershipError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -529,37 +529,37 @@ impl DeleteEnvironmentError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEnvironmentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteEnvironmentError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteEnvironmentError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteEnvironmentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteEnvironmentError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteEnvironmentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteEnvironmentError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -623,39 +623,39 @@ impl DeleteEnvironmentMembershipError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         DeleteEnvironmentMembershipError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteEnvironmentMembershipError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -719,41 +719,43 @@ impl DescribeEnvironmentMembershipsError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         DescribeEnvironmentMembershipsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DescribeEnvironmentMembershipsError::LimitExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeEnvironmentMembershipsError::LimitExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeEnvironmentMembershipsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         DescribeEnvironmentMembershipsError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -815,39 +817,39 @@ impl DescribeEnvironmentStatusError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         DescribeEnvironmentStatusError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeEnvironmentStatusError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -909,37 +911,37 @@ impl DescribeEnvironmentsError {
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
-                    return RusotoError::Service(DescribeEnvironmentsError::Forbidden(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeEnvironmentsError::Forbidden(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeEnvironmentsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1001,37 +1003,37 @@ impl ListEnvironmentsError {
                 "BadRequestException" => {
                     return RusotoError::Service(ListEnvironmentsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(ListEnvironmentsError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListEnvironmentsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListEnvironmentsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(ListEnvironmentsError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListEnvironmentsError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListEnvironmentsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListEnvironmentsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1093,37 +1095,37 @@ impl UpdateEnvironmentError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateEnvironmentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateEnvironmentError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateEnvironmentError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateEnvironmentError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateEnvironmentError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateEnvironmentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateEnvironmentError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1187,39 +1189,39 @@ impl UpdateEnvironmentMembershipError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         UpdateEnvironmentMembershipError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateEnvironmentMembershipError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -273,17 +273,17 @@ impl DescribeDimensionKeysError {
                 "InternalServiceError" => {
                     return RusotoError::Service(DescribeDimensionKeysError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DescribeDimensionKeysError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(DescribeDimensionKeysError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -333,17 +333,17 @@ impl GetResourceMetricsError {
                 "InternalServiceError" => {
                     return RusotoError::Service(GetResourceMetricsError::InternalServiceError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(GetResourceMetricsError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(GetResourceMetricsError::NotAuthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

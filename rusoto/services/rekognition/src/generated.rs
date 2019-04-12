@@ -1944,42 +1944,42 @@ impl CompareFacesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CompareFacesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(CompareFacesError::ImageTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CompareFacesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(CompareFacesError::InvalidImageFormat(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CompareFacesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(CompareFacesError::InvalidS3Object(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(CompareFacesError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CompareFacesError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2040,34 +2040,34 @@ impl CreateCollectionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateCollectionError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateCollectionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateCollectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         CreateCollectionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateCollectionError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateCollectionError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2128,39 +2128,39 @@ impl CreateStreamProcessorError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateStreamProcessorError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateStreamProcessorError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateStreamProcessorError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateStreamProcessorError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         CreateStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateStreamProcessorError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateStreamProcessorError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2220,34 +2220,34 @@ impl DeleteCollectionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteCollectionError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteCollectionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteCollectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         DeleteCollectionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteCollectionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteCollectionError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2306,32 +2306,32 @@ impl DeleteFacesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteFacesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteFacesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteFacesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DeleteFacesError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteFacesError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteFacesError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2392,39 +2392,39 @@ impl DeleteStreamProcessorError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteStreamProcessorError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DeleteStreamProcessorError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteStreamProcessorError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         DeleteStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteStreamProcessorError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteStreamProcessorError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DeleteStreamProcessorError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2484,34 +2484,34 @@ impl DescribeCollectionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeCollectionError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeCollectionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeCollectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         DescribeCollectionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeCollectionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeCollectionError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2570,34 +2570,34 @@ impl DescribeStreamProcessorError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeStreamProcessorError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeStreamProcessorError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeStreamProcessorError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         DescribeStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStreamProcessorError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DescribeStreamProcessorError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2660,42 +2660,42 @@ impl DetectFacesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetectFacesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(DetectFacesError::ImageTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DetectFacesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidImageFormatException" => {
-                    return RusotoError::Service(DetectFacesError::InvalidImageFormat(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DetectFacesError::InvalidImageFormat(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DetectFacesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(DetectFacesError::InvalidS3Object(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DetectFacesError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DetectFacesError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2760,42 +2760,42 @@ impl DetectLabelsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetectLabelsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(DetectLabelsError::ImageTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DetectLabelsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(DetectLabelsError::InvalidImageFormat(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DetectLabelsError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(DetectLabelsError::InvalidS3Object(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DetectLabelsError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DetectLabelsError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2860,44 +2860,44 @@ impl DetectModerationLabelsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetectModerationLabelsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(DetectModerationLabelsError::ImageTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(DetectModerationLabelsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(DetectModerationLabelsError::InvalidImageFormat(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DetectModerationLabelsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(DetectModerationLabelsError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         DetectModerationLabelsError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DetectModerationLabelsError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2962,42 +2962,42 @@ impl DetectTextError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetectTextError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(DetectTextError::ImageTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(DetectTextError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DetectTextError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(DetectTextError::InvalidImageFormat(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DetectTextError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(DetectTextError::InvalidS3Object(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(DetectTextError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(DetectTextError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3058,34 +3058,34 @@ impl GetCelebrityInfoError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetCelebrityInfoError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetCelebrityInfoError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetCelebrityInfoError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetCelebrityInfoError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetCelebrityInfoError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3146,41 +3146,41 @@ impl GetCelebrityRecognitionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(
                         GetCelebrityRecognitionError::InvalidPaginationToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetCelebrityRecognitionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetCelebrityRecognitionError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3242,39 +3242,39 @@ impl GetContentModerationError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetContentModerationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetContentModerationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetContentModerationError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetContentModerationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetContentModerationError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetContentModerationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetContentModerationError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3336,39 +3336,39 @@ impl GetFaceDetectionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetFaceDetectionError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetFaceDetectionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetFaceDetectionError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetFaceDetectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetFaceDetectionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetFaceDetectionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetFaceDetectionError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3430,37 +3430,37 @@ impl GetFaceSearchError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetFaceSearchError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetFaceSearchError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetFaceSearchError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
-                    return RusotoError::Service(GetFaceSearchError::InvalidParameter(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetFaceSearchError::InvalidParameter(
+                        String::from(error_message),
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(GetFaceSearchError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(GetFaceSearchError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetFaceSearchError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetFaceSearchError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3520,41 +3520,41 @@ impl GetLabelDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetLabelDetectionError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetLabelDetectionError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetLabelDetectionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetLabelDetectionError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetLabelDetectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetLabelDetectionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetLabelDetectionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetLabelDetectionError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3614,41 +3614,41 @@ impl GetPersonTrackingError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetPersonTrackingError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetPersonTrackingError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(GetPersonTrackingError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(GetPersonTrackingError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetPersonTrackingError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         GetPersonTrackingError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetPersonTrackingError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(GetPersonTrackingError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3714,47 +3714,47 @@ impl IndexFacesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(IndexFacesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(IndexFacesError::ImageTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
-                    return RusotoError::Service(IndexFacesError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(IndexFacesError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(IndexFacesError::InvalidImageFormat(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(IndexFacesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(IndexFacesError::InvalidS3Object(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(IndexFacesError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(IndexFacesError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(IndexFacesError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3818,39 +3818,39 @@ impl ListCollectionsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListCollectionsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListCollectionsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(ListCollectionsError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListCollectionsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         ListCollectionsError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListCollectionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListCollectionsError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3912,37 +3912,37 @@ impl ListFacesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFacesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListFacesError::InternalServerError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(ListFacesError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListFacesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(ListFacesError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListFacesError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListFacesError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4002,34 +4002,34 @@ impl ListStreamProcessorsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListStreamProcessorsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(ListStreamProcessorsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(ListStreamProcessorsError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListStreamProcessorsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         ListStreamProcessorsError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(ListStreamProcessorsError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4092,44 +4092,44 @@ impl RecognizeCelebritiesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::ImageTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InvalidImageFormat(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(RecognizeCelebritiesError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4190,32 +4190,32 @@ impl SearchFacesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SearchFacesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(SearchFacesError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SearchFacesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(SearchFacesError::ProvisionedThroughputExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SearchFacesError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(SearchFacesError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4280,49 +4280,49 @@ impl SearchFacesByImageError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(SearchFacesByImageError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ImageTooLargeException" => {
                     return RusotoError::Service(SearchFacesByImageError::ImageTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(SearchFacesByImageError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidImageFormatException" => {
                     return RusotoError::Service(SearchFacesByImageError::InvalidImageFormat(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(SearchFacesByImageError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(SearchFacesByImageError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         SearchFacesByImageError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(SearchFacesByImageError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(SearchFacesByImageError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4390,53 +4390,53 @@ impl StartCelebrityRecognitionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
                         StartCelebrityRecognitionError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(
                         StartCelebrityRecognitionError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StartCelebrityRecognitionError::ProvisionedThroughputExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartCelebrityRecognitionError::VideoTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4504,51 +4504,51 @@ impl StartContentModerationError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartContentModerationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
                         StartContentModerationError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartContentModerationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartContentModerationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartContentModerationError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartContentModerationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StartContentModerationError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartContentModerationError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartContentModerationError::VideoTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4616,51 +4616,51 @@ impl StartFaceDetectionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartFaceDetectionError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
                         StartFaceDetectionError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartFaceDetectionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartFaceDetectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartFaceDetectionError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartFaceDetectionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StartFaceDetectionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartFaceDetectionError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartFaceDetectionError::VideoTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4730,54 +4730,54 @@ impl StartFaceSearchError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartFaceSearchError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(StartFaceSearchError::IdempotentParameterMismatch(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartFaceSearchError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartFaceSearchError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartFaceSearchError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartFaceSearchError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StartFaceSearchError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartFaceSearchError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartFaceSearchError::Throttling(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartFaceSearchError::VideoTooLarge(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4846,51 +4846,51 @@ impl StartLabelDetectionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartLabelDetectionError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
                         StartLabelDetectionError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartLabelDetectionError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartLabelDetectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartLabelDetectionError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartLabelDetectionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StartLabelDetectionError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartLabelDetectionError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartLabelDetectionError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartLabelDetectionError::VideoTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4958,51 +4958,51 @@ impl StartPersonTrackingError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartPersonTrackingError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IdempotentParameterMismatchException" => {
                     return RusotoError::Service(
                         StartPersonTrackingError::IdempotentParameterMismatch(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartPersonTrackingError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartPersonTrackingError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidS3ObjectException" => {
                     return RusotoError::Service(StartPersonTrackingError::InvalidS3Object(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartPersonTrackingError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StartPersonTrackingError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StartPersonTrackingError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartPersonTrackingError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "VideoTooLargeException" => {
                     return RusotoError::Service(StartPersonTrackingError::VideoTooLarge(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5066,39 +5066,39 @@ impl StartStreamProcessorError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StartStreamProcessorError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StartStreamProcessorError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StartStreamProcessorError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StartStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StartStreamProcessorError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartStreamProcessorError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
                     return RusotoError::Service(StartStreamProcessorError::Throttling(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5160,39 +5160,39 @@ impl StopStreamProcessorError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(StopStreamProcessorError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerError" => {
                     return RusotoError::Service(StopStreamProcessorError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(StopStreamProcessorError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         StopStreamProcessorError::ProvisionedThroughputExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StopStreamProcessorError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopStreamProcessorError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottlingException" => {
-                    return RusotoError::Service(StopStreamProcessorError::Throttling(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StopStreamProcessorError::Throttling(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

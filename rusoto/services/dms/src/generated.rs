@@ -2399,7 +2399,7 @@ impl AddTagsToResourceError {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(AddTagsToResourceError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2453,32 +2453,32 @@ impl CreateEndpointError {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(CreateEndpointError::AccessDeniedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(CreateEndpointError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RusotoError::Service(CreateEndpointError::KMSKeyNotAccessibleFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsFault" => {
                     return RusotoError::Service(CreateEndpointError::ResourceAlreadyExistsFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(CreateEndpointError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(CreateEndpointError::ResourceQuotaExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2537,33 +2537,35 @@ impl CreateEventSubscriptionError {
                         CreateEventSubscriptionError::ResourceAlreadyExistsFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         CreateEventSubscriptionError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(
                         CreateEventSubscriptionError::ResourceQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SNSInvalidTopicFault" => {
-                    return RusotoError::Service(CreateEventSubscriptionError::SNSInvalidTopicFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "SNSNoAuthorizationFault" => {
                     return RusotoError::Service(
                         CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2629,68 +2631,68 @@ impl CreateReplicationInstanceError {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(CreateReplicationInstanceError::AccessDeniedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InsufficientResourceCapacityFault" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::InsufficientResourceCapacityFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSubnet" => {
                     return RusotoError::Service(CreateReplicationInstanceError::InvalidSubnet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::KMSKeyNotAccessibleFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ReplicationSubnetGroupDoesNotCoverEnoughAZs" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceAlreadyExistsFault" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::ResourceAlreadyExistsFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::ResourceQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "StorageQuotaExceededFault" => {
                     return RusotoError::Service(
                         CreateReplicationInstanceError::StorageQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2759,12 +2761,12 @@ impl CreateReplicationSubnetGroupError {
                         CreateReplicationSubnetGroupError::AccessDeniedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSubnet" => {
                     return RusotoError::Service(CreateReplicationSubnetGroupError::InvalidSubnet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicationSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(
                     CreateReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
@@ -2776,21 +2778,21 @@ impl CreateReplicationSubnetGroupError {
                         CreateReplicationSubnetGroupError::ResourceAlreadyExistsFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         CreateReplicationSubnetGroupError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(
                         CreateReplicationSubnetGroupError::ResourceQuotaExceededFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2851,40 +2853,40 @@ impl CreateReplicationTaskError {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(CreateReplicationTaskError::AccessDeniedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
                         CreateReplicationTaskError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RusotoError::Service(
                         CreateReplicationTaskError::KMSKeyNotAccessibleFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceAlreadyExistsFault" => {
                     return RusotoError::Service(
                         CreateReplicationTaskError::ResourceAlreadyExistsFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(CreateReplicationTaskError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(
                         CreateReplicationTaskError::ResourceQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2935,12 +2937,12 @@ impl DeleteCertificateError {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(DeleteCertificateError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DeleteCertificateError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2987,12 +2989,12 @@ impl DeleteEndpointError {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(DeleteEndpointError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DeleteEndpointError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3041,14 +3043,14 @@ impl DeleteEventSubscriptionError {
                         DeleteEventSubscriptionError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         DeleteEventSubscriptionError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3097,14 +3099,14 @@ impl DeleteReplicationInstanceError {
                         DeleteReplicationInstanceError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         DeleteReplicationInstanceError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3155,14 +3157,14 @@ impl DeleteReplicationSubnetGroupError {
                         DeleteReplicationSubnetGroupError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         DeleteReplicationSubnetGroupError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3211,12 +3213,12 @@ impl DeleteReplicationTaskError {
                         DeleteReplicationTaskError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DeleteReplicationTaskError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3295,7 +3297,7 @@ impl DescribeCertificatesError {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DescribeCertificatesError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3339,7 +3341,7 @@ impl DescribeConnectionsError {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DescribeConnectionsError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3417,7 +3419,7 @@ impl DescribeEndpointsError {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DescribeEndpointsError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3499,7 +3501,7 @@ impl DescribeEventSubscriptionsError {
                         DescribeEventSubscriptionsError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3619,14 +3621,14 @@ impl DescribeRefreshSchemasStatusError {
                         DescribeRefreshSchemasStatusError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeRefreshSchemasStatusError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3677,14 +3679,14 @@ impl DescribeReplicationInstanceTaskLogsError {
                         DescribeReplicationInstanceTaskLogsError::InvalidResourceStateFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeReplicationInstanceTaskLogsError::ResourceNotFoundFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3733,7 +3735,7 @@ impl DescribeReplicationInstancesError {
                         DescribeReplicationInstancesError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3781,7 +3783,7 @@ impl DescribeReplicationSubnetGroupsError {
                         DescribeReplicationSubnetGroupsError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3829,7 +3831,7 @@ impl DescribeReplicationTaskAssessmentResultsError {
                         DescribeReplicationTaskAssessmentResultsError::ResourceNotFoundFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3877,7 +3879,7 @@ impl DescribeReplicationTasksError {
                         DescribeReplicationTasksError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3923,12 +3925,12 @@ impl DescribeSchemasError {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(DescribeSchemasError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(DescribeSchemasError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3977,14 +3979,14 @@ impl DescribeTableStatisticsError {
                         DescribeTableStatisticsError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         DescribeTableStatisticsError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4033,17 +4035,21 @@ impl ImportCertificateError {
                 "InvalidCertificateFault" => {
                     return RusotoError::Service(ImportCertificateError::InvalidCertificateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsFault" => {
-                    return RusotoError::Service(ImportCertificateError::ResourceAlreadyExistsFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ImportCertificateError::ResourceAlreadyExistsFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceQuotaExceededFault" => {
-                    return RusotoError::Service(ImportCertificateError::ResourceQuotaExceededFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ImportCertificateError::ResourceQuotaExceededFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4089,7 +4095,7 @@ impl ListTagsForResourceError {
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4141,27 +4147,27 @@ impl ModifyEndpointError {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(ModifyEndpointError::AccessDeniedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(ModifyEndpointError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RusotoError::Service(ModifyEndpointError::KMSKeyNotAccessibleFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsFault" => {
                     return RusotoError::Service(ModifyEndpointError::ResourceAlreadyExistsFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(ModifyEndpointError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4217,26 +4223,28 @@ impl ModifyEventSubscriptionError {
                         ModifyEventSubscriptionError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(
                         ModifyEventSubscriptionError::ResourceQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "SNSInvalidTopicFault" => {
-                    return RusotoError::Service(ModifyEventSubscriptionError::SNSInvalidTopicFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "SNSNoAuthorizationFault" => {
                     return RusotoError::Service(
                         ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4295,42 +4303,42 @@ impl ModifyReplicationInstanceError {
                         ModifyReplicationInstanceError::InsufficientResourceCapacityFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
                         ModifyReplicationInstanceError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceAlreadyExistsFault" => {
                     return RusotoError::Service(
                         ModifyReplicationInstanceError::ResourceAlreadyExistsFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         ModifyReplicationInstanceError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "StorageQuotaExceededFault" => {
                     return RusotoError::Service(
                         ModifyReplicationInstanceError::StorageQuotaExceededFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UpgradeDependencyFailureFault" => {
                     return RusotoError::Service(
                         ModifyReplicationInstanceError::UpgradeDependencyFailureFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4393,12 +4401,12 @@ impl ModifyReplicationSubnetGroupError {
                         ModifyReplicationSubnetGroupError::AccessDeniedFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidSubnet" => {
                     return RusotoError::Service(ModifyReplicationSubnetGroupError::InvalidSubnet(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ReplicationSubnetGroupDoesNotCoverEnoughAZs" => return RusotoError::Service(
                     ModifyReplicationSubnetGroupError::ReplicationSubnetGroupDoesNotCoverEnoughAZs(
@@ -4410,21 +4418,21 @@ impl ModifyReplicationSubnetGroupError {
                         ModifyReplicationSubnetGroupError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(
                         ModifyReplicationSubnetGroupError::ResourceQuotaExceededFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "SubnetAlreadyInUse" => {
                     return RusotoError::Service(
                         ModifyReplicationSubnetGroupError::SubnetAlreadyInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4483,26 +4491,26 @@ impl ModifyReplicationTaskError {
                         ModifyReplicationTaskError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RusotoError::Service(
                         ModifyReplicationTaskError::KMSKeyNotAccessibleFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceAlreadyExistsFault" => {
                     return RusotoError::Service(
                         ModifyReplicationTaskError::ResourceAlreadyExistsFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(ModifyReplicationTaskError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4553,14 +4561,14 @@ impl RebootReplicationInstanceError {
                         RebootReplicationInstanceError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         RebootReplicationInstanceError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4611,22 +4619,22 @@ impl RefreshSchemasError {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(RefreshSchemasError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RusotoError::Service(RefreshSchemasError::KMSKeyNotAccessibleFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(RefreshSchemasError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(RefreshSchemasError::ResourceQuotaExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4675,12 +4683,12 @@ impl ReloadTablesError {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(ReloadTablesError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(ReloadTablesError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4723,9 +4731,11 @@ impl RemoveTagsFromResourceError {
 
             match *error_type {
                 "ResourceNotFoundFault" => {
-                    return RusotoError::Service(RemoveTagsFromResourceError::ResourceNotFoundFault(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RemoveTagsFromResourceError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4773,19 +4783,19 @@ impl StartReplicationTaskError {
                 "AccessDeniedFault" => {
                     return RusotoError::Service(StartReplicationTaskError::AccessDeniedFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
                         StartReplicationTaskError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(StartReplicationTaskError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4837,14 +4847,14 @@ impl StartReplicationTaskAssessmentError {
                         StartReplicationTaskAssessmentError::InvalidResourceStateFault(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         StartReplicationTaskAssessmentError::ResourceNotFoundFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4893,12 +4903,12 @@ impl StopReplicationTaskError {
                         StopReplicationTaskError::InvalidResourceStateFault(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(StopReplicationTaskError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4949,22 +4959,22 @@ impl TestConnectionError {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(TestConnectionError::InvalidResourceStateFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "KMSKeyNotAccessibleFault" => {
                     return RusotoError::Service(TestConnectionError::KMSKeyNotAccessibleFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(TestConnectionError::ResourceNotFoundFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceQuotaExceededFault" => {
                     return RusotoError::Service(TestConnectionError::ResourceQuotaExceededFault(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

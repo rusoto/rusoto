@@ -7043,17 +7043,17 @@ impl CloneReceiptRuleSetError {
                     "AlreadyExists" => {
                         return RusotoError::Service(CloneReceiptRuleSetError::AlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CloneReceiptRuleSetError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(CloneReceiptRuleSetError::RuleSetDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7108,19 +7108,19 @@ impl CreateConfigurationSetError {
                             CreateConfigurationSetError::ConfigurationSetAlreadyExists(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidConfigurationSet" => {
                         return RusotoError::Service(
                             CreateConfigurationSetError::InvalidConfigurationSet(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateConfigurationSetError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7198,21 +7198,21 @@ impl CreateConfigurationSetEventDestinationError {
                             CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSNSDestination" => {
                         return RusotoError::Service(
                             CreateConfigurationSetEventDestinationError::InvalidSNSDestination(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             CreateConfigurationSetEventDestinationError::LimitExceeded(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7285,7 +7285,7 @@ impl CreateConfigurationSetTrackingOptionsError {
                             CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TrackingOptionsAlreadyExistsException" => return RusotoError::Service(
                         CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(
@@ -7398,12 +7398,12 @@ impl CreateReceiptFilterError {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateReceiptFilterError::AlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateReceiptFilterError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7463,37 +7463,39 @@ impl CreateReceiptRuleError {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateReceiptRuleError::AlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidLambdaFunction" => {
                         return RusotoError::Service(CreateReceiptRuleError::InvalidLambdaFunction(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidS3Configuration" => {
-                        return RusotoError::Service(CreateReceiptRuleError::InvalidS3Configuration(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateReceiptRuleError::InvalidS3Configuration(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidSnsTopic" => {
                         return RusotoError::Service(CreateReceiptRuleError::InvalidSnsTopic(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateReceiptRuleError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(CreateReceiptRuleError::RuleDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(CreateReceiptRuleError::RuleSetDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7548,12 +7550,12 @@ impl CreateReceiptRuleSetError {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateReceiptRuleSetError::AlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateReceiptRuleSetError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7605,17 +7607,17 @@ impl CreateTemplateError {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateTemplateError::AlreadyExists(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTemplate" => {
                         return RusotoError::Service(CreateTemplateError::InvalidTemplate(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateTemplateError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7666,7 +7668,7 @@ impl DeleteConfigurationSetError {
                             DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7785,7 +7787,7 @@ impl DeleteConfigurationSetTrackingOptionsError {
                             DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7987,7 +7989,7 @@ impl DeleteReceiptRuleError {
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(DeleteReceiptRuleError::RuleSetDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8034,7 +8036,7 @@ impl DeleteReceiptRuleSetError {
                     "CannotDelete" => {
                         return RusotoError::Service(DeleteReceiptRuleSetError::CannotDelete(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8198,7 +8200,7 @@ impl DescribeConfigurationSetError {
                             DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8247,12 +8249,12 @@ impl DescribeReceiptRuleError {
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(DescribeReceiptRuleError::RuleDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(DescribeReceiptRuleError::RuleSetDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8302,7 +8304,7 @@ impl DescribeReceiptRuleSetError {
                             DescribeReceiptRuleSetError::RuleSetDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -8695,7 +8697,7 @@ impl GetTemplateError {
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(GetTemplateError::TemplateDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9042,7 +9044,7 @@ impl PutIdentityPolicyError {
                     "InvalidPolicy" => {
                         return RusotoError::Service(PutIdentityPolicyError::InvalidPolicy(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9091,14 +9093,14 @@ impl ReorderReceiptRuleSetError {
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(ReorderReceiptRuleSetError::RuleDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(
                             ReorderReceiptRuleSetError::RuleSetDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9144,9 +9146,9 @@ impl SendBounceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "MessageRejected" => {
-                        return RusotoError::Service(SendBounceError::MessageRejected(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(SendBounceError::MessageRejected(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     _ => {}
                 }
@@ -9205,40 +9207,40 @@ impl SendBulkTemplatedEmailError {
                             SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
                             SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(
                             SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(
                             SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MessageRejected" => {
                         return RusotoError::Service(SendBulkTemplatedEmailError::MessageRejected(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(
                             SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9356,27 +9358,27 @@ impl SendEmailError {
                     "AccountSendingPausedException" => {
                         return RusotoError::Service(SendEmailError::AccountSendingPaused(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(SendEmailError::ConfigurationSetDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(SendEmailError::ConfigurationSetSendingPaused(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(SendEmailError::MailFromDomainNotVerified(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MessageRejected" => {
                         return RusotoError::Service(SendEmailError::MessageRejected(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -9435,31 +9437,31 @@ impl SendRawEmailError {
                     "AccountSendingPausedException" => {
                         return RusotoError::Service(SendRawEmailError::AccountSendingPaused(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
                             SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(
                             SendRawEmailError::ConfigurationSetSendingPaused(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(SendRawEmailError::MailFromDomainNotVerified(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "MessageRejected" => {
                         return RusotoError::Service(SendRawEmailError::MessageRejected(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9520,38 +9522,38 @@ impl SendTemplatedEmailError {
                     "AccountSendingPausedException" => {
                         return RusotoError::Service(SendTemplatedEmailError::AccountSendingPaused(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
                             SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(
                             SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(
                             SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MessageRejected" => {
                         return RusotoError::Service(SendTemplatedEmailError::MessageRejected(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(SendTemplatedEmailError::TemplateDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -9605,7 +9607,7 @@ impl SetActiveReceiptRuleSetError {
                             SetActiveReceiptRuleSetError::RuleSetDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9845,14 +9847,14 @@ impl SetReceiptRulePositionError {
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(SetReceiptRulePositionError::RuleDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(
                             SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -9906,19 +9908,19 @@ impl TestRenderTemplateError {
                             TestRenderTemplateError::InvalidRenderingParameter(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "MissingRenderingAttribute" => {
                         return RusotoError::Service(
                             TestRenderTemplateError::MissingRenderingAttribute(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(TestRenderTemplateError::TemplateDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10033,14 +10035,14 @@ impl UpdateConfigurationSetEventDestinationError {
                             UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "InvalidSNSDestination" => {
                         return RusotoError::Service(
                             UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10149,7 +10151,7 @@ impl UpdateConfigurationSetSendingEnabledError {
                             UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10211,14 +10213,14 @@ impl UpdateConfigurationSetTrackingOptionsError {
                             UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TrackingOptionsDoesNotExistException" => {
                         return RusotoError::Service(
                             UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -10331,32 +10333,34 @@ impl UpdateReceiptRuleError {
                     "InvalidLambdaFunction" => {
                         return RusotoError::Service(UpdateReceiptRuleError::InvalidLambdaFunction(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidS3Configuration" => {
-                        return RusotoError::Service(UpdateReceiptRuleError::InvalidS3Configuration(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            UpdateReceiptRuleError::InvalidS3Configuration(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "InvalidSnsTopic" => {
                         return RusotoError::Service(UpdateReceiptRuleError::InvalidSnsTopic(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateReceiptRuleError::LimitExceeded(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(UpdateReceiptRuleError::RuleDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(UpdateReceiptRuleError::RuleSetDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -10410,12 +10414,12 @@ impl UpdateTemplateError {
                     "InvalidTemplate" => {
                         return RusotoError::Service(UpdateTemplateError::InvalidTemplate(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(UpdateTemplateError::TemplateDoesNotExist(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -12817,11 +12821,9 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ListConfigurationSetsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListConfigurationSetsError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -13289,11 +13291,9 @@ impl Ses for SesClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(ReorderReceiptRuleSetError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ReorderReceiptRuleSetError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

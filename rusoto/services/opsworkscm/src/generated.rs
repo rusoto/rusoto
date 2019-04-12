@@ -706,12 +706,12 @@ impl AssociateNodeError {
                 "InvalidStateException" => {
                     return RusotoError::Service(AssociateNodeError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AssociateNodeError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AssociateNodeError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -760,17 +760,17 @@ impl CreateBackupError {
                 "InvalidStateException" => {
                     return RusotoError::Service(CreateBackupError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateBackupError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateBackupError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -820,17 +820,17 @@ impl CreateServerError {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateServerError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateServerError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateServerError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -878,12 +878,12 @@ impl DeleteBackupError {
                 "InvalidStateException" => {
                     return RusotoError::Service(DeleteBackupError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteBackupError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -930,12 +930,12 @@ impl DeleteServerError {
                 "InvalidStateException" => {
                     return RusotoError::Service(DeleteServerError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteServerError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1016,12 +1016,12 @@ impl DescribeBackupsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeBackupsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeBackupsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1068,12 +1068,12 @@ impl DescribeEventsError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeEventsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeEventsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1122,7 +1122,7 @@ impl DescribeNodeAssociationStatusError {
                         DescribeNodeAssociationStatusError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1168,12 +1168,12 @@ impl DescribeServersError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeServersError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeServersError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1220,12 +1220,12 @@ impl DisassociateNodeError {
                 "InvalidStateException" => {
                     return RusotoError::Service(DisassociateNodeError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateNodeError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1274,12 +1274,14 @@ impl ExportServerEngineAttributeError {
                 "InvalidStateException" => {
                     return RusotoError::Service(ExportServerEngineAttributeError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(ExportServerEngineAttributeError::ResourceNotFound(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ExportServerEngineAttributeError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1326,12 +1328,12 @@ impl RestoreServerError {
                 "InvalidStateException" => {
                     return RusotoError::Service(RestoreServerError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RestoreServerError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RestoreServerError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1378,12 +1380,12 @@ impl StartMaintenanceError {
                 "InvalidStateException" => {
                     return RusotoError::Service(StartMaintenanceError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartMaintenanceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1430,12 +1432,12 @@ impl UpdateServerError {
                 "InvalidStateException" => {
                     return RusotoError::Service(UpdateServerError::InvalidState(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateServerError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1484,14 +1486,14 @@ impl UpdateServerEngineAttributesError {
                 "InvalidStateException" => {
                     return RusotoError::Service(UpdateServerEngineAttributesError::InvalidState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         UpdateServerEngineAttributesError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

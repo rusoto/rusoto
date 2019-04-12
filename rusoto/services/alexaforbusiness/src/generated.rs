@@ -2495,17 +2495,17 @@ impl ApproveSkillError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(ApproveSkillError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ApproveSkillError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ApproveSkillError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2555,7 +2555,7 @@ impl AssociateContactWithAddressBookError {
                         AssociateContactWithAddressBookError::LimitExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2605,17 +2605,17 @@ impl AssociateDeviceWithRoomError {
                         AssociateDeviceWithRoomError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(AssociateDeviceWithRoomError::DeviceNotRegistered(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateDeviceWithRoomError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2665,7 +2665,7 @@ impl AssociateSkillGroupWithRoomError {
                         AssociateSkillGroupWithRoomError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2717,17 +2717,17 @@ impl AssociateSkillWithSkillGroupError {
                         AssociateSkillWithSkillGroupError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(AssociateSkillWithSkillGroupError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SkillNotLinkedException" => {
                     return RusotoError::Service(AssociateSkillWithSkillGroupError::SkillNotLinked(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2775,7 +2775,7 @@ impl AssociateSkillWithUsersError {
                         AssociateSkillWithUsersError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2821,12 +2821,12 @@ impl CreateAddressBookError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateAddressBookError::AlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateAddressBookError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2873,7 +2873,7 @@ impl CreateBusinessReportScheduleError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateBusinessReportScheduleError::AlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2917,7 +2917,7 @@ impl CreateConferenceProviderError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateConferenceProviderError::AlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2963,12 +2963,12 @@ impl CreateContactError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateContactError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateContactError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3017,17 +3017,17 @@ impl CreateProfileError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateProfileError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateProfileError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateProfileError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3075,12 +3075,12 @@ impl CreateRoomError {
                 "AlreadyExistsException" => {
                     return RusotoError::Service(CreateRoomError::AlreadyExists(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateRoomError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3127,19 +3127,19 @@ impl CreateSkillGroupError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return RusotoError::Service(CreateSkillGroupError::AlreadyExists(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateSkillGroupError::AlreadyExists(
+                        String::from(error_message),
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateSkillGroupError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(CreateSkillGroupError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateSkillGroupError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3189,17 +3189,17 @@ impl CreateUserError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateUserError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUserError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateUserError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3247,12 +3247,12 @@ impl DeleteAddressBookError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteAddressBookError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteAddressBookError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3303,12 +3303,12 @@ impl DeleteBusinessReportScheduleError {
                         DeleteBusinessReportScheduleError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBusinessReportScheduleError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3353,7 +3353,7 @@ impl DeleteConferenceProviderError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteConferenceProviderError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3399,12 +3399,12 @@ impl DeleteContactError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteContactError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteContactError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3453,17 +3453,17 @@ impl DeleteDeviceError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteDeviceError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidCertificateAuthorityException" => {
                     return RusotoError::Service(DeleteDeviceError::InvalidCertificateAuthority(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDeviceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3511,12 +3511,12 @@ impl DeleteProfileError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteProfileError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3563,12 +3563,12 @@ impl DeleteRoomError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteRoomError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteRoomError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3615,7 +3615,7 @@ impl DeleteRoomSkillParameterError {
                         DeleteRoomSkillParameterError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3663,12 +3663,12 @@ impl DeleteSkillAuthorizationError {
                         DeleteSkillAuthorizationError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteSkillAuthorizationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3715,12 +3715,12 @@ impl DeleteSkillGroupError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteSkillGroupError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteSkillGroupError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3767,12 +3767,12 @@ impl DeleteUserError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteUserError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteUserError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3859,14 +3859,14 @@ impl DisassociateDeviceFromRoomError {
                         DisassociateDeviceFromRoomError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(
                         DisassociateDeviceFromRoomError::DeviceNotRegistered(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3917,12 +3917,12 @@ impl DisassociateSkillFromSkillGroupError {
                         DisassociateSkillFromSkillGroupError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DisassociateSkillFromSkillGroupError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3971,7 +3971,7 @@ impl DisassociateSkillFromUsersError {
                         DisassociateSkillFromUsersError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4019,7 +4019,7 @@ impl DisassociateSkillGroupFromRoomError {
                         DisassociateSkillGroupFromRoomError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4063,7 +4063,7 @@ impl ForgetSmartHomeAppliancesError {
                 "NotFoundException" => {
                     return RusotoError::Service(ForgetSmartHomeAppliancesError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4107,7 +4107,7 @@ impl GetAddressBookError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetAddressBookError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4151,7 +4151,7 @@ impl GetConferencePreferenceError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetConferencePreferenceError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4193,9 +4193,9 @@ impl GetConferenceProviderError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetConferenceProviderError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetConferenceProviderError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4239,7 +4239,7 @@ impl GetContactError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetContactError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4283,7 +4283,7 @@ impl GetDeviceError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDeviceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4327,7 +4327,7 @@ impl GetProfileError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4369,7 +4369,9 @@ impl GetRoomError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRoomError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetRoomError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4411,9 +4413,9 @@ impl GetRoomSkillParameterError {
 
             match *error_type {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetRoomSkillParameterError::NotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetRoomSkillParameterError::NotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4457,7 +4459,7 @@ impl GetSkillGroupError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetSkillGroupError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4571,7 +4573,7 @@ impl ListDeviceEventsError {
                 "NotFoundException" => {
                     return RusotoError::Service(ListDeviceEventsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4719,7 +4721,7 @@ impl ListSmartHomeAppliancesError {
                 "NotFoundException" => {
                     return RusotoError::Service(ListSmartHomeAppliancesError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4763,7 +4765,7 @@ impl ListTagsError {
                 "NotFoundException" => {
                     return RusotoError::Service(ListTagsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4807,7 +4809,7 @@ impl PutConferencePreferenceError {
                 "NotFoundException" => {
                     return RusotoError::Service(PutConferencePreferenceError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4849,9 +4851,11 @@ impl PutRoomSkillParameterError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(PutRoomSkillParameterError::ConcurrentModification(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutRoomSkillParameterError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4895,14 +4899,16 @@ impl PutSkillAuthorizationError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(PutSkillAuthorizationError::ConcurrentModification(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutSkillAuthorizationError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "UnauthorizedException" => {
                     return RusotoError::Service(PutSkillAuthorizationError::Unauthorized(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4951,17 +4957,17 @@ impl RegisterAVSDeviceError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RegisterAVSDeviceError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidDeviceException" => {
                     return RusotoError::Service(RegisterAVSDeviceError::InvalidDevice(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RegisterAVSDeviceError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5009,12 +5015,12 @@ impl RejectSkillError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RejectSkillError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RejectSkillError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5059,7 +5065,7 @@ impl ResolveRoomError {
                 "NotFoundException" => {
                     return RusotoError::Service(ResolveRoomError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5105,12 +5111,12 @@ impl RevokeInvitationError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RevokeInvitationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RevokeInvitationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5397,17 +5403,17 @@ impl SendInvitationError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(SendInvitationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidUserStatusException" => {
                     return RusotoError::Service(SendInvitationError::InvalidUserStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(SendInvitationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5453,7 +5459,7 @@ impl StartDeviceSyncError {
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(StartDeviceSyncError::DeviceNotRegistered(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5499,7 +5505,7 @@ impl StartSmartHomeApplianceDiscoveryError {
                 "NotFoundException" => {
                     return RusotoError::Service(StartSmartHomeApplianceDiscoveryError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5543,7 +5549,7 @@ impl TagResourceError {
                 "NotFoundException" => {
                     return RusotoError::Service(TagResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5587,7 +5593,7 @@ impl UntagResourceError {
                 "NotFoundException" => {
                     return RusotoError::Service(UntagResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5635,17 +5641,17 @@ impl UpdateAddressBookError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateAddressBookError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NameInUseException" => {
                     return RusotoError::Service(UpdateAddressBookError::NameInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateAddressBookError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5697,12 +5703,12 @@ impl UpdateBusinessReportScheduleError {
                         UpdateBusinessReportScheduleError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateBusinessReportScheduleError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5747,7 +5753,7 @@ impl UpdateConferenceProviderError {
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateConferenceProviderError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5793,12 +5799,12 @@ impl UpdateContactError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateContactError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateContactError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5847,17 +5853,17 @@ impl UpdateDeviceError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateDeviceError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DeviceNotRegisteredException" => {
                     return RusotoError::Service(UpdateDeviceError::DeviceNotRegistered(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateDeviceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5907,17 +5913,17 @@ impl UpdateProfileError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateProfileError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NameInUseException" => {
                     return RusotoError::Service(UpdateProfileError::NameInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateProfileError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5965,12 +5971,12 @@ impl UpdateRoomError {
                 "NameInUseException" => {
                     return RusotoError::Service(UpdateRoomError::NameInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateRoomError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6019,17 +6025,17 @@ impl UpdateSkillGroupError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateSkillGroupError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NameInUseException" => {
                     return RusotoError::Service(UpdateSkillGroupError::NameInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateSkillGroupError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

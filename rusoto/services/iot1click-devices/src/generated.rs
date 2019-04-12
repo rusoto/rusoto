@@ -369,17 +369,17 @@ impl ClaimDevicesByClaimCodeError {
                 "ForbiddenException" => {
                     return RusotoError::Service(ClaimDevicesByClaimCodeError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalFailureException" => {
                     return RusotoError::Service(ClaimDevicesByClaimCodeError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ClaimDevicesByClaimCodeError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -440,19 +440,19 @@ impl DescribeDeviceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return RusotoError::Service(DescribeDeviceError::InternalFailure(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeDeviceError::InternalFailure(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeDeviceError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDeviceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -519,27 +519,27 @@ impl FinalizeDeviceClaimError {
                 "InternalFailureException" => {
                     return RusotoError::Service(FinalizeDeviceClaimError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(FinalizeDeviceClaimError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(FinalizeDeviceClaimError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(FinalizeDeviceClaimError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(FinalizeDeviceClaimError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -604,17 +604,17 @@ impl GetDeviceMethodsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(GetDeviceMethodsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(GetDeviceMethodsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetDeviceMethodsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -679,22 +679,22 @@ impl InitiateDeviceClaimError {
                 "InternalFailureException" => {
                     return RusotoError::Service(InitiateDeviceClaimError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(InitiateDeviceClaimError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(InitiateDeviceClaimError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InitiateDeviceClaimError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -764,32 +764,32 @@ impl InvokeDeviceMethodError {
                 "InternalFailureException" => {
                     return RusotoError::Service(InvokeDeviceMethodError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(InvokeDeviceMethodError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PreconditionFailedException" => {
                     return RusotoError::Service(InvokeDeviceMethodError::PreconditionFailed(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RangeNotSatisfiableException" => {
                     return RusotoError::Service(InvokeDeviceMethodError::RangeNotSatisfiable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceConflictException" => {
                     return RusotoError::Service(InvokeDeviceMethodError::ResourceConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(InvokeDeviceMethodError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -857,22 +857,22 @@ impl ListDeviceEventsError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDeviceEventsError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDeviceEventsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RangeNotSatisfiableException" => {
                     return RusotoError::Service(ListDeviceEventsError::RangeNotSatisfiable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListDeviceEventsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -936,17 +936,17 @@ impl ListDevicesError {
                 "InternalFailureException" => {
                     return RusotoError::Service(ListDevicesError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDevicesError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RangeNotSatisfiableException" => {
                     return RusotoError::Service(ListDevicesError::RangeNotSatisfiable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1009,17 +1009,17 @@ impl UnclaimDeviceError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UnclaimDeviceError::InternalFailure(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UnclaimDeviceError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UnclaimDeviceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UnclaimDeviceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1082,17 +1082,17 @@ impl UpdateDeviceStateError {
                 "InternalFailureException" => {
                     return RusotoError::Service(UpdateDeviceStateError::InternalFailure(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateDeviceStateError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateDeviceStateError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

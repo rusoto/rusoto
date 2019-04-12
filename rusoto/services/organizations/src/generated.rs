@@ -1187,57 +1187,59 @@ impl AcceptHandshakeError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(AcceptHandshakeError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(AcceptHandshakeError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "AccessDeniedForDependencyException" => {
                     return RusotoError::Service(AcceptHandshakeError::AccessDeniedForDependency(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AcceptHandshakeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeAlreadyInStateException" => {
                     return RusotoError::Service(AcceptHandshakeError::HandshakeAlreadyInState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeConstraintViolationException" => {
-                    return RusotoError::Service(AcceptHandshakeError::HandshakeConstraintViolation(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        AcceptHandshakeError::HandshakeConstraintViolation(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "HandshakeNotFoundException" => {
                     return RusotoError::Service(AcceptHandshakeError::HandshakeNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidHandshakeTransitionException" => {
                     return RusotoError::Service(AcceptHandshakeError::InvalidHandshakeTransition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AcceptHandshakeError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AcceptHandshakeError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AcceptHandshakeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1311,57 +1313,57 @@ impl AttachPolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(AttachPolicyError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachPolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AttachPolicyError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(AttachPolicyError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicatePolicyAttachmentException" => {
                     return RusotoError::Service(AttachPolicyError::DuplicatePolicyAttachment(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(AttachPolicyError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(AttachPolicyError::PolicyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyTypeNotEnabledException" => {
                     return RusotoError::Service(AttachPolicyError::PolicyTypeNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(AttachPolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TargetNotFoundException" => {
                     return RusotoError::Service(AttachPolicyError::TargetNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(AttachPolicyError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1429,42 +1431,42 @@ impl CancelHandshakeError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CancelHandshakeError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CancelHandshakeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeAlreadyInStateException" => {
                     return RusotoError::Service(CancelHandshakeError::HandshakeAlreadyInState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeNotFoundException" => {
                     return RusotoError::Service(CancelHandshakeError::HandshakeNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidHandshakeTransitionException" => {
                     return RusotoError::Service(CancelHandshakeError::InvalidHandshakeTransition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CancelHandshakeError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CancelHandshakeError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CancelHandshakeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1529,42 +1531,42 @@ impl CreateAccountError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(CreateAccountError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateAccountError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateAccountError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(CreateAccountError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FinalizingOrganizationException" => {
                     return RusotoError::Service(CreateAccountError::FinalizingOrganization(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateAccountError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateAccountError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateAccountError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1629,42 +1631,44 @@ impl CreateOrganizationError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateOrganizationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedForDependencyException" => {
-                    return RusotoError::Service(CreateOrganizationError::AccessDeniedForDependency(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateOrganizationError::AccessDeniedForDependency(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "AlreadyInOrganizationException" => {
                     return RusotoError::Service(CreateOrganizationError::AlreadyInOrganization(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateOrganizationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(CreateOrganizationError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateOrganizationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateOrganizationError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateOrganizationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1733,51 +1737,53 @@ impl CreateOrganizationalUnitError {
                         CreateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         CreateOrganizationalUnitError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ConstraintViolationException" => {
-                    return RusotoError::Service(CreateOrganizationalUnitError::ConstraintViolation(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateOrganizationalUnitError::ConstraintViolation(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "DuplicateOrganizationalUnitException" => {
                     return RusotoError::Service(
                         CreateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParentNotFoundException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::ParentNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateOrganizationalUnitError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1847,54 +1853,54 @@ impl CreatePolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(CreatePolicyError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreatePolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreatePolicyError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(CreatePolicyError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicatePolicyException" => {
                     return RusotoError::Service(CreatePolicyError::DuplicatePolicy(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(CreatePolicyError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(CreatePolicyError::MalformedPolicyDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyTypeNotAvailableForOrganizationException" => {
                     return RusotoError::Service(
                         CreatePolicyError::PolicyTypeNotAvailableForOrganization(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(CreatePolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreatePolicyError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1961,42 +1967,42 @@ impl DeclineHandshakeError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeclineHandshakeError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeclineHandshakeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeAlreadyInStateException" => {
                     return RusotoError::Service(DeclineHandshakeError::HandshakeAlreadyInState(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeNotFoundException" => {
                     return RusotoError::Service(DeclineHandshakeError::HandshakeNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidHandshakeTransitionException" => {
                     return RusotoError::Service(DeclineHandshakeError::InvalidHandshakeTransition(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeclineHandshakeError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeclineHandshakeError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeclineHandshakeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2059,37 +2065,37 @@ impl DeleteOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DeleteOrganizationError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteOrganizationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteOrganizationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteOrganizationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationNotEmptyException" => {
                     return RusotoError::Service(DeleteOrganizationError::OrganizationNotEmpty(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteOrganizationError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteOrganizationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2155,48 +2161,48 @@ impl DeleteOrganizationalUnitError {
                         DeleteOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteOrganizationalUnitError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         DeleteOrganizationalUnitError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeleteOrganizationalUnitError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationalUnitNotEmptyException" => {
                     return RusotoError::Service(
                         DeleteOrganizationalUnitError::OrganizationalUnitNotEmpty(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return RusotoError::Service(
                         DeleteOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeleteOrganizationalUnitError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteOrganizationalUnitError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2261,42 +2267,42 @@ impl DeletePolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DeletePolicyError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeletePolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeletePolicyError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DeletePolicyError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyInUseException" => {
                     return RusotoError::Service(DeletePolicyError::PolicyInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(DeletePolicyError::PolicyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DeletePolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeletePolicyError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2357,32 +2363,32 @@ impl DescribeAccountError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DescribeAccountError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAccountError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "AccountNotFoundException" => {
                     return RusotoError::Service(DescribeAccountError::AccountNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeAccountError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeAccountError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeAccountError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2445,34 +2451,34 @@ impl DescribeCreateAccountStatusError {
                         DescribeCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeCreateAccountStatusError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "CreateAccountStatusNotFoundException" => {
                     return RusotoError::Service(
                         DescribeCreateAccountStatusError::CreateAccountStatusNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeCreateAccountStatusError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeCreateAccountStatusError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeCreateAccountStatusError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2529,34 +2535,34 @@ impl DescribeHandshakeError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DescribeHandshakeError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeHandshakeError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DescribeHandshakeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeNotFoundException" => {
                     return RusotoError::Service(DescribeHandshakeError::HandshakeNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DescribeHandshakeError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeHandshakeError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeHandshakeError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeHandshakeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2615,27 +2621,27 @@ impl DescribeOrganizationError {
                         DescribeOrganizationError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeOrganizationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DescribeOrganizationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeOrganizationError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeOrganizationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2697,34 +2703,34 @@ impl DescribeOrganizationalUnitError {
                         DescribeOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeOrganizationalUnitError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribeOrganizationalUnitError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return RusotoError::Service(
                         DescribeOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribeOrganizationalUnitError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeOrganizationalUnitError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2783,32 +2789,32 @@ impl DescribePolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DescribePolicyError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribePolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DescribePolicyError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(DescribePolicyError::PolicyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DescribePolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(DescribePolicyError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribePolicyError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2875,52 +2881,52 @@ impl DetachPolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DetachPolicyError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachPolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DetachPolicyError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(DetachPolicyError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DetachPolicyError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyNotAttachedException" => {
-                    return RusotoError::Service(DetachPolicyError::PolicyNotAttached(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DetachPolicyError::PolicyNotAttached(
+                        String::from(error_message),
+                    ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(DetachPolicyError::PolicyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DetachPolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TargetNotFoundException" => {
                     return RusotoError::Service(DetachPolicyError::TargetNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DetachPolicyError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2987,39 +2993,39 @@ impl DisableAWSServiceAccessError {
                         DisableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         DisableAWSServiceAccessError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DisableAWSServiceAccessError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3085,47 +3091,47 @@ impl DisablePolicyTypeError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(DisablePolicyTypeError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DisablePolicyTypeError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DisablePolicyTypeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(DisablePolicyTypeError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DisablePolicyTypeError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "PolicyTypeNotEnabledException" => {
                     return RusotoError::Service(DisablePolicyTypeError::PolicyTypeNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RootNotFoundException" => {
-                    return RusotoError::Service(DisablePolicyTypeError::RootNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DisablePolicyTypeError::RootNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(DisablePolicyTypeError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DisablePolicyTypeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3191,39 +3197,39 @@ impl EnableAWSServiceAccessError {
                         EnableAWSServiceAccessError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(EnableAWSServiceAccessError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         EnableAWSServiceAccessError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(EnableAWSServiceAccessError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(EnableAWSServiceAccessError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
-                    return RusotoError::Service(EnableAWSServiceAccessError::Service(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(EnableAWSServiceAccessError::Service(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(EnableAWSServiceAccessError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3285,39 +3291,39 @@ impl EnableAllFeaturesError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(EnableAllFeaturesError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(EnableAllFeaturesError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(EnableAllFeaturesError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(EnableAllFeaturesError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "HandshakeConstraintViolationException" => {
                     return RusotoError::Service(
                         EnableAllFeaturesError::HandshakeConstraintViolation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(EnableAllFeaturesError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(EnableAllFeaturesError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(EnableAllFeaturesError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(EnableAllFeaturesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3385,54 +3391,54 @@ impl EnablePolicyTypeError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(EnablePolicyTypeError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(EnablePolicyTypeError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(EnablePolicyTypeError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(EnablePolicyTypeError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(EnablePolicyTypeError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyTypeAlreadyEnabledException" => {
                     return RusotoError::Service(EnablePolicyTypeError::PolicyTypeAlreadyEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyTypeNotAvailableForOrganizationException" => {
                     return RusotoError::Service(
                         EnablePolicyTypeError::PolicyTypeNotAvailableForOrganization(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RootNotFoundException" => {
                     return RusotoError::Service(EnablePolicyTypeError::RootNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(EnablePolicyTypeError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(EnablePolicyTypeError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3507,62 +3513,62 @@ impl InviteAccountToOrganizationError {
                         InviteAccountToOrganizationError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(InviteAccountToOrganizationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccountOwnerNotVerifiedException" => {
                     return RusotoError::Service(
                         InviteAccountToOrganizationError::AccountOwnerNotVerified(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         InviteAccountToOrganizationError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DuplicateHandshakeException" => {
                     return RusotoError::Service(
                         InviteAccountToOrganizationError::DuplicateHandshake(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "FinalizingOrganizationException" => {
                     return RusotoError::Service(
                         InviteAccountToOrganizationError::FinalizingOrganization(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "HandshakeConstraintViolationException" => {
                     return RusotoError::Service(
                         InviteAccountToOrganizationError::HandshakeConstraintViolation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(InviteAccountToOrganizationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(InviteAccountToOrganizationError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(InviteAccountToOrganizationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3631,49 +3637,49 @@ impl LeaveOrganizationError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(LeaveOrganizationError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
-                    return RusotoError::Service(LeaveOrganizationError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(LeaveOrganizationError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "AccountNotFoundException" => {
                     return RusotoError::Service(LeaveOrganizationError::AccountNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(LeaveOrganizationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(LeaveOrganizationError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
-                    return RusotoError::Service(LeaveOrganizationError::InvalidInput(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(LeaveOrganizationError::InvalidInput(
+                        String::from(error_message),
+                    ))
                 }
                 "MasterCannotLeaveOrganizationException" => {
                     return RusotoError::Service(
                         LeaveOrganizationError::MasterCannotLeaveOrganization(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(LeaveOrganizationError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(LeaveOrganizationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3739,40 +3745,40 @@ impl ListAWSServiceAccessForOrganizationError {
                         ListAWSServiceAccessForOrganizationError::AWSOrganizationsNotInUse(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(
                         ListAWSServiceAccessForOrganizationError::AccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(
                         ListAWSServiceAccessForOrganizationError::ConstraintViolation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
                         ListAWSServiceAccessForOrganizationError::InvalidInput(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListAWSServiceAccessForOrganizationError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         ListAWSServiceAccessForOrganizationError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3829,27 +3835,27 @@ impl ListAccountsError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListAccountsError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAccountsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAccountsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListAccountsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListAccountsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3909,32 +3915,32 @@ impl ListAccountsForParentError {
                         ListAccountsForParentError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAccountsForParentError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListAccountsForParentError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ParentNotFoundException" => {
                     return RusotoError::Service(ListAccountsForParentError::ParentNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListAccountsForParentError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListAccountsForParentError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3993,32 +3999,32 @@ impl ListChildrenError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListChildrenError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListChildrenError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListChildrenError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ParentNotFoundException" => {
                     return RusotoError::Service(ListChildrenError::ParentNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListChildrenError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListChildrenError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4077,27 +4083,27 @@ impl ListCreateAccountStatusError {
                         ListCreateAccountStatusError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListCreateAccountStatusError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListCreateAccountStatusError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListCreateAccountStatusError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListCreateAccountStatusError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4153,29 +4159,29 @@ impl ListHandshakesForAccountError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         ListHandshakesForAccountError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListHandshakesForAccountError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4237,36 +4243,36 @@ impl ListHandshakesForOrganizationError {
                         ListHandshakesForOrganizationError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListHandshakesForOrganizationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         ListHandshakesForOrganizationError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListHandshakesForOrganizationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListHandshakesForOrganizationError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         ListHandshakesForOrganizationError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4329,40 +4335,40 @@ impl ListOrganizationalUnitsForParentError {
                         ListOrganizationalUnitsForParentError::AWSOrganizationsNotInUse(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(
                         ListOrganizationalUnitsForParentError::AccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(
                         ListOrganizationalUnitsForParentError::InvalidInput(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ParentNotFoundException" => {
                     return RusotoError::Service(
                         ListOrganizationalUnitsForParentError::ParentNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListOrganizationalUnitsForParentError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         ListOrganizationalUnitsForParentError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4421,32 +4427,32 @@ impl ListParentsError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListParentsError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListParentsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ChildNotFoundException" => {
                     return RusotoError::Service(ListParentsError::ChildNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListParentsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListParentsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListParentsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4503,27 +4509,27 @@ impl ListPoliciesError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListPoliciesError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPoliciesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListPoliciesError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListPoliciesError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListPoliciesError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4583,32 +4589,32 @@ impl ListPoliciesForTargetError {
                         ListPoliciesForTargetError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPoliciesForTargetError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListPoliciesForTargetError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListPoliciesForTargetError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TargetNotFoundException" => {
                     return RusotoError::Service(ListPoliciesForTargetError::TargetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListPoliciesForTargetError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4665,27 +4671,27 @@ impl ListRootsError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(ListRootsError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListRootsError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListRootsError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListRootsError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListRootsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4745,32 +4751,32 @@ impl ListTargetsForPolicyError {
                         ListTargetsForPolicyError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTargetsForPolicyError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(ListTargetsForPolicyError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(ListTargetsForPolicyError::PolicyNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(ListTargetsForPolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListTargetsForPolicyError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4837,52 +4843,52 @@ impl MoveAccountError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(MoveAccountError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(MoveAccountError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "AccountNotFoundException" => {
                     return RusotoError::Service(MoveAccountError::AccountNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(MoveAccountError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DestinationParentNotFoundException" => {
                     return RusotoError::Service(MoveAccountError::DestinationParentNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateAccountException" => {
                     return RusotoError::Service(MoveAccountError::DuplicateAccount(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(MoveAccountError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(MoveAccountError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "SourceParentNotFoundException" => {
                     return RusotoError::Service(MoveAccountError::SourceParentNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(MoveAccountError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4955,57 +4961,57 @@ impl RemoveAccountFromOrganizationError {
                         RemoveAccountFromOrganizationError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveAccountFromOrganizationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccountNotFoundException" => {
                     return RusotoError::Service(
                         RemoveAccountFromOrganizationError::AccountNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         RemoveAccountFromOrganizationError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(
                         RemoveAccountFromOrganizationError::ConstraintViolation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(RemoveAccountFromOrganizationError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MasterCannotLeaveOrganizationException" => {
                     return RusotoError::Service(
                         RemoveAccountFromOrganizationError::MasterCannotLeaveOrganization(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(RemoveAccountFromOrganizationError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         RemoveAccountFromOrganizationError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5073,48 +5079,48 @@ impl UpdateOrganizationalUnitError {
                         UpdateOrganizationalUnitError::AWSOrganizationsNotInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateOrganizationalUnitError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(
                         UpdateOrganizationalUnitError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "DuplicateOrganizationalUnitException" => {
                     return RusotoError::Service(
                         UpdateOrganizationalUnitError::DuplicateOrganizationalUnit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdateOrganizationalUnitError::InvalidInput(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OrganizationalUnitNotFoundException" => {
                     return RusotoError::Service(
                         UpdateOrganizationalUnitError::OrganizationalUnitNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdateOrganizationalUnitError::Service(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateOrganizationalUnitError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5183,52 +5189,52 @@ impl UpdatePolicyError {
                 "AWSOrganizationsNotInUseException" => {
                     return RusotoError::Service(UpdatePolicyError::AWSOrganizationsNotInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdatePolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdatePolicyError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConstraintViolationException" => {
                     return RusotoError::Service(UpdatePolicyError::ConstraintViolation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicatePolicyException" => {
                     return RusotoError::Service(UpdatePolicyError::DuplicatePolicy(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidInputException" => {
                     return RusotoError::Service(UpdatePolicyError::InvalidInput(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "MalformedPolicyDocumentException" => {
                     return RusotoError::Service(UpdatePolicyError::MalformedPolicyDocument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "PolicyNotFoundException" => {
                     return RusotoError::Service(UpdatePolicyError::PolicyNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceException" => {
                     return RusotoError::Service(UpdatePolicyError::Service(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdatePolicyError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

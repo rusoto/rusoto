@@ -1118,32 +1118,32 @@ impl CreateChannelError {
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateChannelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(CreateChannelError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1214,34 +1214,34 @@ impl CreateOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return RusotoError::Service(CreateOriginEndpointError::Forbidden(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateOriginEndpointError::Forbidden(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateOriginEndpointError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateOriginEndpointError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateOriginEndpointError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateOriginEndpointError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(CreateOriginEndpointError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1314,32 +1314,32 @@ impl DeleteChannelError {
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteChannelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(DeleteChannelError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1410,34 +1410,34 @@ impl DeleteOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return RusotoError::Service(DeleteOriginEndpointError::Forbidden(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteOriginEndpointError::Forbidden(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteOriginEndpointError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteOriginEndpointError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DeleteOriginEndpointError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteOriginEndpointError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(DeleteOriginEndpointError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1510,32 +1510,32 @@ impl DescribeChannelError {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeChannelError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(DescribeChannelError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1608,32 +1608,32 @@ impl DescribeOriginEndpointError {
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeOriginEndpointError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeOriginEndpointError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeOriginEndpointError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeOriginEndpointError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeOriginEndpointError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(DescribeOriginEndpointError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1706,32 +1706,32 @@ impl ListChannelsError {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListChannelsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListChannelsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListChannelsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListChannelsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListChannelsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(ListChannelsError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1804,32 +1804,32 @@ impl ListOriginEndpointsError {
                 "ForbiddenException" => {
                     return RusotoError::Service(ListOriginEndpointsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListOriginEndpointsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListOriginEndpointsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListOriginEndpointsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListOriginEndpointsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(ListOriginEndpointsError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1902,32 +1902,36 @@ impl RotateChannelCredentialsError {
                 "ForbiddenException" => {
                     return RusotoError::Service(RotateChannelCredentialsError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(RotateChannelCredentialsError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RotateChannelCredentialsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RotateChannelCredentialsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(RotateChannelCredentialsError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(RotateChannelCredentialsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
-                    return RusotoError::Service(RotateChannelCredentialsError::UnprocessableEntity(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        RotateChannelCredentialsError::UnprocessableEntity(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2002,40 +2006,40 @@ impl RotateIngestEndpointCredentialsError {
                 "ForbiddenException" => {
                     return RusotoError::Service(RotateIngestEndpointCredentialsError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         RotateIngestEndpointCredentialsError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(RotateIngestEndpointCredentialsError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         RotateIngestEndpointCredentialsError::ServiceUnavailable(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(
                         RotateIngestEndpointCredentialsError::TooManyRequests(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(
                         RotateIngestEndpointCredentialsError::UnprocessableEntity(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2108,32 +2112,32 @@ impl UpdateChannelError {
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateChannelError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateChannelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(UpdateChannelError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2204,34 +2208,34 @@ impl UpdateOriginEndpointError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return RusotoError::Service(UpdateOriginEndpointError::Forbidden(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateOriginEndpointError::Forbidden(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateOriginEndpointError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateOriginEndpointError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(UpdateOriginEndpointError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateOriginEndpointError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(UpdateOriginEndpointError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

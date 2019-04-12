@@ -231,22 +231,22 @@ impl GetResourcesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetResourcesError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetResourcesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PaginationTokenExpiredException" => {
                     return RusotoError::Service(GetResourcesError::PaginationTokenExpired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetResourcesError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -299,22 +299,22 @@ impl GetTagKeysError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTagKeysError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetTagKeysError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PaginationTokenExpiredException" => {
                     return RusotoError::Service(GetTagKeysError::PaginationTokenExpired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetTagKeysError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -367,22 +367,22 @@ impl GetTagValuesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(GetTagValuesError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(GetTagValuesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PaginationTokenExpiredException" => {
                     return RusotoError::Service(GetTagValuesError::PaginationTokenExpired(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(GetTagValuesError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -433,17 +433,17 @@ impl TagResourcesError {
                 "InternalServiceException" => {
                     return RusotoError::Service(TagResourcesError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(TagResourcesError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(TagResourcesError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -491,19 +491,19 @@ impl UntagResourcesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return RusotoError::Service(UntagResourcesError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourcesError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UntagResourcesError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ThrottledException" => {
                     return RusotoError::Service(UntagResourcesError::Throttled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

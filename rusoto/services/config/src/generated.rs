@@ -2118,7 +2118,7 @@ impl BatchGetAggregateResourceConfigError {
                         BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2164,7 +2164,7 @@ impl BatchGetResourceConfigError {
                         BatchGetResourceConfigError::NoAvailableConfigurationRecorder(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2212,7 +2212,7 @@ impl DeleteAggregationAuthorizationError {
                         DeleteAggregationAuthorizationError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2258,12 +2258,12 @@ impl DeleteConfigRuleError {
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(DeleteConfigRuleError::NoSuchConfigRule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(DeleteConfigRuleError::ResourceInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteConfigRuleError::ResourceInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2312,7 +2312,7 @@ impl DeleteConfigurationAggregatorError {
                         DeleteConfigurationAggregatorError::NoSuchConfigurationAggregator(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2360,7 +2360,7 @@ impl DeleteConfigurationRecorderError {
                         DeleteConfigurationRecorderError::NoSuchConfigurationRecorder(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2408,12 +2408,12 @@ impl DeleteDeliveryChannelError {
                         DeleteDeliveryChannelError::LastDeliveryChannelDeleteFailed(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(DeleteDeliveryChannelError::NoSuchDeliveryChannel(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2460,12 +2460,12 @@ impl DeleteEvaluationResultsError {
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(DeleteEvaluationResultsError::NoSuchConfigRule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteEvaluationResultsError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2514,7 +2514,7 @@ impl DeletePendingAggregationRequestError {
                         DeletePendingAggregationRequestError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2564,14 +2564,14 @@ impl DeleteRetentionConfigurationError {
                         DeleteRetentionConfigurationError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchRetentionConfigurationException" => {
                     return RusotoError::Service(
                         DeleteRetentionConfigurationError::NoSuchRetentionConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2622,19 +2622,19 @@ impl DeliverConfigSnapshotError {
                         DeliverConfigSnapshotError::NoAvailableConfigurationRecorder(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoRunningConfigurationRecorderException" => {
                     return RusotoError::Service(
                         DeliverConfigSnapshotError::NoRunningConfigurationRecorder(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchDeliveryChannelException" => {
                     return RusotoError::Service(DeliverConfigSnapshotError::NoSuchDeliveryChannel(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2688,14 +2688,14 @@ impl DescribeAggregateComplianceByConfigRulesError {
                         DescribeAggregateComplianceByConfigRulesError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeAggregateComplianceByConfigRulesError::InvalidNextToken(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "NoSuchConfigurationAggregatorException" => return RusotoError::Service(
                     DescribeAggregateComplianceByConfigRulesError::NoSuchConfigurationAggregator(
@@ -2756,21 +2756,21 @@ impl DescribeAggregationAuthorizationsError {
                         DescribeAggregationAuthorizationsError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeAggregationAuthorizationsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeAggregationAuthorizationsError::InvalidParameterValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2824,21 +2824,21 @@ impl DescribeComplianceByConfigRuleError {
                         DescribeComplianceByConfigRuleError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeComplianceByConfigRuleError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(
                         DescribeComplianceByConfigRuleError::NoSuchConfigRule(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2890,14 +2890,14 @@ impl DescribeComplianceByResourceError {
                         DescribeComplianceByResourceError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeComplianceByResourceError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2950,21 +2950,21 @@ impl DescribeConfigRuleEvaluationStatusError {
                         DescribeConfigRuleEvaluationStatusError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeConfigRuleEvaluationStatusError::InvalidParameterValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(
                         DescribeConfigRuleEvaluationStatusError::NoSuchConfigRule(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3012,12 +3012,12 @@ impl DescribeConfigRulesError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeConfigRulesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(DescribeConfigRulesError::NoSuchConfigRule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3130,28 +3130,28 @@ impl DescribeConfigurationAggregatorsError {
                         DescribeConfigurationAggregatorsError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeConfigurationAggregatorsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeConfigurationAggregatorsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         DescribeConfigurationAggregatorsError::NoSuchConfigurationAggregator(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3204,7 +3204,7 @@ impl DescribeConfigurationRecorderStatusError {
                         DescribeConfigurationRecorderStatusError::NoSuchConfigurationRecorder(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3254,7 +3254,7 @@ impl DescribeConfigurationRecordersError {
                         DescribeConfigurationRecordersError::NoSuchConfigurationRecorder(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3302,7 +3302,7 @@ impl DescribeDeliveryChannelStatusError {
                         DescribeDeliveryChannelStatusError::NoSuchDeliveryChannel(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3348,7 +3348,7 @@ impl DescribeDeliveryChannelsError {
                         DescribeDeliveryChannelsError::NoSuchDeliveryChannel(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3400,21 +3400,21 @@ impl DescribePendingAggregationRequestsError {
                         DescribePendingAggregationRequestsError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribePendingAggregationRequestsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribePendingAggregationRequestsError::InvalidParameterValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3468,21 +3468,21 @@ impl DescribeRetentionConfigurationsError {
                         DescribeRetentionConfigurationsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         DescribeRetentionConfigurationsError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchRetentionConfigurationException" => {
                     return RusotoError::Service(
                         DescribeRetentionConfigurationsError::NoSuchRetentionConfiguration(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3536,14 +3536,14 @@ impl GetAggregateComplianceDetailsByConfigRuleError {
                         GetAggregateComplianceDetailsByConfigRuleError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         GetAggregateComplianceDetailsByConfigRuleError::InvalidNextToken(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "NoSuchConfigurationAggregatorException" => return RusotoError::Service(
                     GetAggregateComplianceDetailsByConfigRuleError::NoSuchConfigurationAggregator(
@@ -3604,21 +3604,21 @@ impl GetAggregateConfigRuleComplianceSummaryError {
                         GetAggregateConfigRuleComplianceSummaryError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         GetAggregateConfigRuleComplianceSummaryError::InvalidNextToken(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         GetAggregateConfigRuleComplianceSummaryError::NoSuchConfigurationAggregator(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3674,21 +3674,21 @@ impl GetAggregateDiscoveredResourceCountsError {
                         GetAggregateDiscoveredResourceCountsError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         GetAggregateDiscoveredResourceCountsError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3744,21 +3744,21 @@ impl GetAggregateResourceConfigError {
                         GetAggregateResourceConfigError::NoSuchConfigurationAggregator(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "OversizedConfigurationItemException" => {
                     return RusotoError::Service(
                         GetAggregateResourceConfigError::OversizedConfigurationItem(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotDiscoveredException" => {
                     return RusotoError::Service(
                         GetAggregateResourceConfigError::ResourceNotDiscovered(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3812,21 +3812,21 @@ impl GetComplianceDetailsByConfigRuleError {
                         GetComplianceDetailsByConfigRuleError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(
                         GetComplianceDetailsByConfigRuleError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(
                         GetComplianceDetailsByConfigRuleError::NoSuchConfigRule(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3876,7 +3876,7 @@ impl GetComplianceDetailsByResourceError {
                         GetComplianceDetailsByResourceError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3960,7 +3960,7 @@ impl GetComplianceSummaryByResourceTypeError {
                         GetComplianceSummaryByResourceTypeError::InvalidParameterValue(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4008,12 +4008,14 @@ impl GetDiscoveredResourceCountsError {
                 "InvalidLimitException" => {
                     return RusotoError::Service(GetDiscoveredResourceCountsError::InvalidLimit(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
-                    return RusotoError::Service(GetDiscoveredResourceCountsError::InvalidNextToken(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetDiscoveredResourceCountsError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4066,31 +4068,31 @@ impl GetResourceConfigHistoryError {
                 "InvalidLimitException" => {
                     return RusotoError::Service(GetResourceConfigHistoryError::InvalidLimit(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(GetResourceConfigHistoryError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidTimeRangeException" => {
                     return RusotoError::Service(GetResourceConfigHistoryError::InvalidTimeRange(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
                         GetResourceConfigHistoryError::NoAvailableConfigurationRecorder(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotDiscoveredException" => {
                     return RusotoError::Service(
                         GetResourceConfigHistoryError::ResourceNotDiscovered(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4146,21 +4148,21 @@ impl ListAggregateDiscoveredResourcesError {
                         ListAggregateDiscoveredResourcesError::InvalidLimit(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         ListAggregateDiscoveredResourcesError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchConfigurationAggregatorException" => {
                     return RusotoError::Service(
                         ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4212,19 +4214,19 @@ impl ListDiscoveredResourcesError {
                 "InvalidLimitException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::InvalidLimit(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDiscoveredResourcesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
                         ListDiscoveredResourcesError::NoAvailableConfigurationRecorder(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4274,7 +4276,7 @@ impl PutAggregationAuthorizationError {
                         PutAggregationAuthorizationError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4326,29 +4328,31 @@ impl PutConfigRuleError {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(PutConfigRuleError::InsufficientPermissions(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(PutConfigRuleError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaxNumberOfConfigRulesExceededException" => {
-                    return RusotoError::Service(PutConfigRuleError::MaxNumberOfConfigRulesExceeded(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        PutConfigRuleError::MaxNumberOfConfigRulesExceeded(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
                         PutConfigRuleError::NoAvailableConfigurationRecorder(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(PutConfigRuleError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4410,38 +4414,38 @@ impl PutConfigurationAggregatorError {
                         PutConfigurationAggregatorError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(PutConfigurationAggregatorError::InvalidRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutConfigurationAggregatorError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoAvailableOrganizationException" => {
                     return RusotoError::Service(
                         PutConfigurationAggregatorError::NoAvailableOrganization(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationAccessDeniedException" => {
                     return RusotoError::Service(
                         PutConfigurationAggregatorError::OrganizationAccessDenied(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OrganizationAllFeaturesNotEnabledException" => {
                     return RusotoError::Service(
                         PutConfigurationAggregatorError::OrganizationAllFeaturesNotEnabled(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4498,26 +4502,26 @@ impl PutConfigurationRecorderError {
                         PutConfigurationRecorderError::InvalidConfigurationRecorderName(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidRecordingGroupException" => {
                     return RusotoError::Service(
                         PutConfigurationRecorderError::InvalidRecordingGroup(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(PutConfigurationRecorderError::InvalidRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaxNumberOfConfigurationRecordersExceededException" => {
                     return RusotoError::Service(
                         PutConfigurationRecorderError::MaxNumberOfConfigurationRecordersExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4580,43 +4584,43 @@ impl PutDeliveryChannelError {
                         PutDeliveryChannelError::InsufficientDeliveryPolicy(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidDeliveryChannelNameException" => {
                     return RusotoError::Service(
                         PutDeliveryChannelError::InvalidDeliveryChannelName(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidS3KeyPrefixException" => {
                     return RusotoError::Service(PutDeliveryChannelError::InvalidS3KeyPrefix(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidSNSTopicARNException" => {
                     return RusotoError::Service(PutDeliveryChannelError::InvalidSNSTopicARN(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "MaxNumberOfDeliveryChannelsExceededException" => {
                     return RusotoError::Service(
                         PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoAvailableConfigurationRecorderException" => {
                     return RusotoError::Service(
                         PutDeliveryChannelError::NoAvailableConfigurationRecorder(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchBucketException" => {
                     return RusotoError::Service(PutDeliveryChannelError::NoSuchBucket(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4670,17 +4674,17 @@ impl PutEvaluationsError {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(PutEvaluationsError::InvalidParameterValue(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResultTokenException" => {
                     return RusotoError::Service(PutEvaluationsError::InvalidResultToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(PutEvaluationsError::NoSuchConfigRule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4730,14 +4734,14 @@ impl PutRetentionConfigurationError {
                         PutRetentionConfigurationError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "MaxNumberOfRetentionConfigurationsExceededException" => {
                     return RusotoError::Service(
                         PutRetentionConfigurationError::MaxNumberOfRetentionConfigurationsExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4794,22 +4798,22 @@ impl StartConfigRulesEvaluationError {
                         StartConfigRulesEvaluationError::InvalidParameterValue(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartConfigRulesEvaluationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoSuchConfigRuleException" => {
                     return RusotoError::Service(StartConfigRulesEvaluationError::NoSuchConfigRule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(StartConfigRulesEvaluationError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4862,14 +4866,14 @@ impl StartConfigurationRecorderError {
                         StartConfigurationRecorderError::NoAvailableDeliveryChannel(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NoSuchConfigurationRecorderException" => {
                     return RusotoError::Service(
                         StartConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4916,7 +4920,7 @@ impl StopConfigurationRecorderError {
                         StopConfigurationRecorderError::NoSuchConfigurationRecorder(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

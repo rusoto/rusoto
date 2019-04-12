@@ -2393,12 +2393,12 @@ impl AddInstanceFleetError {
                 "InternalServerException" => {
                     return RusotoError::Service(AddInstanceFleetError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(AddInstanceFleetError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2443,7 +2443,7 @@ impl AddInstanceGroupsError {
                 "InternalServerError" => {
                     return RusotoError::Service(AddInstanceGroupsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2487,7 +2487,7 @@ impl AddJobFlowStepsError {
                 "InternalServerError" => {
                     return RusotoError::Service(AddJobFlowStepsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2533,12 +2533,12 @@ impl AddTagsError {
                 "InternalServerException" => {
                     return RusotoError::Service(AddTagsError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(AddTagsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2585,12 +2585,12 @@ impl CancelStepsError {
                 "InternalServerError" => {
                     return RusotoError::Service(CancelStepsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CancelStepsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2639,12 +2639,12 @@ impl CreateSecurityConfigurationError {
                 "InternalServerException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(CreateSecurityConfigurationError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2693,12 +2693,12 @@ impl DeleteSecurityConfigurationError {
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteSecurityConfigurationError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2743,14 +2743,14 @@ impl DescribeClusterError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(DescribeClusterError::InternalServer(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeClusterError::InternalServer(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeClusterError::InvalidRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeClusterError::InvalidRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2795,7 +2795,7 @@ impl DescribeJobFlowsError {
                 "InternalServerError" => {
                     return RusotoError::Service(DescribeJobFlowsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2841,14 +2841,18 @@ impl DescribeSecurityConfigurationError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return RusotoError::Service(DescribeSecurityConfigurationError::InternalServer(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeSecurityConfigurationError::InternalServer(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidRequestException" => {
-                    return RusotoError::Service(DescribeSecurityConfigurationError::InvalidRequest(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeSecurityConfigurationError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2895,12 +2899,12 @@ impl DescribeStepError {
                 "InternalServerException" => {
                     return RusotoError::Service(DescribeStepError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DescribeStepError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2947,12 +2951,12 @@ impl ListBootstrapActionsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListBootstrapActionsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListBootstrapActionsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2999,12 +3003,12 @@ impl ListClustersError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListClustersError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListClustersError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3051,12 +3055,12 @@ impl ListInstanceFleetsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListInstanceFleetsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListInstanceFleetsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3103,12 +3107,12 @@ impl ListInstanceGroupsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListInstanceGroupsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListInstanceGroupsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3155,12 +3159,12 @@ impl ListInstancesError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListInstancesError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListInstancesError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3209,12 +3213,12 @@ impl ListSecurityConfigurationsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListSecurityConfigurationsError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListSecurityConfigurationsError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3261,12 +3265,12 @@ impl ListStepsError {
                 "InternalServerException" => {
                     return RusotoError::Service(ListStepsError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListStepsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3313,12 +3317,12 @@ impl ModifyInstanceFleetError {
                 "InternalServerException" => {
                     return RusotoError::Service(ModifyInstanceFleetError::InternalServer(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ModifyInstanceFleetError::InvalidRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3363,7 +3367,7 @@ impl ModifyInstanceGroupsError {
                 "InternalServerError" => {
                     return RusotoError::Service(ModifyInstanceGroupsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3477,12 +3481,12 @@ impl RemoveTagsError {
                 "InternalServerException" => {
                     return RusotoError::Service(RemoveTagsError::InternalServer(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(RemoveTagsError::InvalidRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3525,9 +3529,9 @@ impl RunJobFlowError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(RunJobFlowError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RunJobFlowError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3569,9 +3573,11 @@ impl SetTerminationProtectionError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RusotoError::Service(SetTerminationProtectionError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        SetTerminationProtectionError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3615,7 +3621,7 @@ impl SetVisibleToAllUsersError {
                 "InternalServerError" => {
                     return RusotoError::Service(SetVisibleToAllUsersError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3659,7 +3665,7 @@ impl TerminateJobFlowsError {
                 "InternalServerError" => {
                     return RusotoError::Service(TerminateJobFlowsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

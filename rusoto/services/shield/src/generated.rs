@@ -589,42 +589,42 @@ impl AssociateDRTLogBucketError {
                         AssociateDRTLogBucketError::AccessDeniedForDependency(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitsExceededException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::LimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoAssociatedRoleException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::NoAssociatedRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::OptimisticLock(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateDRTLogBucketError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -685,32 +685,32 @@ impl AssociateDRTRoleError {
                 "AccessDeniedForDependencyException" => {
                     return RusotoError::Service(AssociateDRTRoleError::AccessDeniedForDependency(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(AssociateDRTRoleError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AssociateDRTRoleError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(AssociateDRTRoleError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(AssociateDRTRoleError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(AssociateDRTRoleError::OptimisticLock(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateDRTRoleError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -769,39 +769,39 @@ impl CreateProtectionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateProtectionError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateProtectionError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(CreateProtectionError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(CreateProtectionError::InvalidResource(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitsExceededException" => {
                     return RusotoError::Service(CreateProtectionError::LimitsExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(CreateProtectionError::OptimisticLock(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateProtectionError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateProtectionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -853,12 +853,12 @@ impl CreateSubscriptionError {
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateSubscriptionError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateSubscriptionError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -905,19 +905,19 @@ impl DeleteProtectionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteProtectionError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteProtectionError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(DeleteProtectionError::OptimisticLock(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteProtectionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -967,17 +967,17 @@ impl DeleteSubscriptionError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteSubscriptionError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LockedSubscriptionException" => {
                     return RusotoError::Service(DeleteSubscriptionError::LockedSubscription(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteSubscriptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1025,12 +1025,12 @@ impl DescribeAttackError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DescribeAttackError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeAttackError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1077,12 +1077,12 @@ impl DescribeDRTAccessError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeDRTAccessError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDRTAccessError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1133,14 +1133,14 @@ impl DescribeEmergencyContactSettingsError {
                         DescribeEmergencyContactSettingsError::InternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DescribeEmergencyContactSettingsError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1189,17 +1189,17 @@ impl DescribeProtectionError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeProtectionError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeProtectionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProtectionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1247,12 +1247,12 @@ impl DescribeSubscriptionError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeSubscriptionError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeSubscriptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1309,32 +1309,32 @@ impl DisassociateDRTLogBucketError {
                         DisassociateDRTLogBucketError::AccessDeniedForDependency(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NoAssociatedRoleException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::NoAssociatedRole(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::OptimisticLock(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateDRTLogBucketError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1389,22 +1389,22 @@ impl DisassociateDRTRoleError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DisassociateDRTRoleError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(DisassociateDRTRoleError::InvalidOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(DisassociateDRTRoleError::OptimisticLock(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateDRTRoleError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1451,7 +1451,7 @@ impl GetSubscriptionStateError {
                 "InternalErrorException" => {
                     return RusotoError::Service(GetSubscriptionStateError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1499,17 +1499,17 @@ impl ListAttacksError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListAttacksError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(ListAttacksError::InvalidOperation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ListAttacksError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1559,17 +1559,17 @@ impl ListProtectionsError {
                 "InternalErrorException" => {
                     return RusotoError::Service(ListProtectionsError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidPaginationTokenException" => {
                     return RusotoError::Service(ListProtectionsError::InvalidPaginationToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListProtectionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1621,30 +1621,32 @@ impl UpdateEmergencyContactSettingsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateEmergencyContactSettingsError::InternalError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateEmergencyContactSettingsError::InternalError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         UpdateEmergencyContactSettingsError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(
                         UpdateEmergencyContactSettingsError::OptimisticLock(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         UpdateEmergencyContactSettingsError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1699,27 +1701,27 @@ impl UpdateSubscriptionError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateSubscriptionError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateSubscriptionError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LockedSubscriptionException" => {
                     return RusotoError::Service(UpdateSubscriptionError::LockedSubscription(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OptimisticLockException" => {
                     return RusotoError::Service(UpdateSubscriptionError::OptimisticLock(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateSubscriptionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

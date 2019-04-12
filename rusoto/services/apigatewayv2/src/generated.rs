@@ -3445,22 +3445,22 @@ impl CreateApiError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApiError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateApiError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateApiError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateApiError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3527,22 +3527,22 @@ impl CreateApiMappingError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateApiMappingError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateApiMappingError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateApiMappingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateApiMappingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3609,22 +3609,22 @@ impl CreateAuthorizerError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateAuthorizerError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateAuthorizerError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateAuthorizerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateAuthorizerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3691,22 +3691,22 @@ impl CreateDeploymentError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDeploymentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateDeploymentError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateDeploymentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateDeploymentError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3773,22 +3773,22 @@ impl CreateDomainNameError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateDomainNameError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateDomainNameError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateDomainNameError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateDomainNameError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3855,22 +3855,22 @@ impl CreateIntegrationError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateIntegrationError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateIntegrationError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateIntegrationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateIntegrationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3937,22 +3937,22 @@ impl CreateIntegrationResponseError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateIntegrationResponseError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateIntegrationResponseError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateIntegrationResponseError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateIntegrationResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4019,22 +4019,22 @@ impl CreateModelError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateModelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateModelError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateModelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateModelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4101,22 +4101,22 @@ impl CreateRouteError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateRouteError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateRouteError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateRouteError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateRouteError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4181,24 +4181,24 @@ impl CreateRouteResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(CreateRouteResponseError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateRouteResponseError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateRouteResponseError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateRouteResponseError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateRouteResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4265,22 +4265,22 @@ impl CreateStageError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateStageError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateStageError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateStageError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateStageError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4343,12 +4343,12 @@ impl DeleteApiError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteApiError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteApiError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4411,17 +4411,17 @@ impl DeleteApiMappingError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteApiMappingError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteApiMappingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteApiMappingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4483,12 +4483,12 @@ impl DeleteAuthorizerError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteAuthorizerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteAuthorizerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4549,12 +4549,12 @@ impl DeleteDeploymentError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDeploymentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteDeploymentError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4615,12 +4615,12 @@ impl DeleteDomainNameError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteDomainNameError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteDomainNameError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4681,12 +4681,12 @@ impl DeleteIntegrationError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteIntegrationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteIntegrationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4747,12 +4747,12 @@ impl DeleteIntegrationResponseError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteIntegrationResponseError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteIntegrationResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4813,12 +4813,12 @@ impl DeleteModelError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteModelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteModelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4879,12 +4879,12 @@ impl DeleteRouteError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteRouteError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteRouteError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4945,12 +4945,12 @@ impl DeleteRouteResponseError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteRouteResponseError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteRouteResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5011,12 +5011,12 @@ impl DeleteStageError {
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteStageError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteStageError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5075,12 +5075,12 @@ impl GetApiError {
 
             match error_type {
                 "NotFoundException" => {
-                    return RusotoError::Service(GetApiError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetApiError::NotFound(String::from(error_message)))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetApiError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5143,17 +5143,17 @@ impl GetApiMappingError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApiMappingError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetApiMappingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetApiMappingError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5217,17 +5217,17 @@ impl GetApiMappingsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApiMappingsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetApiMappingsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetApiMappingsError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetApiMappingsError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5291,15 +5291,17 @@ impl GetApisError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetApisError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
-                    return RusotoError::Service(GetApisError::NotFound(String::from(error_message)));
+                    return RusotoError::Service(GetApisError::NotFound(String::from(
+                        error_message,
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetApisError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5361,12 +5363,12 @@ impl GetAuthorizerError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetAuthorizerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetAuthorizerError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5429,17 +5431,17 @@ impl GetAuthorizersError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetAuthorizersError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetAuthorizersError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetAuthorizersError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetAuthorizersError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5501,12 +5503,12 @@ impl GetDeploymentError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDeploymentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetDeploymentError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5569,17 +5571,17 @@ impl GetDeploymentsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDeploymentsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDeploymentsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetDeploymentsError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDeploymentsError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5641,12 +5643,12 @@ impl GetDomainNameError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetDomainNameError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetDomainNameError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5709,17 +5711,17 @@ impl GetDomainNamesError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetDomainNamesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetDomainNamesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetDomainNamesError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDomainNamesError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5781,12 +5783,12 @@ impl GetIntegrationError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntegrationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
-                    return RusotoError::Service(GetIntegrationError::TooManyRequests(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetIntegrationError::TooManyRequests(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5847,12 +5849,12 @@ impl GetIntegrationResponseError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntegrationResponseError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetIntegrationResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5915,17 +5917,17 @@ impl GetIntegrationResponsesError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntegrationResponsesError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntegrationResponsesError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetIntegrationResponsesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5989,17 +5991,17 @@ impl GetIntegrationsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetIntegrationsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetIntegrationsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetIntegrationsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6061,12 +6063,12 @@ impl GetModelError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetModelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetModelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6127,12 +6129,12 @@ impl GetModelTemplateError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetModelTemplateError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetModelTemplateError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6195,17 +6197,17 @@ impl GetModelsError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetModelsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetModelsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetModelsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6267,12 +6269,12 @@ impl GetRouteError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetRouteError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetRouteError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6333,12 +6335,12 @@ impl GetRouteResponseError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetRouteResponseError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetRouteResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6401,17 +6403,17 @@ impl GetRouteResponsesError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetRouteResponsesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRouteResponsesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetRouteResponsesError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6475,17 +6477,17 @@ impl GetRoutesError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetRoutesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetRoutesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetRoutesError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6547,12 +6549,12 @@ impl GetStageError {
                 "NotFoundException" => {
                     return RusotoError::Service(GetStageError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetStageError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6615,17 +6617,17 @@ impl GetStagesError {
                 "BadRequestException" => {
                     return RusotoError::Service(GetStagesError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(GetStagesError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(GetStagesError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6691,22 +6693,22 @@ impl UpdateApiError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateApiError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateApiError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateApiError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateApiError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6773,22 +6775,22 @@ impl UpdateApiMappingError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateApiMappingError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateApiMappingError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateApiMappingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateApiMappingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6855,22 +6857,22 @@ impl UpdateAuthorizerError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateAuthorizerError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateAuthorizerError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateAuthorizerError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateAuthorizerError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6937,22 +6939,22 @@ impl UpdateDeploymentError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDeploymentError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateDeploymentError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateDeploymentError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateDeploymentError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7019,22 +7021,22 @@ impl UpdateDomainNameError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateDomainNameError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateDomainNameError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateDomainNameError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateDomainNameError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7101,22 +7103,22 @@ impl UpdateIntegrationError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateIntegrationError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateIntegrationError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateIntegrationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateIntegrationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7183,22 +7185,22 @@ impl UpdateIntegrationResponseError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateIntegrationResponseError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateIntegrationResponseError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateIntegrationResponseError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateIntegrationResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7265,22 +7267,22 @@ impl UpdateModelError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateModelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateModelError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateModelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateModelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7347,22 +7349,22 @@ impl UpdateRouteError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateRouteError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateRouteError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateRouteError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateRouteError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7427,24 +7429,24 @@ impl UpdateRouteResponseError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(UpdateRouteResponseError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateRouteResponseError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateRouteResponseError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateRouteResponseError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateRouteResponseError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7511,22 +7513,22 @@ impl UpdateStageError {
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateStageError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateStageError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateStageError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(UpdateStageError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

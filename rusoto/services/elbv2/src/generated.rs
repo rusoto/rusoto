@@ -5790,19 +5790,21 @@ impl AddListenerCertificatesError {
                             AddListenerCertificatesError::CertificateNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "ListenerNotFound" => {
-                        return RusotoError::Service(AddListenerCertificatesError::ListenerNotFound(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            AddListenerCertificatesError::ListenerNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(
                             AddListenerCertificatesError::TooManyCertificates(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -5857,22 +5859,22 @@ impl AddTagsError {
                     "DuplicateTagKeys" => {
                         return RusotoError::Service(AddTagsError::DuplicateTagKeys(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(AddTagsError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(AddTagsError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyTags" => {
                         return RusotoError::Service(AddTagsError::TooManyTags(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -5950,83 +5952,85 @@ impl CreateListenerError {
                     "CertificateNotFound" => {
                         return RusotoError::Service(CreateListenerError::CertificateNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DuplicateListener" => {
                         return RusotoError::Service(CreateListenerError::DuplicateListener(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "IncompatibleProtocols" => {
                         return RusotoError::Service(CreateListenerError::IncompatibleProtocols(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateListenerError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidLoadBalancerAction" => {
-                        return RusotoError::Service(CreateListenerError::InvalidLoadBalancerAction(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateListenerError::InvalidLoadBalancerAction(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(CreateListenerError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SSLPolicyNotFound" => {
                         return RusotoError::Service(CreateListenerError::SSLPolicyNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupAssociationLimit" => {
                         return RusotoError::Service(
                             CreateListenerError::TargetGroupAssociationLimit(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(CreateListenerError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyActions" => {
                         return RusotoError::Service(CreateListenerError::TooManyActions(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(CreateListenerError::TooManyCertificates(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyListeners" => {
                         return RusotoError::Service(CreateListenerError::TooManyListeners(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return RusotoError::Service(
                             CreateListenerError::TooManyRegistrationsForTargetId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTargets" => {
                         return RusotoError::Service(CreateListenerError::TooManyTargets(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(CreateListenerError::UnsupportedProtocol(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6111,73 +6115,75 @@ impl CreateLoadBalancerError {
                     "AllocationIdNotFound" => {
                         return RusotoError::Service(CreateLoadBalancerError::AllocationIdNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AvailabilityZoneNotSupported" => {
                         return RusotoError::Service(
                             CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DuplicateLoadBalancerName" => {
                         return RusotoError::Service(
                             CreateLoadBalancerError::DuplicateLoadBalancerName(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "DuplicateTagKeys" => {
                         return RusotoError::Service(CreateLoadBalancerError::DuplicateTagKeys(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidScheme" => {
                         return RusotoError::Service(CreateLoadBalancerError::InvalidScheme(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSecurityGroup" => {
                         return RusotoError::Service(CreateLoadBalancerError::InvalidSecurityGroup(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateLoadBalancerError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationNotPermitted" => {
-                        return RusotoError::Service(CreateLoadBalancerError::OperationNotPermitted(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerError::OperationNotPermitted(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(CreateLoadBalancerError::ResourceInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SubnetNotFound" => {
                         return RusotoError::Service(CreateLoadBalancerError::SubnetNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyLoadBalancers" => {
                         return RusotoError::Service(CreateLoadBalancerError::TooManyLoadBalancers(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyTags" => {
                         return RusotoError::Service(CreateLoadBalancerError::TooManyTags(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6260,69 +6266,69 @@ impl CreateRuleError {
                     "IncompatibleProtocols" => {
                         return RusotoError::Service(CreateRuleError::IncompatibleProtocols(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(CreateRuleError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidLoadBalancerAction" => {
                         return RusotoError::Service(CreateRuleError::InvalidLoadBalancerAction(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "ListenerNotFound" => {
                         return RusotoError::Service(CreateRuleError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PriorityInUse" => {
                         return RusotoError::Service(CreateRuleError::PriorityInUse(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TargetGroupAssociationLimit" => {
                         return RusotoError::Service(CreateRuleError::TargetGroupAssociationLimit(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(CreateRuleError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyActions" => {
                         return RusotoError::Service(CreateRuleError::TooManyActions(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return RusotoError::Service(
                             CreateRuleError::TooManyRegistrationsForTargetId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyRules" => {
                         return RusotoError::Service(CreateRuleError::TooManyRules(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TooManyTargetGroups" => {
                         return RusotoError::Service(CreateRuleError::TooManyTargetGroups(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyTargets" => {
                         return RusotoError::Service(CreateRuleError::TooManyTargets(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(CreateRuleError::UnsupportedProtocol(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6387,19 +6393,19 @@ impl CreateTargetGroupError {
                             CreateTargetGroupError::DuplicateTargetGroupName(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             CreateTargetGroupError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTargetGroups" => {
                         return RusotoError::Service(CreateTargetGroupError::TooManyTargetGroups(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6448,7 +6454,7 @@ impl DeleteListenerError {
                     "ListenerNotFound" => {
                         return RusotoError::Service(DeleteListenerError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6499,17 +6505,19 @@ impl DeleteLoadBalancerError {
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(DeleteLoadBalancerError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationNotPermitted" => {
-                        return RusotoError::Service(DeleteLoadBalancerError::OperationNotPermitted(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DeleteLoadBalancerError::OperationNotPermitted(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(DeleteLoadBalancerError::ResourceInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6560,12 +6568,12 @@ impl DeleteRuleError {
                     "OperationNotPermitted" => {
                         return RusotoError::Service(DeleteRuleError::OperationNotPermitted(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleNotFound" => {
                         return RusotoError::Service(DeleteRuleError::RuleNotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -6613,7 +6621,7 @@ impl DeleteTargetGroupError {
                     "ResourceInUse" => {
                         return RusotoError::Service(DeleteTargetGroupError::ResourceInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6662,12 +6670,12 @@ impl DeregisterTargetsError {
                     "InvalidTarget" => {
                         return RusotoError::Service(DeregisterTargetsError::InvalidTarget(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(DeregisterTargetsError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6756,7 +6764,7 @@ impl DescribeListenerCertificatesError {
                             DescribeListenerCertificatesError::ListenerNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6807,17 +6815,17 @@ impl DescribeListenersError {
                     "ListenerNotFound" => {
                         return RusotoError::Service(DescribeListenersError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(DescribeListenersError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(DescribeListenersError::UnsupportedProtocol(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -6870,7 +6878,7 @@ impl DescribeLoadBalancerAttributesError {
                             DescribeLoadBalancerAttributesError::LoadBalancerNotFound(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6919,7 +6927,7 @@ impl DescribeLoadBalancersError {
                             DescribeLoadBalancersError::LoadBalancerNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -6970,17 +6978,17 @@ impl DescribeRulesError {
                     "ListenerNotFound" => {
                         return RusotoError::Service(DescribeRulesError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleNotFound" => {
-                        return RusotoError::Service(DescribeRulesError::RuleNotFound(String::from(
-                            parsed_error.message,
-                        )));
+                        return RusotoError::Service(DescribeRulesError::RuleNotFound(
+                            String::from(parsed_error.message),
+                        ))
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(DescribeRulesError::UnsupportedProtocol(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7029,7 +7037,7 @@ impl DescribeSSLPoliciesError {
                     "SSLPolicyNotFound" => {
                         return RusotoError::Service(DescribeSSLPoliciesError::SSLPolicyNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7082,22 +7090,22 @@ impl DescribeTagsError {
                     "ListenerNotFound" => {
                         return RusotoError::Service(DescribeTagsError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(DescribeTagsError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleNotFound" => {
                         return RusotoError::Service(DescribeTagsError::RuleNotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(DescribeTagsError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7151,7 +7159,7 @@ impl DescribeTargetGroupAttributesError {
                             DescribeTargetGroupAttributesError::TargetGroupNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7202,12 +7210,14 @@ impl DescribeTargetGroupsError {
                             DescribeTargetGroupsError::LoadBalancerNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TargetGroupNotFound" => {
-                        return RusotoError::Service(DescribeTargetGroupsError::TargetGroupNotFound(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DescribeTargetGroupsError::TargetGroupNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -7259,17 +7269,19 @@ impl DescribeTargetHealthError {
                     "HealthUnavailable" => {
                         return RusotoError::Service(DescribeTargetHealthError::HealthUnavailable(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidTarget" => {
                         return RusotoError::Service(DescribeTargetHealthError::InvalidTarget(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupNotFound" => {
-                        return RusotoError::Service(DescribeTargetHealthError::TargetGroupNotFound(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            DescribeTargetHealthError::TargetGroupNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     _ => {}
                 }
@@ -7346,83 +7358,85 @@ impl ModifyListenerError {
                     "CertificateNotFound" => {
                         return RusotoError::Service(ModifyListenerError::CertificateNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "DuplicateListener" => {
                         return RusotoError::Service(ModifyListenerError::DuplicateListener(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "IncompatibleProtocols" => {
                         return RusotoError::Service(ModifyListenerError::IncompatibleProtocols(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(
                             ModifyListenerError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidLoadBalancerAction" => {
-                        return RusotoError::Service(ModifyListenerError::InvalidLoadBalancerAction(
-                            String::from(parsed_error.message),
-                        ));
+                        return RusotoError::Service(
+                            ModifyListenerError::InvalidLoadBalancerAction(String::from(
+                                parsed_error.message,
+                            )),
+                        )
                     }
                     "ListenerNotFound" => {
                         return RusotoError::Service(ModifyListenerError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SSLPolicyNotFound" => {
                         return RusotoError::Service(ModifyListenerError::SSLPolicyNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupAssociationLimit" => {
                         return RusotoError::Service(
                             ModifyListenerError::TargetGroupAssociationLimit(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(ModifyListenerError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyActions" => {
                         return RusotoError::Service(ModifyListenerError::TooManyActions(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(ModifyListenerError::TooManyCertificates(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyListeners" => {
                         return RusotoError::Service(ModifyListenerError::TooManyListeners(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return RusotoError::Service(
                             ModifyListenerError::TooManyRegistrationsForTargetId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTargets" => {
                         return RusotoError::Service(ModifyListenerError::TooManyTargets(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(ModifyListenerError::UnsupportedProtocol(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7489,14 +7503,14 @@ impl ModifyLoadBalancerAttributesError {
                             ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(
                             ModifyLoadBalancerAttributesError::LoadBalancerNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7562,54 +7576,54 @@ impl ModifyRuleError {
                     "IncompatibleProtocols" => {
                         return RusotoError::Service(ModifyRuleError::IncompatibleProtocols(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidLoadBalancerAction" => {
                         return RusotoError::Service(ModifyRuleError::InvalidLoadBalancerAction(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "OperationNotPermitted" => {
                         return RusotoError::Service(ModifyRuleError::OperationNotPermitted(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleNotFound" => {
                         return RusotoError::Service(ModifyRuleError::RuleNotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TargetGroupAssociationLimit" => {
                         return RusotoError::Service(ModifyRuleError::TargetGroupAssociationLimit(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(ModifyRuleError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyActions" => {
                         return RusotoError::Service(ModifyRuleError::TooManyActions(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return RusotoError::Service(
                             ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTargets" => {
                         return RusotoError::Service(ModifyRuleError::TooManyTargets(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "UnsupportedProtocol" => {
                         return RusotoError::Service(ModifyRuleError::UnsupportedProtocol(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7669,12 +7683,12 @@ impl ModifyTargetGroupError {
                             ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(ModifyTargetGroupError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7728,14 +7742,14 @@ impl ModifyTargetGroupAttributesError {
                             ModifyTargetGroupAttributesError::InvalidConfigurationRequest(
                                 String::from(parsed_error.message),
                             ),
-                        );
+                        )
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyTargetGroupAttributesError::TargetGroupNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7789,24 +7803,24 @@ impl RegisterTargetsError {
                     "InvalidTarget" => {
                         return RusotoError::Service(RegisterTargetsError::InvalidTarget(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(RegisterTargetsError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyRegistrationsForTargetId" => {
                         return RusotoError::Service(
                             RegisterTargetsError::TooManyRegistrationsForTargetId(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "TooManyTargets" => {
                         return RusotoError::Service(RegisterTargetsError::TooManyTargets(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -7862,14 +7876,14 @@ impl RemoveListenerCertificatesError {
                             RemoveListenerCertificatesError::ListenerNotFound(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "OperationNotPermitted" => {
                         return RusotoError::Service(
                             RemoveListenerCertificatesError::OperationNotPermitted(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     _ => {}
                 }
@@ -7925,27 +7939,27 @@ impl RemoveTagsError {
                     "ListenerNotFound" => {
                         return RusotoError::Service(RemoveTagsError::ListenerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(RemoveTagsError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleNotFound" => {
                         return RusotoError::Service(RemoveTagsError::RuleNotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "TargetGroupNotFound" => {
                         return RusotoError::Service(RemoveTagsError::TargetGroupNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "TooManyTags" => {
                         return RusotoError::Service(RemoveTagsError::TooManyTags(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -8002,17 +8016,17 @@ impl SetIpAddressTypeError {
                             SetIpAddressTypeError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(SetIpAddressTypeError::InvalidSubnet(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(SetIpAddressTypeError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8065,17 +8079,17 @@ impl SetRulePrioritiesError {
                     "OperationNotPermitted" => {
                         return RusotoError::Service(SetRulePrioritiesError::OperationNotPermitted(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "PriorityInUse" => {
                         return RusotoError::Service(SetRulePrioritiesError::PriorityInUse(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "RuleNotFound" => {
                         return RusotoError::Service(SetRulePrioritiesError::RuleNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8130,17 +8144,17 @@ impl SetSecurityGroupsError {
                             SetSecurityGroupsError::InvalidConfigurationRequest(String::from(
                                 parsed_error.message,
                             )),
-                        );
+                        )
                     }
                     "InvalidSecurityGroup" => {
                         return RusotoError::Service(SetSecurityGroupsError::InvalidSecurityGroup(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(SetSecurityGroupsError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     _ => {}
                 }
@@ -8199,32 +8213,32 @@ impl SetSubnetsError {
                     "AllocationIdNotFound" => {
                         return RusotoError::Service(SetSubnetsError::AllocationIdNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "AvailabilityZoneNotSupported" => {
                         return RusotoError::Service(SetSubnetsError::AvailabilityZoneNotSupported(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidConfigurationRequest" => {
                         return RusotoError::Service(SetSubnetsError::InvalidConfigurationRequest(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(SetSubnetsError::InvalidSubnet(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     "LoadBalancerNotFound" => {
                         return RusotoError::Service(SetSubnetsError::LoadBalancerNotFound(
                             String::from(parsed_error.message),
-                        ));
+                        ))
                     }
                     "SubnetNotFound" => {
                         return RusotoError::Service(SetSubnetsError::SubnetNotFound(String::from(
                             parsed_error.message,
-                        )));
+                        )))
                     }
                     _ => {}
                 }
@@ -9086,11 +9100,9 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeAccountLimitsError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountLimitsError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {
@@ -9292,11 +9304,9 @@ impl Elb for ElbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if !response.status.is_success() {
-                return Box::new(
-                    response.buffer().from_err().and_then(|response| {
-                        Err(DescribeLoadBalancersError::from_response(response))
-                    }),
-                );
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeLoadBalancersError::from_response(response))
+                }));
             }
 
             Box::new(response.buffer().from_err().and_then(move |response| {

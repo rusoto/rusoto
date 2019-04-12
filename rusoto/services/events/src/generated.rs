@@ -691,17 +691,17 @@ impl DeleteRuleError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteRuleError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(DeleteRuleError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ManagedRuleException" => {
                     return RusotoError::Service(DeleteRuleError::ManagedRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -749,12 +749,12 @@ impl DescribeEventBusError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeEventBusError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeEventBusError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -801,12 +801,12 @@ impl DescribeRuleError {
                 "InternalException" => {
                     return RusotoError::Service(DescribeRuleError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeRuleError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -857,22 +857,22 @@ impl DisableRuleError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DisableRuleError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(DisableRuleError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ManagedRuleException" => {
                     return RusotoError::Service(DisableRuleError::ManagedRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisableRuleError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -925,22 +925,22 @@ impl EnableRuleError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(EnableRuleError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(EnableRuleError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ManagedRuleException" => {
                     return RusotoError::Service(EnableRuleError::ManagedRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(EnableRuleError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -985,9 +985,9 @@ impl ListRuleNamesByTargetError {
 
             match *error_type {
                 "InternalException" => {
-                    return RusotoError::Service(ListRuleNamesByTargetError::Internal(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListRuleNamesByTargetError::Internal(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1031,7 +1031,7 @@ impl ListRulesError {
                 "InternalException" => {
                     return RusotoError::Service(ListRulesError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1077,12 +1077,12 @@ impl ListTargetsByRuleError {
                 "InternalException" => {
                     return RusotoError::Service(ListTargetsByRuleError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTargetsByRuleError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1127,7 +1127,7 @@ impl PutEventsError {
                 "InternalException" => {
                     return RusotoError::Service(PutEventsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1177,22 +1177,22 @@ impl PutPermissionError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutPermissionError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(PutPermissionError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "PolicyLengthExceededException" => {
                     return RusotoError::Service(PutPermissionError::PolicyLengthExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(PutPermissionError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutPermissionError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1245,27 +1245,29 @@ impl PutRuleError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(PutRuleError::ConcurrentModification(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutRuleError::ConcurrentModification(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalException" => {
-                    return RusotoError::Service(PutRuleError::Internal(String::from(error_message)));
+                    return RusotoError::Service(PutRuleError::Internal(String::from(
+                        error_message,
+                    )))
                 }
                 "InvalidEventPatternException" => {
                     return RusotoError::Service(PutRuleError::InvalidEventPattern(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutRuleError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ManagedRuleException" => {
                     return RusotoError::Service(PutRuleError::ManagedRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1321,27 +1323,27 @@ impl PutTargetsError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(PutTargetsError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(PutTargetsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutTargetsError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ManagedRuleException" => {
                     return RusotoError::Service(PutTargetsError::ManagedRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(PutTargetsError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1393,17 +1395,17 @@ impl RemovePermissionError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RemovePermissionError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(RemovePermissionError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemovePermissionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1455,22 +1457,22 @@ impl RemoveTargetsError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(RemoveTargetsError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalException" => {
                     return RusotoError::Service(RemoveTargetsError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ManagedRuleException" => {
                     return RusotoError::Service(RemoveTargetsError::ManagedRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(RemoveTargetsError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(RemoveTargetsError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1519,12 +1521,12 @@ impl TestEventPatternError {
                 "InternalException" => {
                     return RusotoError::Service(TestEventPatternError::Internal(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidEventPatternException" => {
                     return RusotoError::Service(TestEventPatternError::InvalidEventPattern(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

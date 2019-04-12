@@ -3071,42 +3071,42 @@ impl AddFacetToObjectError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AddFacetToObjectError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(AddFacetToObjectError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(AddFacetToObjectError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(AddFacetToObjectError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(AddFacetToObjectError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(AddFacetToObjectError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AddFacetToObjectError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddFacetToObjectError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(AddFacetToObjectError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3183,37 +3183,37 @@ impl ApplySchemaError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ApplySchemaError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ApplySchemaError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ApplySchemaError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAttachmentException" => {
                     return RusotoError::Service(ApplySchemaError::InvalidAttachment(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ApplySchemaError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ApplySchemaError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ApplySchemaError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3295,52 +3295,52 @@ impl AttachObjectError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachObjectError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(AttachObjectError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(AttachObjectError::FacetValidation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(AttachObjectError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(AttachObjectError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAttachmentException" => {
-                    return RusotoError::Service(AttachObjectError::InvalidAttachment(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AttachObjectError::InvalidAttachment(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AttachObjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LinkNameAlreadyInUseException" => {
                     return RusotoError::Service(AttachObjectError::LinkNameAlreadyInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AttachObjectError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(AttachObjectError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AttachObjectError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3421,42 +3421,42 @@ impl AttachPolicyError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachPolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(AttachPolicyError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(AttachPolicyError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(AttachPolicyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AttachPolicyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotPolicyException" => {
                     return RusotoError::Service(AttachPolicyError::NotPolicy(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AttachPolicyError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(AttachPolicyError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AttachPolicyError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3541,57 +3541,57 @@ impl AttachToIndexError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachToIndexError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(AttachToIndexError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IndexedAttributeMissingException" => {
                     return RusotoError::Service(AttachToIndexError::IndexedAttributeMissing(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(AttachToIndexError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(AttachToIndexError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAttachmentException" => {
                     return RusotoError::Service(AttachToIndexError::InvalidAttachment(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AttachToIndexError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LinkNameAlreadyInUseException" => {
                     return RusotoError::Service(AttachToIndexError::LinkNameAlreadyInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotIndexException" => {
                     return RusotoError::Service(AttachToIndexError::NotIndex(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(AttachToIndexError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(AttachToIndexError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(AttachToIndexError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3675,47 +3675,47 @@ impl AttachTypedLinkError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(AttachTypedLinkError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(AttachTypedLinkError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(AttachTypedLinkError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(AttachTypedLinkError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(AttachTypedLinkError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAttachmentException" => {
                     return RusotoError::Service(AttachTypedLinkError::InvalidAttachment(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AttachTypedLinkError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AttachTypedLinkError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(AttachTypedLinkError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3791,32 +3791,32 @@ impl BatchReadError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchReadError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(BatchReadError::DirectoryNotEnabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchReadError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(BatchReadError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(BatchReadError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(BatchReadError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3891,37 +3891,37 @@ impl BatchWriteError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(BatchWriteError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BatchWriteException" => {
                     return RusotoError::Service(BatchWriteError::BatchWrite(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
-                    return RusotoError::Service(BatchWriteError::DirectoryNotEnabled(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(BatchWriteError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(BatchWriteError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(BatchWriteError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(BatchWriteError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(BatchWriteError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3997,37 +3997,37 @@ impl CreateDirectoryError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateDirectoryError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryAlreadyExistsException" => {
                     return RusotoError::Service(CreateDirectoryError::DirectoryAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateDirectoryError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateDirectoryError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateDirectoryError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateDirectoryError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(CreateDirectoryError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4107,47 +4107,47 @@ impl CreateFacetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateFacetError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FacetAlreadyExistsException" => {
-                    return RusotoError::Service(CreateFacetError::FacetAlreadyExists(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateFacetError::FacetAlreadyExists(
+                        String::from(error_message),
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(CreateFacetError::FacetValidation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateFacetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateFacetError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRuleException" => {
                     return RusotoError::Service(CreateFacetError::InvalidRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateFacetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateFacetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(CreateFacetError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4231,52 +4231,52 @@ impl CreateIndexError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateIndexError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(CreateIndexError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(CreateIndexError::FacetValidation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateIndexError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateIndexError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateIndexError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LinkNameAlreadyInUseException" => {
                     return RusotoError::Service(CreateIndexError::LinkNameAlreadyInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateIndexError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(CreateIndexError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnsupportedIndexTypeException" => {
                     return RusotoError::Service(CreateIndexError::UnsupportedIndexType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4361,52 +4361,52 @@ impl CreateObjectError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateObjectError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(CreateObjectError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(CreateObjectError::FacetValidation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateObjectError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateObjectError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateObjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LinkNameAlreadyInUseException" => {
                     return RusotoError::Service(CreateObjectError::LinkNameAlreadyInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateObjectError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(CreateObjectError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateObjectError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "UnsupportedIndexTypeException" => {
                     return RusotoError::Service(CreateObjectError::UnsupportedIndexType(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4483,32 +4483,32 @@ impl CreateSchemaError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateSchemaError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateSchemaError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateSchemaError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateSchemaError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(CreateSchemaError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateSchemaError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "SchemaAlreadyExistsException" => {
                     return RusotoError::Service(CreateSchemaError::SchemaAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4587,47 +4587,47 @@ impl CreateTypedLinkFacetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetAlreadyExistsException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::FacetAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRuleException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::InvalidRule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(CreateTypedLinkFacetError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4707,42 +4707,42 @@ impl DeleteDirectoryError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteDirectoryError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryDeletedException" => {
                     return RusotoError::Service(DeleteDirectoryError::DirectoryDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotDisabledException" => {
                     return RusotoError::Service(DeleteDirectoryError::DirectoryNotDisabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteDirectoryError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteDirectoryError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteDirectoryError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDirectoryError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(DeleteDirectoryError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4821,42 +4821,42 @@ impl DeleteFacetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteFacetError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FacetInUseException" => {
                     return RusotoError::Service(DeleteFacetError::FacetInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(DeleteFacetError::FacetNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteFacetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteFacetError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteFacetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteFacetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(DeleteFacetError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4935,42 +4935,42 @@ impl DeleteObjectError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteObjectError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(DeleteObjectError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteObjectError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteObjectError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteObjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ObjectNotDetachedException" => {
-                    return RusotoError::Service(DeleteObjectError::ObjectNotDetached(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteObjectError::ObjectNotDetached(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteObjectError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(DeleteObjectError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteObjectError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5047,37 +5047,37 @@ impl DeleteSchemaError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSchemaError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteSchemaError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteSchemaError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteSchemaError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteSchemaError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(DeleteSchemaError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteSchemaError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "StillContainsLinksException" => {
                     return RusotoError::Service(DeleteSchemaError::StillContainsLinks(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5153,37 +5153,37 @@ impl DeleteTypedLinkFacetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::FacetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(DeleteTypedLinkFacetError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5263,47 +5263,47 @@ impl DetachFromIndexError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachFromIndexError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(DetachFromIndexError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DetachFromIndexError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DetachFromIndexError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DetachFromIndexError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotIndexException" => {
                     return RusotoError::Service(DetachFromIndexError::NotIndex(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ObjectAlreadyDetachedException" => {
                     return RusotoError::Service(DetachFromIndexError::ObjectAlreadyDetached(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DetachFromIndexError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(DetachFromIndexError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5383,42 +5383,42 @@ impl DetachObjectError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachObjectError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(DetachObjectError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DetachObjectError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DetachObjectError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DetachObjectError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotNodeException" => {
                     return RusotoError::Service(DetachObjectError::NotNode(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DetachObjectError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(DetachObjectError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DetachObjectError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5497,42 +5497,42 @@ impl DetachPolicyError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachPolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(DetachPolicyError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DetachPolicyError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DetachPolicyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DetachPolicyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotPolicyException" => {
                     return RusotoError::Service(DetachPolicyError::NotPolicy(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DetachPolicyError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(DetachPolicyError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DetachPolicyError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5611,42 +5611,42 @@ impl DetachTypedLinkError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DetachTypedLinkError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(DetachTypedLinkError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(DetachTypedLinkError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DetachTypedLinkError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DetachTypedLinkError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(DetachTypedLinkError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DetachTypedLinkError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(DetachTypedLinkError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5723,37 +5723,37 @@ impl DisableDirectoryError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DisableDirectoryError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryDeletedException" => {
                     return RusotoError::Service(DisableDirectoryError::DirectoryDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(DisableDirectoryError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(DisableDirectoryError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
-                    return RusotoError::Service(DisableDirectoryError::LimitExceeded(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DisableDirectoryError::LimitExceeded(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisableDirectoryError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(DisableDirectoryError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5829,37 +5829,37 @@ impl EnableDirectoryError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(EnableDirectoryError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryDeletedException" => {
                     return RusotoError::Service(EnableDirectoryError::DirectoryDeleted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(EnableDirectoryError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(EnableDirectoryError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(EnableDirectoryError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(EnableDirectoryError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(EnableDirectoryError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5933,32 +5933,32 @@ impl GetAppliedSchemaVersionError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetAppliedSchemaVersionError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetAppliedSchemaVersionError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetAppliedSchemaVersionError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetAppliedSchemaVersionError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetAppliedSchemaVersionError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(GetAppliedSchemaVersionError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6029,27 +6029,27 @@ impl GetDirectoryError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetDirectoryError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetDirectoryError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetDirectoryError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetDirectoryError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(GetDirectoryError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetDirectoryError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6123,37 +6123,37 @@ impl GetFacetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetFacetError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(GetFacetError::FacetNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetFacetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetFacetError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetFacetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetFacetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(GetFacetError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6229,44 +6229,44 @@ impl GetLinkAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(GetLinkAttributesError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetLinkAttributesError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(GetLinkAttributesError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(GetLinkAttributesError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetLinkAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetLinkAttributesError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetLinkAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetLinkAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(GetLinkAttributesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6345,42 +6345,42 @@ impl GetObjectAttributesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetObjectAttributesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(GetObjectAttributesError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(GetObjectAttributesError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetObjectAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(GetObjectAttributesError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(GetObjectAttributesError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetObjectAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetObjectAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(GetObjectAttributesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6457,37 +6457,37 @@ impl GetObjectInformationError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetObjectInformationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(GetObjectInformationError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetObjectInformationError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetObjectInformationError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetObjectInformationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetObjectInformationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(GetObjectInformationError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6561,32 +6561,32 @@ impl GetSchemaAsJsonError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetSchemaAsJsonError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(GetSchemaAsJsonError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetSchemaAsJsonError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetSchemaAsJsonError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetSchemaAsJsonError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(GetSchemaAsJsonError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6665,48 +6665,50 @@ impl GetTypedLinkFacetInformationError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(GetTypedLinkFacetInformationError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(GetTypedLinkFacetInformationError::FacetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(GetTypedLinkFacetInformationError::InternalService(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        GetTypedLinkFacetInformationError::InternalService(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(GetTypedLinkFacetInformationError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         GetTypedLinkFacetInformationError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(GetTypedLinkFacetInformationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         GetTypedLinkFacetInformationError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(
                         GetTypedLinkFacetInformationError::RetryableConflict(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6783,37 +6785,37 @@ impl ListAppliedSchemaArnsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListAppliedSchemaArnsError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6889,37 +6891,37 @@ impl ListAttachedIndicesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListAttachedIndicesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListAttachedIndicesError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListAttachedIndicesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListAttachedIndicesError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListAttachedIndicesError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListAttachedIndicesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListAttachedIndicesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListAttachedIndicesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6995,37 +6997,37 @@ impl ListDevelopmentSchemaArnsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListDevelopmentSchemaArnsError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7099,32 +7101,32 @@ impl ListDirectoriesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListDirectoriesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListDirectoriesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListDirectoriesError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListDirectoriesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListDirectoriesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListDirectoriesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7201,42 +7203,42 @@ impl ListFacetAttributesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFacetAttributesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(ListFacetAttributesError::FacetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListFacetAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListFacetAttributesError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListFacetAttributesError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListFacetAttributesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListFacetAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListFacetAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListFacetAttributesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7313,37 +7315,37 @@ impl ListFacetNamesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListFacetNamesError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(ListFacetNamesError::InternalService(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListFacetNamesError::InternalService(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListFacetNamesError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListFacetNamesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListFacetNamesError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListFacetNamesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListFacetNamesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7423,47 +7425,47 @@ impl ListIncomingTypedLinksError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListIncomingTypedLinksError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7547,52 +7549,52 @@ impl ListIndexError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListIndexError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListIndexError::DirectoryNotEnabled(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(ListIndexError::FacetValidation(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListIndexError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListIndexError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListIndexError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListIndexError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotIndexException" => {
                     return RusotoError::Service(ListIndexError::NotIndex(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListIndexError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListIndexError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7675,47 +7677,47 @@ impl ListObjectAttributesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectAttributesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListObjectAttributesError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(ListObjectAttributesError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListObjectAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListObjectAttributesError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListObjectAttributesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListObjectAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListObjectAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListObjectAttributesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7797,47 +7799,47 @@ impl ListObjectChildrenError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectChildrenError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListObjectChildrenError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListObjectChildrenError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListObjectChildrenError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListObjectChildrenError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListObjectChildrenError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotNodeException" => {
                     return RusotoError::Service(ListObjectChildrenError::NotNode(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListObjectChildrenError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListObjectChildrenError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7917,42 +7919,42 @@ impl ListObjectParentPathsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectParentPathsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListObjectParentPathsError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListObjectParentPathsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListObjectParentPathsError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListObjectParentPathsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListObjectParentPathsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListObjectParentPathsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListObjectParentPathsError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8031,49 +8033,49 @@ impl ListObjectParentsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(ListObjectParentsError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListObjectParentsError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "CannotListParentOfRootException" => {
                     return RusotoError::Service(ListObjectParentsError::CannotListParentOfRoot(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListObjectParentsError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListObjectParentsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListObjectParentsError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListObjectParentsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListObjectParentsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListObjectParentsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListObjectParentsError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8153,42 +8155,42 @@ impl ListObjectPoliciesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListObjectPoliciesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListObjectPoliciesError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListObjectPoliciesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListObjectPoliciesError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListObjectPoliciesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListObjectPoliciesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListObjectPoliciesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListObjectPoliciesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8269,47 +8271,47 @@ impl ListOutgoingTypedLinksError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListOutgoingTypedLinksError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8391,47 +8393,47 @@ impl ListPolicyAttachmentsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotPolicyException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::NotPolicy(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListPolicyAttachmentsError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8509,37 +8511,37 @@ impl ListPublishedSchemaArnsError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListPublishedSchemaArnsError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8615,37 +8617,37 @@ impl ListTagsForResourceError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTagsForResourceError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
-                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidTaggingRequestException" => {
                     return RusotoError::Service(ListTagsForResourceError::InvalidTaggingRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTagsForResourceError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListTagsForResourceError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8725,48 +8727,50 @@ impl ListTypedLinkFacetAttributesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTypedLinkFacetAttributesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(ListTypedLinkFacetAttributesError::FacetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
-                    return RusotoError::Service(ListTypedLinkFacetAttributesError::InternalService(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        ListTypedLinkFacetAttributesError::InternalService(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListTypedLinkFacetAttributesError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         ListTypedLinkFacetAttributesError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTypedLinkFacetAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         ListTypedLinkFacetAttributesError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(
                         ListTypedLinkFacetAttributesError::RetryableConflict(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8843,37 +8847,37 @@ impl ListTypedLinkFacetNamesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(ListTypedLinkFacetNamesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -8951,42 +8955,42 @@ impl LookupPolicyError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(LookupPolicyError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(LookupPolicyError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(LookupPolicyError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(LookupPolicyError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(LookupPolicyError::InvalidNextToken(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(LookupPolicyError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(LookupPolicyError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(LookupPolicyError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(LookupPolicyError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9063,37 +9067,37 @@ impl PublishSchemaError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(PublishSchemaError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(PublishSchemaError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(PublishSchemaError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PublishSchemaError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(PublishSchemaError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PublishSchemaError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(PublishSchemaError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "SchemaAlreadyPublishedException" => {
                     return RusotoError::Service(PublishSchemaError::SchemaAlreadyPublished(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9167,39 +9171,39 @@ impl PutSchemaFromJsonError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return RusotoError::Service(PutSchemaFromJsonError::AccessDenied(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(PutSchemaFromJsonError::AccessDenied(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(PutSchemaFromJsonError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(PutSchemaFromJsonError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidRuleException" => {
                     return RusotoError::Service(PutSchemaFromJsonError::InvalidRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidSchemaDocException" => {
                     return RusotoError::Service(PutSchemaFromJsonError::InvalidSchemaDoc(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(PutSchemaFromJsonError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(PutSchemaFromJsonError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9277,42 +9281,42 @@ impl RemoveFacetFromObjectError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(RemoveFacetFromObjectError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9389,37 +9393,37 @@ impl TagResourceError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(TagResourceError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(TagResourceError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(TagResourceError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTaggingRequestException" => {
                     return RusotoError::Service(TagResourceError::InvalidTaggingRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(TagResourceError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9495,37 +9499,37 @@ impl UntagResourceError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UntagResourceError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UntagResourceError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UntagResourceError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidTaggingRequestException" => {
                     return RusotoError::Service(UntagResourceError::InvalidTaggingRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UntagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(UntagResourceError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9605,47 +9609,47 @@ impl UpdateFacetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateFacetError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(UpdateFacetError::FacetNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateFacetError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateFacetError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidFacetUpdateException" => {
-                    return RusotoError::Service(UpdateFacetError::InvalidFacetUpdate(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateFacetError::InvalidFacetUpdate(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidRuleException" => {
                     return RusotoError::Service(UpdateFacetError::InvalidRule(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateFacetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateFacetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(UpdateFacetError::RetryableConflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9725,42 +9729,42 @@ impl UpdateLinkAttributesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(UpdateLinkAttributesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9841,47 +9845,47 @@ impl UpdateObjectAttributesError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DirectoryNotEnabledException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::DirectoryNotEnabled(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LinkNameAlreadyInUseException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::LinkNameAlreadyInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(UpdateObjectAttributesError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -9957,32 +9961,32 @@ impl UpdateSchemaError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateSchemaError::AccessDenied(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateSchemaError::InternalService(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateSchemaError::InvalidArn(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateSchemaError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateSchemaError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "RetryableConflictException" => {
-                    return RusotoError::Service(UpdateSchemaError::RetryableConflict(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateSchemaError::RetryableConflict(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10063,52 +10067,52 @@ impl UpdateTypedLinkFacetError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetNotFoundException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::FacetNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "FacetValidationException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::FacetValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidFacetUpdateException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::InvalidFacetUpdate(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRuleException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::InvalidRule(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(UpdateTypedLinkFacetError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10187,37 +10191,37 @@ impl UpgradeAppliedSchemaError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleSchemaException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::IncompatibleSchema(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAttachmentException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::InvalidAttachment(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(UpgradeAppliedSchemaError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -10295,42 +10299,42 @@ impl UpgradePublishedSchemaError {
                 "AccessDeniedException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::AccessDenied(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleSchemaException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::IncompatibleSchema(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServiceException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::InternalService(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArnException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::InvalidArn(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAttachmentException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::InvalidAttachment(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "RetryableConflictException" => {
                     return RusotoError::Service(UpgradePublishedSchemaError::RetryableConflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

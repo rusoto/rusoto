@@ -600,22 +600,22 @@ impl CreateBudgetError {
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateBudgetError::CreationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateRecordException" => {
                     return RusotoError::Service(CreateBudgetError::DuplicateRecord(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateBudgetError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateBudgetError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -670,27 +670,27 @@ impl CreateNotificationError {
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateNotificationError::CreationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateRecordException" => {
                     return RusotoError::Service(CreateNotificationError::DuplicateRecord(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(CreateNotificationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateNotificationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateNotificationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -746,27 +746,27 @@ impl CreateSubscriberError {
                 "CreationLimitExceededException" => {
                     return RusotoError::Service(CreateSubscriberError::CreationLimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "DuplicateRecordException" => {
                     return RusotoError::Service(CreateSubscriberError::DuplicateRecord(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(CreateSubscriberError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateSubscriberError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(CreateSubscriberError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateSubscriberError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -818,17 +818,17 @@ impl DeleteBudgetError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteBudgetError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteBudgetError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteBudgetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -878,17 +878,17 @@ impl DeleteNotificationError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DeleteNotificationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteNotificationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteNotificationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -936,19 +936,19 @@ impl DeleteSubscriberError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return RusotoError::Service(DeleteSubscriberError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteSubscriberError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DeleteSubscriberError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteSubscriberError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -998,17 +998,17 @@ impl DescribeBudgetError {
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeBudgetError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeBudgetError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeBudgetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1066,33 +1066,33 @@ impl DescribeBudgetPerformanceHistoryError {
                         DescribeBudgetPerformanceHistoryError::ExpiredNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(
                         DescribeBudgetPerformanceHistoryError::InternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeBudgetPerformanceHistoryError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DescribeBudgetPerformanceHistoryError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeBudgetPerformanceHistoryError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1148,27 +1148,27 @@ impl DescribeBudgetsError {
                 "ExpiredNextTokenException" => {
                     return RusotoError::Service(DescribeBudgetsError::ExpiredNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(DescribeBudgetsError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(DescribeBudgetsError::InvalidNextToken(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(DescribeBudgetsError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeBudgetsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1228,31 +1228,33 @@ impl DescribeNotificationsForBudgetError {
                         DescribeNotificationsForBudgetError::ExpiredNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(DescribeNotificationsForBudgetError::InternalError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeNotificationsForBudgetError::InternalError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DescribeNotificationsForBudgetError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeNotificationsForBudgetError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1312,33 +1314,33 @@ impl DescribeSubscribersForNotificationError {
                         DescribeSubscribersForNotificationError::ExpiredNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(
                         DescribeSubscribersForNotificationError::InternalError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeSubscribersForNotificationError::InvalidNextToken(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DescribeSubscribersForNotificationError::InvalidParameter(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeSubscribersForNotificationError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1390,17 +1392,17 @@ impl UpdateBudgetError {
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateBudgetError::InternalError(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateBudgetError::InvalidParameter(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateBudgetError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1452,22 +1454,22 @@ impl UpdateNotificationError {
                 "DuplicateRecordException" => {
                     return RusotoError::Service(UpdateNotificationError::DuplicateRecord(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
                     return RusotoError::Service(UpdateNotificationError::InternalError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateNotificationError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateNotificationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1520,22 +1522,22 @@ impl UpdateSubscriberError {
                 "DuplicateRecordException" => {
                     return RusotoError::Service(UpdateSubscriberError::DuplicateRecord(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalErrorException" => {
-                    return RusotoError::Service(UpdateSubscriberError::InternalError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UpdateSubscriberError::InternalError(
+                        String::from(error_message),
+                    ))
                 }
                 "InvalidParameterException" => {
                     return RusotoError::Service(UpdateSubscriberError::InvalidParameter(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateSubscriberError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

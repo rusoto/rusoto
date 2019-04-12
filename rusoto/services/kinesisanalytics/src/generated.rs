@@ -1231,35 +1231,35 @@ impl AddApplicationCloudWatchLoggingOptionError {
                         AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
                         AddApplicationCloudWatchLoggingOptionError::InvalidArgument(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(
                         AddApplicationCloudWatchLoggingOptionError::ResourceInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1317,32 +1317,32 @@ impl AddApplicationInputError {
                 "CodeValidationException" => {
                     return RusotoError::Service(AddApplicationInputError::CodeValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AddApplicationInputError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(AddApplicationInputError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(AddApplicationInputError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddApplicationInputError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(AddApplicationInputError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1403,35 +1403,35 @@ impl AddApplicationInputProcessingConfigurationError {
                         AddApplicationInputProcessingConfigurationError::ConcurrentModification(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
                         AddApplicationInputProcessingConfigurationError::InvalidArgument(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(
                         AddApplicationInputProcessingConfigurationError::ResourceInUse(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AddApplicationInputProcessingConfigurationError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         AddApplicationInputProcessingConfigurationError::UnsupportedOperation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1491,27 +1491,27 @@ impl AddApplicationOutputError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AddApplicationOutputError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(AddApplicationOutputError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(AddApplicationOutputError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AddApplicationOutputError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(AddApplicationOutputError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1571,35 +1571,35 @@ impl AddApplicationReferenceDataSourceError {
                         AddApplicationReferenceDataSourceError::ConcurrentModification(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
                         AddApplicationReferenceDataSourceError::InvalidArgument(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(
                         AddApplicationReferenceDataSourceError::ResourceInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         AddApplicationReferenceDataSourceError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         AddApplicationReferenceDataSourceError::UnsupportedOperation(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1653,22 +1653,22 @@ impl CreateApplicationError {
                 "CodeValidationException" => {
                     return RusotoError::Service(CreateApplicationError::CodeValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(CreateApplicationError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateApplicationError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateApplicationError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1721,22 +1721,22 @@ impl DeleteApplicationError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteApplicationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteApplicationError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteApplicationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DeleteApplicationError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1795,35 +1795,35 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
                         DeleteApplicationCloudWatchLoggingOptionError::ConcurrentModification(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
                         DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(
                         DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1885,35 +1885,35 @@ impl DeleteApplicationInputProcessingConfigurationError {
                         DeleteApplicationInputProcessingConfigurationError::ConcurrentModification(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
                         DeleteApplicationInputProcessingConfigurationError::InvalidArgument(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(
                         DeleteApplicationInputProcessingConfigurationError::ResourceInUse(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1977,27 +1977,29 @@ impl DeleteApplicationOutputError {
                         DeleteApplicationOutputError::ConcurrentModification(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DeleteApplicationOutputError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteApplicationOutputError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteApplicationOutputError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
-                    return RusotoError::Service(DeleteApplicationOutputError::UnsupportedOperation(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteApplicationOutputError::UnsupportedOperation(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2057,35 +2059,35 @@ impl DeleteApplicationReferenceDataSourceError {
                         DeleteApplicationReferenceDataSourceError::ConcurrentModification(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(
                         DeleteApplicationReferenceDataSourceError::InvalidArgument(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(
                         DeleteApplicationReferenceDataSourceError::ResourceInUse(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         DeleteApplicationReferenceDataSourceError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(
                         DeleteApplicationReferenceDataSourceError::UnsupportedOperation(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2135,12 +2137,12 @@ impl DescribeApplicationError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeApplicationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(DescribeApplicationError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2191,24 +2193,24 @@ impl DiscoverInputSchemaError {
                 "InvalidArgumentException" => {
                     return RusotoError::Service(DiscoverInputSchemaError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceProvisionedThroughputExceededException" => {
                     return RusotoError::Service(
                         DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DiscoverInputSchemaError::ServiceUnavailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnableToDetectSchemaException" => {
                     return RusotoError::Service(DiscoverInputSchemaError::UnableToDetectSchema(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2299,27 +2301,27 @@ impl StartApplicationError {
                         StartApplicationError::InvalidApplicationConfiguration(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(StartApplicationError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
-                    return RusotoError::Service(StartApplicationError::ResourceInUse(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(StartApplicationError::ResourceInUse(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartApplicationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(StartApplicationError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2371,17 +2373,17 @@ impl StopApplicationError {
                 "ResourceInUseException" => {
                     return RusotoError::Service(StopApplicationError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopApplicationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(StopApplicationError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2437,32 +2439,32 @@ impl UpdateApplicationError {
                 "CodeValidationException" => {
                     return RusotoError::Service(UpdateApplicationError::CodeValidation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateApplicationError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidArgumentException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidArgument(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateApplicationError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateApplicationError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnsupportedOperationException" => {
                     return RusotoError::Service(UpdateApplicationError::UnsupportedOperation(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

@@ -4669,44 +4669,44 @@ impl BatchUpdateScheduleError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::BadGateway(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(BatchUpdateScheduleError::BadGateway(
+                        String::from(error_message),
+                    ))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(BatchUpdateScheduleError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(BatchUpdateScheduleError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(BatchUpdateScheduleError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4785,42 +4785,42 @@ impl CreateChannelError {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateChannelError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(CreateChannelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CreateChannelError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(CreateChannelError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateChannelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(CreateChannelError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4895,32 +4895,32 @@ impl CreateInputError {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateInputError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(CreateInputError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateInputError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(CreateInputError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(CreateInputError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateInputError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4993,32 +4993,34 @@ impl CreateInputSecurityGroupError {
                 "BadGatewayException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::BadGateway(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(CreateInputSecurityGroupError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        CreateInputSecurityGroupError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateInputSecurityGroupError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5087,22 +5089,22 @@ impl CreateTagsError {
                 "BadRequestException" => {
                     return RusotoError::Service(CreateTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(CreateTagsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(CreateTagsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateTagsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(CreateTagsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5177,42 +5179,42 @@ impl DeleteChannelError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteChannelError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteChannelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteChannelError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DeleteChannelError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteChannelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5291,42 +5293,42 @@ impl DeleteInputError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteInputError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteInputError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteInputError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteInputError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DeleteInputError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteInputError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteInputError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteInputError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5403,37 +5405,39 @@ impl DeleteInputSecurityGroupError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::BadGateway(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DeleteInputSecurityGroupError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DeleteInputSecurityGroupError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteInputSecurityGroupError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5511,42 +5515,42 @@ impl DeleteReservationError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DeleteReservationError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteReservationError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(DeleteReservationError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteReservationError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DeleteReservationError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DeleteReservationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteReservationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DeleteReservationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5617,22 +5621,22 @@ impl DeleteTagsError {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteTagsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteTagsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(DeleteTagsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DeleteTagsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DeleteTagsError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5705,37 +5709,37 @@ impl DescribeChannelError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeChannelError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeChannelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
-                    return RusotoError::Service(DescribeChannelError::GatewayTimeout(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeChannelError::GatewayTimeout(
+                        String::from(error_message),
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeChannelError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5811,37 +5815,37 @@ impl DescribeInputError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeInputError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeInputError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeInputError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DescribeInputError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeInputError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeInputError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeInputError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -5919,39 +5923,39 @@ impl DescribeInputSecurityGroupError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::BadGateway(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(
                         DescribeInputSecurityGroupError::InternalServerError(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeInputSecurityGroupError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6027,37 +6031,37 @@ impl DescribeOfferingError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeOfferingError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeOfferingError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeOfferingError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DescribeOfferingError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeOfferingError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeOfferingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeOfferingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6131,39 +6135,39 @@ impl DescribeReservationError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return RusotoError::Service(DescribeReservationError::BadGateway(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeReservationError::BadGateway(
+                        String::from(error_message),
+                    ))
                 }
                 "BadRequestException" => {
-                    return RusotoError::Service(DescribeReservationError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeReservationError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeReservationError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DescribeReservationError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeReservationError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeReservationError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeReservationError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6239,37 +6243,37 @@ impl DescribeScheduleError {
                 "BadGatewayException" => {
                     return RusotoError::Service(DescribeScheduleError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(DescribeScheduleError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DescribeScheduleError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(DescribeScheduleError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(DescribeScheduleError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(DescribeScheduleError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(DescribeScheduleError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6343,32 +6347,32 @@ impl ListChannelsError {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListChannelsError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(ListChannelsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListChannelsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(ListChannelsError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListChannelsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListChannelsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6441,32 +6445,32 @@ impl ListInputSecurityGroupsError {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::BadGateway(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListInputSecurityGroupsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6539,32 +6543,32 @@ impl ListInputsError {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListInputsError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(ListInputsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListInputsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(ListInputsError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(ListInputsError::InternalServerError(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListInputsError::InternalServerError(
+                        String::from(error_message),
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListInputsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6637,32 +6641,32 @@ impl ListOfferingsError {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListOfferingsError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(ListOfferingsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListOfferingsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(ListOfferingsError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListOfferingsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListOfferingsError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6735,32 +6739,32 @@ impl ListReservationsError {
                 "BadGatewayException" => {
                     return RusotoError::Service(ListReservationsError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(ListReservationsError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListReservationsError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(ListReservationsError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListReservationsError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListReservationsError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6827,24 +6831,24 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "BadRequestException" => {
-                    return RusotoError::Service(ListTagsForResourceError::BadRequest(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(
+                        String::from(error_message),
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListTagsForResourceError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(ListTagsForResourceError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -6919,42 +6923,42 @@ impl PurchaseOfferingError {
                 "BadGatewayException" => {
                     return RusotoError::Service(PurchaseOfferingError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(PurchaseOfferingError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(PurchaseOfferingError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(PurchaseOfferingError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(PurchaseOfferingError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(PurchaseOfferingError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(PurchaseOfferingError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(PurchaseOfferingError::TooManyRequests(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7033,42 +7037,42 @@ impl StartChannelError {
                 "BadGatewayException" => {
                     return RusotoError::Service(StartChannelError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(StartChannelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(StartChannelError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(StartChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(StartChannelError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(StartChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StartChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartChannelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7147,42 +7151,42 @@ impl StopChannelError {
                 "BadGatewayException" => {
                     return RusotoError::Service(StopChannelError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(StopChannelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(StopChannelError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(StopChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(StopChannelError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(StopChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(StopChannelError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StopChannelError::TooManyRequests(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7259,37 +7263,37 @@ impl UpdateChannelError {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateChannelError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateChannelError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateChannelError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateChannelError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(UpdateChannelError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateChannelError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "UnprocessableEntityException" => {
                     return RusotoError::Service(UpdateChannelError::UnprocessableEntity(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7365,37 +7369,37 @@ impl UpdateInputError {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateInputError::BadGateway(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateInputError::BadRequest(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateInputError::Conflict(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateInputError::Forbidden(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(UpdateInputError::GatewayTimeout(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UpdateInputError::InternalServerError(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateInputError::NotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -7471,37 +7475,39 @@ impl UpdateInputSecurityGroupError {
                 "BadGatewayException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::BadGateway(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::BadRequest(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ConflictException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::Conflict(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::Forbidden(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "GatewayTimeoutException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::GatewayTimeout(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InternalServerErrorException" => {
-                    return RusotoError::Service(UpdateInputSecurityGroupError::InternalServerError(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateInputSecurityGroupError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateInputSecurityGroupError::NotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}

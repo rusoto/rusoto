@@ -1797,32 +1797,32 @@ impl AssociateFleetError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(AssociateFleetError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleImageException" => {
                     return RusotoError::Service(AssociateFleetError::IncompatibleImage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(AssociateFleetError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(AssociateFleetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(AssociateFleetError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(AssociateFleetError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1873,7 +1873,7 @@ impl BatchAssociateUserStackError {
                         BatchAssociateUserStackError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -1963,32 +1963,32 @@ impl CopyImageError {
                 "IncompatibleImageException" => {
                     return RusotoError::Service(CopyImageError::IncompatibleImage(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAccountStatusException" => {
-                    return RusotoError::Service(CopyImageError::InvalidAccountStatus(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CopyImageError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CopyImageError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CopyImageError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotAvailableException" => {
-                    return RusotoError::Service(CopyImageError::ResourceNotAvailable(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CopyImageError::ResourceNotAvailable(
+                        String::from(error_message),
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CopyImageError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2041,17 +2041,17 @@ impl CreateDirectoryConfigError {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(CreateDirectoryConfigError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateDirectoryConfigError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateDirectoryConfigError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2115,52 +2115,52 @@ impl CreateFleetError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateFleetError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleImageException" => {
                     return RusotoError::Service(CreateFleetError::IncompatibleImage(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(CreateFleetError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(CreateFleetError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(CreateFleetError::InvalidRole(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateFleetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateFleetError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateFleetError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(CreateFleetError::ResourceNotAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateFleetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2231,54 +2231,54 @@ impl CreateImageBuilderError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateImageBuilderError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleImageException" => {
                     return RusotoError::Service(CreateImageBuilderError::IncompatibleImage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(CreateImageBuilderError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(
                         CreateImageBuilderError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "InvalidRoleException" => {
-                    return RusotoError::Service(CreateImageBuilderError::InvalidRole(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(CreateImageBuilderError::InvalidRole(
+                        String::from(error_message),
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateImageBuilderError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateImageBuilderError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateImageBuilderError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(CreateImageBuilderError::ResourceNotAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateImageBuilderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2337,14 +2337,14 @@ impl CreateImageBuilderStreamingURLError {
                         CreateImageBuilderStreamingURLError::OperationNotPermitted(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(
                         CreateImageBuilderStreamingURLError::ResourceNotFound(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2401,37 +2401,37 @@ impl CreateStackError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(CreateStackError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(CreateStackError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(CreateStackError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(CreateStackError::InvalidRole(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateStackError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateStackError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateStackError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2489,22 +2489,22 @@ impl CreateStreamingURLError {
                         CreateStreamingURLError::InvalidParameterCombination(String::from(
                             error_message,
                         )),
-                    );
+                    )
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateStreamingURLError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(CreateStreamingURLError::ResourceNotAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(CreateStreamingURLError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2559,27 +2559,27 @@ impl CreateUserError {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(CreateUserError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(CreateUserError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateUserError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(CreateUserError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceAlreadyExistsException" => {
                     return RusotoError::Service(CreateUserError::ResourceAlreadyExists(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2629,12 +2629,12 @@ impl DeleteDirectoryConfigError {
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteDirectoryConfigError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteDirectoryConfigError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2683,17 +2683,17 @@ impl DeleteFleetError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteFleetError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteFleetError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteFleetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2745,22 +2745,22 @@ impl DeleteImageError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteImageError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteImageError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteImageError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteImageError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2811,17 +2811,17 @@ impl DeleteImageBuilderError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteImageBuilderError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(DeleteImageBuilderError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteImageBuilderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2869,12 +2869,12 @@ impl DeleteImagePermissionsError {
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(DeleteImagePermissionsError::ResourceNotAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteImagePermissionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2923,17 +2923,17 @@ impl DeleteStackError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DeleteStackError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DeleteStackError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteStackError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -2979,7 +2979,7 @@ impl DeleteUserError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DeleteUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3023,7 +3023,7 @@ impl DescribeDirectoryConfigsError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeDirectoryConfigsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3067,7 +3067,7 @@ impl DescribeFleetsError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeFleetsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3111,7 +3111,7 @@ impl DescribeImageBuildersError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeImageBuildersError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3155,7 +3155,7 @@ impl DescribeImagePermissionsError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeImagePermissionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3201,12 +3201,12 @@ impl DescribeImagesError {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DescribeImagesError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeImagesError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3249,9 +3249,11 @@ impl DescribeSessionsError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return RusotoError::Service(DescribeSessionsError::InvalidParameterCombination(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        DescribeSessionsError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3295,7 +3297,7 @@ impl DescribeStacksError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeStacksError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3343,7 +3345,7 @@ impl DescribeUserStackAssociationsError {
                         DescribeUserStackAssociationsError::InvalidParameterCombination(
                             String::from(error_message),
                         ),
-                    );
+                    )
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3389,12 +3391,12 @@ impl DescribeUsersError {
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(DescribeUsersError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(DescribeUsersError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(DescribeUsersError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3439,7 +3441,7 @@ impl DisableUserError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisableUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3487,17 +3489,17 @@ impl DisassociateFleetError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(DisassociateFleetError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(DisassociateFleetError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DisassociateFleetError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3545,12 +3547,12 @@ impl EnableUserError {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(EnableUserError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(EnableUserError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3697,7 +3699,7 @@ impl ListTagsForResourceError {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3749,27 +3751,27 @@ impl StartFleetError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StartFleetError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(StartFleetError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartFleetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StartFleetError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartFleetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3825,27 +3827,27 @@ impl StartImageBuilderError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StartImageBuilderError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleImageException" => {
                     return RusotoError::Service(StartImageBuilderError::IncompatibleImage(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(StartImageBuilderError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(StartImageBuilderError::ResourceNotAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StartImageBuilderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3895,12 +3897,12 @@ impl StopFleetError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StopFleetError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopFleetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -3949,17 +3951,17 @@ impl StopImageBuilderError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(StopImageBuilderError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(StopImageBuilderError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(StopImageBuilderError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4009,17 +4011,17 @@ impl TagResourceError {
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(TagResourceError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4063,9 +4065,9 @@ impl UntagResourceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
-                        error_message,
-                    )));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4111,19 +4113,21 @@ impl UpdateDirectoryConfigError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return RusotoError::Service(UpdateDirectoryConfigError::ConcurrentModification(
-                        String::from(error_message),
-                    ));
+                    return RusotoError::Service(
+                        UpdateDirectoryConfigError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    )
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateDirectoryConfigError::ResourceInUse(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateDirectoryConfigError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4187,52 +4191,52 @@ impl UpdateFleetError {
                 "ConcurrentModificationException" => {
                     return RusotoError::Service(UpdateFleetError::ConcurrentModification(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "IncompatibleImageException" => {
                     return RusotoError::Service(UpdateFleetError::IncompatibleImage(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(UpdateFleetError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UpdateFleetError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(UpdateFleetError::InvalidRole(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateFleetError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateFleetError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateFleetError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(UpdateFleetError::ResourceNotAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateFleetError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4289,17 +4293,17 @@ impl UpdateImagePermissionsError {
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateImagePermissionsError::LimitExceeded(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotAvailableException" => {
                     return RusotoError::Service(UpdateImagePermissionsError::ResourceNotAvailable(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateImagePermissionsError::ResourceNotFound(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
@@ -4359,42 +4363,42 @@ impl UpdateStackError {
                 "IncompatibleImageException" => {
                     return RusotoError::Service(UpdateStackError::IncompatibleImage(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "InvalidAccountStatusException" => {
                     return RusotoError::Service(UpdateStackError::InvalidAccountStatus(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidParameterCombinationException" => {
                     return RusotoError::Service(UpdateStackError::InvalidParameterCombination(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "InvalidRoleException" => {
                     return RusotoError::Service(UpdateStackError::InvalidRole(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(UpdateStackError::LimitExceeded(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(UpdateStackError::OperationNotPermitted(
                         String::from(error_message),
-                    ));
+                    ))
                 }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateStackError::ResourceInUse(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(UpdateStackError::ResourceNotFound(String::from(
                         error_message,
-                    )));
+                    )))
                 }
                 "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
