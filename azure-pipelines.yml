@@ -1,6 +1,5 @@
-trigger:
-  branches:
-    include: ['*']
+trigger: ["master"]
+pr: ["master"]
 
 jobs:
 - job: 'unit_and_integration_tests_linux'
@@ -14,10 +13,6 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
-    - script: rustup component add --toolchain stable rustfmt
-      displayName: 'Install rustfmt'
-    - script: git submodule update --init --recursive
-      displayName: 'Fetch botocore sources'
     - script: make unit_test
       displayName: 'Run unit tests'
     - script: make rustls_unit_test
@@ -36,10 +31,6 @@ jobs:
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
         echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
       displayName: 'Install Rust'
-    - script: rustup component add --toolchain stable rustfmt
-      displayName: 'Install rustfmt'
-    - script: git submodule update --init --recursive
-      displayName: 'Fetch botocore sources'
     - script: make unit_test
       displayName: 'Run unit tests'
     - script: make rustls_unit_test
