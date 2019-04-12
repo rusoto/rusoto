@@ -3,7 +3,7 @@ trigger:
     include: ['*']
 
 jobs:
-- job: 'Unit and integration tests'
+- job: 'unit_and_integration_tests'
   displayName: 'Unit and integration tests'
   pool:
     vmImage: 'Ubuntu-16.04'
@@ -25,7 +25,7 @@ jobs:
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
 
-- job: 'Crate generation'
+- job: 'crate_gen'
   displayName: 'Crate generation'
   pool:
     vmImage: 'Ubuntu-16.04'
