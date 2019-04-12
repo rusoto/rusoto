@@ -3,8 +3,8 @@ trigger:
     include: ['*']
 
 jobs:
-- job: 'unit_and_integration_tests'
-  displayName: 'Unit and integration tests'
+- job: 'unit_and_integration_tests_linux'
+  displayName: 'Unit and integration tests on Linux'
   pool:
     vmImage: 'Ubuntu-16.04'
 
@@ -25,10 +25,50 @@ jobs:
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
 
-- job: 'crate_gen'
-  displayName: 'Crate generation'
+- job: 'unit_and_integration_tests_osx'
+  displayName: 'Unit and integration tests on OSX'
+  pool:
+    vmImage: 'macos-10.13'
+
+  steps:
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: rustup component add --toolchain stable rustfmt
+      displayName: 'Install rustfmt'
+    - script: git submodule update --init --recursive
+      displayName: 'Fetch botocore sources'
+    - script: make unit_test
+      displayName: 'Run unit tests'
+    - script: make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
+    - script: make check_integration_test
+      displayName: 'Cargo check integration tests'
+
+- job: 'crate_gen_linux'
+  displayName: 'Crate generation on Linux'
   pool:
     vmImage: 'Ubuntu-16.04'
+
+  steps:
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: rustup component add --toolchain stable rustfmt
+      displayName: 'Install rustfmt'
+    - script: git submodule update --init --recursive
+      displayName: 'Fetch botocore sources'
+    - script: make generate
+      displayName: 'Generate crates from botocore'
+
+- job: 'crate_gen_osx'
+  displayName: 'Crate generation on OSX'
+  pool:
+    vmImage: 'macos-10.13'
 
   steps:
     - script: |
