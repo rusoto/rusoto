@@ -2,18 +2,43 @@ trigger:
   branches:
     include: ['*']
 
-pool:
-  vmImage: 'Ubuntu-16.04'
+jobs:
+- job: 'Unit and integration tests'
+  displayName: 'Unit and integration tests'
+  pool:
+    vmImage: 'Ubuntu-16.04'
 
-steps:
-  - script: |
-      set -e
-      curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
-      echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-    displayName: 'Install Rust'
-  - script: rustup component add --toolchain stable rustfmt
-    displayName: 'Install rustfmt'
-  - script: git submodule update --init --recursive
-    displayName: 'Fetch botocore sources'
-  - script: make build
-    displayName: 'Generate services and compile everything'
+  steps:
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: rustup component add --toolchain stable rustfmt
+      displayName: 'Install rustfmt'
+    - script: git submodule update --init --recursive
+      displayName: 'Fetch botocore sources'
+    - script: make unit_test
+      displayName: 'Run unit tests'
+    - script: make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
+    - script: make check_integration_test
+      displayName: 'Cargo check integration tests'
+
+- job: 'Crate generation'
+  displayName: 'Crate generation'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: rustup component add --toolchain stable rustfmt
+      displayName: 'Install rustfmt'
+    - script: git submodule update --init --recursive
+      displayName: 'Fetch botocore sources'
+    - script: make generate
+      displayName: 'Generate crates from botocore'

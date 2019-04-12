@@ -6,7 +6,6 @@ cache:
     - ~/.cargo
 # run builds for all the trains
 rust:
-  - stable
   - beta
   - nightly
 os:
