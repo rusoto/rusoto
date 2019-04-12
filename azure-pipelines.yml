@@ -1,0 +1,14 @@
+trigger:
+  branches:
+    include: ['*']
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+  - script: |
+    set -e
+    curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+    displayName: 'Generate services and compile everything'
+  - script: make build
+    displayName: 'Generate services and compile everything'
