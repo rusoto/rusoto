@@ -2,7 +2,11 @@
 
 <table>
     <tr>
-        <td><strong>Linux / OS X</strong></td>
+        <td><strong>Linux / OS X stable</strong></td>
+        <td><a href="https://dev.azure.com/matthewkmayer/Rusoto/_build?definitionId=1" title="Pipelines Build Status"><img src="https://dev.azure.com/matthewkmayer/Rusoto/_apis/build/status/rusoto.rusoto?branchName=master" alt="pipelines-badge"></img></a></td>
+    </tr>
+    <tr>
+        <td><strong>Linux / OS X beta and nightly</strong></td>
         <td><a href="https://travis-ci.org/rusoto/rusoto" title="Travis Build Status"><img src="https://travis-ci.org/rusoto/rusoto.svg?branch=master" alt="travis-badge"></img></a></td>
     </tr>
     <tr>
