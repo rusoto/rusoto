@@ -10,6 +10,8 @@ steps:
       set -e
       curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
       echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-    displayName: 'Generate services and compile everything'
+    displayName: 'Install Rust'
+  - script: git submodule update --init --recursive
+    displayName: 'Fetch botocore sources'
   - script: make build
     displayName: 'Generate services and compile everything'
