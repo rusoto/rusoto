@@ -7,8 +7,8 @@ pool:
 
 steps:
   - script: |
-    set -e
-    curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+      set -e
+      curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
     displayName: 'Generate services and compile everything'
   - script: make build
     displayName: 'Generate services and compile everything'
