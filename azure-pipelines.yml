@@ -10,8 +10,9 @@ steps:
       set -e
       curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
       echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
-      rustup component add --toolchain stable rustfmt
-    displayName: 'Install Rust and rustfmt'
+    displayName: 'Install Rust'
+  - script: rustup component add --toolchain stable rustfmt
+    displayName: 'Install rustfmt'
   - script: git submodule update --init --recursive
     displayName: 'Fetch botocore sources'
   - script: make build
