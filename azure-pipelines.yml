@@ -20,7 +20,6 @@ jobs:
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
 
-jobs:
 - job: 'unit_and_integration_tests_linux_beta'
   displayName: 'Unit and integration tests on Linux (beta channel)'
   pool:
