@@ -20,6 +20,25 @@ jobs:
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
 
+jobs:
+- job: 'unit_and_integration_tests_linux_beta'
+  displayName: 'Unit and integration tests on Linux (beta channel)'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: RUST_VERSION=beta make unit_test
+      displayName: 'Run unit tests'
+    - script: RUST_VERSION=beta make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
+    - script: RUST_VERSION=beta make check_integration_test
+      displayName: 'Cargo check integration tests'
+
 - job: 'unit_and_integration_tests_osx'
   displayName: 'Unit and integration tests on OSX'
   pool:
@@ -36,6 +55,24 @@ jobs:
     - script: make rustls_unit_test
       displayName: 'Run unit tests with rustls'
     - script: make check_integration_test
+      displayName: 'Cargo check integration tests'
+
+- job: 'unit_and_integration_tests_osx_beta'
+  displayName: 'Unit and integration tests on OSX (beta channel)'
+  pool:
+    vmImage: 'macos-10.13'
+
+  steps:
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: RUST_VERSION=beta make unit_test
+      displayName: 'Run unit tests'
+    - script: RUST_VERSION=beta make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
+    - script: RUST_VERSION=beta make check_integration_test
       displayName: 'Cargo check integration tests'
 
 - job: 'crate_gen_linux'

@@ -6,7 +6,7 @@ cache:
     - ~/.cargo
 # run builds for all the trains
 rust:
-  - beta
+  - stable
   - nightly
 os:
   - linux
@@ -15,47 +15,47 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; fi
 script:
   - |
-      if [ "$JOB" = "unit_tests_A" ]; then
+      if [ "$JOB" = "unit_tests_A" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
         echo "Running Rusoto tests (phase A)" \
          && pip install --user toml \
          && .travis/split_workspace 1 2 \
          && RUST_VERSION=$TRAVIS_RUST_VERSION make unit_test
       fi
   - |
-      if [ "$JOB" = "unit_tests_B" ]; then
+      if [ "$JOB" = "unit_tests_B" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
         echo "Running Rusoto tests (phase B)" \
          && pip install --user toml \
          && .travis/split_workspace 2 2 \
          && RUST_VERSION=$TRAVIS_RUST_VERSION make unit_test
       fi
   - |
-      if [ "$JOB" = "integration_tests_and_docs" ]; then
+      if [ "$JOB" = "integration_tests" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
         echo "Building integration tests" &&
         RUST_VERSION=$TRAVIS_RUST_VERSION make check_integration_test
       fi
   - |
-      if [ "$JOB" = "unit_tests_rustls_A" ]; then
+      if [ "$JOB" = "unit_tests_rustls_A" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
         echo "Running Rusoto tests (rustls phase A)" \
          && pip install --user toml \
          && .travis/split_workspace 1 2 \
          && RUST_VERSION=$TRAVIS_RUST_VERSION make rustls_unit_test
       fi
   - |
-      if [ "$JOB" = "unit_tests_rustls_B" ]; then
+      if [ "$JOB" = "unit_tests_rustls_B" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
         echo "Running Rusoto tests (rustls phase B)" \
          && pip install --user toml \
          && .travis/split_workspace 2 2 \
          && RUST_VERSION=$TRAVIS_RUST_VERSION make rustls_unit_test
       fi
   - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "integration_tests_and_docs" ]]; then
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "api_docs" ]]; then
         echo "Running cargo docs on stable Rust on Linux" &&
         make docs
       fi
 after_success:
   # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
   - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false && "$JOB" == "integration_tests_and_docs" ]]; then
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false && "$JOB" == "api_docs" ]]; then
         echo '<meta http-equiv=refresh content=0;url=rusoto_core/index.html>' > target/doc/index.html \
         && mkdir target/doc/rusoto/ && echo '<meta http-equiv=refresh content=0;url=../rusoto_core/index.html>' > target/doc/rusoto/index.html \
         && sudo pip install ghp-import && ghp-import -n target/doc \
@@ -69,9 +69,10 @@ env:
   matrix:
     - JOB=unit_tests_A
     - JOB=unit_tests_B
-    - JOB=integration_tests_and_docs
+    - JOB=integration_tests
     - JOB=unit_tests_rustls_A
     - JOB=unit_tests_rustls_B
+    - JOB=api_docs
 branches:
   only:
     - master
