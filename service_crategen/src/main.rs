@@ -30,7 +30,7 @@ use std::path::Path;
 
 use clap::{App, Arg, SubCommand};
 
-use botocore::ServiceDefinition;
+use botocore::{ServiceDefinition, Paginators};
 use config::ServiceConfig;
 use service::Service;
 

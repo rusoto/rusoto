@@ -14,7 +14,7 @@ use toml;
 mod codegen;
 
 use cargo;
-use {Service, ServiceConfig, ServiceDefinition};
+use {Service, ServiceConfig, ServiceDefinition, Paginators};
 
 fn generate_examples(crate_dir_path: &Path) -> Option<String> {
     let examples_dir_path = crate_dir_path.join("examples");
@@ -75,7 +75,11 @@ pub fn generate_services(
 
         let sw = Stopwatch::start_new();
         let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
-            Ok(sd) => Service::new(service_config, sd),
+            Ok(sd) => {
+                let paginators = Paginators::load(name, &service_config.protocol_version)
+                    .unwrap_or_else(|err| panic!("Failed to load paginators for service {}. Make sure the botocore submodule has been initialized!: {}", name, err));
+                Service::new(service_config, sd, paginators)
+            },
             Err(_) => panic!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name),
         };
 
@@ -171,7 +175,7 @@ You may be looking for:
 ## Requirements
 
 Rust stable or beta are required to use Rusoto. Nightly is tested, but not guaranteed to be supported. Older
-versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project 
+versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project
 [`travis.yml`](https://github.com/rusoto/rusoto/blob/master/.travis.yml).
 
 On Linux, OpenSSL is required.

@@ -31,7 +31,12 @@ impl GenerateProtocol for RestJsonGenerator {
                 method_signature = generate_method_signature(operation, input_shape),
                 error_type = error_type_name(service, operation_name),
                 output_type = output_type
-            )?
+            )?;
+
+            if let Some(pagination) = service.pagination(operation_name) {
+                // todo generate paginator signature
+            }
+
         }
         Ok(())
     }
@@ -98,7 +103,11 @@ impl GenerateProtocol for RestJsonGenerator {
                 load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or_else(|| "".to_string()),
                 default_headers = generate_default_headers(service),
                 set_headers = generate_headers(service).unwrap_or_else(|| "".to_string()),
-            )?
+            )?;
+
+            if let Some(pagination) = service.pagination(operation_name) {
+                // todo generate paginator impl
+            }
         }
         Ok(())
     }

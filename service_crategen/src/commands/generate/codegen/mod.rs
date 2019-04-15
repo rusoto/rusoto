@@ -10,7 +10,7 @@ use self::rest_json::RestJsonGenerator;
 use self::rest_xml::RestXmlGenerator;
 use self::tests::generate_tests;
 use self::type_filter::filter_types;
-use botocore::{Member, Shape, ShapeType};
+use botocore::{Member, Operation, Pagination, Shape, ShapeType};
 use util;
 use Service;
 
@@ -130,8 +130,7 @@ where
         use std::fmt;
 
         #[allow(warnings)]
-        use futures::future;
-        use futures::Future;
+        use futures::{{future, stream, Future, Stream}};
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
@@ -209,6 +208,24 @@ where
     )?;
     protocol_generator.generate_method_impls(writer, service)?;
     writeln!(writer, "}}")
+}
+
+pub fn get_pagination_item_type(
+    pagination: &Pagination,
+    service: &Service,
+    operation: &Operation,
+    for_timestamps: &str
+) -> Option<String> {
+    service.get_shape(operation.output.as_ref().map(|o| o.shape.as_str()).expect(&format!("{} operation {} output did not contain a shape for paginated method", service.name(), operation.name)))
+        .as_ref()
+        .and_then(|s| s.members.as_ref())
+        .and_then(|m| m.get(&pagination.result_key.first()))
+        .and_then(|m| service.get_shape(m.shape.as_str()))
+        .and_then(|s| s.member.as_ref())
+        .and_then(|m| service.get_shape(m.shape.as_str()).map(|s| (m.shape.as_str(), s)))
+        .map(|(name, shape)| {
+            get_rust_type(&service, name, shape, false, for_timestamps)
+        })
 }
 
 pub fn get_rust_type(

@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use botocore::{Member, Operation, ServiceDefinition, Shape, ShapeType, Value};
+use botocore::{Member, Operation, Paginators, Pagination, ServiceDefinition, Shape, ShapeType, Value};
 use cargo;
 use config::ServiceConfig;
 
@@ -8,13 +8,15 @@ use config::ServiceConfig;
 pub struct Service<'a> {
     config: &'a ::ServiceConfig,
     definition: ServiceDefinition,
+    paginators: Option<Paginators>
 }
 
 impl<'b> Service<'b> {
-    pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition) -> Self {
+    pub fn new(config: &'b ServiceConfig, definition: ServiceDefinition, paginators: Option<Paginators>) -> Self {
         Service {
-            config: config,
-            definition: definition,
+            config,
+            definition,
+            paginators
         }
     }
 
@@ -190,5 +192,9 @@ impl<'b> Service<'b> {
         }
 
         dev_dependencies
+    }
+
+    pub fn pagination(&self, operation_name: &str) -> Option<Pagination> {
+        self.paginators.clone().and_then(|pages| pages.pagination.get(operation_name).cloned())
     }
 }

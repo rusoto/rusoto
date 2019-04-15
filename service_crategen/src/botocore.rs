@@ -470,3 +470,44 @@ where
         deserializer.deserialize_map(ShapesMapVisitor::new())
     }
 }
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct Paginators {
+    pub pagination: BTreeMap<String, Pagination>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct Pagination {
+    pub input_token: String,
+    pub output_token: String,
+    pub result_key: PainationResultKey,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[serde(untagged)]
+pub enum PainationResultKey {
+    One(String),
+    Many(Vec<String>),
+}
+
+impl PainationResultKey {
+    pub fn first(&self) -> String {
+        match self {
+            PainationResultKey::One(one) => one.clone(),
+            PainationResultKey::Many(many) => many[0].clone(),
+        }
+    }
+}
+
+impl Paginators {
+    pub fn load(name: &str, protocol_version: &str) -> Result<Option<Self>, Box<error::Error>> {
+        let input_path = Path::new(BOTOCORE_DIR)
+            .join(format!("{}/{}/paginators-1.json", name, protocol_version));
+        if !input_path.exists() {
+            return Ok(None);
+        }
+        let input_file = BufReader::new(File::open(&input_path)?);
+
+        Ok(serde_json::from_reader(input_file)?)
+    }
+}

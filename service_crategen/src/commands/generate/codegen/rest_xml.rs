@@ -23,7 +23,11 @@ impl GenerateProtocol for RestXmlGenerator {
                 ",
                 documentation = generate_documentation(operation, service),
                 method_signature = generate_method_signature(operation_name, operation, service),
-            )?
+            )?;
+
+            if let Some(pagination) = service.pagination(operation_name) {
+                // todo generate paginator signature
+            }
         }
         Ok(())
     }
@@ -77,6 +81,10 @@ impl GenerateProtocol for RestXmlGenerator {
                              .unwrap_or_else(|| "".to_string()),
                      parse_response_body =
                          xml_payload_parser::generate_response_parser(service, operation, true, &parse_non_payload))?;
+
+            if let Some(pagination) = service.pagination(operation_name) {
+                // todo generate paginator impl
+            }
         }
         Ok(())
     }
