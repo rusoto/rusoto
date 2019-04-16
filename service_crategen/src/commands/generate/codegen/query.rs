@@ -27,7 +27,7 @@ impl GenerateProtocol for QueryGenerator {
 
 
             if let Some(pagination) = service.pagination(operation_name) {
-                // todo generate paginator signature
+                // todo generate paginator default fn
             }
         }
         Ok(())
@@ -70,11 +70,6 @@ impl GenerateProtocol for QueryGenerator {
                      request_uri = &operation.http.request_uri,
                      serialize_input = generate_method_input_serialization(operation),
                      set_input_params = generate_set_input_params(operation))?;
-
-
-            if let Some(pagination) = service.pagination(operation_name) {
-                // todo generate paginator impl
-            }
         }
         Ok(())
     }

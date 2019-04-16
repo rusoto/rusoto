@@ -32,13 +32,57 @@ impl GenerateProtocol for JsonGenerator {
                 writeln!(
                     writer,
                     "
-                    /// Auto paginating version of {wrapped_operation}
-                    {method_signature} -> impl Stream<Item = {item_type}, Error = {error_type}>;
+                    /// Auto-paginating version of `{wrapped_operation}`
+                    {method_signature} -> RusotoStream<{item_type}, {error_type}> {{
+                        enum PageState<T> {{
+                            Start(Option<T>),
+                            Next(T),
+                            End,
+                        }}
+                        let clone = self.clone();
+                        Box::new(
+                            stream::unfold(PageState::Start(None), move |state| {{
+                                let {input_token} = match state {{
+                                    PageState::Start(start) => start,
+                                    PageState::Next(next) => Some(next),
+                                    PageState::End => return None,
+                                }};
+                                Some(
+                                    clone.clone()
+                                        .{wrapped_operation}({operation_input_type} {{
+                                            {input_token},
+                                            ..input.clone()
+                                        }})
+                                        .map(move |resp| {{
+                                            let next_state = match resp.{output_token} {{
+                                                Some(next) => {{
+                                                    if next.is_empty() {{
+                                                        PageState::End
+                                                    }} else {{
+                                                        PageState::Next(next)
+                                                    }}
+                                                }}
+                                                _ => PageState::End,
+                                            }};
+                                            (
+                                                stream::iter_ok(resp.{result_field}.unwrap_or_default()),
+                                                next_state,
+                                            )
+                                        }})
+                                )
+                            }})
+                            .flatten()
+                        )
+                    }}
                     ",
-                    wrapped_operation = operation.name.to_snake_case(),
                     method_signature = generate_method_signature(service, operation, true),
                     item_type = item_type,
-                    error_type = error_type_name(service, operation_name)
+                    error_type = error_type_name(service, operation_name),
+                    input_token = pagination.input_token.to_snake_case(),
+                    output_token = pagination.output_token.to_snake_case(),
+                    wrapped_operation = operation.name.to_snake_case(),
+                    operation_input_type = operation.input_shape(),
+                    result_field = pagination.result_key.first().to_snake_case()
                 )?;
             }
         }
@@ -84,66 +128,6 @@ impl GenerateProtocol for JsonGenerator {
                      json_version = service.json_version().unwrap(),
                      error_type = error_type_name(service, operation_name),
                      output_type = output_type)?;
-
-
-
-            if let Some(pagination) = service.pagination(operation_name) {
-                let item_type = get_pagination_item_type(&pagination, &service, &operation, self.timestamp_type())
-                    .expect(&format!("Failed to resolve a pagination result type for {} operation {}", service.name(), operation.name));
-
-                writeln!(
-                    writer,
-                    "
-                    /// Auto paginating version of {wrapped_operation}
-                    {method_signature} -> impl Stream<Item = {item_type}, Error = {error_type}> {{
-                        enum PageState {{
-                            Start(Option<String>),
-                            Next(String),
-                            End,
-                        }}
-                        Box::new(
-                            stream::unfold(PageState::Start(None), move |state| {{
-                                let {input_token} = match state {{
-                                    PageState::Start(start) => start,
-                                    PageState::Next(next) => Some(next),
-                                    PageState::End => return None,
-                                }};
-                                self.clone()
-                                    .{wrapped_operation}({operation_input_type} {{
-                                        {input_token},
-                                        ..input.clone()
-                                    }})
-                                    .map(move |resp| {{
-                                        let next_state = match resp.{output_token} {{
-                                            Some(next) => {{
-                                                if next.is_empty() {{
-                                                    PageState::End
-                                                }} else {{
-                                                    PageState::Next(next)
-                                                }}
-                                            }}
-                                            _ => PageState::End,
-                                        }};
-                                        (
-                                            stream::iter_ok(resp.{result_field}.unwrap_or_default()),
-                                            next_state,
-                                        )
-                                    }})
-                            }})
-                            .flatten()
-                        )
-                    }}
-                    ",
-                    method_signature = generate_method_signature(service, operation, true),
-                    item_type = item_type,
-                    error_type = error_type_name(service, operation_name),
-                    input_token = pagination.input_token.to_snake_case(),
-                    output_token = pagination.output_token.to_snake_case(),
-                    wrapped_operation = operation.name.to_snake_case(),
-                    operation_input_type = operation.input_shape(),
-                    result_field = pagination.result_key.first().to_snake_case()
-                )?;
-            }
         }
         Ok(())
     }
@@ -188,6 +172,11 @@ fn generate_method_signature(service: &Service, operation: &Operation, auto_pagi
     } else {
         operation.name.to_snake_case()
     };
+    let reciever = if auto_paging {
+        "self"
+    } else {
+        "&self"
+    };
     if operation.input.is_some()
         && service
             .get_shape(operation.input_shape())
@@ -197,14 +186,16 @@ fn generate_method_signature(service: &Service, operation: &Operation, auto_pagi
             .unwrap_or(false)
     {
         format!(
-            "fn {method_name}(&self, input: {input_type}) ",
+            "fn {method_name}({reciever}, input: {input_type}) ",
+            method_name = method_name,
+            reciever = reciever,
             input_type = operation.input_shape(),
-            method_name = method_name
         )
     } else {
         format!(
-            "fn {method_name}(&self) ",
-            method_name = method_name
+            "fn {method_name}({reciever}) ",
+            method_name = method_name,
+            reciever = reciever
         )
     }
 }

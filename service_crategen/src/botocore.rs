@@ -478,7 +478,15 @@ pub struct Paginators {
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Pagination {
+    // fixme: a very small set of
+    // services (s3 & route53)
+    // have pagination a input_token
+    // represented as multiple fields
     pub input_token: String,
+    // fixme: a very small set of
+    // services (s3 & route53)
+    // have pagination a input_token
+    // represented as multiple fields
     pub output_token: String,
     pub result_key: PainationResultKey,
 }

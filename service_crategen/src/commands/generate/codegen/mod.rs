@@ -135,6 +135,9 @@ where
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
         use rusoto_core::{{Client, RusotoFuture, RusotoError}};
+
+        // todo: make a concrete type for this in rusoto_core
+        type RusotoStream<I, E> = Box<Stream<Item = I, Error = RusotoError<E>> + Send>;
     "
     )?;
 
@@ -159,7 +162,7 @@ where
     // See https://github.com/rusoto/rusoto/issues/519
     writeln!(writer,
              "/// Trait representing the capabilities of the {service_name} API. {service_name} clients implement this trait.
-        pub trait {trait_name} {{
+        pub trait {trait_name}: Clone + Sync + Send + 'static {{
         ",
              trait_name = service.service_type_name(),
              service_name = service.name())?;
@@ -216,6 +219,12 @@ pub fn get_pagination_item_type(
     operation: &Operation,
     for_timestamps: &str
 ) -> Option<String> {
+    // Paginated operations typically return
+    // and output shape with a member of type Vec<T>
+    // Auto-paginating operations return Stream<Item=T, ...>.
+    // Below we inspect the output shape and the shape of its member
+    // referred to by pagination's result_key
+    // in order to get the rust type name for T
     service.get_shape(operation.output.as_ref().map(|o| o.shape.as_str()).expect(&format!("{} operation {} output did not contain a shape for paginated method", service.name(), operation.name)))
         .as_ref()
         .and_then(|s| s.members.as_ref())

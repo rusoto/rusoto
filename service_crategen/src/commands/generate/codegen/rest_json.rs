@@ -34,7 +34,7 @@ impl GenerateProtocol for RestJsonGenerator {
             )?;
 
             if let Some(pagination) = service.pagination(operation_name) {
-                // todo generate paginator signature
+                // todo generate paginator default fn
             }
 
         }
@@ -104,10 +104,6 @@ impl GenerateProtocol for RestJsonGenerator {
                 default_headers = generate_default_headers(service),
                 set_headers = generate_headers(service).unwrap_or_else(|| "".to_string()),
             )?;
-
-            if let Some(pagination) = service.pagination(operation_name) {
-                // todo generate paginator impl
-            }
         }
         Ok(())
     }
