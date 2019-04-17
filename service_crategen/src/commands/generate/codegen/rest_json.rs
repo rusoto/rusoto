@@ -3,7 +3,7 @@ use std::io::Write;
 use inflector::Inflector;
 
 use super::{
-    error_type_name, generate_field_name, rest_request_generator, rest_response_parser, FileWriter,
+    get_pagination_item_type, error_type_name, generate_field_name, rest_request_generator, rest_response_parser, FileWriter,
     GenerateProtocol, IoResult,
 };
 use botocore::{Operation, Shape, ShapeType};
@@ -28,13 +28,70 @@ impl GenerateProtocol for RestJsonGenerator {
                       RusotoFuture<{output_type}, {error_type}>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                method_signature = generate_method_signature(operation, input_shape),
+                method_signature = generate_method_signature(operation_name, operation, input_shape, false),
                 error_type = error_type_name(service, operation_name),
                 output_type = output_type
             )?;
 
             if let Some(pagination) = service.pagination(operation_name) {
-                // todo generate paginator default fn
+                let item_type = get_pagination_item_type(&pagination, &service, &operation, self.timestamp_type())
+                    .expect(&format!("Failed to resolve a pagination result type for {} operation {}", service.name(), operation.name));
+
+                writeln!(
+                    writer,
+                    "
+                    /// Auto-paginating version of `{wrapped_operation}`
+                    {method_signature} -> RusotoStream<{item_type}, {error_type}> {{
+                        enum PageState<T> {{
+                            Start(Option<T>),
+                            Next(T),
+                            End,
+                        }}
+                        let clone = self.clone();
+                        Box::new(
+                            stream::unfold(PageState::Start(None), move |state| {{
+                                let {input_token} = match state {{
+                                    PageState::Start(start) => start,
+                                    PageState::Next(next) => Some(next),
+                                    PageState::End => return None,
+                                }};
+                                Some(
+                                    clone.clone()
+                                        .{wrapped_operation}({operation_input_type} {{
+                                            {input_token},
+                                            ..input.clone()
+                                        }})
+                                        .map(move |resp| {{
+                                            let next_state = match resp.{output_token} {{
+                                                Some(next) => {{
+                                                    if next.is_empty() {{
+                                                        PageState::End
+                                                    }} else {{
+                                                        PageState::Next(next)
+                                                    }}
+                                                }}
+                                                _ => PageState::End,
+                                            }};
+                                            (
+                                                stream::iter_ok(resp.{result_field}.unwrap_or_default()),
+                                                next_state,
+                                            )
+                                        }})
+                                )
+                            }})
+                            .flatten()
+                        )
+                    }}
+                    ",
+                    method_signature = generate_method_signature(operation_name, operation, input_shape, true),
+                    item_type = item_type,
+                    error_type = error_type_name(service, operation_name),
+                    input_token = pagination.input_token.to_snake_case(),
+                    output_token = pagination.output_token.to_snake_case(),
+                    wrapped_operation = operation.name.to_snake_case(),
+                    operation_input_type = operation.input_shape(),
+                    result_field = pagination.result_key.first().to_snake_case()
+                )?;
             }
 
         }
@@ -82,7 +139,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                method_signature = generate_method_signature(operation, input_shape),
+                method_signature = generate_method_signature(operation_name, operation, input_shape, false),
                 endpoint_prefix = service.signing_name(),
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
                 http_method = operation.http.method,
@@ -180,17 +237,29 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
 
 // IoT defines a lot of empty (and therefore unnecessary) request shapes
 // don't clutter method signatures with them
-fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
+fn generate_method_signature(operation_name: &str, operation: &Operation, shape: &Shape, auto_paging: bool) -> String {
+    let fn_name = if auto_paging {
+        format!("{}_pages", operation_name.to_snake_case())
+    } else {
+        operation_name.to_snake_case()
+    };
+    let reciever = if auto_paging {
+        "self"
+    } else {
+        "&self"
+    };
     if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
         format!(
-            "fn {method_name}(&self, input: {input_type})",
-            method_name = operation.name.to_snake_case(),
+            "fn {fn_name}({reciever}, input: {input_type})",
+            fn_name = fn_name,
+            reciever = reciever,
             input_type = operation.input_shape()
         )
     } else {
         format!(
-            "fn {method_name}(&self)",
-            method_name = operation.name.to_snake_case()
+            "fn {fn_name}({reciever})",
+            fn_name = fn_name,
+            reciever = reciever
         )
     }
 }

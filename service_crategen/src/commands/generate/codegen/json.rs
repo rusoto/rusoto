@@ -19,7 +19,7 @@ impl GenerateProtocol for JsonGenerator {
                 {method_signature} -> RusotoFuture<{output_type}, {error_type}>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                method_signature = generate_method_signature(service, operation, false),
+                method_signature = generate_method_signature(operation_name, service, operation, false),
                 error_type = error_type_name(service, operation_name),
                 output_type = output_type
             )?;
@@ -75,7 +75,7 @@ impl GenerateProtocol for JsonGenerator {
                         )
                     }}
                     ",
-                    method_signature = generate_method_signature(service, operation, true),
+                    method_signature = generate_method_signature(operation_name, service, operation, true),
                     item_type = item_type,
                     error_type = error_type_name(service, operation_name),
                     input_token = pagination.input_token.to_snake_case(),
@@ -115,7 +115,7 @@ impl GenerateProtocol for JsonGenerator {
                 }}
                 ",
                      documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                     method_signature = generate_method_signature(service, operation, false),
+                     method_signature = generate_method_signature(operation_name, service, operation, false),
                      payload = generate_payload(service, operation),
                      signing_name = service.signing_name(),
                      modify_endpoint_prefix = generate_endpoint_modification(service)
@@ -166,9 +166,9 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     }
 }
 
-fn generate_method_signature(service: &Service, operation: &Operation, auto_paging: bool) -> String {
-    let method_name = if auto_paging {
-        format!("{}_pages", operation.name.to_snake_case())
+fn generate_method_signature(operation_name: &str, service: &Service, operation: &Operation, auto_paging: bool) -> String {
+    let fn_name = if auto_paging {
+        format!("{}_pages", operation_name.to_snake_case())
     } else {
         operation.name.to_snake_case()
     };
@@ -186,15 +186,15 @@ fn generate_method_signature(service: &Service, operation: &Operation, auto_pagi
             .unwrap_or(false)
     {
         format!(
-            "fn {method_name}({reciever}, input: {input_type}) ",
-            method_name = method_name,
+            "fn {fn_name}({reciever}, input: {input_type}) ",
+            fn_name = fn_name,
             reciever = reciever,
             input_type = operation.input_shape(),
         )
     } else {
         format!(
-            "fn {method_name}({reciever}) ",
-            method_name = method_name,
+            "fn {fn_name}({reciever}) ",
+            fn_name = fn_name,
             reciever = reciever
         )
     }
