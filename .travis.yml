@@ -10,14 +10,14 @@ os:
   - linux
 script:
   - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "api_docs" ]]; then
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "1.33.0" && "$JOB" == "api_docs" ]]; then
         echo "Running cargo docs on stable Rust on Linux" &&
         make docs
       fi
 after_success:
   # upload the documentation from the build if it's from Rust stable, Linux and not a pull request:
   - |
-      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == false && "$JOB" == "api_docs" ]]; then
+      if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "1.33.0" && "$TRAVIS_PULL_REQUEST" == false && "$JOB" == "api_docs" ]]; then
         echo '<meta http-equiv=refresh content=0;url=rusoto_core/index.html>' > target/doc/index.html \
         && mkdir target/doc/rusoto/ && echo '<meta http-equiv=refresh content=0;url=../rusoto_core/index.html>' > target/doc/rusoto/index.html \
         && sudo pip install ghp-import && ghp-import -n target/doc \
