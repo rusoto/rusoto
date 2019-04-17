@@ -15,33 +15,33 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ulimit -n 1024; fi
 script:
   - |
-      if [ "$JOB" = "unit_tests_A" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
+      if [[ "$JOB" = "unit_tests_A" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]]; then
         echo "Running Rusoto tests (phase A)" \
          && pip install --user toml \
          && .travis/split_workspace 1 2 \
          && RUST_VERSION=$TRAVIS_RUST_VERSION make unit_test
       fi
   - |
-      if [ "$JOB" = "unit_tests_B" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
+      if [[ "$JOB" = "unit_tests_B" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]]; then
         echo "Running Rusoto tests (phase B)" \
          && pip install --user toml \
          && .travis/split_workspace 2 2 \
          && RUST_VERSION=$TRAVIS_RUST_VERSION make unit_test
       fi
   - |
-      if [ "$JOB" = "integration_tests" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
+      if [[ "$JOB" = "integration_tests" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]]; then
         echo "Building integration tests" &&
         RUST_VERSION=$TRAVIS_RUST_VERSION make check_integration_test
       fi
   - |
-      if [ "$JOB" = "unit_tests_rustls_A" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
+      if [[ "$JOB" = "unit_tests_rustls_A" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]]; then
         echo "Running Rusoto tests (rustls phase A)" \
          && pip install --user toml \
          && .travis/split_workspace 1 2 \
          && RUST_VERSION=$TRAVIS_RUST_VERSION make rustls_unit_test
       fi
   - |
-      if [ "$JOB" = "unit_tests_rustls_B" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]; then
+      if [[ "$JOB" = "unit_tests_rustls_B" && "$TRAVIS_RUST_VERSION" != "stable" && "$TRAVIS_OS_NAME" != "linux" ]]; then
         echo "Running Rusoto tests (rustls phase B)" \
          && pip install --user toml \
          && .travis/split_workspace 2 2 \
