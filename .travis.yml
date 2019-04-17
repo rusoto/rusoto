@@ -7,6 +7,8 @@ rust:
   - stable
 os:
   - linux
+git:
+  depth: 5
 script:
   - |
       if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_RUST_VERSION" == "stable" && "$JOB" == "api_docs" ]]; then
