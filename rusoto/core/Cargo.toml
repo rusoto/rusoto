@@ -15,6 +15,7 @@ readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
 version = "0.37.0"
 homepage = "https://www.rusoto.org/"
+exclude = ["test_resources/*"]
 
 [badges]
 travis-ci = { repository = "rusoto/rusoto", branch = "master" }
