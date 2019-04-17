@@ -220,7 +220,8 @@ fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
     let prefix_snip: String;
     if service.service_id() == Some("SNS")
         && shape.value.is_some()
-        && shape.value.as_ref().unwrap().shape == "MessageAttributeValue"
+        && (shape.value.as_ref().unwrap().shape == "MessageAttributeValue"
+            || shape.value.as_ref().unwrap().shape == "AttributeValue")
     {
         prefix_snip = "let prefix = format!(\"{}.entry.{}\", name, index+1);".to_string();
     } else {

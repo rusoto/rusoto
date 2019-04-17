@@ -7,6 +7,7 @@
 - Fix hostname derivation for custom Region endpoints
 - Support presigned URLs for multipart uploads to S3
 - Add Us-Gov-East region
+- Fix a bug in SNS CreateTopic and Subscribe
 
 ## [0.37.0] - 2019-03-12
 
